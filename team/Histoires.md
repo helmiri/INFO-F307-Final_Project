@@ -44,7 +44,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 1
 **Instructions originales:**
-- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h, G2
+- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h, G3
 - BDD utilisateurs (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 15h, G4
 - Interface de connexion. 10h, G2
 - Validitée des données des l'utilisateurs. 2h, G4
@@ -58,7 +58,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Pouvoir créer un projet (étiquettes, nom, description, date). 12h, G1
 - Création de sous projets. 2h, G1
 - Ajout de tâches à un projet. 7h, G1
-- L'utilisateur doit pouvoir passer en mode édition pour un projet. 10h
+- L'utilisateur doit pouvoir passer en mode édition pour un projet. 10h, G2
 - Possibilité de supprimer un projet. 2h, G1
 
 :question: **Question:**  
