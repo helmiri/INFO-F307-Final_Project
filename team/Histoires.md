@@ -44,24 +44,24 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 1
 **Instructions originales:**
-- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application.
-- Connexion à l'interface (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email).
-- Validitée des données des l'utilisateurs.
+- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h 
+- Connexion à l'interface (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 25h
+- Validitée des données des l'utilisateurs. 2h
 
 :question: **Question:**       
-- est-ce qu'un seul utilisateur peut être connecté à tout moment?
+- est-ce qu'un seul utilisateur peut être connecté à tout moment? Réponse : Un utilisateur/client.
 
 
 ### Histoire 2
 **Instructions originales:**
-- Pouvoir créer un projet (étiquettes, nom, description, date).
-- Création de sous projets.
-- Ajout de tâches à un projet.
-- L'utilisateur doit pouvoir passer en mode édition pour un projet.
-- Possibilité de supprimer un projet.
+- Pouvoir créer un projet (étiquettes, nom, description, date). 12h
+- Création de sous projets. 2h 
+- Ajout de tâches à un projet. 7h
+- L'utilisateur doit pouvoir passer en mode édition pour un projet. 10h
+- Possibilité de supprimer un projet. 2h
 
 :question: **Question:**  
-- Qu'est-ce qu'une tâche concrètement?
+- Qu'est-ce qu'une tâche concrètement? Réponse : Une simple chose à faire, sans date ni heure, ni échéance.
 
 
 ### Histoire 3
