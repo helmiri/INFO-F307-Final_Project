@@ -44,9 +44,10 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 1
 **Instructions originales:**
-- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h 
-- Connexion à l'interface (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 25h
-- Validitée des données des l'utilisateurs. 2h
+- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h, G2
+- BDD utilisateurs (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 15h, G4
+- Interface de connexion. 10h, G2
+- Validitée des données des l'utilisateurs. 2h, G4
 
 :question: **Question:**       
 - est-ce qu'un seul utilisateur peut être connecté à tout moment? Réponse : Un utilisateur/client.
@@ -54,11 +55,11 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 2
 **Instructions originales:**
-- Pouvoir créer un projet (étiquettes, nom, description, date). 12h
-- Création de sous projets. 2h 
-- Ajout de tâches à un projet. 7h
+- Pouvoir créer un projet (étiquettes, nom, description, date). 12h, G1
+- Création de sous projets. 2h, G1
+- Ajout de tâches à un projet. 7h, G1
 - L'utilisateur doit pouvoir passer en mode édition pour un projet. 10h
-- Possibilité de supprimer un projet. 2h
+- Possibilité de supprimer un projet. 2h, G1
 
 :question: **Question:**  
 - Qu'est-ce qu'une tâche concrètement? Réponse : Une simple chose à faire, sans date ni heure, ni échéance.
@@ -137,9 +138,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 8
 **Instructions originales:**
-- Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet). 5h
-- Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets. 3h
-- Possibilité d'exporter les statistiques en ".csv", ".json". 2h
+- Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet). 5h, G3
+- Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets. 3h, G3
+- Possibilité d'exporter les statistiques en ".csv", ".json". 2h, G3
 
 :question: **Question:** 
 - /
