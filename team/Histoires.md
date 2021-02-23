@@ -66,10 +66,10 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 3
 **Instructions originales:**
--  Spécifier une date de début et/ou de fin aux tâches du projet.
--  Calendrier des tâches.
--  Spécifier la date de début et le temps attribué pour le projet.
--  Priorité des tâches en fonction du temps. 
+-  Spécifier une date de début et/ou de fin aux tâches du projet. 4h
+-  Choisisr une date via une interface calendrier. 3h
+-  Spécifier la date de début et le temps attribué pour le projet. 4h 
+-  Priorité des tâches en fonction du temps. 4h
 
 :question: **Question:**  
 - Peut-on avoir plusieurs tâches en même temps, si oui comment l'afficher?
@@ -79,14 +79,14 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 4
 **Instructions originales:**
-- Créer un calendrier (graphiquement) afin de visualiser les tâches et les projets.
-- Le calendrier permet la sélection d'un ou plusieurs projets qui peuvent être associés chacun à une couleur du choix de l'utilisateur.
-- Tâches reliées aux projets par leur nom et leur couleur. 
-- Faire en sorte de voir le début et la fin d'une tâche. 
+- Créer un calendrier (graphiquement) afin de visualiser les tâches et les projets. 20h
+- Le calendrier permet la sélection d'un ou plusieurs projets qui peuvent être associés chacun à une couleur du choix de l'utilisateur. 4h
+- Tâches reliées aux projets par leur nom et leur couleur. 2h
+- Faire en sorte de voir le début et la fin d'une tâche. 5h
 
 **Tâches en plus:** 
-- Penser à tout type d'utilisateur (handicape, daltonisme,..) 
-- Créer potentiellement 3 types d'affichage (par jour,par semaine et par mois). 
+- Penser à tout type d'utilisateur (handicape, daltonisme,..) 1h
+- Créer potentiellement 3 types d'affichage (par jour,par semaine et par mois). 3h
 
 :question: **Question:** 
 - Quel type de calendrier( une fenêtre entière ou bien juste dans un coin comme sous windows)?
