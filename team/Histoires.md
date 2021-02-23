@@ -31,10 +31,11 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Tableau Risque-priorité
 
-| &#8595; Priorité / Risque &#8594; | 1 | 2 |
-| ------ | ------ | ------ |
-| 1 |  |  |
-| 2 |  |  |
+| &#8595; Priorité / Risque &#8594; | 1 | 2 | 3 |
+| ------ | ------ | ------ | ------ |
+| 1 |  | 1 |  |
+| 2 | 4-5-6-9 | 2 | 3-7-8 |
+| 3 | 13 | 10-12 | 11 |
 
 
 ----------------------
