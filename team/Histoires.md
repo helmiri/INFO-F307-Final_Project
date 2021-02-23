@@ -16,15 +16,14 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 |   | 3 | Histoire 3 |  | 3 | 15 |  |
 |   | 4 | Histoire 4 |  | 1 | 35 |  |
 |   | 5 | Histoire 5 |  | 1 | 27 |  |
-|   | 6 | Histoire 6 |  | 1 | 30 |  |
+|   | 6 | Histoire 6 |  | 1 | 20 |  |
 |   | 7 | Histoire 7 |  | 3 | 18 |  |
 |   | 8 | Histoire 8 |  | 3 | 10 |  |
-|   | 9 | Histoire 9 |  | 1 | 10 |  |
+|   | 9 | Histoire 9 |  | 1 | 20 |  |
 | 3 | 10 | Histoire 10 |  | 2 | 25 | / |
-|   | 11 | Histoire 11 |  | 3 | 4 |  |
-|   | 12 | Histoire 12 |  | 2 | 15 |  |
-|   | 13 | Histoire 13 |  | 1 | 20 |  |
-
+|   | 11 | Histoire 11 |  | 3 | 9 |  |
+|   | 12 | Histoire 12 |  | 2 | 25 |  |
+|   | 13 | Histoire 13 |  | 1 | 25 |  |
 
 ----------------------
 
@@ -94,9 +93,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 
 ### Histoire 5
-**Instructions originales:** 
-- Accès à un système de versions. 
-- Suivi de l'évolution d'un projet:
+**Instructions originales:**  
+- Suivi de l'évolution d'un projet: 12h
         - "add" l'ajout de fichiers et dossiers d'un projet.
         - "remove" la suppression de fichiers et dossiers d'un projet.
         - "branch" le branchement d'un projet.
@@ -105,10 +103,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
         - "revert" annuler une ou plusieurs validations précédentes, pour rétablir une version
           précédente.
         - "merge" fusionner deux branches, les modifications de l'une sont portées sur l'autre.
-        - "diff" présente la différence entre la version actuelle et un commit précédent spécifié.
-        
-- Un commit sera lié à l"utilisateur l'ayant fait.
-- Création d'un menu pour gérer ces fonctionnalités.
+        - "diff" présente la différence entre la version actuelle et un commit précédent spécifié. 
+        - Un commit sera lié à l"utilisateur l'ayant fait.
+- Création d'un menu pour gérer ces fonctionnalités. 15h 
 
 :question: **Question:** 
 - /
@@ -116,22 +113,23 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
  
 ### Histoire 6
 **Instructions originales:**
-- Permettre la possibilité d'ajouter d'autres collaborateurs à un projet (s'ils l'acceptent).
-- Les autres collaborateurs ont le droit de le modifier et de le supprimer.
-- Les sous projets du projet partagé doivent aussi être partagés.
-- Il doit être possible d'assigner des tâches à un ou plusieurs des utilisateurs collaborateurs (chaque utilisateur peut modifier les attributions).
-- Les tâches assignées doivent être bien visibles pour les utilisateurs.
+
+- Permettre la possibilité d'ajouter d'autres collaborateurs à un projet (s'ils l'acceptent). 7h
+- Les autres collaborateurs ont le droit de le modifier et de le supprimer. 1h
+- Les sous projets du projet partagé doivent aussi être partagés. 1h
+- Il doit être possible d'assigner des tâches à un ou plusieurs des utilisateurs collaborateurs (chaque utilisateur peut modifier les attributions). 4h
+- Les tâches assignées doivent être bien visibles pour les utilisateurs. 2h
 
 **Tâches en plus:** 
-- Lier les rappels avec les collaborateurs.
+- Lier les rappels avec les collaborateurs. 5h
 
 :question: **Question:** 
-- /
+- Pouvons-nous quitter la collaboration ?
 
 ### Histoire 7
 **Instructions originales:**
-- Exporter un fichier compressé(.tar.gz).
-- Peut importer un projet ayant été exporté pour apparaitre comme projet dans l'application (pas forcément utilisable en dehors de l'application). 3h
+- Exporter un fichier compressé(.tar.gz). 9h
+- Peut importer un projet ayant été exporté pour apparaitre comme projet dans l'application (pas forcément utilisable en dehors de l'application). 9h
 
 :question: **Question:** 
 - /
@@ -139,9 +137,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 8
 **Instructions originales:**
-- Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet).
-- Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets.
-- Possibilité d'exporter les statistiques en ".csv", ".json".
+- Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet). 5h
+- Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets. 3h
+- Possibilité d'exporter les statistiques en ".csv", ".json". 2h
 
 :question: **Question:** 
 - /
@@ -149,22 +147,20 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 9
 **Instructions originales:**
-- Chaque utilisateur dispose d'une quantité d'espace disque définie par l'administrateur.
-- L'espace peut être étendu grâce à l'aide de services de stockage cloud.
-- Possibilité d'exporter ses projets vers le service web désiré ainsi qu'importer des fichiers de celui-ci.
-- L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois.
-- Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur.
-- Intégration faites en utilisant les API dédiées fournies par les services mêmes.
+- Chaque utilisateur dispose d'une quantité d'espace disque définie par l'administrateur. 5h
+- L'espace peut être étendu grâce à l'aide de services de stockage cloud. 10h
+- Possibilité d'exporter ses projets vers le service web désiré ainsi qu'importer des fichiers de celui-ci. 2h
+- L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois. 2h
+- Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur. 1h
 
 :question: **Question:** 
-- /
+- Qui est l'administrateur ?
 
 
 ### Histoire 10
 **Instructions originales:**
-- Intégration d'un système de rappels pour les projets et les tâches avec une date d'échéance.(via l'application ou par l'intégration d'une application calendrier externe).
-- Si les rappels se font via l'application, ceux ci doivent être présentés à l'utilisateur lors du démarrage du logiciel, avec la possibilité de soit validé les rappels, soit de les reporter à une date ultérieure.
-- Cependant si les rappels se font via l'intégration d'une application externe, ceux ci sont déleguée à celle-ci.
+- Intégration d'un système de rappels pour les projets et les tâches avec une date d'échéance.(via l'application ou par l'intégration d'une application calendrier externe). 20h
+- Si les rappels se font via l'application, ceux ci doivent être présentés à l'utilisateur lors du démarrage du logiciel, avec la possibilité de soit validé les rappels, soit de les reporter à une date ultérieure. 5h
 
 :question: **Question:** 
 - Sous quelle forme doit apparaître le rappel lors du démarrage de l'application?
@@ -172,8 +168,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 11
 **Instructions originales:**
-- Accès à une section d'aide 'informations et explications sur les fonctionnalités du programme).
-- Possiblement l'intégration d'un tutoriel qui pourrait être démarré à partir de cette section.
+- Accès à une section d'aide 'informations et explications sur les fonctionnalités du programme). 4h
+- Possiblement l'intégration d'un tutoriel qui pourrait être démarré à partir de cette section. 5h
 
 :question: **Question:** 
 - /
@@ -181,9 +177,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 12
 **Instructions originales:**
-- Les données sauvegardées ne doivent pas être accesibles par des personnes tierces(confidentialité).
-- Protection par mot de passe pour les fichiers ou les exportation de projet.
-- Ne peut ouvrir ou importer un fichier/un projet protégé que si le mod de passe entré est correcte.
+- Les données sauvegardées ne doivent pas être accesibles par des personnes tierces(confidentialité). 10h
+- Protection par mot de passe pour les fichiers ou les exportation de projet. 10h
+- Ne peut ouvrir ou importer un fichier/un projet protégé que si le mod de passe entré est correcte. 5h
 
 :question: **Question:** 
 - /
@@ -191,8 +187,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 13
 **Instructions originales:**
-- Garantit que les données stockées dans l'application ne puissent pas être alétérées de façon fortuite,illicite ou malveillante.
-- Garantit l'absence de modifications non autorisées.
+- Garantit que les données stockées dans l'application ne puissent pas être alétérées de façon fortuite,illicite ou malveillante. 15h
+- Garantit l'absence de modifications non autorisées. 10h
 
 :question: **Question:** 
 - Pouvons-nous utiliser une database basée sur du cloud (MongoDB Atlas).
