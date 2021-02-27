@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.CubicCurve?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="799.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="266.0" prefHeight="136.0" prefWidth="823.0" style="-fx-background-color: #f1948a;" AnchorPane.leftAnchor="266.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="14.0" layoutY="37.0" prefHeight="87.0" prefWidth="250.0" text="Statistics" textFill="WHITE">
+               <font>
+                  <Font size="49.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="266.0" layoutY="136.0" prefHeight="663.0" prefWidth="823.0">
+         <children>
+            <CheckBox layoutX="515.0" layoutY="115.0" mnemonicParsing="false" prefHeight="136.0" prefWidth="146.0" style="-fx-background-color: #dfdfdf;" text="Projet 3" />
+            <CheckBox layoutX="307.0" layoutY="115.0" mnemonicParsing="false" prefHeight="136.0" prefWidth="146.0" style="-fx-background-color: #dfdfdf;" text="Projet 2" />
+            <Button layoutX="560.0" layoutY="567.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="146.0" text="Visualiser" />
+            <CheckBox layoutX="515.0" layoutY="316.0" mnemonicParsing="false" prefHeight="136.0" prefWidth="146.0" style="-fx-background-color: #dfdfdf;" text="Projet 6" />
+            <CheckBox layoutX="26.0" layoutY="23.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="182.0" text="Tout selctionner" />
+            <CheckBox layoutX="80.0" layoutY="115.0" mnemonicParsing="false" prefHeight="136.0" prefWidth="146.0" style="-fx-background-color: #dfdfdf;" text="Projet 1" />
+            <CheckBox layoutX="80.0" layoutY="316.0" mnemonicParsing="false" prefHeight="136.0" prefWidth="146.0" style="-fx-background-color: #dfdfdf;" text="Projet 4" />
+            <CheckBox layoutX="307.0" layoutY="323.0" mnemonicParsing="false" prefHeight="136.0" prefWidth="146.0" style="-fx-background-color: #dfdfdf;" text="Projet 5" />
+         </children>
+      </Pane>
+      <VBox prefHeight="799.0" prefWidth="268.0" style="-fx-background-color: #f1948a;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane prefHeight="136.0" prefWidth="268.0" style="-fx-background-color: F26C5D;">
+               <children>
+                  <Label layoutX="106.0" layoutY="25.0" prefHeight="87.0" prefWidth="155.0" text="ProGestion" textFill="WHITE">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                  </Label>
+                  <Circle fill="DODGERBLUE" layoutX="46.0" layoutY="68.0" radius="27.0" stroke="BLACK" strokeType="INSIDE" />
+                  <CubicCurve controlX1="-16.0" controlX2="-26.0" controlY1="-130.0" controlY2="2.0" endX="7.8113555908203125" endY="-29.0" fill="DODGERBLUE" layoutX="77.0" layoutY="128.0" startX="-71.18864440917969" startY="-89.0" stroke="BLACK" />
+               </children>
+            </Pane>
+            <Pane prefHeight="316.0" prefWidth="268.0">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="64.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../../Images/kisspng-computer-icons-login-user-profile-avatar-female-avatar-5b0c7ddd23a033.9936957615275453091459.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutY="213.0" prefHeight="35.0" prefWidth="268.0" text="Aline" />
+                  <Label layoutY="237.0" prefHeight="35.0" prefWidth="268.0" text="Projets : 8" />
+               </children>
+            </Pane>
+            <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="271.0" style="-fx-background-color: F26C5D;" text="Menu" />
+            <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="271.0" style="-fx-background-color: F26C5D;" text="Paramètres" />
+            <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="271.0" style="-fx-background-color: F26C5D;" text="Deconnexion" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
