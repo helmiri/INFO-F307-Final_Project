@@ -10,10 +10,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        // JE NE SAIS PAS PQ MAIS CA CREE UN BUG (ALINE)!! Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/conditions.fxml"));
-        primaryStage.setTitle("Terms & conditions");
-        primaryStage.setScene(new Scene(root,600, 500));
+        Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/statistics1.fxml")); // Test
+        primaryStage.setTitle("Satistics");
+        primaryStage.setScene(new Scene(root,900, 900));
         primaryStage.show();
     }
 
