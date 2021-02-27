@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g6.database;
 
 import java.sql.*;
-
 public class Database {
     private static Connection database;
 
