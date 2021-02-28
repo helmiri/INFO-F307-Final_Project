@@ -1,6 +1,7 @@
-package be.ac.ulb.infof307.g6.database;
+package be.ac.ulb.infof307.g06.database;
 
 import java.sql.*;
+
 public class Database {
     private static Connection database;
 
@@ -8,6 +9,7 @@ public class Database {
         init("data.db");
         createTable();
     }
+
     private static void init(String dbName) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         database = DriverManager.getConnection("jdbc:sqlite:" + dbName);
@@ -17,7 +19,7 @@ public class Database {
         Statement state = database.createStatement();
 
         ResultSet res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Users'");
-        if (res.next()){
+        if (res.next()) {
             System.out.println("Found");
             return;
         }

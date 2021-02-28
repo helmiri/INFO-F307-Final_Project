@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g6;
+package be.ac.ulb.infof307.g06;
 
 public class Main {
     public static void main(String[] args) {
