@@ -13,6 +13,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/Project_test.fxml")); // Test
         primaryStage.setTitle("Satistics");
         primaryStage.setScene(new Scene(root,900, 900));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
