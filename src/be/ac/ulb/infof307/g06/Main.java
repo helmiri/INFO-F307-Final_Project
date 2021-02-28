@@ -10,12 +10,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/statistics1.fxml")); // Test
+        Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/Project_test.fxml")); // Test
         primaryStage.setTitle("Satistics");
         primaryStage.setScene(new Scene(root,900, 900));
         primaryStage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);
