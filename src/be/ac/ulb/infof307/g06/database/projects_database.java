@@ -1,7 +1,27 @@
 package be.ac.ulb.infof307.g06.database;
 
 import java.sql.*;
+class Project{
+    int id;
+    String title;
+    String description;
+    String tags;
+    Date date;
+    int[] subProjects;
+    int[] tasks;
 
+    public Project(int id, String title, String description, String tags, Date date){
+        this.title = title;
+        this.description = description;
+        this.tags = tags;
+        this.date = date;
+    }
+    public int getId(){return id;}
+    public String getTitle(){return title;}
+    public String getDescription(){return description;}
+    public String getTags(){return tags;}
+    public Date getDate(){return date;}
+}
 public class projects_database {
     private static Connection database;
 
@@ -9,7 +29,8 @@ public class projects_database {
         init("projects.db");
         //createTable();
         //createProject("test1", "decr1", "tags1");
-        System.out.println(getProjectTitle(0));
+        System.out.println(getProject(0).getTitle());
+        System.out.println(getProjectID("test1"));
     }
 
     private static void init(String dbName) throws SQLException, ClassNotFoundException {
@@ -25,7 +46,7 @@ public class projects_database {
         state.execute("CREATE TABLE Task(id Integer, description varchar(20));");
     }
 
-    private static void createProject(String title, String description, String tags) throws SQLException {
+    private static int createProject(String title, String description, String tags) throws SQLException {
         Statement state = database.createStatement();
         int id;
         try {
@@ -36,13 +57,28 @@ public class projects_database {
             id = 0;
         }
         state.execute("INSERT INTO Project (id, title, description, tags) VALUES('" + id + "','" + title + "','" + description + "','" + tags + "');");
+
+        return id;
     }
 
-    private static String getProjectTitle(int id) throws SQLException {
+    private static int getProjectID(String title)throws  SQLException{
         Statement state = database.createStatement();
+        ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
 
-        ResultSet rs = state.executeQuery("SELECT title FROM Project WHERE id='" + id + "';");
+        int id = rs.getInt("id");
+
+        return id;
+    }
+
+    private static Project getProject(int id) throws SQLException {
+        Statement state = database.createStatement();
+        ResultSet rs = state.executeQuery("SELECT title,description,tags, date FROM Project WHERE id='" + id + "';");
+
         String title = rs.getString("title");
-        return title;
+        String description = rs.getString("description");
+        String tags = rs.getString("tags");
+        Date date =  rs.getDate("date");
+        Project res = new Project(id,title,description,tags,date);
+        return res;
     }
 }
