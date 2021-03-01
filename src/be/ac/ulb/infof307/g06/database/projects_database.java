@@ -22,13 +22,14 @@ class Project{
     public String getTags(){return tags;}
     public Date getDate(){return date;}
 }
+
 public class projects_database {
     private static Connection database;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         init("projects.db");
-        //createTable();
-        //createProject("test1", "decr1", "tags1");
+        createTable();
+        createProject("test1", "decr1", "tags1");
         System.out.println(getProject(0).getTitle());
         System.out.println(getProjectID("test1"));
     }
@@ -41,9 +42,23 @@ public class projects_database {
     private static void createTable() throws SQLException {
         Statement state = database.createStatement();
         //TODO: Check if table already exists
-        state.execute("CREATE TABLE Project(id Integer,title varchar(20),description varchar(20),tags varchar(20),date Date,subProjects_id Integer,tasks_id Integer);");
-        state.execute("CREATE TABLE Collaborator(id Integer, project_id Integer, user_id Integer);");
-        state.execute("CREATE TABLE Task(id Integer, description varchar(20));");
+
+        ResultSet res1 = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Project'");
+        ResultSet res2 = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Collaborator'");
+        ResultSet res3 = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Task'");
+        ResultSet res4 = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Subproject'");
+        System.out.println(res1.next());
+        if (res1.next()) {System.out.println("exists");} else {System.out.println("doesnt exists");}
+        
+        if (res2==null) {
+            state.execute("CREATE TABLE Collaborator(id Integer, project_id Integer, user_id Integer);");
+        }
+        if (res3==null) {
+            state.execute("CREATE TABLE Task(id Integer, description varchar(20), project_id Integer);");
+        }
+        if (res4==null) {
+            state.execute("CREATE TABLE SubProject(id Integer, project_id Integer);");
+        }
     }
 
     private static int createProject(String title, String description, String tags) throws SQLException {
