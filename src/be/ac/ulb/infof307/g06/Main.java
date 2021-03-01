@@ -6,15 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/Connection.fxml")); // Test
-        primaryStage.setTitle("Satistics");
+        Parent root = FXMLLoader.load(getClass().getResource("JavaUI/sample/statistics1.fxml")); // Test
+        primaryStage.setTitle("ALINE");
         primaryStage.setScene(new Scene(root,1500, 900));
-        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
