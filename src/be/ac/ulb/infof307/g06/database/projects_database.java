@@ -1,3 +1,5 @@
+// TODO: collaborators, edit project
+
 package be.ac.ulb.infof307.g06.database;
 
 import java.sql.*;
