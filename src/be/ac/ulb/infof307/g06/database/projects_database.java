@@ -29,7 +29,11 @@ class Project{
     public Date getDate(){return date;}
     public int getParent_id(){return parent_id;}
 }
-
+class Task{
+    String description;
+    public Task(String description){this.description = description;}
+    public String getDescription() {return description; }
+}
 public class projects_database {
     private static Connection database;
 
@@ -116,13 +120,13 @@ public class projects_database {
         return id;
     }
 
-    public static List<String> getTasks(int project_id) throws SQLException{
+    public static List<Task> getTasks(int project_id) throws SQLException{
         Statement state = database.createStatement();
         ResultSet rs = state.executeQuery("SELECT description FROM Task WHERE project_id='" + project_id + "';");
-        List<String> res = new ArrayList<String>();
+        List<Task> res = new ArrayList<Task>();
 
         while (rs.next()){
-            res.add(rs.getString("description"));
+            res.add(new Task(rs.getString("description")));
         }
         return res;
     }
