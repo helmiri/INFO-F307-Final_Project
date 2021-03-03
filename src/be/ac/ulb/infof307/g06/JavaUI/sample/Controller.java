@@ -19,6 +19,7 @@ public class Controller {
 
     // --------------------- ATTRIBUTS -------------------------
 
+    // * SignIn / SignUp  *
     @FXML
     private Text helloUser;
 
@@ -35,9 +36,8 @@ public class Controller {
     private Button registerBtn;
 
     @FXML
-    private ToggleSwitch toggle_switch;
+    private ToggleSwitch toggleSwitch;
 
-    // --------------------- METHODES -------------------------
     @FXML
     private TextField firstName;
 
@@ -62,12 +62,18 @@ public class Controller {
     @FXML
     private Button goToConnection;
 
+    // * Conditions *
     @FXML
     private Button acceptConditionsBtn;
 
     @FXML
     private CheckBox acceptConditionsBox;
 
+    // * Statistics *
+    @FXML
+    private Button visualiseBtn;
+
+    // --------------------- METHODES -------------------------
 
     @FXML
     private void buttonEvents(ActionEvent event) throws Exception {
@@ -89,9 +95,9 @@ public class Controller {
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()) {
                 main.showStatisticsScene();
-
             }
         }
+        else if( event.getSource()== visualiseBtn){main.showVisualiseScene(); }
     }
 
     @FXML

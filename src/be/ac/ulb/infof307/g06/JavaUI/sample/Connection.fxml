@@ -34,7 +34,7 @@
             <HyperlinkLabel layoutX="131.0" layoutY="478.0" prefHeight="18.0" prefWidth="105.0" text="forgot password?" />
          </children>
       </Pane>
-      <ToggleSwitch fx:id="toggle_switch" layoutX="1362.0" layoutY="44.0" text="Theme" />
+      <ToggleSwitch fx:id="toggleSwitch" layoutX="1362.0" layoutY="44.0" text="Theme" />
       <Polygon fill="#eefeac" layoutX="579.0" layoutY="182.0" points="-601.0, 178.0, -331.0, 647.0, -387.0, -105.0" stroke="WHITE" strokeType="INSIDE" />
       <Polygon fill="#eefeac" layoutX="483.0" layoutY="-68.0" points="-483.0, 68.0, -419.0, 624.0, -55.0, 68.0" stroke="WHITE" strokeType="INSIDE" />
       <Polygon fill="#b1a493" layoutX="409.0" layoutY="-148.0" points="-409.0, 148.0, -409.0, 555.0, 120.0, 148.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
