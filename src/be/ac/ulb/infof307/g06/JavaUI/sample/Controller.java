@@ -83,14 +83,15 @@ public class Controller {
         }
 
         else if( event.getSource()== registerBtn   )  {main.showRegisterScene()  ;}
+
         else if( event.getSource()== goToConnection)  {main.showConnectionScene();}
+
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()) {
                 main.showStatisticsScene();
 
             }
         }
-
     }
 
     @FXML

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #2F2F30;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutX="378.0" layoutY="350.0" spacing="40.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #B9DCE4;" textFill="#f2f1f0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="USER" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #F1E0A6;" textFill="#f2f1f0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="FOLDER" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #FFD7FF;" textFill="#f2f1f0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="CALENDAR" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #D0F8D0;" textFill="#f2f1f0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="COG" />
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <Polygon fill="#b1a493" layoutX="151.0" layoutY="150.0" points="-151.0, 300.0, 387.0, -150.0, -151.0, -150.0" stroke="#b1a493" strokeType="INSIDE" strokeWidth="0.0" />
+      <Polygon fill="#3f3f59" layoutX="99.0" layoutY="737.0" points="-99.0, 163.0, 439.0, 163.0, -99.0, -287.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <HBox layoutX="1156.0" layoutY="760.0" prefHeight="70.0" prefWidth="206.0" spacing="15.0">
+         <children>
+            <Circle fill="#b1a493" radius="34.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fill="#b1a493" radius="34.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#b1a493" radius="34.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
