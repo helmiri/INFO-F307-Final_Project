@@ -17,6 +17,8 @@ import org.controlsfx.control.ToggleSwitch;
 public class Controller {
     private Main main;
 
+    // --------------------- ATTRIBUTS -------------------------
+
     @FXML
     private Text helloUser;
 
@@ -35,6 +37,7 @@ public class Controller {
     @FXML
     private ToggleSwitch toggle_switch;
 
+    // --------------------- METHODES -------------------------
     @FXML
     private TextField firstName;
 
