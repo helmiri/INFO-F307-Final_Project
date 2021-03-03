@@ -55,7 +55,7 @@ public class Main extends Application {
 
     public static void showStatisticsScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/statistics1.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/Stats.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
         // Delay part.
@@ -66,7 +66,7 @@ public class Main extends Application {
 
     public static void showConditionsScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Conditions.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/Terms.fxml"));
         AnchorPane conditions = loader.load();
         Stage stage = new Stage();
         stage.setTitle("User terms and conditions");
