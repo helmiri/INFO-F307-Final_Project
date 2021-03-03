@@ -12,6 +12,8 @@ import javafx.event.ActionEvent;
 
 public class Controller {
 
+    // --------------------- ATTRIBUTS -------------------------
+
     @FXML
     private AnchorPane root;
 
@@ -30,6 +32,7 @@ public class Controller {
     @FXML
     private ToggleSwitch toggle_switch;
 
+    // --------------------- METHODES -------------------------
     @FXML
     private void buttonEvents(ActionEvent event) {
 
