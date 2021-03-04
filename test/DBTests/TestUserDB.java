@@ -22,7 +22,7 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Insert")
     public void testAddUser() throws SQLException {
-        assertTrue(UserDB.addUser("User1_fName", "User1_lname", "User1_userName", "user1.email.com", "123passwd"));
+        assertEquals(11, UserDB.addUser("User1_fName", "User1_lname", "User1_userName", "user1.email.com", "123passwd"));
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("Select fName from users where fName='User1_fName'");
 

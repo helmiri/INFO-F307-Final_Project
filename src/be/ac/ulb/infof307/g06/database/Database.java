@@ -1,6 +1,8 @@
 package be.ac.ulb.infof307.g06.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public abstract class Database {
     protected static Connection db;
@@ -15,15 +17,14 @@ public abstract class Database {
         db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
     }
 
-    protected static void closeConnection() throws SQLException {
+    public static void close(AutoCloseable... objects) throws SQLException {
         db.close();
-    }
-
-    protected static ResultSet run(String sql) throws SQLException {
-        connect();
-        Statement state = db.createStatement();
-        ResultSet res = state.executeQuery(sql);
-        closeConnection();
-        return res;
+        for (AutoCloseable obj : objects) {
+            try {
+                obj.close();
+            } catch (Exception e) {
+                return;
+            }
+        }
     }
 }

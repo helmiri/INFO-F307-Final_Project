@@ -26,27 +26,29 @@ public class UserDB extends Database {
     }
 
     /**
-     * @param fName First name
-     * @param lName Last name
+     * @param fName    First name
+     * @param lName    Last name
      * @param userName User name
-     * @param email email
+     * @param email    email
      * @param password password
      * @return true on success
      * @throws SQLException Error accessing the database
      */
-    public static boolean addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
-
+    public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         connect();
         createTable();
-        PreparedStatement state1 = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)");
+        String[] key = {"id"};
+        PreparedStatement state1 = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)", key);
         state1.setString(1, fName);
         state1.setString(2, lName);
         state1.setString(3, userName);
         state1.setString(4, email);
         state1.setString(5, password);
         state1.execute();
-        closeConnection();
-        return true;
+        ResultSet rs = state1.getGeneratedKeys();
+        int res = rs.getInt(1);
+        close(state1, rs);
+        return res;
     }
 
     public static boolean userExists(String userName) throws SQLException {
@@ -54,7 +56,7 @@ public class UserDB extends Database {
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("SELECT userName FROM users WHERE userName='" + userName + "'");
         boolean found = res.next();
-        closeConnection();
+        close(state, res);
         return found;
     }
 
@@ -66,7 +68,7 @@ public class UserDB extends Database {
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("SELECT password FROM main.users WHERE userName='" + userName + "'");
         boolean valid = res.getString("password").equals(password);
-        closeConnection();
+        close(state, res);
         return valid;
     }
 
@@ -83,7 +85,7 @@ public class UserDB extends Database {
         res.put("fName", usrInfo.getString("fName"));
         res.put("lName", usrInfo.getString("lName"));
         res.put("email", usrInfo.getString("email"));
-        closeConnection();
+        close(state, usrInfo);
         return res;
     }
 }
