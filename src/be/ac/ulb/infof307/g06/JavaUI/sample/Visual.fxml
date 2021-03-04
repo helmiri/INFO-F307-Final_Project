@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #2F2F30;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Polygon fill="#ffd7ff" layoutX="68.0" layoutY="-26.0" points="-68.0, 26.0, -67.99999237060547, 587.333251953125, 311.0, 26.000030517578125" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Polygon fill="#b9dce4" layoutX="320.0" layoutY="315.0" points="63.0, 520.0, -320.0, 520.0, -320.0, -28.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+      <Pane prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: #FFD7FF;">
+         <children>
+            <Label layoutX="112.0" layoutY="21.0" prefHeight="40.0" prefWidth="137.0" text="LOGO" textFill="#1b0303">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label layoutX="360.0" layoutY="41.0" prefHeight="59.0" prefWidth="343.0" text="Visualisation" textFill="#e8e8e8" AnchorPane.topAnchor="41.0">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="360.0" layoutY="78.0" prefHeight="59.0" prefWidth="436.0" text="Visualise your statistics &amp; expert them in json." textFill="WHITE" />
+      <Button layoutX="1254.0" layoutY="750.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="102.0" text="Export " AnchorPane.bottomAnchor="43.0" />
+      <VBox layoutX="320.0" layoutY="137.0" prefHeight="561.0" prefWidth="964.0">
+         <children>
+            <BorderPane prefHeight="529.0" prefWidth="915.0">
+               <top>
+                  <Label prefHeight="17.0" prefWidth="129.0" text="Project 1" textFill="#f9f9f9" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </top>
+               <right>
+                  <Pane prefHeight="499.0" prefWidth="483.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label alignment="CENTER" layoutX="250.0" layoutY="29.0" prefHeight="178.0" prefWidth="219.0" style="-fx-background-color: #3F3F59;" text="8" textFill="WHITE">
+                           <font>
+                              <Font size="64.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="17.0" layoutY="29.0" prefHeight="175.0" prefWidth="208.0" style="-fx-background-color: #3F3F59;" text="7" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="64.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="61.0" layoutY="233.0" prefHeight="40.0" prefWidth="120.0" text="Real time" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="287.0" layoutY="233.0" prefHeight="40.0" prefWidth="167.0" text="Estimated time" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </right>
+               <bottom>
+                  <TableView prefHeight="162.0" prefWidth="921.0" style="-fx-background-color: #D0F8D0;" BorderPane.alignment="CENTER">
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="Nbr" />
+                      <TableColumn prefWidth="401.0" text="User" />
+                      <TableColumn prefWidth="233.0" text="N.projects" />
+                    </columns>
+                  </TableView>
+               </bottom>
+               <center>
+                  <PieChart fx:id="pieChartTasks" prefHeight="215.0" prefWidth="909.0" style="-fx-background-color: #eefeac;" title="Tasks" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
