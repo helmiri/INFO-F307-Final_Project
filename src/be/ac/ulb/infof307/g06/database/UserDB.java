@@ -52,8 +52,7 @@ public class UserDB extends Database {
     }
 
     public static boolean userExists(String userName) throws SQLException {
-        connect();
-        Statement state = db.createStatement();
+        Statement state = connect();
         ResultSet res = state.executeQuery("SELECT userName FROM users WHERE userName='" + userName + "'");
         boolean found = res.next();
         close(state, res);
@@ -64,8 +63,7 @@ public class UserDB extends Database {
         if (!userExists(userName)) {
             return false;
         }
-        connect();
-        Statement state = db.createStatement();
+        Statement state = connect();
         ResultSet res = state.executeQuery("SELECT password FROM main.users WHERE userName='" + userName + "'");
         boolean valid = res.getString("password").equals(password);
         close(state, res);
@@ -77,9 +75,8 @@ public class UserDB extends Database {
         if (!userExists(userName)) {
             return res;
         }
-        connect();
 
-        Statement state = db.createStatement();
+        Statement state = connect();
         ResultSet usrInfo = state.executeQuery("Select fName, lName, email from users where userName='" + userName + "'");
 
         res.put("fName", usrInfo.getString("fName"));
