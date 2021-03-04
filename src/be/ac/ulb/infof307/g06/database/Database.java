@@ -2,30 +2,28 @@ package be.ac.ulb.infof307.g06.database;
 
 import java.sql.*;
 
-public class Database {
-    private static Connection database;
+public abstract class Database {
+    protected static Connection db;
+    protected static String dbURL;
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        init("data.db");
-        createTable();
-    }
-
-    private static void init(String dbName) throws SQLException, ClassNotFoundException {
+    public Database(String dbName) throws ClassNotFoundException {
+        dbURL = dbName;
         Class.forName("org.sqlite.JDBC");
-        database = DriverManager.getConnection("jdbc:sqlite:" + dbName);
     }
 
-    private static void createTable() throws SQLException {
-        Statement state = database.createStatement();
+    protected static void connect() throws SQLException {
+        db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
+    }
 
-        ResultSet res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Users'");
-        if (res.next()) {
-            System.out.println("Found");
-            return;
-        }
-        state.execute("CREATE TABLE Users(id Integer," + "fName varchar(20),"
-                + "lName varchar(20)," + "userName varchar(20),"
-                + "email varchar(40)," + "password varchar(20),"
-                + "primary key (id));");
+    protected static void closeConnection() throws SQLException {
+        db.close();
+    }
+
+    protected static ResultSet run(String sql) throws SQLException {
+        connect();
+        Statement state = db.createStatement();
+        ResultSet res = state.executeQuery(sql);
+        closeConnection();
+        return res;
     }
 }

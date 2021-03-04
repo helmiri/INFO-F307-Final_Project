@@ -1,21 +1,20 @@
+
 package be.ac.ulb.infof307.g06.database;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDB {
-    private static Connection db;
-    private static String dbURL;
+/**
+ *
+ */
+public class UserDB extends Database {
 
-    public static void init(String dbName) throws ClassNotFoundException, SQLException {
-        dbURL = dbName;
-        Class.forName("org.sqlite.JDBC");
-        db = DriverManager.getConnection("jdbc:sqlite:" + dbName);
-    }
-
-    public static void closeConnection() throws SQLException {
-        db.close();
+    public UserDB(String dbName) throws ClassNotFoundException {
+        super(dbName);
     }
 
     private static void createTable() throws SQLException {
@@ -26,8 +25,18 @@ public class UserDB {
                 + "primary key (id));");
     }
 
-    public static boolean addUser(String fName, String lName, String userName, String email, String password) throws SQLException, ClassNotFoundException {
-        init("test/DBTests/testDB.db");
+    /**
+     * @param fName First name
+     * @param lName Last name
+     * @param userName User name
+     * @param email email
+     * @param password password
+     * @return true on success
+     * @throws SQLException Error accessing the database
+     */
+    public static boolean addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
+
+        connect();
         createTable();
         PreparedStatement state1 = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)");
         state1.setString(1, fName);
@@ -40,8 +49,8 @@ public class UserDB {
         return true;
     }
 
-    public static boolean userExists(String userName) throws SQLException, ClassNotFoundException {
-        init(dbURL);
+    public static boolean userExists(String userName) throws SQLException {
+        connect();
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("SELECT userName FROM users WHERE userName='" + userName + "'");
         boolean found = res.next();
@@ -49,11 +58,11 @@ public class UserDB {
         return found;
     }
 
-    public static boolean validateData(String userName, String password) throws SQLException, ClassNotFoundException {
+    public static boolean validateData(String userName, String password) throws SQLException {
         if (!userExists(userName)) {
             return false;
         }
-        init(dbURL);
+        connect();
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("SELECT password FROM main.users WHERE userName='" + userName + "'");
         boolean valid = res.getString("password").equals(password);
@@ -61,12 +70,12 @@ public class UserDB {
         return valid;
     }
 
-    public static Map<String, String> getUserInfo(String userName) throws SQLException, ClassNotFoundException {
+    public static Map<String, String> getUserInfo(String userName) throws SQLException {
         Map<String, String> res = new HashMap<>();
         if (!userExists(userName)) {
             return res;
         }
-        init(dbURL);
+        connect();
 
         Statement state = db.createStatement();
         ResultSet usrInfo = state.executeQuery("Select fName, lName, email from users where userName='" + userName + "'");
