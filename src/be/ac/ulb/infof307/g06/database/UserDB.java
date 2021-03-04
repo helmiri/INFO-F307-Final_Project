@@ -13,16 +13,8 @@ import java.util.Map;
  */
 public class UserDB extends Database {
 
-    public UserDB(String dbName) throws ClassNotFoundException {
+    public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
-    }
-
-    private static void createTable() throws SQLException {
-        Statement state = db.createStatement();
-        state.execute("CREATE TABLE IF NOT EXISTS users(id Integer," + "fName varchar(20),"
-                + "lName varchar(20)," + "userName varchar(20),"
-                + "email varchar(40)," + "password varchar(20),"
-                + "primary key (id));");
     }
 
     /**
@@ -36,7 +28,6 @@ public class UserDB extends Database {
      */
     public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         connect();
-        createTable();
         String[] key = {"id"};
         PreparedStatement state1 = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)", key);
         state1.setString(1, fName);
