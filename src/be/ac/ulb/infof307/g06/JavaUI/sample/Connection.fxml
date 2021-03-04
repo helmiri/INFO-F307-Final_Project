@@ -22,7 +22,7 @@
                   <Font name="Agency FB" size="64.0" />
                </font>
             </Label>
-            <TextField fx:id="username" layoutX="74.0" layoutY="209.0" maxHeight="26.0" maxLength="64" maxWidth="220.0" minHeight="26.0" minWidth="0.0" prefHeight="26.0" prefWidth="220.0" promptText="Username/Email Address" />
+            <TextField fx:id="username" layoutX="74.0" layoutY="209.0" maxHeight="26.0" maxLength="10" maxWidth="220.0" minHeight="26.0" minWidth="0.0" prefHeight="26.0" prefWidth="220.0" promptText="Username/Email Address" />
             <PasswordField fx:id="password" layoutX="74.0" layoutY="279.0" prefHeight="26.0" prefWidth="220.0" promptText="Password" />
             <Button fx:id="connectionBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #B9DCE4;" text="Connexion" textFill="#7c7a7a">
                <effect>

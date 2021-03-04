@@ -1,20 +1,19 @@
 package be.ac.ulb.infof307.g06;
 
-
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
     private static Stage primaryStage;
     private static AnchorPane mainLayout;
+    private static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -28,7 +27,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         /*
-            If u want to show another window as the first one u need to get rif of
+            If u want to show another window as the first one u need to get rid of
             the "setup" part and the "delay" part and replace them by:
             mainLayout = loader.load();
             Scene scene = new Scene(mainLayout);
@@ -68,13 +67,13 @@ public class Main extends Application {
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/Terms.fxml"));
         AnchorPane conditions = loader.load();
-        Stage stage = new Stage();
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("User terms and conditions");
         stage.setScene(new Scene(conditions, 750, 900));
         stage.show();
     }
+    public static void closeConditionsStage() { stage.close(); }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) { launch(args); }
 }

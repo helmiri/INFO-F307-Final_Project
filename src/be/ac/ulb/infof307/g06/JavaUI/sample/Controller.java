@@ -9,14 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
 
 public class Controller {
-    private Main main;
-
     // --------------------- ATTRIBUTS -------------------------
 
     @FXML
@@ -37,7 +34,6 @@ public class Controller {
     @FXML
     private ToggleSwitch toggle_switch;
 
-    // --------------------- METHODES -------------------------
     @FXML
     private TextField firstName;
 
@@ -46,9 +42,6 @@ public class Controller {
 
     @FXML
     private TextField emailAddress;
-
-    @FXML
-    private TextField usernameRegister;
 
     @FXML
     private TextField registerPassword;
@@ -68,41 +61,51 @@ public class Controller {
     @FXML
     private CheckBox acceptConditionsBox;
 
+    // --------------------- METHODES -------------------------
 
     @FXML
     private void buttonEvents(ActionEvent event) throws Exception {
-        if( event.getSource()== connectionBtn){
-            String passwd;
+        //TODO: Rename cette méthode en LogInEvents?
+        //TODO: Changer "16" par une constante ou bien une valeur récupérer maximale
+        //TODO: Méthode pour les conditions de connection
+        //TODO: Méthode pour les conditions de register
+        if( event.getSource()== connectionBtn
+                && username.getText().length() < username.getMaxLength()
+                && username.getText().length() > 0
+                && password.getText().length() < 16
+                && password.getText().length() > 0 ){
+            String passwd = password.getText();
             String user = username.getText();
-            passwd = password.getText();
-            mainMenu(event, passwd, user);
+            mainMenu(user);
         }
+
+        else if( event.getSource()== registerBtn   )  {
+            Main.showRegisterScene()  ;}
 
         else if( event.getSource()== SignUpBtn     )  {
-            main.showConditionsScene();
+            Main.showConditionsScene();
         }
 
-        else if( event.getSource()== registerBtn   )  {main.showRegisterScene()  ;}
-
-        else if( event.getSource()== goToConnection)  {main.showConnectionScene();}
+        else if( event.getSource()== goToConnection)  {
+            Main.showConnectionScene();}
 
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()) {
-                main.showStatisticsScene();
-
+                Main.showStatisticsScene();
+                Main.closeConditionsStage();
             }
         }
     }
 
     @FXML
-    private void mainMenu(ActionEvent event, String passwd, String user) throws Exception {
+    private void mainMenu(String user) throws Exception {
         /*
             Creates a delay to say hello to the user before going to the main menu.
          */
         PauseTransition delay = new PauseTransition(Duration.seconds(0.3));
-        delay.setOnFinished(actionEvent -> helloUser.setText("Bienvenue " + user + "!"));
+        delay.setOnFinished(actionEvent->helloUser.setText("Bienvenue " + user + "!"));
         delay.play();
-        main.showStatisticsScene();
+        Main.showStatisticsScene();
 
     }
 }
