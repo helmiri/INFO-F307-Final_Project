@@ -63,6 +63,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 :question: **Question:**  
 - Qu'est-ce qu'une tâche concrètement? Réponse : Une simple chose à faire, sans date ni heure, ni échéance.
+- When a parent project's tag(label) is updated, do we update all the childern project's tags as well?
 
 
 ### Histoire 3
