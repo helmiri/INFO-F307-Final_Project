@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import org.controlsfx.control.ToggleSwitch?>
 
 <AnchorPane fx:id="root" maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #2F2F30;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
    <children>
@@ -17,12 +16,12 @@
          <children>
             <VBox layoutX="74.0" layoutY="141.0" prefHeight="319.0" prefWidth="220.0" spacing="25.0">
                <children>
-                  <TextField fx:id="firstName" maxHeight="26.0" maxLength="24" maxWidth="220.0" minHeight="26.0" minWidth="0.0" prefHeight="26.0" prefWidth="220.0" promptText="First Name" />
-                  <TextField fx:id="lastName" maxHeight="26.0" maxLength="32" maxWidth="220.0" minHeight="26.0" minWidth="0.0" prefHeight="26.0" prefWidth="220.0" promptText="Last Name" />
-                  <TextField fx:id="emailAddress" maxHeight="26.0" maxLength="64" maxWidth="220.0" minHeight="26.0" minWidth="0.0" prefHeight="26.0" prefWidth="220.0" promptText="Email Address" />
-                  <TextField fx:id="username" maxHeight="26.0" maxLength="16" maxWidth="220.0" minHeight="26.0" minWidth="0.0" prefHeight="26.0" prefWidth="220.0" promptText="Username" />
-                  <TextField fx:id="registerPassword" maxHeight="26.0" maxLength="16" maxWidth="302.0" minHeight="26.0" minWidth="100.0" prefHeight="26.0" prefWidth="220.0" promptText="Password" />
-                  <TextField fx:id="passwordConfirmation" maxHeight="26.0" maxLength="16" maxWidth="302.0" minHeight="26.0" minWidth="100.0" prefHeight="26.0" prefWidth="220.0" promptText="Password Confirmation" />
+                  <TextField fx:id="lastName" promptText="Last Name" />
+                  <TextField fx:id="firstName" promptText="First Name" />
+                  <TextField fx:id="email" promptText="Email Adress" />
+                  <TextField fx:id="signUpUsername" promptText="Username" />
+                  <TextField fx:id="signUpPassword" promptText="Password" />
+                  <TextField fx:id="passwordConfirmation" promptText="Password Confirmation" />
                </children>
             </VBox>
             <Label layoutX="108.0" layoutY="31.0" text="Sign Up" textFill="WHITE">
@@ -34,7 +33,6 @@
             <Button fx:id="goToConnection" layoutX="294.0" layoutY="469.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="34.0" prefWidth="59.0" style="-fx-background-color: #B9DCE4;" text="Back" textFill="#7c7a7a" />
          </children>
       </Pane>
-      <ToggleSwitch fx:id="toggleSwitch" layoutX="1362.0" layoutY="44.0" text="Theme" />
       <Polygon fill="#eefeac" layoutX="579.0" layoutY="182.0" points="-601.0, 178.0, -331.0, 647.0, -387.0, -105.0" stroke="WHITE" strokeType="INSIDE" />
       <Polygon fill="#eefeac" layoutX="483.0" layoutY="-68.0" points="-483.0, 68.0, -419.0, 624.0, -55.0, 68.0" stroke="WHITE" strokeType="INSIDE" />
       <Polygon fill="#b1a493" layoutX="409.0" layoutY="-148.0" points="-409.0, 148.0, -409.0, 555.0, 120.0, 148.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />

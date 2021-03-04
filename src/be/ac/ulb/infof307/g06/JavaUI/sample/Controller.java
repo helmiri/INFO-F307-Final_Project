@@ -2,28 +2,25 @@ package be.ac.ulb.infof307.g06.JavaUI.sample;
 
 
 import be.ac.ulb.infof307.g06.Main;
-import com.gluonhq.charm.glisten.control.TextField;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.controlsfx.control.ToggleSwitch;
 
 public class Controller {
     // --------------------- ATTRIBUTS -------------------------
 
+    // ---------CONNECTION---------
     @FXML
-    private Text helloUser;
+    private TextField logInUsername;
 
     @FXML
-    private TextField username;
-
-    @FXML
-    private PasswordField password;
+    private PasswordField logInPassword;
 
     @FXML
     private Button connectionBtn;
@@ -31,9 +28,7 @@ public class Controller {
     @FXML
     private Button registerBtn;
 
-    @FXML
-    private ToggleSwitch toggle_switch;
-
+    // ---------SIGN UP---------
     @FXML
     private TextField firstName;
 
@@ -41,10 +36,13 @@ public class Controller {
     private TextField lastName;
 
     @FXML
-    private TextField emailAddress;
+    private TextField email;
 
     @FXML
-    private TextField registerPassword;
+    private TextField signUpUsername;
+
+    @FXML
+    private TextField signUpPassword;
 
     @FXML
     private TextField passwordConfirmation;
@@ -55,11 +53,15 @@ public class Controller {
     @FXML
     private Button goToConnection;
 
+    // ---------TERMS AND CONDITIONS---------
+
     @FXML
     private Button acceptConditionsBtn;
 
     @FXML
     private CheckBox acceptConditionsBox;
+
+    // ---------STATISTICS---------
 
     @FXML
     private Button visualiseBtn;
@@ -73,12 +75,12 @@ public class Controller {
         //TODO: Méthode pour les conditions de connection
         //TODO: Méthode pour les conditions de register
         if( event.getSource()== connectionBtn
-                && username.getText().length() <= username.getMaxLength()
-                && username.getText().length() > 8
-                && password.getText().length() < 16
-                && password.getText().length() > 8 ){
-            String passwd = password.getText();
-            String user = username.getText();
+                && logInUsername.getText().length() <= 16
+                && logInUsername.getText().length() > 8
+                && logInPassword.getText().length() <= 16
+                && logInPassword.getText().length() > 8 ){
+            String passwd = logInPassword.getText();
+            String user = logInUsername.getText();
             mainMenu(user);
         }
 
@@ -99,14 +101,28 @@ public class Controller {
         }
     }
 
+    /*
+    * IN PROGRESS
+    @FXML
+    private void logInConditions() throws Exception{
+        if(        logInUsername.getText().length() <= 16
+                && logInUsername.getText().length() >   8
+                && logInPassword.getText().length() <= 16
+                && logInPassword.getText().length() >   8){
+
+        }
+    }
+    */
+
+
     @FXML
     private void mainMenu(String user) throws Exception {
         /*
             Creates a delay to say hello to the user before going to the main menu.
          */
-        PauseTransition delay = new PauseTransition(Duration.seconds(0.3));
-        delay.setOnFinished(actionEvent->helloUser.setText("Bienvenue " + user + "!"));
-        delay.play();
+        //PauseTransition delay = new PauseTransition(Duration.seconds(0.3));
+        //delay.setOnFinished(actionEvent->helloUser.setText("Bienvenue " + user + "!"));
+        //delay.play();
         Main.showStatisticsScene();
 
     }

@@ -23,16 +23,9 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("JavaUI/sample/Connection.fxml"));
         mainLayout = loader.load();
         Scene scene = new Scene(mainLayout);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
-        /*
-            If u want to show another window as the first one u need to get rid of
-            the "setup" part and the "delay" part and replace them by:
-            mainLayout = loader.load();
-            Scene scene = new Scene(mainLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-         */
     }
 
     public static void showConnectionScene() throws Exception{
