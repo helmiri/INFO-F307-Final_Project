@@ -61,6 +61,9 @@ public class Controller {
     @FXML
     private CheckBox acceptConditionsBox;
 
+    @FXML
+    private Button visualiseBtn;
+
     // --------------------- METHODES -------------------------
 
     @FXML
@@ -90,6 +93,9 @@ public class Controller {
                 Main.showStatisticsScene();
                 Main.closeConditionsStage();
             }
+        }
+        else if(event.getSource() ==visualiseBtn){
+            Main.showVisualScene();
         }
     }
 

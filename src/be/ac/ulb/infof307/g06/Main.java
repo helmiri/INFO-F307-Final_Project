@@ -76,5 +76,13 @@ public class Main extends Application {
 
     public static void closeConditionsStage() {stage.close();}
 
+    public static void showVisualScene() throws Exception{
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(Main.class.getResource("JavaUI/sample/Visual.fxml"));
+        // Setup the new page.
+        AnchorPane connection = loader.load();
+        mainLayout.getChildren().setAll(connection);
+    }
+
     public static void main(String[] args) {launch(args);}
 }
