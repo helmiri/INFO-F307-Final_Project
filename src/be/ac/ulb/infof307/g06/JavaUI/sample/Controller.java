@@ -70,27 +70,23 @@ public class Controller {
         //TODO: Méthode pour les conditions de connection
         //TODO: Méthode pour les conditions de register
         if( event.getSource()== connectionBtn
-                && username.getText().length() < username.getMaxLength()
-                && username.getText().length() > 0
+                && username.getText().length() <= username.getMaxLength()
+                && username.getText().length() > 8
                 && password.getText().length() < 16
-                && password.getText().length() > 0 ){
+                && password.getText().length() > 8 ){
             String passwd = password.getText();
             String user = username.getText();
             mainMenu(user);
         }
 
-        else if( event.getSource()== registerBtn   )  {
-            Main.showRegisterScene()  ;}
+        else if( event.getSource()== registerBtn   )  { Main.showRegisterScene()  ;}
 
-        else if( event.getSource()== SignUpBtn     )  {
-            Main.showConditionsScene();
-        }
+        else if( event.getSource()== SignUpBtn     )  { Main.showConditionsScene();}
 
-        else if( event.getSource()== goToConnection)  {
-            Main.showConnectionScene();}
+        else if( event.getSource()== goToConnection)  { Main.showConnectionScene();}
 
         else if( event.getSource()== acceptConditionsBtn){
-            if(acceptConditionsBox.isSelected()) {
+            if(acceptConditionsBox.isSelected()){
                 Main.showStatisticsScene();
                 Main.closeConditionsStage();
             }

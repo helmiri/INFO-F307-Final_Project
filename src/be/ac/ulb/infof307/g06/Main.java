@@ -73,7 +73,8 @@ public class Main extends Application {
         stage.setScene(new Scene(conditions, 750, 900));
         stage.show();
     }
-    public static void closeConditionsStage() { stage.close(); }
 
-    public static void main(String[] args) { launch(args); }
+    public static void closeConditionsStage() {stage.close();}
+
+    public static void main(String[] args) {launch(args);}
 }
