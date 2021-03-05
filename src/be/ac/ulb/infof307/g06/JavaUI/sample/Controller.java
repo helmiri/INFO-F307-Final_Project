@@ -72,7 +72,7 @@ public class Controller {
     private Button ProfileAccessBtn;
 
     @FXML
-    private Button ProjectAccessBtn;
+    private Button ProjectAccessBtn;    //ATTENTION METTRE DES MINUSCULES AU DEBUT DES LES NOMS D'ATTRIBUTS SVPPP (Aline)
 
     @FXML
     private Button CalendarAccessBtn;

@@ -69,7 +69,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button id="connectionBtn" fx:id="goToConnection" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="56.0" prefWidth="110.0" style="-fx-background-color: CC8B8B;" text="Log out" textAlignment="CENTER" textFill="WHITE" underline="true">
+            <Button id="connectionBtn" fx:id="LogOutBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="56.0" prefWidth="110.0" style="-fx-background-color: CC8B8B;" text="Log out" textAlignment="CENTER" textFill="WHITE" underline="true">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
