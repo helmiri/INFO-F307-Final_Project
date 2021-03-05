@@ -18,7 +18,7 @@ public class Main extends Application {
         Main.primaryStage.setTitle("Projet génie logiciel");
         // SetUp the main page. Should try to change that.
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Connection.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/LoginV2.fxml"));
         mainLayout = loader.load();
         Scene scene = new Scene(mainLayout);
         primaryStage.setResizable(false);
@@ -28,7 +28,7 @@ public class Main extends Application {
 
     public static void showConnectionScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Connection.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/LoginV2.fxml"));
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
@@ -36,7 +36,7 @@ public class Main extends Application {
 
     public static void showRegisterScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Register.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/SignUpV2.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
         mainLayout.getChildren().setAll(register);
@@ -73,6 +73,13 @@ public class Main extends Application {
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
+    }
+
+    public static void ShowMainMenu() throws Exception{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("JavaUI/sample/MainMenu.fxml"));
+        AnchorPane menu = loader.load();
+        mainLayout.getChildren().setAll(menu);
     }
 
     public static void main(String[] args) {launch(args);}

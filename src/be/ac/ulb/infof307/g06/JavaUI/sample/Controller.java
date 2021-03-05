@@ -63,6 +63,28 @@ public class Controller {
     @FXML
     private Button visualiseBtn;
 
+    // --------- MAIN MENU ------------
+
+    @FXML
+    private Button ProfileAccessBtn;
+
+    @FXML
+    private Button ProjectAccessBtn;
+
+    @FXML
+    private Button CalendarAccessBtn;
+
+    @FXML
+    private Button SettingsAccessBtn;
+
+    @FXML
+    private Button HelpBtn;
+
+    @FXML
+    private Button LogOutBtn;
+
+
+
     // --------------------- METHODES -------------------------
 
     @FXML
@@ -91,14 +113,14 @@ public class Controller {
     @FXML
     private void logInConditions() throws Exception{
         //TODO: remplacer dans le if pour le mot de passe par validatePassword
-        if(        validateUsername(logInUsernameField)
+        /*if(        validateUsername(logInUsernameField)
                 && logInPasswordField.getText().length() <= 16
                 && logInPasswordField.getText().length() >=  8){
             String passwd = logInPasswordField.getText();
             String user = logInUsernameField.getText();
             //checkData(user,passwd)
-            mainMenu(user);
-        }
+            //mainMenu(user);*/
+        Main.ShowMainMenu();
     }
 
     @FXML
@@ -174,7 +196,7 @@ public class Controller {
         //PauseTransition delay = new PauseTransition(Duration.seconds(0.3));
         //delay.setOnFinished(actionEvent->helloUser.setText("Bienvenue " + user + "!"));
         //delay.play();
-        Main.showStatisticsScene();
+        //Main.showStatisticsScene();
 
     }
 }
