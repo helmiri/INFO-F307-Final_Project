@@ -22,43 +22,43 @@
       <Polygon fill="#4ec8f50d" layoutX="-208.0" layoutY="368.0" points="208.00001525878906, 539.2000122070312, 208.0, -368.0, 686.5999755859375, 539.2000122070312" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4ec8f50d" layoutX="-216.0" layoutY="368.0" points="216.00001525878906, 539.2000122070312, 213.59999084472656, -369.1999816894531, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="-164.0" layoutY="368.0" points="161.59999084472656, 540.0, 162.60000610351562, -370.79998779296875, 451.5999755859375, 541.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <GridPane layoutY="14.0" prefHeight="415.8" prefWidth="616.0" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
-        <columnConstraints>
+      <GridPane layoutX="120.0" layoutY="29.0" prefHeight="848.0" prefWidth="1267.0">
+         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="129.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="173.4" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="102.3999633789063" prefWidth="110.80001220703122" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="101.19998779296873" />
-        </columnConstraints>
-        <rowConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="101.19998779296873" />
+         </columnConstraints>
+         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="124.59998779296875" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="36.60001220703124" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="59.20001831054688" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="14.999981689453108" prefHeight="64.79999999999998" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="25.800012207031273" prefHeight="46.59995117187498" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="59.20001831054688" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="14.999981689453108" prefHeight="64.79999999999998" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.800012207031273" prefHeight="46.59995117187498" vgrow="SOMETIMES" />
             <RowConstraints minHeight="43.59999694824222" prefHeight="83.20004882812498" vgrow="SOMETIMES" />
-        </rowConstraints>
+         </rowConstraints>
          <children>
             <TextField id="username" fx:id="logInUsername" accessibleRole="TEXT" alignment="CENTER" promptText="username" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </TextField>
-            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="62.0" prefWidth="310.0" style="-fx-background-color: #4fc3f7;" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </Button>
-            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="62.0" prefWidth="311.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </Button>
             <PasswordField fx:id="logInPassword" alignment="CENTER" promptText="password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </PasswordField>
+            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="62.0" prefWidth="310.0" style="-fx-background-color: #4fc3f7;" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </Button>
+            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="62.0" prefWidth="311.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </Button>
          </children>
       </GridPane>
    </children>

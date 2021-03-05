@@ -98,6 +98,8 @@ public class Controller {
 
         else if( event.getSource()== goToConnection)  { Main.showConnectionScene();}
 
+        else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
+
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
                 Main.showStatisticsScene();

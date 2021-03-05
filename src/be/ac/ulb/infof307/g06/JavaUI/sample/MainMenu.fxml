@@ -14,11 +14,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
    <children>
       <HBox layoutX="259.0" layoutY="350.0" spacing="40.0">
          <children>
-            <Button fx:id="ProfileAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="ProfileAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -33,7 +33,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="ProjectAccessBtn" mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="ProjectAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -45,7 +45,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="CalendarAccessBtn" mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="CalendarAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -57,7 +57,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="SettingsAccessBtn" mnemonicParsing="false" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="SettingsAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -131,10 +131,13 @@
       <Polygon fill="#c1e7f5" layoutX="121.0" layoutY="90.0" points="-121.0, 91.0, 417.0, -90.0, -121.0, -90.0" stroke="#c1e7f5" strokeType="INSIDE" strokeWidth="0.0" />
       <Polygon fill="#d4f3ff" layoutX="50.0" layoutY="855.0" points="-50.0, 45.0, 481.0, 45.0, -50.0, -293.0" stroke="#d4f3ff" strokeType="INSIDE" />
       <Polygon fill="#c1e7f5" layoutX="72.0" layoutY="828.0" points="-72.0, 72.0, 459.0, 72.0, -72.0, -119.0" stroke="#c1e7f5" strokeType="INSIDE" />
-      <Button fx:id="HelpBtn" layoutX="1407.0" layoutY="821.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="50.0" style="-fx-background-color: #4fc3f7;" text="?" />
-      <Button fx:id="LogOutBtn" layoutX="1296.0" layoutY="821.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="92.0" style="-fx-background-color: #4fc3f7;" text="LOG OUT">
+      <Button fx:id="HelpBtn" layoutX="1407.0" layoutY="821.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="50.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="WHITE">
          <font>
-            <Font name="Calibri" size="13.0" />
+            <Font name="Calibri Bold" size="24.0" />
+         </font></Button>
+      <Button fx:id="LogOutBtn" layoutX="1187.0" layoutY="821.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="LOG OUT" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="24.0" />
          </font></Button>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e1e1" height="77.0" stroke="#e1e1e1" strokeType="INSIDE" width="1500.0" />
       <Text fill="WHITE" layoutX="13.0" layoutY="55.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAIN MENU" wrappingWidth="504.9830722808838">
