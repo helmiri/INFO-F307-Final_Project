@@ -13,12 +13,12 @@
 
 <AnchorPane prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
    <children>
-      <TableView layoutX="382.0" layoutY="231.0" prefHeight="453.0" prefWidth="719.0" style="-fx-background-color: #00000056; -fx-background: #d0f8d01c;">
+      <TableView layoutX="331.0" layoutY="215.0" prefHeight="510.0" prefWidth="940.0" style="-fx-background-color: #00000056; -fx-background: #d0f8d01c;">
          <columns>
             <TableColumn prefWidth="65.0" text="Select" />
-            <TableColumn prefWidth="164.0" text="Name of the project" />
-            <TableColumn minWidth="0.0" prefWidth="221.0" text="Description of the project" />
-            <TableColumn minWidth="0.0" prefWidth="142.0" text="Sub projects" />
+            <TableColumn prefWidth="263.0" text="Name of the project" />
+            <TableColumn minWidth="0.0" prefWidth="397.0" text="Description of the project" />
+            <TableColumn minWidth="0.0" prefWidth="214.0" text="Sub projects" />
          </columns>
       </TableView>
       <VBox layoutX="145.0" layoutY="70.0" prefHeight="73.0" prefWidth="596.0">
@@ -31,16 +31,35 @@
             <Label prefHeight="59.0" prefWidth="436.0" text="Select the project you want to visualise." />
          </children>
       </VBox>
-      <HBox alignment="BOTTOM_RIGHT" layoutX="148.0" prefHeight="54.0" prefWidth="526.0" spacing="12.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER_RIGHT" layoutX="489.0" layoutY="396.0" prefHeight="62.0" prefWidth="74.0" spacing="10.0" />
+      <Button fx:id="BackToMainMenu" layoutX="8.0" layoutY="7.0" minWidth="53.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="81.0" prefWidth="93.0" style="-fx-background-color: #00000056;" text="Back" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Polygon fill="#4ec8f50d" layoutX="-167.0" layoutY="374.0" points="169.00001525878906, 541.0, 169.00001525878906, -368.0, 744.5999755859375, 540.7999877929688" stroke="TRANSPARENT" strokeType="INSIDE">
+         <effect>
+            <Bloom />
+         </effect>
+      </Polygon>
+      <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="374.0" points="208.00001525878906, 539.2000122070312, 208.0, -368.0, 686.5999755859375, 539.2000122070312" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4ec8f50d" layoutX="-214.0" layoutY="374.0" points="216.00001525878906, 539.2000122070312, 213.59999084472656, -369.1999816894531, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="-162.0" layoutY="374.0" points="161.59999084472656, 540.0, 162.60000610351562, -370.79998779296875, 451.5999755859375, 541.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Button fx:id="visualiseBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="1199.0" layoutY="795.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="123.0" style="-fx-background-color: #000000;" text="Visualise" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <HBox alignment="BOTTOM_RIGHT" layoutX="1087.0" layoutY="20.0" prefHeight="51.0" prefWidth="399.0" spacing="12.0">
          <children>
             <Button minWidth="53.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="93.0" style="-fx-background-color: C0D6E1;" text="Profile" textFill="WHITE">
                <font>
-                  <Font size="12.0" />
+                  <Font size="18.0" />
                </font>
             </Button>
             <Button minWidth="53.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="83.0" style="-fx-background-color: C0D6E1;" text="Settings" textFill="WHITE">
                <font>
-                  <Font size="12.0" />
+                  <Font size="14.0" />
                </font>
             </Button>
             <Button alignment="CENTER" minWidth="45.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="67.0" style="-fx-background-color: C0D6E1;" text="?" textFill="WHITE">
@@ -55,24 +74,5 @@
             </Button>
          </children>
       </HBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="489.0" layoutY="396.0" prefHeight="62.0" prefWidth="74.0" spacing="10.0" />
-      <Button fx:id="BackToMainMenu" layoutX="8.0" layoutY="7.0" minWidth="53.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="38.0" prefWidth="60.0" style="-fx-background-color: #00000056;" text="Back" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Polygon fill="#4ec8f50d" layoutX="-167.0" layoutY="374.0" points="169.00001525878906, 541.0, 169.00001525878906, -368.0, 744.5999755859375, 540.7999877929688" stroke="TRANSPARENT" strokeType="INSIDE">
-         <effect>
-            <Bloom />
-         </effect>
-      </Polygon>
-      <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="374.0" points="208.00001525878906, 539.2000122070312, 208.0, -368.0, 686.5999755859375, 539.2000122070312" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4ec8f50d" layoutX="-214.0" layoutY="374.0" points="216.00001525878906, 539.2000122070312, 213.59999084472656, -369.1999816894531, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4fc3f70d" layoutX="-162.0" layoutY="374.0" points="161.59999084472656, 540.0, 162.60000610351562, -370.79998779296875, 451.5999755859375, 541.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Button fx:id="visualiseBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="1040.0" layoutY="797.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="123.0" style="-fx-background-color: #000000;" text="Visualise" textFill="WHITE">
-         <font>
-            <Font size="12.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>

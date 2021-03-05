@@ -86,8 +86,6 @@ public class Controller {
     @FXML
     private Button LogOutBtn;
 
-
-
     @FXML
     private Button goToStats;
 
@@ -107,6 +105,8 @@ public class Controller {
         else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
 
         else if( event.getSource() == ProjectAccessBtn) {Main.showStatisticsScene();}
+
+        else if( event.getSource() == goToStats) {Main.showStatisticsScene();}
 
         else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
 
