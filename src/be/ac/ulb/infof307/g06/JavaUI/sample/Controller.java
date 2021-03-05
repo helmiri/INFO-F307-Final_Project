@@ -100,6 +100,8 @@ public class Controller {
 
         else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
 
+        else if( event.getSource() == ProjectAccessBtn) {Main.showStatisticsScene();}
+
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
                 Main.showStatisticsScene();
