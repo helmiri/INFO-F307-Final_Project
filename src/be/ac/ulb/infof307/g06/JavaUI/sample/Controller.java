@@ -63,6 +63,9 @@ public class Controller {
     @FXML
     private Button visualiseBtn;
 
+    @FXML
+    private Button BackToMainMenu;
+
     // --------- MAIN MENU ------------
 
     @FXML
@@ -104,6 +107,8 @@ public class Controller {
         else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
 
         else if( event.getSource() == ProjectAccessBtn) {Main.showStatisticsScene();}
+
+        else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
 
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){

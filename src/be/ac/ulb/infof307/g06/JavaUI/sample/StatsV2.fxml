@@ -56,7 +56,7 @@
          </children>
       </HBox>
       <HBox alignment="CENTER_RIGHT" layoutX="489.0" layoutY="396.0" prefHeight="62.0" prefWidth="74.0" spacing="10.0" />
-      <Button layoutX="8.0" layoutY="7.0" minWidth="53.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="60.0" style="-fx-background-color: #00000056;" text="Back" textFill="WHITE">
+      <Button fx:id="BackToMainMenu" layoutX="8.0" layoutY="7.0" minWidth="53.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="38.0" prefWidth="60.0" style="-fx-background-color: #00000056;" text="Back" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
