@@ -1,5 +1,6 @@
-package DBTests;
+package be.ac.ulb.infof307.g06;
 
+import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +24,7 @@ public class TestDatabase {
 
     @BeforeAll
     public static void setup() throws SQLException, ClassNotFoundException {
-        db = DriverManager.getConnection("jdbc:sqlite:test/DBTests/testDB.db");
+        db = DriverManager.getConnection("jdbc:sqlite:test/be/ac/ulb/infof307/g06/testDB.db");
         dbFields = new ArrayList<>(5);
         dbFields.add("fName");
         dbFields.add("lName");
@@ -40,7 +41,8 @@ public class TestDatabase {
             }
             testData.add(i, userData);
         }
-        new UserDB("test/DBTests/testDB.db");
+        new UserDB("test/be/ac/ulb/infof307/g06/testDB.db");
+        new ProjectDB("test/be/ac/ulb/infof307/g06/testDB.db");
     }
 
     @AfterAll
@@ -63,12 +65,16 @@ public class TestDatabase {
         }
     }
 
+    @SuppressWarnings("SqlWithoutWhere")
     @AfterEach
     public void clear() throws SQLException {
         /*
           Clear testDB for a fresh start after each Test
          */
         Statement state = db.createStatement();
-        state.executeUpdate("Delete from users");
+        state.executeUpdate("DELETE FROM users");
+        state.executeUpdate("DELETE FROM Project");
+        state.executeUpdate("DELETE FROM Collaborator");
+        state.executeUpdate("DELETE FROM Task");
     }
 }

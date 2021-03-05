@@ -1,4 +1,4 @@
-package DBTests;
+package be.ac.ulb.infof307.g06;
 
 
 import be.ac.ulb.infof307.g06.database.UserDB;
@@ -50,7 +50,6 @@ public class TestUserDB extends TestDatabase {
             ResultSet res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
             assertTrue(res.next());
         }
-
 
         assertFalse(UserDB.validateData("DoesNotExist", "password"));
         assertFalse(UserDB.validateData("userName", "wrongPasswd"));

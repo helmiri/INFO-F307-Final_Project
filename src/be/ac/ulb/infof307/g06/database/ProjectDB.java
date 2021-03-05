@@ -2,38 +2,30 @@
 
 package be.ac.ulb.infof307.g06.database;
 
-import java.sql.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class projects_database {
-    private static Connection database;
+public class ProjectDB extends Database {
 
-    public static Connection init(String dbName) throws SQLException, ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
-        database = DriverManager.getConnection(dbName);
-        createTable();
-        return database;
+    public ProjectDB(String dbName) throws ClassNotFoundException, SQLException {
+        super(dbName);
     }
 
-    private static void createTable() throws SQLException {
-        Statement state = database.createStatement();
-
-        state.execute("CREATE TABLE IF NOT EXISTS Project(id Integer, title varchar(20), description varchar(20), tags varchar(20), date Long, parent_id Integer);");
-        state.execute("CREATE TABLE IF NOT EXISTS Collaborator(id Integer, project_id Integer, user_id Integer);");
-        state.execute("CREATE TABLE IF NOT EXISTS Task(id Integer, description varchar(20), project_id Integer);");
-
-    }
 
     public static int createProject(String title, String description, String tags, Date date, int parent_id) throws SQLException {
-        Statement state = database.createStatement();
+        Statement state = connect();
+        ResultSet rs = null;
         int id;
         try {   // Generate id
-            ResultSet rs = state.executeQuery("SELECT id, MAX(id) FROM Project;");
+            rs = state.executeQuery("SELECT id, MAX(id) FROM Project;");
             id = rs.getInt("id");
             id++;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
             id = 1;
         }
 
@@ -43,16 +35,18 @@ public class projects_database {
         }
         state.execute("INSERT INTO Project (id, title, description, tags, date, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + tags + "','" + date.getTime() + "','" + parent_id + "');");
+        close(state, rs);
         return id;
     }
 
     public static void editProject(int id, String title, String description, String tags, Date date) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         state.execute("UPDATE Project SET title = '" + title + "', description = '" + description + "', tags = '" + tags + "', date = '" + date + "' WHERE id = '" + id + "';");
+        close(state);
     }
 
     public static void deleteProject(int id) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         List<Integer> subProjects = getSubProjects(id);
         for (Integer subProject : subProjects) {
             deleteProject(subProject);
@@ -60,120 +54,135 @@ public class projects_database {
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + id + "';");
         state.execute("DELETE FROM Task WHERE project_id = '" + id + "';");
         state.execute("DELETE FROM Project WHERE id = '" + id + "';");
+        close(state);
     }
 
 
-    public static List<Integer> getSubProjects(int id) throws SQLException{
-        Statement state = database.createStatement();
-        List<Integer> subProjects = new ArrayList<Integer>();
+    public static List<Integer> getSubProjects(int id) throws SQLException {
+        Statement state = connect();
+        List<Integer> subProjects = new ArrayList<>();
         ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE parent_id = '" + id + "';");
-        while (rs.next()){
+        while (rs.next()) {
             subProjects.add(rs.getInt("id"));
         }
+        close(state, rs);
         return subProjects;
     }
 
 
-    public static int getProjectID(String title) throws SQLException{
-        Statement state = database.createStatement();
+    public static int getProjectID(String title) throws SQLException {
+        Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
 
         int id = rs.getInt("id");
+        close(state, rs);
         return id;
     }
 
     public static Project getProject(int id) throws SQLException {
-        Statement state = database.createStatement();
+        Statement state = connect();
+        ResultSet rs = null;
+        Project res = null;
         try {
-            ResultSet rs = state.executeQuery("SELECT title,description,tags,date,parent_id FROM Project WHERE id='" + id + "';");
+            rs = state.executeQuery("SELECT title,description,tags,date,parent_id FROM Project WHERE id='" + id + "';");
 
             String title = rs.getString("title");
             String description = rs.getString("description");
             String tags = rs.getString("tags");
             Date date = new Date(rs.getLong("date"));
             int parent_id = rs.getInt("parent_id");
-            Project res = new Project(id, title, description, tags, date, parent_id);
-            return res;
-        } catch (Exception e){
-            return null;
+            res = new Project(id, title, description, tags, date, parent_id);
+        } catch (Exception ignored) {
         }
 
+        close(state, rs);
+        return res;
     }
 
-    public static int addCollaborator(int project_id, int user_id) throws SQLException{
-        Statement state = database.createStatement();
+    public static int addCollaborator(int project_id, int user_id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
         int id;
         try {   // Generate id
-            ResultSet rs = state.executeQuery("SELECT id, MAX(id) FROM Collaborator;");
+            rs = state.executeQuery("SELECT id, MAX(id) FROM Collaborator;");
             id = rs.getInt("id");
             id++;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
             id = 1;
         }
         state.execute("INSERT INTO Collaborator (id, project_id, user_id) VALUES ('" + id + "','" + project_id + "','" + user_id + "';");
+        close(rs, state);
         return id;
     }
 
     public static void deleteCollaborator(int project_id, int user_id) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + project_id + "' and user_id = '" + user_id + "';");
+        close(state);
     }
 
     public static List<Integer> getCollaborators(int project_id) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT user_id FROM Collaborator WHERE project_id='" + project_id + "';");
-        List<Integer> res = new ArrayList<Integer>();
-        while (rs.next()){
+        List<Integer> res = new ArrayList<>();
+        while (rs.next()) {
             res.add(rs.getInt("user_id"));
         }
+        close(rs);
         return res;
     }
 
-    public static List<Integer> getUserProjects(int user_id) throws SQLException{
-        Statement state = database.createStatement();
+    public static List<Integer> getUserProjects(int user_id) throws SQLException {
+        Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT project_id FROM Collaborator WHERE user_id='" + user_id + "';");
-        List<Integer> res = new ArrayList<Integer>();
-        while (rs.next()){
+        List<Integer> res = new ArrayList<>();
+        while (rs.next()) {
             res.add(rs.getInt("project_id_id"));
         }
+        close(rs);
         return res;
     }
 
-    public static int createTask(String description, int project_id) throws SQLException{
-        Statement state = database.createStatement();
+    public static int createTask(String description, int project_id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
         int id;
         try {   // Generate id
-            ResultSet rs = state.executeQuery("SELECT id, MAX(id) FROM Task;");
+            rs = state.executeQuery("SELECT id, MAX(id) FROM Task;");
             id = rs.getInt("id");
             id++;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
             id = 1;
         }
         state.execute("INSERT INTO Task (id, description, project_id) VALUES('" +
-                id + "','" + description + "','" + project_id+ "');");
+                id + "','" + description + "','" + project_id + "');");
+        close(rs, state);
         return id;
     }
 
     public static void editTask(String prev_description, String new_description, int project_id) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         state.execute("UPDATE Task SET description = '" + new_description + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
+        close(state);
     }
 
     public static void deleteTask(String description , int project_id) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         state.execute("DELETE Task WHERE project_id = '" + project_id + "' and description = '" + description + "';");
+        close(state);
     }
 
     public static List<Task> getTasks(int project_id) throws SQLException{
-        Statement state = database.createStatement();
+        Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT description FROM Task WHERE project_id='" + project_id + "';");
-        List<Task> res = new ArrayList<Task>();
+        List<Task> res = new ArrayList<>();
 
         while (rs.next()){
             res.add(new Task(rs.getString("description")));
         }
+        close(state, rs);
         return res;
     }
 
