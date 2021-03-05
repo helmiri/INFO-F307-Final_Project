@@ -1,13 +1,11 @@
 package be.ac.ulb.infof307.g06;
 
-import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Main extends Application {
     private static Stage primaryStage;
@@ -49,10 +47,11 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("JavaUI/sample/Stats.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
+        mainLayout.getChildren().setAll(register);
         // Delay part.
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
-        delay.setOnFinished( actionEvent ->mainLayout.getChildren().setAll(register));
-        delay.play();
+        //PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+        //delay.setOnFinished( actionEvent ->mainLayout.getChildren().setAll(register));
+        //delay.play();
     }
 
     public static void showConditionsScene() throws Exception{

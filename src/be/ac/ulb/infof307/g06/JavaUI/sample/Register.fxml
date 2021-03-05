@@ -16,12 +16,12 @@
          <children>
             <VBox layoutX="74.0" layoutY="141.0" prefHeight="319.0" prefWidth="220.0" spacing="25.0">
                <children>
-                  <TextField fx:id="lastName" promptText="Last Name" />
-                  <TextField fx:id="firstName" promptText="First Name" />
-                  <TextField fx:id="email" promptText="Email Adress" />
-                  <TextField fx:id="signUpUsername" promptText="Username" />
-                  <TextField fx:id="signUpPassword" promptText="Password" />
-                  <TextField fx:id="passwordConfirmation" promptText="Password Confirmation" />
+                  <TextField fx:id="lastNameField" promptText="Last Name" />
+                  <TextField fx:id="firstNameField" promptText="First Name" />
+                  <TextField fx:id="emailField" promptText="Email Adress" />
+                  <TextField fx:id="signUpUsernameField" promptText="Username" />
+                  <TextField fx:id="signUpPasswordField" promptText="Password" />
+                  <TextField fx:id="passwordConfirmationField" promptText="Password Confirmation" />
                </children>
             </VBox>
             <Label layoutX="108.0" layoutY="31.0" text="Sign Up" textFill="WHITE">

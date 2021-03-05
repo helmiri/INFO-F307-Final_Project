@@ -21,16 +21,16 @@
                   <Font name="Agency FB" size="64.0" />
                </font>
             </Label>
-            <PasswordField fx:id="logInPassword" layoutX="74.0" layoutY="279.0" prefHeight="26.0" prefWidth="220.0" promptText="Password" />
             <Button fx:id="connectionBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #B9DCE4;" text="Connexion" textFill="#7c7a7a">
                <effect>
                   <Blend />
                </effect>
             </Button>
+            <TextField fx:id="logInUsernameField" layoutX="73.0" layoutY="211.0" prefHeight="26.0" prefWidth="220.0" promptText="Username/Email Address" />
+            <PasswordField fx:id="logInPasswordField" layoutX="74.0" layoutY="279.0" prefHeight="26.0" prefWidth="220.0" promptText="Password" />
             <Label layoutX="177.0" layoutY="396.0" text="or" underline="true" />
             <Button fx:id="registerBtn" layoutX="104.0" layoutY="424.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #B9DCE4;" text="Register" textFill="#7c7a7a" />
             <HyperlinkLabel layoutX="131.0" layoutY="478.0" prefHeight="18.0" prefWidth="105.0" text="forgot password?" />
-            <TextField fx:id="logInUsername" layoutX="73.0" layoutY="211.0" prefHeight="26.0" prefWidth="220.0" promptText="Username/Email Address" />
          </children>
       </Pane>
       <Polygon fill="#eefeac" layoutX="579.0" layoutY="182.0" points="-601.0, 178.0, -331.0, 647.0, -387.0, -105.0" stroke="WHITE" strokeType="INSIDE" />
