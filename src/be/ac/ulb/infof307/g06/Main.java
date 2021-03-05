@@ -32,6 +32,7 @@ public class Main extends Application {
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
+
     }
 
     public static void showRegisterScene() throws Exception{
@@ -43,11 +44,14 @@ public class Main extends Application {
     }
 
     public static void showStatisticsScene() throws Exception{
-        FXMLLoader loader =  new FXMLLoader();
+        primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/StatsV2.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
         mainLayout.getChildren().setAll(register);
+
         // Delay part.
         //PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
         //delay.setOnFinished( actionEvent ->mainLayout.getChildren().setAll(register));
@@ -68,6 +72,7 @@ public class Main extends Application {
     public static void closeConditionsStage() {stage.close();}
 
     public static void showVisualScene() throws Exception{
+        primaryStage.setResizable(true);
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/VisualV2.fxml"));
         // Setup the new page.
@@ -75,7 +80,9 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(connection);
     }
 
-    public static void ShowMainMenu() throws Exception{
+    public static void ShowMainMenu() throws Exception {
+        primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/MainMenu.fxml"));
         AnchorPane menu = loader.load();

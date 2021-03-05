@@ -4,62 +4,78 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
+<AnchorPane prefHeight="425.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/15.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
    <children>
-      <Polygon fill="#4ec8f50d" layoutX="-169.0" layoutY="368.0" points="169.00001525878906, 541.0, 169.00001525878906, -368.0, 744.5999755859375, 540.7999877929688" stroke="TRANSPARENT" strokeType="INSIDE">
-         <effect>
-            <Bloom />
-         </effect>
-      </Polygon>
-      <Polygon fill="#4ec8f50d" layoutX="-208.0" layoutY="368.0" points="208.00001525878906, 539.2000122070312, 208.0, -368.0, 686.5999755859375, 539.2000122070312" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4ec8f50d" layoutX="-216.0" layoutY="368.0" points="216.00001525878906, 539.2000122070312, 213.59999084472656, -369.1999816894531, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4fc3f70d" layoutX="-164.0" layoutY="368.0" points="161.59999084472656, 540.0, 162.60000610351562, -370.79998779296875, 451.5999755859375, 541.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <GridPane layoutX="120.0" layoutY="29.0" prefHeight="848.0" prefWidth="1267.0">
+      <GridPane hgap="10.0" layoutY="-89.0" prefHeight="381.2" prefWidth="694.2" vgap="10.0"
+                AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.topAnchor="-89.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="129.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="173.4" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="102.3999633789063" prefWidth="110.80001220703122" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="101.19998779296873" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="129.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="173.4"/>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="102.3999633789063"
+                               prefWidth="110.80001220703122"/>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="101.19998779296873"/>
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="124.59998779296875" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="36.60001220703124" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="59.20001831054688" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="14.999981689453108" prefHeight="64.79999999999998" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="25.800012207031273" prefHeight="46.59995117187498" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="43.59999694824222" prefHeight="83.20004882812498" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="189.60000610351562" minHeight="25.0" prefHeight="189.60000610351562"
+                            vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="110.4" minHeight="33.599993896484364" prefHeight="33.599993896484364"
+                            vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="87.39999999999999" minHeight="20.0" prefHeight="27.200000000000017"
+                            vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.80000000000001" minHeight="1.5999999999999943" prefHeight="5.200006103515619"
+                            vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="64.80001220703122" minHeight="49.599999999999966" prefHeight="49.599999999999966"
+                            vgrow="SOMETIMES"/>
+            <RowConstraints vgrow="SOMETIMES"/>
+            <RowConstraints vgrow="SOMETIMES"/>
          </rowConstraints>
          <children>
-            <TextField id="username" fx:id="logInUsername" accessibleRole="TEXT" alignment="CENTER" promptText="username" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </TextField>
+            <TextField fx:id="loginUsername" alignment="CENTER" promptText="username" GridPane.columnIndex="2"
+                       GridPane.rowIndex="1"/>
             <PasswordField fx:id="logInPassword" alignment="CENTER" promptText="password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </PasswordField>
-            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="62.0" prefWidth="310.0" style="-fx-background-color: #4fc3f7;" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#buttonEvents"
+                    prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="LOG IN"
+                    textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <font>
-                  <Font name="Calibri Bold" size="24.0" />
+                  <Font name="Calibri Bold" size="24.0"/>
                </font>
             </Button>
-            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="62.0" prefWidth="311.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#buttonEvents"
+                    prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP"
+                    textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
-                  <Font name="Calibri Bold" size="24.0" />
+                  <Font name="Calibri Bold" size="24.0"/>
                </font>
             </Button>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         </padding>
+         <opaqueInsets>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         </opaqueInsets>
       </GridPane>
+      <Polygon fill="#4fc3f70d" layoutX="-122.0" layoutY="-486.0"
+               points="120.99995422363281, 919.0, 121.99998474121094, 486.0, 481.7999267578125, 919.0"
+               stroke="TRANSPARENT" strokeType="INSIDE"/>
+      <Polygon fill="#4fc3f70d" layoutX="-122.0" layoutY="-481.0"
+               points="121.99998474121094, 914.5999755859375, 121.99998474121094, 486.0, 396.99993896484375, 914.5999755859375"
+               stroke="TRANSPARENT" strokeType="INSIDE"/>
+      <Polygon fill="#4fc3f70d" layoutX="-123.0" layoutY="-478.0"
+               points="121.99999237060547, 911.0, 121.99998474121094, 486.0, 316.39996337890625, 911.0"
+               stroke="TRANSPARENT" strokeType="INSIDE"/>
+      <Polygon fill="#4fc3f70d" layoutX="-122.0" layoutY="-482.0"
+               points="120.99996948242188, 915.0, 121.99998474121094, 486.0, 240.99993896484375, 915.0"
+               stroke="TRANSPARENT" strokeType="INSIDE"/>
    </children>
 </AnchorPane>
