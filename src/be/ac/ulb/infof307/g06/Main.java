@@ -44,7 +44,7 @@ public class Main extends Application {
 
     public static void showStatisticsScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Stats.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/StatsV2.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
         mainLayout.getChildren().setAll(register);
@@ -56,12 +56,12 @@ public class Main extends Application {
 
     public static void showConditionsScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Terms.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/TermsV2.fxml"));
         AnchorPane conditions = loader.load();
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("User terms and conditions");
-        stage.setScene(new Scene(conditions, 750, 900));
+        stage.setScene(new Scene(conditions, 900, 768));
         stage.show();
     }
 
@@ -69,7 +69,7 @@ public class Main extends Application {
 
     public static void showVisualScene() throws Exception{
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Visual.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/VisualV2.fxml"));
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);

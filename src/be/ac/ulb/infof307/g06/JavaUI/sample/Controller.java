@@ -85,6 +85,9 @@ public class Controller {
 
 
 
+    @FXML
+    private Button goToStats;
+
     // --------------------- METHODES -------------------------
 
     @FXML
