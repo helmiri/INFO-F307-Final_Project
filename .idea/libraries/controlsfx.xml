@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="controlsfx">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/controlsfx/controlsfx-11.1.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/controlsfx/charm-glisten-4.4.1.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib/controlsfx" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/controlsfx" recursive="false" />
   </library>
 </component>
