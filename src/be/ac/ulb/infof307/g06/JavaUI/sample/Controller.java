@@ -2,9 +2,14 @@ package be.ac.ulb.infof307.g06.JavaUI.sample;
 
 
 import be.ac.ulb.infof307.g06.Main;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -89,30 +94,74 @@ public class Controller {
     @FXML
     private Button goToStats;
 
+    // ---------PROJECTS MENu------
+
+    @FXML
+    private TableView<Project> projectsTable;
+
+    @FXML
+    private Button addBtn;
+
+    @FXML
+    private Button loadBtn;
+
+    @FXML
+    private Button deleteBtn;
+
+    @FXML
+    private TableColumn<Project,String> projectsColumn;
+
+    @FXML
+    private TextField nameProject;
+
+    @FXML
+    private TextField descriptionProject;
+
+    @FXML
+    private DatePicker dateProject;
+
+    @FXML
+    private TextField tagsProject;
+
+    @FXML
+    private TableColumn<Project,String> descriptionColumn;
+
+    @FXML
+    private TableColumn<Project,String> tagsColumn;
+
     // --------------------- METHODES -------------------------
 
     @FXML
     private void buttonEvents(ActionEvent event) throws Exception {
         //TODO: Rename cette méthode en LogInEvents?
+
         if( event.getSource()== connectionBtn){ logInConditions(); }
-
         else if( event.getSource()== registerBtn   )  { Main.showRegisterScene()  ;}
-
         else if( event.getSource()== SignUpBtn     )  { signUpConditions()        ;}
-
         else if( event.getSource()== goToConnection)  { Main.showConnectionScene();}
 
+        else if( event.getSource() == loadBtn)        {
+            projectsColumn.setCellValueFactory(new PropertyValueFactory<Project, String>("name"));
+            descriptionColumn.setCellValueFactory(new PropertyValueFactory<Project, String>("description"));
+            tagsColumn.setCellValueFactory(new PropertyValueFactory<Project, String>("tags"));
+            loadProjects();}
+        else if( event.getSource()== addBtn)          {
+            projectsColumn.setCellValueFactory(new PropertyValueFactory<Project, String>("name"));
+            descriptionColumn.setCellValueFactory(new PropertyValueFactory<Project, String>("description"));
+            tagsColumn.setCellValueFactory(new PropertyValueFactory<Project, String>("tags"));
+            addProject(); }
+
+        else if( event.getSource()== deleteBtn){deleteProject();}
+
         else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
-
-        else if( event.getSource() == ProjectAccessBtn) {Main.showStatisticsScene();}
-
+        else if( event.getSource() == ProjectAccessBtn) {Main.showStatisticsScene();
+        }
         else if( event.getSource() == goToStats) {Main.showStatisticsScene();}
-
         else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
 
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
-                Main.showStatisticsScene();
+                Main.ShowMainMenu();
                 Main.closeConditionsStage();
             }
         }
@@ -122,6 +171,9 @@ public class Controller {
     }
 
 
+    private void loadProjects(){
+        projectsTable.setItems(getprojects());
+    }
     @FXML
     private void logInConditions() throws Exception{
         //TODO: remplacer dans le if pour le mot de passe par validatePassword
@@ -130,9 +182,9 @@ public class Controller {
                 && logInPasswordField.getText().length() >=  8){
             String passwd = logInPasswordField.getText();
             String user = logInUsernameField.getText();
-            //checkData(user,passwd)
-            //mainMenu(user);*/
-        Main.ShowMainMenu();
+            //checkData(user,passwd)}
+            */
+            Main.ShowMainMenu();
     }
 
     @FXML
@@ -200,15 +252,26 @@ public class Controller {
         return m.matches();
     }
 
-    @FXML
-    private void mainMenu(String user) throws Exception {
-        /*
-            Creates a delay to say hello to the user before going to the main menu.
-         */
-        //PauseTransition delay = new PauseTransition(Duration.seconds(0.3));
-        //delay.setOnFinished(actionEvent->helloUser.setText("Bienvenue " + user + "!"));
-        //delay.play();
-        //Main.showStatisticsScene();
+    public ObservableList<Project> getprojects() {
+        ObservableList<Project> projects = FXCollections.observableArrayList();
+        projects.add(new Project("projet1", "test", "cool"));
+        return projects;
+    }
 
+    @FXML
+    private void addProject(){
+        Project project = new Project(nameProject.getText(), descriptionProject.getText(),  tagsProject.getText());
+        //addToDatabase()
+        projectsTable.getItems().add(project);
+    }
+
+    @FXML
+    private void deleteProject() {
+        projectsTable.getItems().removeAll(projectsTable.getSelectionModel().getSelectedItem());
+        /*
+        Project project = projectsTable.getSelectionModel().getSelectedItem();
+        project.getName()
+         */
+        //delFromData()
     }
 }

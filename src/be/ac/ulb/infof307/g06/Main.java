@@ -27,12 +27,14 @@ public class Main extends Application {
     }
 
     public static void showConnectionScene() throws Exception{
+        primaryStage.setHeight(465);
+        primaryStage.setWidth(715);
+        primaryStage.centerOnScreen();
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/LoginV2.fxml"));
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
-
     }
 
     public static void showRegisterScene() throws Exception{
@@ -44,18 +46,15 @@ public class Main extends Application {
     }
 
     public static void showStatisticsScene() throws Exception{
-        primaryStage.setResizable(true);
-        primaryStage.setMaximized(true);
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/StatsV2.fxml"));
+        loader.setLocation(Main.class.getResource("JavaUI/sample/Projects.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
         mainLayout.getChildren().setAll(register);
 
-        // Delay part.
-        //PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
-        //delay.setOnFinished( actionEvent ->mainLayout.getChildren().setAll(register));
-        //delay.play();
     }
 
     public static void showConditionsScene() throws Exception{
@@ -66,13 +65,16 @@ public class Main extends Application {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("User terms and conditions");
         stage.setScene(new Scene(conditions, 900, 768));
+        stage.centerOnScreen();
         stage.show();
     }
 
     public static void closeConditionsStage() {stage.close();}
 
     public static void showVisualScene() throws Exception{
-        primaryStage.setResizable(true);
+        primaryStage.setHeight(900);
+        primaryStage.setWidth(1500);
+        primaryStage.centerOnScreen();
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/VisualV2.fxml"));
         // Setup the new page.
@@ -81,13 +83,17 @@ public class Main extends Application {
     }
 
     public static void ShowMainMenu() throws Exception {
-        primaryStage.setResizable(true);
-        primaryStage.setMaximized(true);
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/MainMenu.fxml"));
         AnchorPane menu = loader.load();
         mainLayout.getChildren().setAll(menu);
     }
 
-    public static void main(String[] args) {launch(args);}
+    public static void main(String[] args) {
+        //initDB
+        launch(args);
+    }
 }
