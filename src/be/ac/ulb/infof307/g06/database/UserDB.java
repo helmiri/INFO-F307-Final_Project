@@ -57,7 +57,10 @@ public class UserDB extends Database {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT id, password FROM main.users WHERE userName='" + userName + "'");
         boolean valid = res.getString("password").equals(password);
-        int key = res.getInt("id");
+        int key = 0;
+        if (valid) {
+            key = res.getInt("id");
+        }
         close(state, res);
         return key;
     }
