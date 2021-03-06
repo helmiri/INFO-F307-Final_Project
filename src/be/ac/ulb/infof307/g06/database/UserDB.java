@@ -50,15 +50,16 @@ public class UserDB extends Database {
         return found;
     }
 
-    public static boolean validateData(String userName, String password) throws SQLException {
+    public static int validateData(String userName, String password) throws SQLException {
         if (!userExists(userName)) {
-            return false;
+            return 0;
         }
         Statement state = connect();
-        ResultSet res = state.executeQuery("SELECT password FROM main.users WHERE userName='" + userName + "'");
+        ResultSet res = state.executeQuery("SELECT id, password FROM main.users WHERE userName='" + userName + "'");
         boolean valid = res.getString("password").equals(password);
+        int key = res.getInt("id");
         close(state, res);
-        return valid;
+        return key;
     }
 
     public static Map<String, String> getUserInfo(String userName) throws SQLException {
