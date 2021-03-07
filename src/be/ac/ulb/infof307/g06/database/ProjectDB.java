@@ -1,4 +1,3 @@
-// TODO: collaborators, edit project
 
 package be.ac.ulb.infof307.g06.database;
 
@@ -16,7 +15,7 @@ public class ProjectDB extends Database {
     }
 
 
-    public static int createProject(String title, String description, String tags, Date date, int parent_id) throws SQLException {
+    public static int createProject(String title, String description, String tags, Long date, int parent_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
         int id;
@@ -34,12 +33,12 @@ public class ProjectDB extends Database {
             tags = parent_tags + "," + tags;
         }
         state.execute("INSERT INTO Project (id, title, description, tags, date, parent_id) VALUES('" +
-                id + "','" + title + "','" + description + "','" + tags + "','" + date.getTime() + "','" + parent_id + "');");
+                id + "','" + title + "','" + description + "','" + tags + "','" + date + "','" + parent_id + "');");
         close(state, rs);
         return id;
     }
 
-    public static void editProject(int id, String title, String description, String tags, Date date) throws SQLException{
+    public static void editProject(int id, String title, String description, String tags, Long date) throws SQLException{
         Statement state = connect();
         state.execute("UPDATE Project SET title = '" + title + "', description = '" + description + "', tags = '" + tags + "', date = '" + date + "' WHERE id = '" + id + "';");
         close(state);
@@ -72,10 +71,15 @@ public class ProjectDB extends Database {
 
     public static int getProjectID(String title) throws SQLException {
         Statement state = connect();
-        ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
+        int id = 0;
+        try{
+            ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
 
-        int id = rs.getInt("id");
-        close(state, rs);
+            id = rs.getInt("id");
+        }
+        catch (Exception ignored){};
+
+        close(state);
         return id;
     }
 
@@ -89,7 +93,7 @@ public class ProjectDB extends Database {
             String title = rs.getString("title");
             String description = rs.getString("description");
             String tags = rs.getString("tags");
-            Date date = new Date(rs.getLong("date"));
+            Long date = rs.getLong("date");
             int parent_id = rs.getInt("parent_id");
             res = new Project(id, title, description, tags, date, parent_id);
         } catch (Exception ignored) {
@@ -111,7 +115,7 @@ public class ProjectDB extends Database {
             System.out.println(e.getMessage());
             id = 1;
         }
-        state.execute("INSERT INTO Collaborator (id, project_id, user_id) VALUES ('" + id + "','" + project_id + "','" + user_id + "';");
+        state.execute("INSERT INTO Collaborator (id, project_id, user_id) VALUES ('" + id + "','" + project_id + "','" + user_id + "');");
         close(rs, state);
         return id;
     }
@@ -138,7 +142,7 @@ public class ProjectDB extends Database {
         ResultSet rs = state.executeQuery("SELECT project_id FROM Collaborator WHERE user_id='" + user_id + "';");
         List<Integer> res = new ArrayList<>();
         while (rs.next()) {
-            res.add(rs.getInt("project_id_id"));
+            res.add(rs.getInt("project_id"));
         }
         close(rs);
         return res;
@@ -191,10 +195,10 @@ public class ProjectDB extends Database {
         String title;
         String description;
         String tags;
-        Date date;
+        Long date;
         int parent_id;
 
-        public Project(int id, String title, String description, String tags, Date date, int parent_id) {
+        public Project(int id, String title, String description, String tags, Long date, int parent_id) {
             this.title = title;
             this.description = description;
             this.tags = tags;
@@ -218,7 +222,7 @@ public class ProjectDB extends Database {
             return tags;
         }
 
-        public Date getDate() {
+        public Long getDate() {
             return date;
         }
 

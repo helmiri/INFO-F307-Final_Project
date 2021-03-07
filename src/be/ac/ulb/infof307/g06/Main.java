@@ -1,4 +1,5 @@
 package be.ac.ulb.infof307.g06;
+import be.ac.ulb.infof307.g06.database.*;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,7 @@ public class Main extends Application {
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
+        //getUserProjects() choppes l'id de tous les projets de l'User
     }
 
     public static void showRegisterScene() throws Exception{
@@ -72,14 +74,27 @@ public class Main extends Application {
     public static void closeConditionsStage() {stage.close();}
 
     public static void showVisualScene() throws Exception{
-        primaryStage.setHeight(900);
-        primaryStage.setWidth(1500);
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/VisualV2.fxml"));
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
+    }
+
+    public static void showTaskScene() throws Exception{
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(Main.class.getResource("JavaUI/sample/Task.fxml"));
+        AnchorPane conditions = loader.load();
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Task management");
+        stage.setScene(new Scene(conditions, 600, 400));
+        stage.setResizable(false);
+        stage.centerOnScreen();
+        stage.show();
     }
 
     public static void ShowMainMenu() throws Exception {
@@ -92,8 +107,7 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(menu);
     }
 
-    public static void main(String[] args) {
-        //initDB
-        launch(args);
-    }
+    public static void closeTaskStage() {stage.close();}
+
+    public static void main(String[] args) { launch(args); }
 }

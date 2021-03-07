@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane fx:id="root" prefHeight="850.0" prefWidth="1400.0" style="-fx-background-color: #2F2F30;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="843.0" prefWidth="1492.0" style="-fx-background-color: #2F2F30;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="visualiseBtn" layoutX="1282.0" layoutY="754.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="48.0" prefWidth="103.0" text="Visualise" />
       <Polygon fill="#b9dce4" layoutX="68.0" layoutY="-26.0" points="-68.0, 26.0, -67.99999237060547, 587.333251953125, 311.0, 26.000030517578125" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Polygon fill="#3f3f59" layoutX="320.0" layoutY="315.0" points="63.0, 520.0, -320.0, 520.0, -320.0, -28.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+      <Polygon fill="#f4cbff" layoutX="320.0" layoutY="315.0" points="63.0, 520.0, -320.0, 520.0, -320.0, -28.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
       <Pane prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: #B9DCE4;">
          <children>
             <Label layoutX="112.0" layoutY="21.0" prefHeight="40.0" prefWidth="137.0" text="LOGO" textFill="#1b0303">
@@ -24,181 +22,156 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="14.0" layoutY="15.0" minWidth="53.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="76.0" style="-fx-background-color: #00000056;" text="Back" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
          </children></Pane>
+      <ScrollBar layoutX="1065.0" layoutY="1.0" orientation="VERTICAL" prefHeight="799.0" prefWidth="24.0" AnchorPane.bottomAnchor="-1.3333333333333712" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="1.0" />
+      <HBox layoutX="393.0" layoutY="223.0" prefHeight="203.0" prefWidth="922.0" spacing="35.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="223.0">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 1 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="41.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="18.0" layoutY="78.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="18.0" layoutY="122.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 2 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="16.0" layoutY="78.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="16.0" layoutY="116.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 3 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="16.0" layoutY="84.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="16.0" layoutY="128.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 4 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="26.0" layoutY="81.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="26.0" layoutY="125.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <HBox layoutX="389.0" layoutY="467.0" prefHeight="214.0" prefWidth="922.0" spacing="35.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="467.0">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 5 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="16.0" layoutY="85.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="16.0" layoutY="129.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 6 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="16.0" layoutY="80.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="16.0" layoutY="124.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 7 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="16.0" layoutY="89.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="16.0" layoutY="133.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9DCE4;">
+               <children>
+                  <Pane prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: #3F3F59;">
+                     <children>
+                        <Label layoutX="49.0" layoutY="5.0" text="Project 8 " textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" />
+                     </children>
+                  </Pane>
+                  <Label layoutX="16.0" layoutY="86.0" prefHeight="48.0" prefWidth="168.0" text="Name of the project" />
+                  <Label layoutX="16.0" layoutY="130.0" prefHeight="48.0" prefWidth="168.0" text="Description" />
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <Button layoutX="1219.0" layoutY="735.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="103.0" text="Visualise" />
       <Label layoutX="360.0" layoutY="41.0" prefHeight="48.0" prefWidth="231.0" text="Statistics" textFill="#e8e8e8" AnchorPane.topAnchor="41.0">
          <font>
             <Font size="48.0" />
          </font>
       </Label>
       <Label layoutX="360.0" layoutY="78.0" prefHeight="59.0" prefWidth="436.0" text="Select the project you want to visualise." textFill="WHITE" />
-      <ScrollPane layoutX="413.0" layoutY="169.0" prefHeight="519.0" prefWidth="972.0" style="-fx-background: #2F2F30; -fx-background-color: #2F2F30;">
-         <content>
-            <AnchorPane fx:id="statAnchor" minHeight="0.0" minWidth="0.0" prefHeight="513.0" prefWidth="967.0">
-               <children>
-                  <VBox alignment="CENTER" layoutX="28.0" layoutY="4.0" prefHeight="505.0" prefWidth="924.0" spacing="50.0">
-                     <children>
-                        <HBox alignment="CENTER" prefHeight="203.0" prefWidth="922.0" spacing="35.0">
-                           <children>
-                              <VBox prefHeight="247.0" prefWidth="389.0" spacing="20.0" style="-fx-background-color: #B9DCE4;">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="55.0" prefWidth="389.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckBox fx:id="projectCheckBox" alignment="CENTER" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="21.0" prefWidth="155.0" selected="true" text="Project 1" textAlignment="CENTER" textFill="WHITE">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
-                                    <Label alignment="CENTER" prefHeight="48.0" prefWidth="417.0" text="Name of the project" textFill="WHITE" />
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="390.0" text="Description" wrapText="true" />
-                                    <VBox alignment="CENTER" prefHeight="46.0" prefWidth="190.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckComboBox prefHeight="35.0" prefWidth="251.0" title="Subprojects" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                              <VBox layoutX="269.0" layoutY="10.0" prefHeight="247.0" prefWidth="389.0" spacing="20.0" style="-fx-background-color: #B9DCE4;">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="55.0" prefWidth="389.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="155.0" text="Project 2" textAlignment="CENTER" textFill="WHITE">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
-                                    <Label alignment="CENTER" prefHeight="48.0" prefWidth="417.0" text="Name of the project" textFill="#110101" />
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="390.0" text="Description" wrapText="true" />
-                                    <VBox alignment="CENTER" prefHeight="46.0" prefWidth="190.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckComboBox prefHeight="35.0" prefWidth="251.0" title="Subprojects" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                              <VBox layoutX="57.0" layoutY="10.0" prefHeight="247.0" prefWidth="389.0" spacing="20.0" style="-fx-background-color: #B9DCE4;">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="55.0" prefWidth="389.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="155.0" text="Project 3" textAlignment="CENTER" textFill="WHITE">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
-                                    <Label alignment="CENTER" prefHeight="48.0" prefWidth="417.0" text="Name of the project" textFill="#110101" />
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="390.0" text="Description" wrapText="true" />
-                                    <VBox alignment="CENTER" prefHeight="46.0" prefWidth="190.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckComboBox prefHeight="35.0" prefWidth="251.0" title="Subprojects" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="146.0" prefHeight="203.0" prefWidth="922.0" spacing="35.0">
-                           <children>
-                              <VBox prefHeight="247.0" prefWidth="389.0" spacing="20.0" style="-fx-background-color: #B9DCE4;">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="55.0" prefWidth="389.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="155.0" text="Project 4" textAlignment="CENTER" textFill="WHITE">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
-                                    <Label alignment="CENTER" prefHeight="48.0" prefWidth="417.0" text="Name of the project" textFill="#110101" />
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="390.0" text="Description" wrapText="true" />
-                                    <VBox alignment="CENTER" prefHeight="46.0" prefWidth="190.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckComboBox prefHeight="35.0" prefWidth="251.0" title="Subprojects" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                              <VBox layoutX="269.0" layoutY="10.0" prefHeight="247.0" prefWidth="389.0" spacing="20.0" style="-fx-background-color: #B9DCE4;">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="55.0" prefWidth="389.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="155.0" text="Project 5" textAlignment="CENTER" textFill="WHITE">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
-                                    <Label alignment="CENTER" prefHeight="48.0" prefWidth="417.0" text="Name of the project" textFill="#110101" />
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="390.0" text="Description" wrapText="true" />
-                                    <VBox alignment="CENTER" prefHeight="46.0" prefWidth="190.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckComboBox prefHeight="35.0" prefWidth="251.0" title="Subprojects" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                              <VBox layoutX="57.0" layoutY="10.0" prefHeight="247.0" prefWidth="389.0" spacing="20.0" style="-fx-background-color: #B9DCE4;">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="55.0" prefWidth="389.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="21.0" prefWidth="155.0" text="Project 6" textAlignment="CENTER" textFill="WHITE">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
-                                    <Label alignment="CENTER" prefHeight="48.0" prefWidth="417.0" text="Name of the project" textFill="#110101" />
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="390.0" text="Description" wrapText="true" />
-                                    <VBox alignment="CENTER" prefHeight="46.0" prefWidth="190.0" style="-fx-background-color: #3F3F59;">
-                                       <children>
-                                          <CheckComboBox prefHeight="35.0" prefWidth="251.0" title="Subprojects" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-         </content>
-      </ScrollPane>
-      <HBox alignment="BOTTOM_RIGHT" layoutX="953.0" layoutY="15.0" prefHeight="40.0" prefWidth="468.0" spacing="12.0">
-         <children>
-            <Button minWidth="53.0" mnemonicParsing="false" prefHeight="72.0" prefWidth="81.0" style="-fx-background-color: C0D6E1;" text="Profile" textFill="WHITE">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </Button>
-            <Button minWidth="53.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="76.0" style="-fx-background-color: C0D6E1;" text="Settings" textFill="WHITE">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" minWidth="45.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="62.0" style="-fx-background-color: C0D6E1;" text="?" textFill="WHITE">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Button id="connectionBtn" fx:id="LogOutBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="40.0" prefWidth="97.0" style="-fx-background-color: CC8B8B;" text="Log out" textAlignment="CENTER" textFill="WHITE" underline="true">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-            </Button>
-         </children>
-      </HBox>
    </children>
 </AnchorPane>
