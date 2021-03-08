@@ -82,8 +82,8 @@ public class ProjectsController implements Initializable {
     /**
      * Initializes the tree table view for the projects and the table view for tasks +
      * loads user's projects and initializes the map.
-     * @param url
-     * @param resourceBundle
+     * @param url;
+     * @param resourceBundle;
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -97,8 +97,8 @@ public class ProjectsController implements Initializable {
 
     /**
      * The main method for button's events
-     * @param event
-     * @throws Exception
+     * @param event;
+     * @throws Exception;
      */
     @FXML
     private void Events(ActionEvent event) throws Exception {
@@ -119,7 +119,7 @@ public class ProjectsController implements Initializable {
 
     /**
      * Clears the tables and the map(to refresh when needed)
-     * @throws SQLException
+     * @throws SQLException;
      */
     private void loadProjects() throws SQLException {
         treeProjects.getRoot().getChildren().clear();
@@ -133,9 +133,9 @@ public class ProjectsController implements Initializable {
 
     /**
      * Initializes the map and display projects on the tree table view
-     * @param projects
-     * @param parent
-     * @throws SQLException
+     * @param projects;
+     * @param parent;
+     * @throws SQLException;
      */
     public void getProjects(List<Integer> projects, TreeItem<ProjectDB.Project> parent) throws SQLException{
         treeProjects.setShowRoot(false);
@@ -162,7 +162,7 @@ public class ProjectsController implements Initializable {
 
     /**
      * Creates a project and add it to the Database and the map + displays it in the tree table view
-     * @throws SQLException
+     * @throws SQLException;
      */
     @FXML
     private void addProject() throws SQLException{
@@ -194,8 +194,8 @@ public class ProjectsController implements Initializable {
 
     /**
      * Deletes a project in the Database and in the tree table view
-     * @param event
-     * @throws SQLException
+     * @param event;
+     * @throws SQLException;
      */
     @SuppressWarnings("unchecked")
     @FXML
@@ -219,8 +219,8 @@ public class ProjectsController implements Initializable {
 
     /**
      * Creates a pop up window to show details of a project; its description and tags
-     * @param event
-     * @throws SQLException
+     * @param event;
+     * @throws SQLException;
      */
     @FXML
     private void showDetailsProject(ActionEvent event) throws SQLException{
@@ -241,7 +241,7 @@ public class ProjectsController implements Initializable {
 
     /**
      * Edits a project
-     * @throws SQLException
+     * @throws SQLException;
      */
     @FXML
     private void editProject() throws SQLException{
@@ -260,8 +260,8 @@ public class ProjectsController implements Initializable {
 
     /**
      * Displays on the edit menu the chosen project
-     * @param event
-     * @throws Exception
+     * @param event;
+     * @throws Exception;
      */
     @FXML
     private void Select(ActionEvent event) throws Exception{
@@ -282,8 +282,8 @@ public class ProjectsController implements Initializable {
 
     /**
      * Adds a task to the parent project, adds it to the database
-     * @throws Exception
-     * @throws SQLException
+     * @throws Exception;
+     * @throws SQLException;
      */
     @FXML
     private void addTask() throws Exception, SQLException {
@@ -302,7 +302,7 @@ public class ProjectsController implements Initializable {
 
     /**
      * Displays it in the table view
-     * @throws SQLException
+     * @throws SQLException;
      */
     @FXML
     private void displayTask() throws SQLException {
@@ -317,8 +317,8 @@ public class ProjectsController implements Initializable {
 
     /**
      * Deletes a task in the database and in the table view
-     * @param event
-     * @throws SQLException
+     * @param event;
+     * @throws SQLException;
      */
     @FXML
     private void deleteTask(ActionEvent event) throws SQLException{
@@ -343,8 +343,8 @@ public class ProjectsController implements Initializable {
 
     /**
      *  Check if the string as at least one alphabet character and as 1 to 126 characters
-     * @param text
-     * @return boolean
+     * @param text;
+     * @return boolean;
      */
     @FXML
     private boolean validateDescription(String text){
@@ -355,8 +355,8 @@ public class ProjectsController implements Initializable {
 
     /**
      *  Check if the string as at least one alphabet character and as 1 to 20 characters
-     * @param text
-     * @return boolean
+     * @param text;
+     * @return boolean;
      */
     @FXML
     private boolean validateName(String text){
