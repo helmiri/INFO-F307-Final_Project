@@ -30,7 +30,7 @@ public class ProjectDB extends Database {
 
         if (parent_id != 0){    // Add the parent tags to the current tags
             String parent_tags = getProject(parent_id).getTags();
-            tags = parent_tags + "/" + tags;
+            tags = parent_tags.replace("/", ",") + "/" + tags;
         }
         state.execute("INSERT INTO Project (id, title, description, tags, date, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + tags + "','" + date + "','" + parent_id + "');");
@@ -49,7 +49,7 @@ public class ProjectDB extends Database {
 
     private static void editTags(int id, String tags) throws SQLException{
         Statement state = connect();
-        String newTags = tags.replace("/", ",") + getProject(id).getTags().split("/")[1];
+        String newTags = tags.replace("/", ",") + "/" + getProject(id).getTags().split("/")[1];
         state.execute("UPDATE Project SET tags = '" + newTags + "' WHERE id = '" + id + "';");
         for (Integer subProject : getSubProjects(id)) {
             editTags(subProject, newTags);
@@ -215,7 +215,7 @@ public class ProjectDB extends Database {
     public static int countTasks(int project_id) throws SQLException{
         Statement state = connect();
         int res;
-        ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Tasks WHERE project_id='" + project_id + "';");
+        ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Task WHERE project_id='" + project_id + "';");
         res = rs.getInt("COUNT(*)");
         close(rs);
         return res;
