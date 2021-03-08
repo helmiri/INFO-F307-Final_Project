@@ -199,6 +199,7 @@ public class ProjectDB extends Database {
         int parent_id;
 
         public Project(int id, String title, String description, String tags, Long date, int parent_id) {
+            this.id =id;
             this.title = title;
             this.description = description;
             this.tags = tags;
