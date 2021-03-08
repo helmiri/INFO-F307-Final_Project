@@ -18,12 +18,14 @@ public class UserDB extends Database {
     }
 
     /**
+     * Adds a user to the database
+     *
      * @param fName    First name
      * @param lName    Last name
      * @param userName User name
      * @param email    email
      * @param password password
-     * @return true on success
+     * @return the unique identifier of the newly inserted user
      * @throws SQLException Error accessing the database
      */
     public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
@@ -42,6 +44,13 @@ public class UserDB extends Database {
         return res;
     }
 
+    /**
+     * Queries the database for the requested userName
+     *
+     * @param userName userName to be searched
+     * @return true if found, false if not
+     * @throws SQLException
+     */
     public static boolean userExists(String userName) throws SQLException {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT userName FROM users WHERE userName='" + userName + "'");
@@ -50,6 +59,14 @@ public class UserDB extends Database {
         return found;
     }
 
+    /**
+     * Checks the validity of the password associated with the username
+     *
+     * @param userName input username
+     * @param password input password
+     * @return The unique identifier of the user if the password matches, 0 if the data is invalid
+     * @throws SQLException
+     */
     public static int validateData(String userName, String password) throws SQLException {
         if (!userExists(userName)) {
             return 0;
@@ -65,6 +82,13 @@ public class UserDB extends Database {
         return key;
     }
 
+    /**
+     * Queries the database for the user's information
+     *
+     * @param userName The user's username
+     * @return Map<String, String> where the key is the field's name containing fName, lName, and email
+     * @throws SQLException On error accessing the database
+     */
     public static Map<String, String> getUserInfo(String userName) throws SQLException {
         Map<String, String> res = new HashMap<>();
         if (!userExists(userName)) {
