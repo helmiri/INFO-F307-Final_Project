@@ -37,7 +37,7 @@
                   <TextField fx:id="parentProject" prefHeight="35.0" prefWidth="283.0" promptText="Parent( optionnal )" />
                </children>
             </VBox>
-            <Button fx:id="addProjectBtn" layoutX="163.0" layoutY="388.0" mnemonicParsing="false" onAction="#Events" prefHeight="34.0" prefWidth="144.0" style="-fx-background-color: #bcbcbc;" text="ADD" textFill="WHITE">
+            <Button fx:id="addProjectBtn" layoutX="163.0" layoutY="388.0" mnemonicParsing="false" onAction="#events" prefHeight="34.0" prefWidth="144.0" style="-fx-background-color: #bcbcbc;" text="ADD" textFill="WHITE">
                <font>
                   <Font name="Calibri" size="12.0" />
                </font>
@@ -78,7 +78,7 @@
       <TextArea fx:id="descriptionTask" layoutX="980.0" layoutY="727.0" prefHeight="62.0" prefWidth="219.0" promptText="Description" />
       <TextField fx:id="taskParent" layoutX="1212.0" layoutY="743.0" prefHeight="25.0" prefWidth="127.0" promptText="Project's name" />
       <Button fx:id="addTaskBtn" layoutX="1348.0" layoutY="743.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #4fc3f7;" text="add" textFill="WHITE" />
-      <Button fx:id="backBtn" layoutX="1385.0" layoutY="822.0" mnemonicParsing="false" onAction="#Events" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back" textFill="WHITE" />
+      <Button fx:id="backBtn" layoutX="1385.0" layoutY="822.0" mnemonicParsing="false" onAction="#events" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back" textFill="WHITE" />
       <Label layoutX="477.0" layoutY="14.0" text="Manage Project" textFill="#556668" underline="true">
          <font>
             <Font size="48.0" />
@@ -100,14 +100,14 @@
                   <Font name="Calibri" size="24.0" />
                </font>
             </Text>
-            <Button fx:id="EditProjectBtn" layoutX="168.0" layoutY="416.0" mnemonicParsing="false" onAction="#Events" prefHeight="34.0" prefWidth="134.0" style="-fx-background-color: #bcbcbc;" text="EDIT" textFill="WHITE">
+            <Button fx:id="EditProjectBtn" layoutX="168.0" layoutY="416.0" mnemonicParsing="false" onAction="#events" prefHeight="34.0" prefWidth="134.0" style="-fx-background-color: #bcbcbc;" text="EDIT" textFill="WHITE">
                <font>
                   <Font name="Calibri" size="12.0" />
                </font>
             </Button>
          </children>
       </Pane>
-      <Text fx:id="ErrorText" fill="RED" layoutX="524.0" layoutY="728.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="322.0">
+      <Text fx:id="errorText" fill="RED" layoutX="524.0" layoutY="728.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="322.0">
          <font>
             <Font name="Calibri" size="12.0" />
          </font>

@@ -16,7 +16,7 @@
    <children>
       <HBox layoutX="259.0" layoutY="350.0" spacing="40.0">
          <children>
-            <Button fx:id="ProfileAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="profileAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -31,7 +31,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="ProjectAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="projectAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -43,7 +43,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="CalendarAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="calendarAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -55,7 +55,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="SettingsAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="settingsAccessBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -69,11 +69,11 @@
             </Button>
          </children>
       </HBox>
-      <Button fx:id="HelpBtn" layoutX="1407.0" layoutY="821.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="50.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="WHITE">
+      <Button fx:id="helpBtn" layoutX="1407.0" layoutY="821.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="50.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="WHITE">
          <font>
             <Font name="Calibri Bold" size="24.0" />
          </font></Button>
-      <Button fx:id="LogOutBtn" layoutX="1187.0" layoutY="821.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="LOG OUT" textFill="WHITE">
+      <Button fx:id="logOutBtn" layoutX="1187.0" layoutY="821.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="LOG OUT" textFill="WHITE">
          <font>
             <Font name="Calibri" size="24.0" />
          </font></Button>

@@ -38,9 +38,9 @@ public class Controller {
     @FXML
     private TextField passwordConfirmationField;
     @FXML
-    private Button SignUpBtn;
+    private Button signUpBtn;
     @FXML
-    private Button goToConnection;
+    private Button goToConnectionBtn;
     @FXML
     private Text signUpTxtPopup;
 
@@ -52,29 +52,29 @@ public class Controller {
 
     // -------- PROJECT MENU ----------
     @FXML
-    private Button ManageProjetcsBtn;
+    private Button projectMangementBtn;
     @FXML
-    private Button StatisticsAccessBtn;
+    private Button statsAccessBtn;
     @FXML
-    private Button MainMenuBtn;
+    private Button mainMenuBtn;
 
     // --------- MAIN MENU ------------
     @FXML
-    private Button ProfileAccessBtn;
+    private Button profileAccessBtn;
     @FXML
-    private Button ProjectAccessBtn;
+    private Button projectAccessBtn;
     @FXML
-    private Button CalendarAccessBtn;
+    private Button calendarAccessBtn;
     @FXML
-    private Button SettingsAccessBtn;
+    private Button settingsAccessBtn;
     @FXML
-    private Button HelpBtn;
+    private Button helpBtn;
     @FXML
-    private Button LogOutBtn;
+    private Button logOutBtn;
     @FXML
-    private Button goToStats;
+    private Button goToStatsBtn;
     @FXML
-    private Button BackToMainMenu;
+    private Button backToMainMenu;
 
     // ----------------DATABASE---------------
     private ProjectDB projectsDB = new ProjectDB("Database.db");
@@ -93,15 +93,15 @@ public class Controller {
         //TODO: Rename cette méthode en LogInEvents?
         if( event.getSource()== connectionBtn      )  { logInConditions(); }
         else if( event.getSource()== registerBtn   )  { Main.showSignUpScene();  ;}
-        else if( event.getSource()== SignUpBtn     )  { signUpConditions()        ;}
-        else if( event.getSource()== goToConnection)  { Main.showLoginScene();}
-        else if( event.getSource() == LogOutBtn) { Main.showLoginScene();}
-        else if( event.getSource() == ProjectAccessBtn) { Main.showProjectMenuScene();}
-        else if( event.getSource() == MainMenuBtn ) {Main.showMainMenuScene(); }
-        else if( event.getSource() == StatisticsAccessBtn) {Main.showStatisticsScene();}
-        else if(event.getSource()  == ManageProjetcsBtn){Main.showProjectManagementScene();}
-        else if( event.getSource() == goToStats) { Main.showStatisticsScene(); }
-        else if( event.getSource() == BackToMainMenu) {Main.showMainMenuScene();}
+        else if( event.getSource()== signUpBtn)  { signUpConditions()        ;}
+        else if( event.getSource()== goToConnectionBtn)  { Main.showLoginScene();}
+        else if( event.getSource() == logOutBtn) { Main.showLoginScene();}
+        else if( event.getSource() == projectAccessBtn) { Main.showProjectMenuScene();}
+        else if( event.getSource() == mainMenuBtn) {Main.showMainMenuScene(); }
+        else if( event.getSource() == statsAccessBtn) {Main.showStatisticsScene();}
+        else if(event.getSource()  == projectMangementBtn){Main.showProjectManagementScene();}
+        else if( event.getSource() == goToStatsBtn) { Main.showStatisticsScene(); }
+        else if( event.getSource() == backToMainMenu) {Main.showMainMenuScene();}
         if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
                 Global.userID= UserDB.addUser(Global.firstName,Global.lastName,Global.username,Global.email,Global.passwd);

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class StatsController implements Initializable {
-    // --------- Boutons ------
+    // Boutons
 
     @FXML
     private Button exportBtn;
@@ -49,6 +49,13 @@ public class StatsController implements Initializable {
 
 
     //---------------METHODE----------------
+
+    /**
+     * Initializes the tree table view for the statistics of the project +
+     * loads user's projects and initializes the map.
+     * @param url;
+     * @param resourceBundle;
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTree();
@@ -59,12 +66,15 @@ public class StatsController implements Initializable {
         }
     }
 
+    /**
+     * The main method for button's events
+     * @param event;
+     * @throws Exception;
+     */
     @FXML
     private void buttonEvents(ActionEvent event) throws Exception {
-        //TODO: Rename cette méthode en LogInEvents?
         if(event.getSource() == backToProjectMenu) { Main.showProjectMenuScene(); }
         else if(event.getSource() == logOutBtn) { Main.showLoginScene(); }
-        else if(event.getSource() == exportBtn) { }
     }
 
     @FXML
@@ -74,12 +84,21 @@ public class StatsController implements Initializable {
         projectsTreeView.setRoot(root);
     }
 
+    /**
+     * Loads projects
+     * @throws SQLException;
+     */
     private void loadProjects() throws SQLException {
         List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
         getProjects(projectsArray, root);
     }
 
-
+    /**
+     * Initializes the map and display projects on the tree table view
+     * @param projects;
+     * @param parent;
+     * @throws SQLException;
+     */
     public void getProjects(List<Integer> projects, TreeItem<Project> parent) throws SQLException{
         projectsTreeView.setShowRoot(false);
         for(Integer project : projects){

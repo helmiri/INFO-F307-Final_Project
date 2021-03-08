@@ -75,7 +75,7 @@ public class ProjectsController implements Initializable {
     @FXML
     private TextField newTagsProject;
     @FXML
-    private Text ErrorText;
+    private Text errorText;
 
     //---------------METHODES----------------
 
@@ -101,7 +101,7 @@ public class ProjectsController implements Initializable {
      * @throws Exception;
      */
     @FXML
-    private void Events(ActionEvent event) throws Exception {
+    private void events(ActionEvent event) throws Exception {
         if( event.getSource()== addTaskbtn)    { addTask(); }
         else if( event.getSource()== addProjectBtn) { addProject(); }
         else if( event.getSource()== EditProjectBtn) {editProject();}
@@ -165,10 +165,13 @@ public class ProjectsController implements Initializable {
     private void addProject() throws SQLException{
         //TODO: add conditions to projects creation
         int parentID=0;
-        if(nameProject.getText() == "" ) {ErrorText.setText("Cannot add a project with an empty title.");}
+        if(nameProject.getText() == "" ) {
+            errorText.setText("Cannot add a project with an empty title.");}
         //else if(!validateName(nameProject.getText())){ErrorText.setText("Project's name is invalid (must contain 1 to 20 characters and at least one letter");}
-        else if (ProjectDB.getProjectID(nameProject.getText()) != 0){ErrorText.setText("A project with the same title already exists.");}
-        else if(dateProject.getValue() == null){ErrorText.setText("Cannot create a project without a date.");}
+        else if (ProjectDB.getProjectID(nameProject.getText()) != 0){
+            errorText.setText("A project with the same title already exists.");}
+        else if(dateProject.getValue() == null){
+            errorText.setText("Cannot create a project without a date.");}
         else if (parentProject.getText() == "" || ProjectDB.getProjectID(parentProject.getText())!=0){
             if(parentProject.getText() != ""){ parentID= ProjectDB.getProjectID(parentProject.getText());}
 
@@ -178,7 +181,7 @@ public class ProjectsController implements Initializable {
 
             TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(ProjectDB.getProject(newProjectID));
             Global.TreeMap.put(newProjectID, child);
-            ErrorText.setText("");
+            errorText.setText("");
 
             if (parentID == 0){
                 root.getChildren().add(child);
@@ -243,14 +246,17 @@ public class ProjectsController implements Initializable {
     @FXML
     private void editProject() throws SQLException{
 
-        if (projectSelection.getSelectionModel().getSelectedItem()==null){ErrorText.setText("Please select a project.");}
-        else if (ProjectDB.getProjectID(newNameProject.getText()) != 0 ) {ErrorText.setText("Cannot edit the project with such a title.");}
-        else if (newNameProject.getText() == ""){ErrorText.setText("Cannot edit a project with an empty name.");}
+        if (projectSelection.getSelectionModel().getSelectedItem()==null){
+            errorText.setText("Please select a project.");}
+        else if (ProjectDB.getProjectID(newNameProject.getText()) != 0 ) {
+            errorText.setText("Cannot edit the project with such a title.");}
+        else if (newNameProject.getText() == ""){
+            errorText.setText("Cannot edit a project with an empty name.");}
         else {
             String selection = projectSelection.getSelectionModel().getSelectedItem().toString();
             int projectID= ProjectDB.getProjectID(selection);
             ProjectDB.editProject(projectID, newNameProject.getText(), newdescription.getText(), newTagsProject.getText(), newDateProject.getValue().toEpochDay());
-            ErrorText.setText("");
+            errorText.setText("");
             loadProjects();
         }
     }
