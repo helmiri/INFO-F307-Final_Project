@@ -66,8 +66,7 @@ public class Controller {
     @FXML
     private Button visualiseBtn;
 
-    @FXML
-    private Button BackToMainMenu;
+
 
     // -------- PROJECT MENU ----------
 
@@ -80,7 +79,8 @@ public class Controller {
     @FXML
     private Button MainMenuBtn;
 
-
+    @FXML
+    private Button backToProjectMenu;
 
     // --------- MAIN MENU ------------
 
@@ -105,6 +105,9 @@ public class Controller {
     @FXML
     private Button goToStats;
 
+    @FXML
+    private Button BackToMainMenu;
+
 
     // ----------------DATABASE---------------
 
@@ -128,6 +131,7 @@ public class Controller {
         else if( event.getSource() == StatisticsAccessBtn) {Main.showStatisticsScene();}
         else if (event.getSource() == ManageProjetcsBtn) {Main.showProjectsScene();}
         else if( event.getSource() == goToStats) { Main.showStatisticsScene(); }
+        else if( event.getSource() == backToProjectMenu) { Main.ShowProjectsMenu(); }
         else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
         else if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
