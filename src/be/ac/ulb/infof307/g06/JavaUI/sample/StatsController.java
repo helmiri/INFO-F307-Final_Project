@@ -93,7 +93,7 @@ public class StatsController implements Initializable {
     private void setData() throws SQLException {
         String projectName = projectsTreeView.getSelectionModel().getSelectedItem().getValue().getTitle();
         int projectID = ProjectDB.getProjectID(projectName);
-        int collaboratorsNbr = ProjectDB.countCollaborators(projectID);
+        int collaboratorsNbr = ProjectDB.countTasks(projectID);
 
         List<Integer> collabList =  ProjectDB.getCollaborators(projectID);
         System.out.println(collaboratorsNbr);

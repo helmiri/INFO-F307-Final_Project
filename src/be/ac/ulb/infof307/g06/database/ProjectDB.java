@@ -215,7 +215,7 @@ public class ProjectDB extends Database {
     public static int countTasks(int project_id) throws SQLException{
         Statement state = connect();
         int res;
-        ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Tasks WHERE project_id='" + project_id + "';");
+        ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Task WHERE project_id='" + project_id + "';");
         res = rs.getInt("COUNT(*)");
         close(rs);
         return res;
