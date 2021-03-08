@@ -47,7 +47,7 @@ public class ProjectDB extends Database {
         close(state);
     }
 
-    public static void editTags(int id, String tags) throws SQLException{
+    private static void editTags(int id, String tags) throws SQLException{
         Statement state = connect();
         String newTags = tags.replace("/", ",") + getProject(id).getTags().split("/")[1];
         state.execute("UPDATE Project SET tags = '" + newTags + "' WHERE id = '" + id + "';");
