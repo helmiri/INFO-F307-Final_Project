@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.DatePicker?>
@@ -7,32 +8,17 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.ProjectsController">
    <children>
-      <TableView fx:id="projectsTable" layoutX="499.0" layoutY="196.0" prefHeight="511.0" prefWidth="357.0">
-        <columns>
-          <TableColumn fx:id="projectsColumn" prefWidth="93.0" text="Projects" />
-            <TableColumn fx:id="descriptionColumn" prefWidth="89.0" text="Description" />
-            <TableColumn fx:id="tagsColumn" prefWidth="93.0" text="Tags" />
-            <TableColumn fx:id="dateColumn" prefWidth="81.0" text="Date" />
-        </columns>
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                  <MenuItem mnemonicParsing="false" onAction="#showDetailsProject" text="Show details" />
-                  <MenuItem mnemonicParsing="false" onAction="#showSubProjects" text="Show sub projects" />
-                  <MenuItem mnemonicParsing="false" text="Add task" />
-                <MenuItem mnemonicParsing="false" onAction="#deleteProject" text="Delete" />
-              </items>
-            </ContextMenu>
-         </contextMenu>
-      </TableView>
       <Pane layoutX="-1.0" layoutY="-7.0" prefHeight="908.0" prefWidth="461.0" style="-fx-background-color: #3B6CD1;">
          <children>
             <VBox layoutX="89.0" layoutY="258.0" prefHeight="325.0" prefWidth="283.0" spacing="40.0">
@@ -44,7 +30,7 @@
                   <TextField fx:id="parentProject" prefHeight="35.0" prefWidth="283.0" promptText="Parent( optionnal )" />
                </children>
             </VBox>
-            <Button fx:id="addBtn" layoutX="132.0" layoutY="626.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="54.0" prefWidth="198.0" style="-fx-background-color: #B9DCE4;" text="Add" />
+            <Button fx:id="addProjectBtn" layoutX="132.0" layoutY="626.0" mnemonicParsing="false" onAction="#Events" prefHeight="54.0" prefWidth="198.0" style="-fx-background-color: #B9DCE4;" text="Add" />
             <Label layoutX="82.0" layoutY="89.0" text="Create Project" textFill="#fcf7f7" underline="true">
                <font>
                   <Font size="48.0" />
@@ -52,18 +38,28 @@
             </Label>
          </children>
       </Pane>
-      <Button fx:id="loadBtn" layoutX="813.0" layoutY="777.0" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="70.0" prefWidth="178.0" style="-fx-background-color: #3B6CD1;" text="Load" textFill="#fcf6f6">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Button>
-      <TableView fx:id="subProjectsTable" layoutX="984.0" layoutY="196.0" prefHeight="511.0" prefWidth="357.0">
-         <columns>
-            <TableColumn fx:id="subprojectsColumn" prefWidth="93.0" text="Projects" />
-            <TableColumn fx:id="subdescriptionColumn" prefWidth="89.0" text="Description" />
-            <TableColumn fx:id="subtagsColumn" prefWidth="93.0" text="Tags" />
-            <TableColumn fx:id="subdateColumn" prefWidth="81.0" text="Date" />
-         </columns>
+      <TreeTableView fx:id="treeProjects" layoutX="519.0" layoutY="192.0" prefHeight="511.0" prefWidth="322.0">
+        <columns>
+          <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
+        </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showDetailsProject" text="Show details" />
+                  <MenuItem fx:id="addTaskMenu" mnemonicParsing="false" onAction="#Events" text="Add task" />
+                <MenuItem mnemonicParsing="false" onAction="#deleteProject" text="delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </TreeTableView>
+      <TableView fx:id="taskTable" layoutX="980.0" layoutY="192.0" prefHeight="511.0" prefWidth="413.0">
+        <columns>
+          <TableColumn fx:id="taskColumn" prefWidth="412.0" text="Tasks" />
+        </columns>
       </TableView>
+      <Accordion layoutX="467.0" layoutY="755.0" />
+      <TextArea fx:id="descriptionTask" layoutX="980.0" layoutY="727.0" prefHeight="62.0" prefWidth="219.0" promptText="Description" />
+      <TextField fx:id="taskParent" layoutX="1212.0" layoutY="743.0" prefHeight="25.0" prefWidth="127.0" promptText="Project's name" />
+      <Button fx:id="addTaskBtn" layoutX="1348.0" layoutY="743.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #3B6CD1;" text="add" textFill="WHITE" />
    </children>
 </AnchorPane>

@@ -52,6 +52,18 @@ public class Main extends Application {
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
         FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("JavaUI/sample/StatsV2.fxml"));
+        // Setup the new page.
+        AnchorPane register = loader.load();
+        mainLayout.getChildren().setAll(register);
+
+    }
+
+    public static void showProjectsScene() throws Exception{
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("JavaUI/sample/Projects.fxml"));
         // Setup the new page.
         AnchorPane register = loader.load();
