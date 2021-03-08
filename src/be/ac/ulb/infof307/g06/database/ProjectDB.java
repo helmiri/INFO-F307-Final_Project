@@ -30,7 +30,7 @@ public class ProjectDB extends Database {
 
         if (parent_id != 0){    // Add the parent tags to the current tags
             String parent_tags = getProject(parent_id).getTags();
-            tags = parent_tags + "," + tags;
+            tags = parent_tags + "/" + tags;
         }
         state.execute("INSERT INTO Project (id, title, description, tags, date, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + tags + "','" + date + "','" + parent_id + "');");
@@ -41,13 +41,25 @@ public class ProjectDB extends Database {
     public static void editProject(int id, String title, String description, String tags, Long date) throws SQLException{
         Statement state = connect();
         state.execute("UPDATE Project SET title = '" + title + "', description = '" + description + "', tags = '" + tags + "', date = '" + date + "' WHERE id = '" + id + "';");
+        for (Integer subProject : getSubProjects(id)) {
+            editTags(subProject, tags);
+        }
+        close(state);
+    }
+
+    public static void editTags(int id, String tags) throws SQLException{
+        Statement state = connect();
+        String newTags = tags.replace("/", ",") + getProject(id).getTags().split("/")[1];
+        state.execute("UPDATE Project SET tags = '" + newTags + "' WHERE id = '" + id + "';");
+        for (Integer subProject : getSubProjects(id)) {
+            editTags(subProject, newTags);
+        }
         close(state);
     }
 
     public static void deleteProject(int id) throws SQLException{
         Statement state = connect();
-        List<Integer> subProjects = getSubProjects(id);
-        for (Integer subProject : subProjects) {
+        for (Integer subProject : getSubProjects(id)) {
             deleteProject(subProject);
         }
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + id + "';");
@@ -120,6 +132,7 @@ public class ProjectDB extends Database {
         return id;
     }
 
+
     public static void deleteCollaborator(int project_id, int user_id) throws SQLException{
         Statement state = connect();
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + project_id + "' and user_id = '" + user_id + "';");
@@ -133,6 +146,15 @@ public class ProjectDB extends Database {
         while (rs.next()) {
             res.add(rs.getInt("user_id"));
         }
+        close(rs);
+        return res;
+    }
+
+    public static int countCollaborators(int project_id) throws SQLException{
+        Statement state = connect();
+        int res;
+        ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Collaborator WHERE project_id='" + project_id + "';");
+        res = rs.getInt("COUNT(*)");
         close(rs);
         return res;
     }
@@ -190,6 +212,15 @@ public class ProjectDB extends Database {
         return res;
     }
 
+    public static int countTasks(int project_id) throws SQLException{
+        Statement state = connect();
+        int res;
+        ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Tasks WHERE project_id='" + project_id + "';");
+        res = rs.getInt("COUNT(*)");
+        close(rs);
+        return res;
+    }
+
     public static class Project {
         int id;
         String title;
@@ -199,6 +230,7 @@ public class ProjectDB extends Database {
         int parent_id;
 
         public Project(int id, String title, String description, String tags, Long date, int parent_id) {
+            this.id = id;
             this.title = title;
             this.description = description;
             this.tags = tags;
