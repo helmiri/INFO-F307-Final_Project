@@ -8,11 +8,19 @@ TO DO: Informations sur le système de build et la version du Java/Librairies ut
 
 ## Compilation
 
-TO DO: Informations sur la façon de compiler votre projet 
+Windows:
 
-## Démarrage 
+`$PATH_TO_JDK$\javac.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml .\src\be\ac\ulb\infof307\g06\Main.java .\src\be\ac\ulb\infof307\g06\database\*.java .\src\be\ac\ulb\infof307\g06\JavaUI\sample\*.java -d .\out\production\2021-groupe-6\`
 
-TO DO: Informations sur la façon d'éxecuter votre projet
+## Démarrage
+
+Windows:
+
+``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\lib\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" be.ac.ulb.infof307.g06.Main``
+
+Fichier .jar:
+
+``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\lib\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar .\dist\jar-name.jar``
 
 # Configuration :
 
