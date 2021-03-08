@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="425.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.JavaUI.sample.Controller">
    <children>
@@ -37,12 +38,12 @@
                   <Insets />
                </GridPane.margin>
             </PasswordField>
-            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="45.0" prefWidth="204.0" style="-fx-background-color: #4fc3f7;" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </Button>
-            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#buttonEvents" prefHeight="45.0" prefWidth="226.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
@@ -59,5 +60,6 @@
       <Polygon fill="#4fc3f70d" layoutX="-122.0" layoutY="-481.0" points="121.99998474121094, 914.5999755859375, 121.99998474121094, 486.0, 396.99993896484375, 914.5999755859375" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="-123.0" layoutY="-478.0" points="121.99999237060547, 911.0, 121.99998474121094, 486.0, 316.39996337890625, 911.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="-122.0" layoutY="-482.0" points="120.99996948242188, 915.0, 121.99998474121094, 486.0, 240.99993896484375, 915.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Text fx:id="wrongEntriesField" fill="#c62525" layoutX="170.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="380.0" />
    </children>
 </AnchorPane>

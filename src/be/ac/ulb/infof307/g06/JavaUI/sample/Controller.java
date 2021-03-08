@@ -5,6 +5,7 @@ import be.ac.ulb.infof307.g06.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,6 +28,9 @@ public class Controller {
 
     @FXML
     private Button registerBtn;
+
+    @FXML
+    private Text wrongEntriesField;
 
     // ---------SIGN UP---------
     @FXML
@@ -156,6 +160,7 @@ public class Controller {
         //DB
         Global.userID= UserDB.validateData(user,passwd);
         if(Global.userID!=0){ Main.ShowMainMenu(); }
+        else{wrongEntriesField.setText("This user does not exist or the password/username is wrong");}
         //else alert box
     }
 

@@ -142,7 +142,6 @@ public class ProjectsController implements Initializable {
             TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(ProjectDB.getProject(newProjectID));
             Global.TreeMap.put(newProjectID, child);
 
-            //TODO:Marche pas après un relancement
             if (parentID == 0){
                 root.getChildren().add(child);
             } else {
@@ -154,12 +153,20 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private void deleteProject(ActionEvent event) throws SQLException{
-        //régler le prob si aucun item est sélectionné
-        //TODO: attention au delete de la root
-        String projectName = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
-        int projectID = ProjectDB.getProjectID(projectName);
-        ProjectDB.deleteProject(projectID);
-        root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+        if(treeProjects.getSelectionModel().getSelectedItem().getValue()!=null) {
+            Project child= treeProjects.getSelectionModel().getSelectedItem().getValue();
+            String projectName = child.getTitle();
+            int projectID = ProjectDB.getProjectID(projectName);
+            ProjectDB.deleteProject(projectID);
+            int parentID = child.getParent_id();
+
+            if (parentID == 0) {
+                root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+            } else {
+                Global.TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+            }
+        }
+
     }
     /*
     @FXML
