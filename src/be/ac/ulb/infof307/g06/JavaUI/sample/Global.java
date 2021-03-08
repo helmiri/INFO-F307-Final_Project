@@ -8,4 +8,5 @@ import java.util.Map;
 
 public class Global {
     public static int userID;
+    public static Map<Integer, TreeItem<ProjectDB.Project>> TreeMap = new HashMap<>();
 }

@@ -69,6 +69,19 @@ public class Controller {
     @FXML
     private Button BackToMainMenu;
 
+    // -------- PROJECT MENU ----------
+
+    @FXML
+    private Button ManageProjetcsBtn;
+
+    @FXML
+    private Button StatisticsAccessBtn;
+
+    @FXML
+    private Button MainMenuBtn;
+
+
+
     // --------- MAIN MENU ------------
 
     @FXML
@@ -110,9 +123,10 @@ public class Controller {
         else if( event.getSource()== SignUpBtn     )  { signUpConditions()        ;}
         else if( event.getSource()== goToConnection)  { Main.showConnectionScene();}
         else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
-        else if( event.getSource() == ProjectAccessBtn) {
-            Main.showProjectsScene();
-        }
+        else if( event.getSource() == ProjectAccessBtn) { Main.ShowProjectsMenu();}
+        else if( event.getSource() == MainMenuBtn ) {Main.ShowMainMenu(); }
+        else if( event.getSource() == StatisticsAccessBtn) {Main.showStatisticsScene();}
+        else if (event.getSource() == ManageProjetcsBtn) {Main.showProjectsScene();}
         else if( event.getSource() == goToStats) { Main.showStatisticsScene(); }
         else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
         else if( event.getSource()== acceptConditionsBtn){

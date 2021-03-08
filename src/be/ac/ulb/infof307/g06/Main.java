@@ -119,6 +119,16 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(menu);
     }
 
+    public static void ShowProjectsMenu() throws Exception {
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("JavaUI/sample/ProjectMenu.fxml"));
+        AnchorPane projectMenu = loader.load();
+        mainLayout.getChildren().setAll(projectMenu);
+    }
+
     public static void closeTaskStage() {stage.close();}
 
     public static void main(String[] args) { launch(args); }
