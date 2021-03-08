@@ -196,7 +196,7 @@ public class ProjectDB extends Database {
 
     public static void deleteTask(String description , int project_id) throws SQLException{
         Statement state = connect();
-        state.execute("DELETE Task WHERE project_id = '" + project_id + "' and description = '" + description + "';");
+        state.execute("DELETE FROM Task WHERE project_id = '" + project_id + "' and description = '" + description + "';");
         close(state);
     }
 
