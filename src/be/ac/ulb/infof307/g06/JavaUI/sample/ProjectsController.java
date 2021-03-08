@@ -69,6 +69,9 @@ public class ProjectsController implements Initializable {
     private Button addTaskbtn;
 
     @FXML
+    private Button backBtn;
+
+    @FXML
     private TextArea descriptionTask;
 
     @FXML
@@ -87,11 +90,10 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private void Events(ActionEvent event) throws Exception {
-        if( event.getSource()== addTaskMenu)     { Main.showTaskScene(); }
-        else if( event.getSource()== addTaskbtn)      { addTask(); }
-        else if( event.getSource()== addProjectBtn)      {
-
-            addProject(); }
+        if( event.getSource()== addTaskMenu)        { Main.showTaskScene(); }
+        else if( event.getSource()== addTaskbtn)    { addTask(); }
+        else if( event.getSource()== addProjectBtn) { addProject(); }
+        else if( event.getSource()== backBtn) { Main.ShowMainMenu(); }
     }
 
     @FXML
@@ -109,9 +111,20 @@ public class ProjectsController implements Initializable {
     public void getProjects(List<Integer> projects, TreeItem<ProjectDB.Project> parent) throws SQLException{
         treeProjects.setShowRoot(false);
         for(Integer project : projects){
-            TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(ProjectDB.getProject(project));
-            //Use the map to change the parent
-            parent.getChildren().add(child);
+            Project childProject= ProjectDB.getProject(project);
+            int parentID= childProject.getParent_id();
+            String title= childProject.getTitle();
+            int childID= ProjectDB.getProjectID(title);
+
+            System.out.println("Project= "+childProject+" parentID= "+parentID+ " childID= "+childID+ " description= "+title);
+
+            TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(childProject);
+            Global.TreeMap.put(childID, child);
+            if (parentID== 0){
+                root.getChildren().add(child);
+            } else {
+                Global.TreeMap.get(parentID).getChildren().add(child);
+            }
         }
         treeProjects.setShowRoot(true);
     }
@@ -148,7 +161,6 @@ public class ProjectsController implements Initializable {
         ProjectDB.deleteProject(projectID);
         root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
     }
-
     /*
     @FXML
     private void showSubProjects(ActionEvent event) throws SQLException{

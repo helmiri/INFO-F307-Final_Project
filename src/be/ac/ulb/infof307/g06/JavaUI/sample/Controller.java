@@ -173,6 +173,7 @@ public class Controller {
             String username= signUpUsernameField.getText();
             String passwd= signUpPasswordField.getText();
             //DB
+            //TODO: alert box si le user existe déjà
             if (!(UserDB.userExists(username))){
                 //TODO: ne pas add le user avant les conditions
                 Global.userID= UserDB.addUser(firstName,lastName,username,email,passwd);

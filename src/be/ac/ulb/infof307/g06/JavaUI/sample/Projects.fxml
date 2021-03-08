@@ -61,5 +61,6 @@
       <TextArea fx:id="descriptionTask" layoutX="980.0" layoutY="727.0" prefHeight="62.0" prefWidth="219.0" promptText="Description" />
       <TextField fx:id="taskParent" layoutX="1212.0" layoutY="743.0" prefHeight="25.0" prefWidth="127.0" promptText="Project's name" />
       <Button fx:id="addTaskBtn" layoutX="1348.0" layoutY="743.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #3B6CD1;" text="add" textFill="WHITE" />
+      <Button fx:id="backBtn" layoutX="1385.0" layoutY="822.0" mnemonicParsing="false" onAction="#Events" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #3B6CD1;" text="Back" textFill="WHITE" />
    </children>
 </AnchorPane>
