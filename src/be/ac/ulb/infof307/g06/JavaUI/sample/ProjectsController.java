@@ -1,22 +1,17 @@
 package be.ac.ulb.infof307.g06.JavaUI.sample;
 
-import be.ac.ulb.infof307.g06.database.*;
-import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
-import be.ac.ulb.infof307.g06.database.ProjectDB.Task;
-
 import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.database.ProjectDB;
+import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import be.ac.ulb.infof307.g06.database.ProjectDB;
-import javafx.fxml.Initializable;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -181,6 +176,7 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @FXML
     private void deleteProject(ActionEvent event) throws SQLException{
         if(treeProjects.getSelectionModel().getSelectedItem().getValue()!=null) {
