@@ -124,8 +124,7 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private void Events(ActionEvent event) throws Exception {
-        if( event.getSource()== addTaskMenu)        { Main.showTaskScene(); }
-        else if( event.getSource()== addTaskbtn)    { addTask(); }
+        if( event.getSource()== addTaskbtn)    { addTask(); }
         else if( event.getSource()== addProjectBtn) { addProject(); }
         else if( event.getSource()== EditProjectBtn) {editProject();}
         else if( event.getSource()== backBtn) { Main.ShowMainMenu(); }

@@ -11,8 +11,6 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 public class Controller {
     // --------------------- ATTRIBUTS -------------------------
     // ---------CONNECTION---------
@@ -64,10 +62,6 @@ public class Controller {
     @FXML
     private CheckBox acceptConditionsBox;
 
-    // ---------STATISTICS---------
-
-
-
     // -------- PROJECT MENU ----------
 
     @FXML
@@ -85,7 +79,7 @@ public class Controller {
     private Button ProfileAccessBtn;
 
     @FXML
-    private Button ProjectAccessBtn;    //ATTENTION METTRE DES MINUSCULES AU DEBUT DES LES NOMS D'ATTRIBUTS SVPPP (Aline)
+    private Button ProjectAccessBtn;
 
     @FXML
     private Button CalendarAccessBtn;
@@ -104,7 +98,6 @@ public class Controller {
 
     @FXML
     private Button BackToMainMenu;
-
 
     // ----------------DATABASE---------------
 
@@ -129,10 +122,11 @@ public class Controller {
         else if(event.getSource()  == ManageProjetcsBtn){Main.showProjectsScene();}
         else if( event.getSource() == goToStats) { Main.showStatisticsScene(); }
         else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
-        else if( event.getSource()== acceptConditionsBtn){
+        if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
-                Main.ShowMainMenu();
+                Global.userID= UserDB.addUser(Global.firstName,Global.lastName,Global.username,Global.email,Global.passwd);
                 Main.closeConditionsStage();
+                Main.ShowMainMenu();
             }
         }
 
@@ -140,47 +134,30 @@ public class Controller {
 
     @FXML
     private void logInConditions() throws Exception{
-        //TODO: remplacer dans le if pour le mot de passe par validatePassword
-        /*if(        validateUsername(logInUsernameField)
-                && logInPasswordField.getText().length() <= 16
-                && logInPasswordField.getText().length() >=  8){
-            String passwd = logInPasswordField.getText();
-            String user = logInUsernameField.getText();
-            //checkData(user,passwd)}
-            */
         String passwd = logInPasswordField.getText();
         String user = logInUsernameField.getText();
 
-        //DB
         Global.userID= UserDB.validateData(user,passwd);
         if(Global.userID!=0){ Main.ShowMainMenu(); }
         else{wrongEntriesField.setText("This user does not exist or the password/username is wrong");}
-        //else alert box
     }
 
     @FXML
     private void signUpConditions() throws Exception{
-        if(     validateFirstName()
+        if (validateFirstName()
                 && validateLastName()
                 && validateUsername(signUpUsernameField)
                 && validatePassword(signUpPasswordField)
                 && validateEmail()
-                && passwordConfirmationField.getText().equals(signUpPasswordField.getText())){
-            String firstName= firstNameField.getText();
-            String lastName= lastNameField.getText();
-            String email= emailField.getText();
-            String username= signUpUsernameField.getText();
-            String passwd= signUpPasswordField.getText();
-            //DB
+                && passwordConfirmationField.getText().equals(signUpPasswordField.getText())) {
+            Global.firstName = firstNameField.getText();
+            Global.lastName = lastNameField.getText();
+            Global.email = emailField.getText();
+            Global.username = signUpUsernameField.getText();
+            Global.passwd = signUpPasswordField.getText();
             //TODO: alert box si le user existe déjà
-            if (!(UserDB.userExists(username))){
-                //TODO: ne pas add le user avant les conditions
-                Global.userID= UserDB.addUser(firstName,lastName,username,email,passwd);
-                Main.showConditionsScene();
-            }
-            //else alert box
-        }
-        else {
+            if (!(UserDB.userExists(Global.username))) { Main.showConditionsScene(); }
+        } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Wrong enters");
             alert.setHeaderText(null);

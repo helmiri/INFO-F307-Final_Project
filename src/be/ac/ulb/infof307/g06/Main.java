@@ -36,7 +36,7 @@ public class Main extends Application {
         // Setup the new page.
         AnchorPane connection = loader.load();
         mainLayout.getChildren().setAll(connection);
-        //getUserProjects() choppes l'id de tous les projets de l'User
+        //getUserProjects() to get all user's id
     }
 
     public static void showRegisterScene() throws Exception{
@@ -96,19 +96,6 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(connection);
     }
 
-    public static void showTaskScene() throws Exception{
-        FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/Task.fxml"));
-        AnchorPane conditions = loader.load();
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Task management");
-        stage.setScene(new Scene(conditions, 600, 400));
-        stage.setResizable(false);
-        stage.centerOnScreen();
-        stage.show();
-    }
-
     public static void ShowMainMenu() throws Exception {
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);
@@ -128,20 +115,6 @@ public class Main extends Application {
         AnchorPane projectMenu = loader.load();
         mainLayout.getChildren().setAll(projectMenu);
     }
-
-    public static void ShowEditProject() throws Exception{
-        FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/EditProjects.fxml"));
-        AnchorPane conditions = loader.load();
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("User terms and conditions");
-        stage.setScene(new Scene(conditions, 465, 715));
-        stage.centerOnScreen();
-        stage.show();
-
-    }
-    public static void closeTaskStage() {stage.close();}
 
     public static void main(String[] args) { launch(args); }
 }
