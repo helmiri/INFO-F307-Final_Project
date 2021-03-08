@@ -115,21 +115,21 @@ public class Controller {
     private void buttonEvents(ActionEvent event) throws Exception {
         //TODO: Rename cette méthode en LogInEvents?
         if( event.getSource()== connectionBtn      )  { logInConditions(); }
-        else if( event.getSource()== registerBtn   )  { Main.showRegisterScene()  ;}
+        else if( event.getSource()== registerBtn   )  { Main.showSignUpScene();  ;}
         else if( event.getSource()== SignUpBtn     )  { signUpConditions()        ;}
-        else if( event.getSource()== goToConnection)  { Main.showConnectionScene();}
-        else if( event.getSource() == LogOutBtn) { Main.showConnectionScene();}
-        else if( event.getSource() == ProjectAccessBtn) { Main.ShowProjectsMenu();}
-        else if( event.getSource() == MainMenuBtn ) {Main.ShowMainMenu(); }
+        else if( event.getSource()== goToConnection)  { Main.showLoginScene();}
+        else if( event.getSource() == LogOutBtn) { Main.showLoginScene();}
+        else if( event.getSource() == ProjectAccessBtn) { Main.showProjectMenuScene();}
+        else if( event.getSource() == MainMenuBtn ) {Main.showMainMenuScene(); }
         else if( event.getSource() == StatisticsAccessBtn) {Main.showStatisticsScene();}
-        else if(event.getSource()  == ManageProjetcsBtn){Main.showProjectsScene();}
+        else if(event.getSource()  == ManageProjetcsBtn){Main.showProjectManagementScene();}
         else if( event.getSource() == goToStats) { Main.showStatisticsScene(); }
-        else if( event.getSource() == BackToMainMenu) {Main.ShowMainMenu();}
+        else if( event.getSource() == BackToMainMenu) {Main.showMainMenuScene();}
         if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
                 Global.userID= UserDB.addUser(Global.firstName,Global.lastName,Global.username,Global.email,Global.passwd);
                 Main.closeConditionsStage();
-                Main.ShowMainMenu();
+                Main.showMainMenuScene();
             }
         }
 
@@ -141,7 +141,7 @@ public class Controller {
         String user = logInUsernameField.getText();
 
         Global.userID= UserDB.validateData(user,passwd);
-        if(Global.userID!=0){ Main.ShowMainMenu(); }
+        if(Global.userID!=0){ Main.showMainMenuScene(); }
         else{wrongEntriesField.setText("This user does not exist or the password/username is wrong");}
     }
 
@@ -159,7 +159,7 @@ public class Controller {
             Global.username = signUpUsernameField.getText();
             Global.passwd = signUpPasswordField.getText();
             //TODO: what if 2 users have the same email address?
-            if (!(UserDB.userExists(Global.username))) { Main.showConditionsScene(); }
+            if (!(UserDB.userExists(Global.username))) { Main.showConditionsStage(); }
             else{signUpTxtPopup.setText("This user already exists");}
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
