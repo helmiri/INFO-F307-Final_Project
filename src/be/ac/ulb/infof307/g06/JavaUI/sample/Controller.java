@@ -16,101 +16,78 @@ public class Controller {
     // ---------CONNECTION---------
     @FXML
     private TextField logInUsernameField;
-
     @FXML
     private PasswordField logInPasswordField;
-
     @FXML
     private Button connectionBtn;
-
     @FXML
     private Button registerBtn;
-
     @FXML
     private Text wrongEntriesField;
-
     // ---------SIGN UP---------
     @FXML
     private TextField firstNameField;
-
     @FXML
     private TextField lastNameField;
-
     @FXML
     private TextField emailField;
-
     @FXML
     private TextField signUpUsernameField;
-
     @FXML
     private TextField signUpPasswordField;
-
     @FXML
     private TextField passwordConfirmationField;
-
     @FXML
     private Button SignUpBtn;
-
     @FXML
     private Button goToConnection;
-
     @FXML
     private Text signUpTxtPopup;
 
     // ---------TERMS AND CONDITIONS---------
-
     @FXML
     private Button acceptConditionsBtn;
-
     @FXML
     private CheckBox acceptConditionsBox;
 
     // -------- PROJECT MENU ----------
-
     @FXML
     private Button ManageProjetcsBtn;
-
     @FXML
     private Button StatisticsAccessBtn;
-
     @FXML
     private Button MainMenuBtn;
 
     // --------- MAIN MENU ------------
-
     @FXML
     private Button ProfileAccessBtn;
-
     @FXML
     private Button ProjectAccessBtn;
-
     @FXML
     private Button CalendarAccessBtn;
-
     @FXML
     private Button SettingsAccessBtn;
-
     @FXML
     private Button HelpBtn;
-
     @FXML
     private Button LogOutBtn;
-
     @FXML
     private Button goToStats;
-
     @FXML
     private Button BackToMainMenu;
 
     // ----------------DATABASE---------------
-
     private ProjectDB projectsDB = new ProjectDB("Database.db");
     private UserDB userDB = new UserDB("Database.db");
     public Controller() throws SQLException, ClassNotFoundException {
     }
 
     // --------------------- METHODES -------------------------
-
+    /**
+     * The main method for button's events
+     * @param event;
+     * @throws Exception;
+     */
     @FXML
     private void buttonEvents(ActionEvent event) throws Exception {
         //TODO: Rename cette méthode en LogInEvents?
@@ -135,6 +112,10 @@ public class Controller {
 
     }
 
+    /**
+     * Gets the log in informations and see if the user already exists
+     * @throws Exception
+     */
     @FXML
     private void logInConditions() throws Exception{
         String passwd = logInPasswordField.getText();
@@ -145,6 +126,10 @@ public class Controller {
         else{wrongEntriesField.setText("This user does not exist or the password/username is wrong");}
     }
 
+    /**
+     * Creates an account with the sign up informations if they are valid, if not, shows up a pop up window
+     * @throws Exception
+     */
     @FXML
     private void signUpConditions() throws Exception{
         if (validateFirstName()
@@ -175,6 +160,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Checks if the string as at least one character(special characters excepted) and has 1 to 64 characters
+     * @return boolean;
+     */
     @FXML
     private boolean validateLastName(){
         Pattern p = Pattern.compile("^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$");
@@ -182,6 +171,10 @@ public class Controller {
         return m.matches();
     }
 
+    /**
+     * Checks if the string as at least one character(special characters excepted) and has 1 to 64 characters
+     * @return boolean;
+     */
     @FXML
     private boolean validateFirstName(){
         Pattern p = Pattern.compile("^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$");
@@ -189,6 +182,10 @@ public class Controller {
         return m.matches();
     }
 
+    /**
+     * Checks if the mail address is valid
+     * @return boolean;
+     */
     @FXML
     private boolean validateEmail(){
         Pattern p = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
@@ -196,13 +193,21 @@ public class Controller {
         return m.matches();
     }
 
+    /**
+     * Checks if the string has no special characters and has 6 to 16 characters
+     * @return boolean;
+     */
     @FXML
     private boolean validateUsername(TextField field){
-        Pattern p = Pattern.compile("^[^±!@£$%^&*+§¡€#¢§¶•ª º«\\/<>?:;|=.,]{1,16}$");
+        Pattern p = Pattern.compile("^[^±!@£$%^&*+§¡€#¢§¶•ª º«\\/<>?:;|=.,]{6,16}$");
         Matcher m = p.matcher(field.getText());
         return m.matches();
     }
 
+    /**
+     * Checks if the string as at least one upper and one lower case letter, one special character in the list and has 6 to 16 characters
+     * @return boolean;
+     */
     @FXML
     private boolean validatePassword(TextField field){
         Pattern p = Pattern.compile("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})");

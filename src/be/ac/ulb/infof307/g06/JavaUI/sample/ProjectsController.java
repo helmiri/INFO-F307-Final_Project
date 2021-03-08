@@ -146,10 +146,7 @@ public class ProjectsController implements Initializable {
             projectSelection.getItems().add(title);
             int childID= ProjectDB.getProjectID(title);
 
-            System.out.println("Project= "+childProject+" parentID= "+parentID+ " childID= "+childID+ " description= "+title);
-
             TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(childProject);
-
             Global.TreeMap.put(childID, child);
             if (parentID== 0){
                 root.getChildren().add(child);
@@ -288,7 +285,6 @@ public class ProjectsController implements Initializable {
     @FXML
     private void addTask() throws Exception, SQLException {
         //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
-
         int parentID = 0;
         if (!taskParent.getText().equals("") || ProjectDB.getProjectID(taskParent.getText()) != 0) {
             String projectName = taskParent.getText();
@@ -342,7 +338,7 @@ public class ProjectsController implements Initializable {
     }
 
     /**
-     *  Check if the string as at least one alphabet character and as 1 to 126 characters
+     *  Checks if the string has at least one alphabet character and as 1 to 126 characters
      * @param text;
      * @return boolean;
      */
@@ -354,7 +350,7 @@ public class ProjectsController implements Initializable {
     }
 
     /**
-     *  Check if the string as at least one alphabet character and as 1 to 20 characters
+     *  Checks if the string has at least one alphabet character and as 1 to 20 characters
      * @param text;
      * @return boolean;
      */
