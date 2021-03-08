@@ -106,7 +106,7 @@ public class ProjectsController implements Initializable {
     /**
      *
      * @param url
-     * @param resourceBundle
+     * @param ResourceBundle resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -195,7 +195,7 @@ public class ProjectsController implements Initializable {
     @SuppressWarnings("unchecked")
     @FXML
     private void deleteProject(ActionEvent event) throws SQLException{
-        if(treeProjects.getSelectionModel().getSelectedItem().getValue()!=null) {
+        if(treeProjects.getSelectionModel().getSelectedItem()!= null && treeProjects.getSelectionModel().getSelectedItem().getValue()!=null) {
             Project child= treeProjects.getSelectionModel().getSelectedItem().getValue();
             String projectName = child.getTitle();
             int projectID = ProjectDB.getProjectID(projectName);
@@ -207,6 +207,7 @@ public class ProjectsController implements Initializable {
             } else {
                 Global.TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
             }
+            loadProjects();
         }
 
     }
@@ -241,7 +242,7 @@ public class ProjectsController implements Initializable {
     @FXML
     private void Select(ActionEvent event) throws Exception{
         if(projectSelection.getSelectionModel().getSelectedItem()!=null) {
-            String selected = projectSelection.getSelectionModel().getSelectedItem().toString();
+            String selected = projectSelection.getSelectionModel().getSelectedItem();
             int projectID = ProjectDB.getProjectID(selected);
             ProjectDB.Project project = ProjectDB.getProject(projectID);
             String description = project.getDescription();
@@ -314,4 +315,5 @@ public class ProjectsController implements Initializable {
         Matcher m = p.matcher(text);
         return m.matches();
     }
+
 }
