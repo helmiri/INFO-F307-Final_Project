@@ -49,7 +49,7 @@
             </Text>
          </children>
       </Pane>
-      <TreeTableView fx:id="treeProjects" layoutX="519.0" layoutY="192.0" onContextMenuRequested="#displayTask" onMouseClicked="#displayTask" prefHeight="511.0" prefWidth="322.0">
+      <TreeTableView fx:id="treeProjects" layoutX="519.0" layoutY="192.0" onMouseClicked="#displayTask" prefHeight="511.0" prefWidth="322.0">
         <columns>
           <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
         </columns>
@@ -65,8 +65,15 @@
       </TreeTableView>
       <TableView fx:id="taskTable" layoutX="980.0" layoutY="192.0" prefHeight="511.0" prefWidth="413.0">
         <columns>
-          <TableColumn fx:id="taskColumn" prefWidth="412.0" text="Tasks" />
+          <TableColumn fx:id="taskColumn" onEditCommit="#editTask" prefWidth="412.0" text="Tasks" />
         </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
       </TableView>
       <Accordion layoutX="467.0" layoutY="755.0" />
       <TextArea fx:id="descriptionTask" layoutX="980.0" layoutY="727.0" prefHeight="62.0" prefWidth="219.0" promptText="Description" />
