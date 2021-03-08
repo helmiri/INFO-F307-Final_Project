@@ -238,11 +238,13 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private void editProject() throws SQLException{
-        String selection = projectSelection.getSelectionModel().getSelectedItem().toString();
-        int projectID= ProjectDB.getProjectID(selection);
-        if (ProjectDB.getProjectID(newNameProject.getText()) != 0 ) {ErrorText.setText("Cannot edit the project with such a title.");}
+
+        if (projectSelection.getSelectionModel().getSelectedItem()==null){ErrorText.setText("Please select a project.");}
+        else if (ProjectDB.getProjectID(newNameProject.getText()) != 0 ) {ErrorText.setText("Cannot edit the project with such a title.");}
         else if (newNameProject.getText() == ""){ErrorText.setText("Cannot edit a project with an empty name.");}
         else {
+            String selection = projectSelection.getSelectionModel().getSelectedItem().toString();
+            int projectID= ProjectDB.getProjectID(selection);
             ProjectDB.editProject(projectID, newNameProject.getText(), newdescription.getText(), newTagsProject.getText(), newDateProject.getValue().toEpochDay());
             ErrorText.setText("");
             loadProjects();
