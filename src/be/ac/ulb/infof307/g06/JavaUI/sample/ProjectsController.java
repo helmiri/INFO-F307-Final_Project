@@ -15,6 +15,7 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import javafx.fxml.Initializable;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
@@ -203,11 +204,14 @@ public class ProjectsController implements Initializable {
     }
 
     @FXML
-    private void displayTask(MouseEvent event) throws SQLException {
-        String projectTitle = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
-        int projectID = ProjectDB.getProjectID(projectTitle);
-        List<ProjectDB.Task> taskList =  ProjectDB.getTasks(projectID);
-        ObservableList<ProjectDB.Task> oTaskList = FXCollections.observableArrayList(taskList);
-        taskTable.setItems(oTaskList);
+    private void displayTask() throws SQLException {
+        if( treeProjects.getSelectionModel().getSelectedItem().getValue() !=null) {
+            String projectTitle = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
+            int projectID = ProjectDB.getProjectID(projectTitle);
+            List<ProjectDB.Task> taskList = ProjectDB.getTasks(projectID);
+            ObservableList<ProjectDB.Task> oTaskList = FXCollections.observableArrayList(taskList);
+            taskTable.setItems(oTaskList);
+        }
     }
+
 }

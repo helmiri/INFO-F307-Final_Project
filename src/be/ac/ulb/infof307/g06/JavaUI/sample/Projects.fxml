@@ -38,7 +38,7 @@
             </Label>
          </children>
       </Pane>
-      <TreeTableView fx:id="treeProjects" layoutX="519.0" layoutY="192.0" prefHeight="511.0" prefWidth="322.0">
+      <TreeTableView fx:id="treeProjects" layoutX="519.0" layoutY="192.0" onContextMenuRequested="#displayTask" onMouseClicked="#displayTask" prefHeight="511.0" prefWidth="322.0">
         <columns>
           <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
         </columns>
