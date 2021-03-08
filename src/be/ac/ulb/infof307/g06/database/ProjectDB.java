@@ -206,7 +206,7 @@ public class ProjectDB extends Database {
         List<Task> res = new ArrayList<>();
 
         while (rs.next()){
-            res.add(new Task(rs.getString("description")));
+            res.add(new Task(rs.getString("description"), project_id));
         }
         close(state, rs);
         return res;
@@ -265,13 +265,14 @@ public class ProjectDB extends Database {
 
     public static class Task {
         String description;
+        int projectID;
 
-        public Task(String description) {
+        public Task(String description, int id) {
             this.description = description;
+            this.projectID = id;
         }
 
-        public String getDescription() {
-            return description;
-        }
+        public String getDescription() {return description;}
+        public int getProjectID(){return projectID;}
     }
 }
