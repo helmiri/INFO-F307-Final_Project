@@ -1,5 +1,10 @@
 package be.ac.ulb.infof307.g06.JavaUI.sample;
 
+import be.ac.ulb.infof307.g06.database.*;
+import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
+import be.ac.ulb.infof307.g06.database.ProjectDB.Task;
+
+
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
@@ -10,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
 import java.net.URL;
@@ -17,6 +23,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ProjectsController implements Initializable {
     // ---------PROJECTS MENU------
@@ -97,6 +105,12 @@ public class ProjectsController implements Initializable {
 
 
     //---------------METHODE----------------
+
+    /**
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTree();
@@ -121,10 +135,14 @@ public class ProjectsController implements Initializable {
     private void initTree(){
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<ProjectDB.Project, String>("title"));
         taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
+        taskTable.setEditable(true);
+        taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         treeProjects.setRoot(root);
     }
 
     private void loadProjects() throws SQLException {
+        treeProjects.getRoot().getChildren().clear();
+        Global.TreeMap.clear();
         List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
         getProjects(projectsArray, root);
     }
@@ -143,6 +161,7 @@ public class ProjectsController implements Initializable {
             System.out.println("Project= "+childProject+" parentID= "+parentID+ " childID= "+childID+ " description= "+title);
 
             TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(childProject);
+
             Global.TreeMap.put(childID, child);
             if (parentID== 0){
                 root.getChildren().add(child);
@@ -219,7 +238,7 @@ public class ProjectsController implements Initializable {
         int projectID= ProjectDB.getProjectID(selection);
         System.out.println(newNameProject.getText());
         ProjectDB.editProject(projectID, newNameProject.getText(), newdescription.getText(), newTagsProject.getText(),newDateProject.getValue().toEpochDay());
-
+        loadProjects();
 
     }
 
@@ -266,4 +285,36 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    @FXML
+    private void deleteTask(ActionEvent event) throws SQLException{
+        String taskDescription = taskTable.getSelectionModel().getSelectedItem().getDescription();
+        int projectID = taskTable.getSelectionModel().getSelectedItem().getProjectID();
+        ProjectDB.deleteTask(taskDescription,projectID);
+        taskTable.getItems().removeAll(taskTable.getSelectionModel().getSelectedItem());
+    }
+
+    /**
+     *  Give the opportunity to edit a cell with a double mouse click
+     */
+    @FXML
+    private void editTask(TableColumn.CellEditEvent event) throws SQLException {
+        Task task = (Task) event.getRowValue();
+        int projectID = task.getProjectID();
+        String description = task.getDescription();
+        String newDescription = (String) event.getNewValue();
+        if(validateTask(newDescription)) { ProjectDB.editTask(description,newDescription,projectID);}
+        displayTask();
+    }
+
+    /**
+     *
+     * @param text
+     * @return boolean
+     */
+    @FXML
+    private boolean validateTask(String text){
+        Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,126}$");
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
 }
