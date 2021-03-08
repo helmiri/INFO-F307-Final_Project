@@ -85,17 +85,6 @@ public class Main extends Application {
 
     public static void closeConditionsStage() {stage.close();}
 
-    public static void showVisualScene() throws Exception{
-        primaryStage.setHeight(940);
-        primaryStage.setWidth(1515);
-        primaryStage.centerOnScreen();
-        FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/VisualV2.fxml"));
-        // Setup the new page.
-        AnchorPane connection = loader.load();
-        mainLayout.getChildren().setAll(connection);
-    }
-
     public static void ShowMainMenu() throws Exception {
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);

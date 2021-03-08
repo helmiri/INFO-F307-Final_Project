@@ -25,33 +25,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProjectsController implements Initializable {
+    //----------ATTRIBUTES---------
     // ---------PROJECTS MENU------
     @FXML
-    private Button addBtn;
-
-    @FXML
     private TextField nameProject;
-
     @FXML
     private TextField descriptionProject;
-
     @FXML
     private DatePicker dateProject;
-
     @FXML
     private TextField tagsProject;
-
     @FXML
     private TextField parentProject;
-
     @FXML
     private TreeTableView<ProjectDB.Project> treeProjects;
-
     @FXML
     private TreeTableColumn<ProjectDB.Project, String> treeProjectColumn;
-
     private TreeItem<ProjectDB.Project> root = new TreeItem<ProjectDB.Project>();
-
     @FXML
     private Button addProjectBtn;
 
@@ -59,25 +49,14 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private TableView<ProjectDB.Task> taskTable;
-
-    @FXML
-    private TextArea taskDescription;
-
     @FXML
     private TableColumn<ProjectDB.Task,String> taskColumn;
-
-    @FXML
-    private MenuItem addTaskMenu;
-
     @FXML
     private Button addTaskbtn;
-
     @FXML
     private Button backBtn;
-
     @FXML
     private TextArea descriptionTask;
-
     @FXML
     private TextField taskParent;
 
@@ -85,30 +64,24 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private Button EditProjectBtn;
-
     @FXML
     private ComboBox<String> projectSelection;
-
     @FXML
     private TextField newNameProject;
-
     @FXML
     private TextField newdescription;
-
     @FXML
     private DatePicker newDateProject;
-
     @FXML
     private TextField newTagsProject;
-
     @FXML
     private Text ErrorText;
 
-
-    //---------------METHODE----------------
+    //---------------METHODES----------------
 
     /**
-     *
+     * Initializes the tree table view for the projects and the table view for tasks +
+     * loads user's projects and initializes the map.
      * @param url
      * @param resourceBundle
      */
@@ -122,6 +95,11 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    /**
+     * The main method for button's events
+     * @param event
+     * @throws Exception
+     */
     @FXML
     private void Events(ActionEvent event) throws Exception {
         if( event.getSource()== addTaskbtn)    { addTask(); }
@@ -139,6 +117,10 @@ public class ProjectsController implements Initializable {
         treeProjects.setRoot(root);
     }
 
+    /**
+     * Clears the tables and the map(to refresh when needed)
+     * @throws SQLException
+     */
     private void loadProjects() throws SQLException {
         treeProjects.getRoot().getChildren().clear();
         projectSelection.getItems().clear();
@@ -149,6 +131,12 @@ public class ProjectsController implements Initializable {
         getProjects(projectsArray, root);
     }
 
+    /**
+     * Initializes the map and display projects on the tree table view
+     * @param projects
+     * @param parent
+     * @throws SQLException
+     */
     public void getProjects(List<Integer> projects, TreeItem<ProjectDB.Project> parent) throws SQLException{
         treeProjects.setShowRoot(false);
         for(Integer project : projects){
@@ -172,10 +160,16 @@ public class ProjectsController implements Initializable {
         treeProjects.setShowRoot(true);
     }
 
+    /**
+     * Creates a project and add it to the Database and the map + displays it in the tree table view
+     * @throws SQLException
+     */
     @FXML
     private void addProject() throws SQLException{
+        //TODO: add conditions to projects creation
         int parentID=0;
         if(nameProject.getText() == "" ) {ErrorText.setText("Cannot add a project with an empty title.");}
+        //else if(!validateName(nameProject.getText())){ErrorText.setText("Project's name is invalid (must contain 1 to 20 characters and at least one letter");}
         else if (ProjectDB.getProjectID(nameProject.getText()) != 0){ErrorText.setText("A project with the same title already exists.");}
         else if(dateProject.getValue() == null){ErrorText.setText("Cannot create a project without a date.");}
         else if (parentProject.getText() == "" || ProjectDB.getProjectID(parentProject.getText())!=0){
@@ -198,6 +192,11 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    /**
+     * Deletes a project in the Database and in the tree table view
+     * @param event
+     * @throws SQLException
+     */
     @SuppressWarnings("unchecked")
     @FXML
     private void deleteProject(ActionEvent event) throws SQLException{
@@ -218,6 +217,11 @@ public class ProjectsController implements Initializable {
 
     }
 
+    /**
+     * Creates a pop up window to show details of a project; its description and tags
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     private void showDetailsProject(ActionEvent event) throws SQLException{
         String projectName = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
@@ -235,6 +239,10 @@ public class ProjectsController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Edits a project
+     * @throws SQLException
+     */
     @FXML
     private void editProject() throws SQLException{
 
@@ -250,6 +258,11 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    /**
+     * Displays on the edit menu the chosen project
+     * @param event
+     * @throws Exception
+     */
     @FXML
     private void Select(ActionEvent event) throws Exception{
         if(projectSelection.getSelectionModel().getSelectedItem()!=null) {
@@ -267,7 +280,11 @@ public class ProjectsController implements Initializable {
         }
     }
 
-
+    /**
+     * Adds a task to the parent project, adds it to the database
+     * @throws Exception
+     * @throws SQLException
+     */
     @FXML
     private void addTask() throws Exception, SQLException {
         //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
@@ -283,6 +300,10 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    /**
+     * Displays it in the table view
+     * @throws SQLException
+     */
     @FXML
     private void displayTask() throws SQLException {
         if( treeProjects.getSelectionModel().getSelectedItem()!=null && treeProjects.getSelectionModel().getSelectedItem().getValue() !=null) {
@@ -294,6 +315,11 @@ public class ProjectsController implements Initializable {
         }
     }
 
+    /**
+     * Deletes a task in the database and in the table view
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     private void deleteTask(ActionEvent event) throws SQLException{
         String taskDescription = taskTable.getSelectionModel().getSelectedItem().getDescription();
@@ -311,18 +337,30 @@ public class ProjectsController implements Initializable {
         int projectID = task.getProjectID();
         String description = task.getDescription();
         String newDescription = (String) event.getNewValue();
-        if(validateTask(newDescription)) { ProjectDB.editTask(description,newDescription,projectID);}
+        if(validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,projectID);}
         displayTask();
     }
 
     /**
-     *
+     *  Check if the string as at least one alphabet character and as 1 to 126 characters
      * @param text
      * @return boolean
      */
     @FXML
-    private boolean validateTask(String text){
+    private boolean validateDescription(String text){
         Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,126}$");
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
+
+    /**
+     *  Check if the string as at least one alphabet character and as 1 to 20 characters
+     * @param text
+     * @return boolean
+     */
+    @FXML
+    private boolean validateName(String text){
+        Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,20}$");
         Matcher m = p.matcher(text);
         return m.matches();
     }

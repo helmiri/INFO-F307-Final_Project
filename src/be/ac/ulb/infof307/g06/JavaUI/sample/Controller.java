@@ -54,6 +54,9 @@ public class Controller {
     @FXML
     private Button goToConnection;
 
+    @FXML
+    private Text signUpTxtPopup;
+
     // ---------TERMS AND CONDITIONS---------
 
     @FXML
@@ -155,8 +158,9 @@ public class Controller {
             Global.email = emailField.getText();
             Global.username = signUpUsernameField.getText();
             Global.passwd = signUpPasswordField.getText();
-            //TODO: alert box si le user existe déjà
+            //TODO: what if 2 users have the same email address?
             if (!(UserDB.userExists(Global.username))) { Main.showConditionsScene(); }
+            else{signUpTxtPopup.setText("This user already exists");}
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Wrong enters");
