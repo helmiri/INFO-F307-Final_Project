@@ -15,6 +15,7 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import javafx.fxml.Initializable;
 
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -168,16 +169,6 @@ public class ProjectsController implements Initializable {
         }
 
     }
-    /*
-    @FXML
-    private void showSubProjects(ActionEvent event) throws SQLException{
-        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<ProjectDB.Project, String>("title"));
-
-        String projectName = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
-        int projectID = ProjectDB.getProjectID(projectName);
-        List<Integer> subProjects = ProjectDB.getSubProjects(projectID);
-        getProjects(subProjects,treeProjects.getSelectionModel().getSelectedItem());
-    }*/
 
     @FXML
     private void showDetailsProject(ActionEvent event) throws SQLException{
@@ -198,7 +189,7 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private void addTask() throws Exception, SQLException {
-        taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
+        //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
 
         int parentID = 0;
         if (!taskParent.getText().equals("") || ProjectDB.getProjectID(taskParent.getText()) != 0) {
@@ -209,5 +200,14 @@ public class ProjectsController implements Initializable {
             ObservableList<ProjectDB.Task> otaskList = FXCollections.observableArrayList(taskList);
             taskTable.setItems(otaskList);
         }
+    }
+
+    @FXML
+    private void displayTask(MouseEvent event) throws SQLException {
+        String projectTitle = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
+        int projectID = ProjectDB.getProjectID(projectTitle);
+        List<ProjectDB.Task> taskList =  ProjectDB.getTasks(projectID);
+        ObservableList<ProjectDB.Task> oTaskList = FXCollections.observableArrayList(taskList);
+        taskTable.setItems(oTaskList);
     }
 }
