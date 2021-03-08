@@ -1,13 +1,10 @@
 package be.ac.ulb.infof307.g06.JavaUI.sample;
 
-import be.ac.ulb.infof307.g06.database.*;
 import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
 import be.ac.ulb.infof307.g06.database.ProjectDB.Task;
 
-
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -143,11 +140,11 @@ public class ProjectsController implements Initializable {
     private void loadProjects() throws SQLException {
         treeProjects.getRoot().getChildren().clear();
         Global.TreeMap.clear();
+        projectSelection.getItems().clear();
+        projectSelection.setPromptText("Select project");
         List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
         getProjects(projectsArray, root);
     }
-
-
 
     public void getProjects(List<Integer> projects, TreeItem<ProjectDB.Project> parent) throws SQLException{
         treeProjects.setShowRoot(false);
@@ -239,23 +236,23 @@ public class ProjectsController implements Initializable {
         System.out.println(newNameProject.getText());
         ProjectDB.editProject(projectID, newNameProject.getText(), newdescription.getText(), newTagsProject.getText(),newDateProject.getValue().toEpochDay());
         loadProjects();
-
     }
-
 
     @FXML
     private void Select(ActionEvent event) throws Exception{
-        String selected = projectSelection.getSelectionModel().getSelectedItem().toString();
-        int projectID = ProjectDB.getProjectID(selected);
-        ProjectDB.Project project = ProjectDB.getProject(projectID);
-        String description = project.getDescription();
-        String tags = project.getTags();
-        LocalDate date = LocalDate.ofEpochDay(project.getDate());
+        if(projectSelection.getSelectionModel().getSelectedItem()!=null) {
+            String selected = projectSelection.getSelectionModel().getSelectedItem().toString();
+            int projectID = ProjectDB.getProjectID(selected);
+            ProjectDB.Project project = ProjectDB.getProject(projectID);
+            String description = project.getDescription();
+            String tags = project.getTags();
+            LocalDate date = LocalDate.ofEpochDay(project.getDate());
 
-        newdescription.setText(description);
-        newDateProject.setValue(date);
-        newNameProject.setText(selected);
-        newTagsProject.setText(tags);
+            newdescription.setText(description);
+            newDateProject.setValue(date);
+            newNameProject.setText(selected);
+            newTagsProject.setText(tags);
+        }
     }
 
 
@@ -276,7 +273,7 @@ public class ProjectsController implements Initializable {
 
     @FXML
     private void displayTask() throws SQLException {
-        if( treeProjects.getSelectionModel().getSelectedItem().getValue() !=null) {
+        if( treeProjects.getSelectionModel().getSelectedItem()!=null && treeProjects.getSelectionModel().getSelectedItem().getValue() !=null) {
             String projectTitle = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
             int projectID = ProjectDB.getProjectID(projectTitle);
             List<ProjectDB.Task> taskList = ProjectDB.getTasks(projectID);
