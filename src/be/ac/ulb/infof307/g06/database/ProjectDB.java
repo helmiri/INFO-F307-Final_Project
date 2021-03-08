@@ -30,7 +30,7 @@ public class ProjectDB extends Database {
 
         if (parent_id != 0){    // Add the parent tags to the current tags
             String parent_tags = getProject(parent_id).getTags();
-            tags = parent_tags + "," + tags;
+            tags = parent_tags + "/" + tags;
         }
         state.execute("INSERT INTO Project (id, title, description, tags, date, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + tags + "','" + date + "','" + parent_id + "');");
@@ -41,6 +41,21 @@ public class ProjectDB extends Database {
     public static void editProject(int id, String title, String description, String tags, Long date) throws SQLException{
         Statement state = connect();
         state.execute("UPDATE Project SET title = '" + title + "', description = '" + description + "', tags = '" + tags + "', date = '" + date + "' WHERE id = '" + id + "';");
+        List<Integer> subProjects = getSubProjects(id);
+        for (Integer subProject : subProjects) {
+            updateTags(subProject, tags);
+        }
+        close(state);
+    }
+
+    public static void updateTags(int id, String newTags) throws SQLException{
+        Statement state = connect();
+        String newTagsString = newTags.replace("/", ",") + "/" + getProject(id).getTags().split("/")[1];
+        state.execute("UPDATE Project SET tags = '" + newTagsString + "' WHERE id = '" + id + "';");
+        List<Integer> subProjects = getSubProjects(id);
+        for (Integer subProject : subProjects) {
+            updateTags(subProject, newTagsString);
+        }
         close(state);
     }
 
@@ -189,6 +204,13 @@ public class ProjectDB extends Database {
         close(state, rs);
         return res;
     }
+
+    /*
+    public static int countTasks(int project_id) throws SQLException {
+
+    }
+
+     */
 
     public static class Project {
         int id;
