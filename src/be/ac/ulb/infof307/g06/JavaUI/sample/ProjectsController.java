@@ -19,6 +19,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -79,6 +80,27 @@ public class ProjectsController implements Initializable {
     @FXML
     private TextField taskParent;
 
+    //---------------EDIT PROJECTS----------
+
+    @FXML
+    private Button EditProjectBtn;
+
+    @FXML
+    private ComboBox<String> projectSelection;
+
+    @FXML
+    private TextField newNameProject;
+
+    @FXML
+    private TextField newdescription;
+
+    @FXML
+    private DatePicker newDateProject;
+
+    @FXML
+    private TextField newTagsProject;
+
+
     //---------------METHODE----------------
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -95,7 +117,9 @@ public class ProjectsController implements Initializable {
         if( event.getSource()== addTaskMenu)        { Main.showTaskScene(); }
         else if( event.getSource()== addTaskbtn)    { addTask(); }
         else if( event.getSource()== addProjectBtn) { addProject(); }
+        else if( event.getSource()== EditProjectBtn) {editProject();}
         else if( event.getSource()== backBtn) { Main.ShowMainMenu(); }
+
     }
 
     @FXML
@@ -110,12 +134,15 @@ public class ProjectsController implements Initializable {
         getProjects(projectsArray, root);
     }
 
+
+
     public void getProjects(List<Integer> projects, TreeItem<ProjectDB.Project> parent) throws SQLException{
         treeProjects.setShowRoot(false);
         for(Integer project : projects){
             Project childProject= ProjectDB.getProject(project);
             int parentID= childProject.getParent_id();
             String title= childProject.getTitle();
+            projectSelection.getItems().add(title);
             int childID= ProjectDB.getProjectID(title);
 
             System.out.println("Project= "+childProject+" parentID= "+parentID+ " childID= "+childID+ " description= "+title);
@@ -139,6 +166,7 @@ public class ProjectsController implements Initializable {
             if(parentProject.getText() != ""){ parentID= ProjectDB.getProjectID(parentProject.getText());}
 
             int newProjectID = ProjectDB.createProject(nameProject.getText(),descriptionProject.getText(),tagsProject.getText(),dateProject.getValue().toEpochDay(),parentID);
+            projectSelection.getItems().add(nameProject.getText());
             ProjectDB.addCollaborator(newProjectID, Global.userID);
 
             TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(ProjectDB.getProject(newProjectID));
@@ -187,6 +215,34 @@ public class ProjectsController implements Initializable {
         alert.setContentText("DESCRIPTION:\n" +description+"\n\n"+"TAGS:\n"+tags);
         alert.showAndWait();
     }
+
+    @FXML
+    private void editProject() throws SQLException{
+        //Vérification de l'existence
+        String selection = projectSelection.getSelectionModel().getSelectedItem().toString();
+        int projectID= ProjectDB.getProjectID(selection);
+        System.out.println(newNameProject.getText());
+        ProjectDB.editProject(projectID, newNameProject.getText(), newdescription.getText(), newTagsProject.getText(),newDateProject.getValue().toEpochDay());
+
+
+    }
+
+
+    @FXML
+    private void Select(ActionEvent event) throws Exception{
+        String selected = projectSelection.getSelectionModel().getSelectedItem().toString();
+        int projectID = ProjectDB.getProjectID(selected);
+        ProjectDB.Project project = ProjectDB.getProject(projectID);
+        String description = project.getDescription();
+        String tags = project.getTags();
+        LocalDate date = LocalDate.ofEpochDay(project.getDate());
+
+        newdescription.setText(description);
+        newDateProject.setValue(date);
+        newNameProject.setText(selected);
+        newTagsProject.setText(tags);
+    }
+
 
     @FXML
     private void addTask() throws Exception, SQLException {

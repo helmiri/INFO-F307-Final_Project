@@ -129,6 +129,18 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(projectMenu);
     }
 
+    public static void ShowEditProject() throws Exception{
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(Main.class.getResource("JavaUI/sample/EditProjects.fxml"));
+        AnchorPane conditions = loader.load();
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("User terms and conditions");
+        stage.setScene(new Scene(conditions, 465, 715));
+        stage.centerOnScreen();
+        stage.show();
+
+    }
     public static void closeTaskStage() {stage.close();}
 
     public static void main(String[] args) { launch(args); }
