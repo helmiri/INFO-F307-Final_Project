@@ -13,15 +13,15 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
 | 1 | [1](#Histoire-1) | Histoire 1 |  | 2 | 30 | / |
 | 2 | 2 | Histoire 2 |  | 2 | 33 | / |
-|   | 3 | Histoire 3 |  | 3 | 15 |  |
+|   | 3 | Histoire 3 |  | 3 | 18 |  |
 |   | 4 | Histoire 4 |  | 1 | 35 |  |
-|   | 5 | Histoire 5 |  | 1 | 27 |  |
-|   | 6 | Histoire 6 |  | 1 | 20 |  |
-|   | 7 | Histoire 7 |  | 3 | 18 |  |
+|   | 5 | Histoire 5 |  | 1 | 35 |  |
+|   | 6 | Histoire 6 |  | 1 | 24 |  |
+|   | 7 | Histoire 7 |  | 3 | 8 |  |
 |   | 8 | Histoire 8 |  | 3 | 10 |  |
-|   | 9 | Histoire 9 |  | 1 | 20 |  |
+|   | 9 | Histoire 9 |  | 1 | 25 |  |
 | 3 | 10 | Histoire 10 |  | 2 | 25 | / |
-|   | 11 | Histoire 11 |  | 3 | 9 |  |
+|   | 11 | Histoire 11 |  | 3 | 12 |  |
 |   | 12 | Histoire 12 |  | 2 | 25 |  |
 |   | 13 | Histoire 13 |  | 1 | 25 |  |
 
@@ -68,10 +68,10 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 3
 **Instructions originales:**
--  Spécifier une date de début et/ou de fin aux tâches du projet. 4h
--  Choisisr une date via une interface calendrier. 3h
--  Spécifier la date de début et le temps attribué pour le projet. 4h 
--  Priorité des tâches en fonction du temps. 4h
+-  Spécifier une date de début et/ou de fin aux tâches du projet. 1h
+-  Choisir une date via une interface calendrier. 10h
+-  Spécifier la date de début et le temps attribué pour le projet. 2h 
+-  Priorité des tâches en fonction du temps. 6h
 
 :question: **Question:**  
 - Peut-on avoir plusieurs tâches en même temps, si oui comment l'afficher?
@@ -96,7 +96,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 5
 **Instructions originales:**  
-- Suivi de l'évolution d'un projet: 12h
+- Suivi de l'évolution d'un projet: 20h
         - "add" l'ajout de fichiers et dossiers d'un projet.
         - "remove" la suppression de fichiers et dossiers d'un projet.
         - "branch" le branchement d'un projet.
@@ -120,7 +120,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Les autres collaborateurs ont le droit de le modifier et de le supprimer. 1h
 - Les sous projets du projet partagé doivent aussi être partagés. 1h
 - Il doit être possible d'assigner des tâches à un ou plusieurs des utilisateurs collaborateurs (chaque utilisateur peut modifier les attributions). 4h
-- Les tâches assignées doivent être bien visibles pour les utilisateurs. 2h
+- Les tâches assignées doivent être bien visibles pour les utilisateurs. 6h
 
 **Tâches en plus:** 
 - Lier les rappels avec les collaborateurs. 5h
@@ -130,8 +130,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 7
 **Instructions originales:**
-- Exporter un fichier compressé(.tar.gz). 9h
-- Peut importer un projet ayant été exporté pour apparaitre comme projet dans l'application (pas forcément utilisable en dehors de l'application). 9h
+- Exporter un fichier compressé(.tar.gz). 4h
+- Peut importer un projet ayant été exporté pour apparaitre comme projet dans l'application (pas forcément utilisable en dehors de l'application). 4h
 
 :question: **Question:** 
 - /
@@ -152,7 +152,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Chaque utilisateur dispose d'une quantité d'espace disque définie par l'administrateur. 5h
 - L'espace peut être étendu grâce à l'aide de services de stockage cloud. 10h
 - Possibilité d'exporter ses projets vers le service web désiré ainsi qu'importer des fichiers de celui-ci. 2h
-- L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois. 2h
+- L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois. 7h
 - Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur. 1h
 
 :question: **Question:** 
@@ -170,7 +170,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 11
 **Instructions originales:**
-- Accès à une section d'aide 'informations et explications sur les fonctionnalités du programme). 4h
+- Accès à une section d'aide 'informations et explications sur les fonctionnalités du programme). 7h
 - Possiblement l'intégration d'un tutoriel qui pourrait être démarré à partir de cette section. 5h
 
 :question: **Question:** 
