@@ -1,7 +1,8 @@
-package be.ac.ulb.infof307.g06.JavaUI.sample;
+package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.database.*;
 import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Controller {
+public class LoginViewController {
     // --------------------- ATTRIBUTS -------------------------
     // ---------CONNECTION---------
     @FXML
@@ -79,7 +80,7 @@ public class Controller {
     // ----------------DATABASE---------------
     private ProjectDB projectsDB = new ProjectDB("Database.db");
     private UserDB userDB = new UserDB("Database.db");
-    public Controller() throws SQLException, ClassNotFoundException {
+    public LoginViewController() throws SQLException, ClassNotFoundException {
     }
 
     // --------------------- METHODES -------------------------
@@ -109,7 +110,6 @@ public class Controller {
                 Main.showMainMenuScene();
             }
         }
-
     }
 
     /**

@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.JavaUI.sample;
+package be.ac.ulb.infof307.g06.models;
 
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import javafx.scene.control.TreeItem;

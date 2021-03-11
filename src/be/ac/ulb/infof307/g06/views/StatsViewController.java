@@ -1,8 +1,9 @@
-package be.ac.ulb.infof307.g06.JavaUI.sample;
+package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
+import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class StatsController implements Initializable {
+public class StatsViewController implements Initializable {
     // Boutons
 
     @FXML
