@@ -189,5 +189,25 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(projectMenuAnchor);
     }
 
+    /**
+     * Shows the settings scene
+     *
+     * @throws Exception;
+     */
+    public static void showSettingsMenuScene() throws Exception {
+        // Set main stage
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
+
+        // Load the fxml
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/SettingsMenu.fxml"));
+
+        // Setup the new stage
+        AnchorPane settingsMenuAnchor = loader.load();
+        mainLayout.getChildren().setAll(settingsMenuAnchor);
+    }
+
     public static void main(String[] args) { launch(args); }
 }

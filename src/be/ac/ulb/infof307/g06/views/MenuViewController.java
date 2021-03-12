@@ -14,6 +14,8 @@ public class MenuViewController {
     private Button logOutBtn;
     @FXML
     private Button projectAccessBtn;
+    @FXML
+    private Button settingsAccessBtn;
 
     /*TO DO*/
 
@@ -21,8 +23,7 @@ public class MenuViewController {
     private Button profileAccessBtn;
     @FXML
     private Button calendarAccessBtn;
-    @FXML
-    private Button settingsAccessBtn;
+
     @FXML
     private Button helpBtn;
 
@@ -35,6 +36,15 @@ public class MenuViewController {
     @FXML
     private Button mainMenuBtn;
 
+    //----------- SETTINGS MENU -----------
+
+    @FXML
+    private Button tagsBtn;
+    @FXML
+    private Button languageBtn;
+    @FXML
+    private Button backBtn;
+
 
     @FXML
     private void menuEvents(ActionEvent event) throws Exception {
@@ -42,7 +52,11 @@ public class MenuViewController {
         else if( event.getSource() == logOutBtn) { Main.showLoginScene();} //Loging out
         else if( event.getSource() == mainMenuBtn) {Main.showMainMenuScene(); }
         else if( event.getSource() == statsAccessBtn) {Main.showStatisticsScene();}
+        else if( event.getSource() == settingsAccessBtn) {Main.showSettingsMenuScene();}
         else if(event.getSource()  == projectManagementBtn){Main.showProjectManagementScene();}
+        else if( event.getSource() ==tagsBtn){ System.out.println("test tags Button");}
+        else if( event.getSource() == languageBtn){ System.out.println("test language button");}
+        else if( event.getSource() == backBtn){Main.showMainMenuScene();}
 
     }
 }
