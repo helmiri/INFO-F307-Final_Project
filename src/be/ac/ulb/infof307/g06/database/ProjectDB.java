@@ -1,9 +1,6 @@
 
 package be.ac.ulb.infof307.g06.database;
-
-import be.ac.ulb.infof307.g06.database.Database;
 import be.ac.ulb.infof307.g06.models.*;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,7 +14,7 @@ public class ProjectDB extends Database {
     }
 
 
-    public static int createProject(String title, String description, String tags, Long date, int parent_id) throws SQLException {
+    public static int createProject(String title, String description, Long date, int parent_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
         int id;
@@ -31,24 +28,29 @@ public class ProjectDB extends Database {
         }
 
         if (parent_id != 0){    // Add the parent tags to the current tags
-            String parent_tags = getProject(parent_id).getTags();
-            tags = parent_tags.replace("/", ",") + "/" + tags;
+            List<Tag> parent_tags = new ArrayList<>();
+            parent_tags = getTags(parent_id);
+            for (int i=0; i<parent_tags.size(); i++){
+                addTag(parent_tags.get(i).getId(), id);
+            }
         }
-        state.execute("INSERT INTO Project (id, title, description, tags, date, parent_id) VALUES('" +
-                id + "','" + title + "','" + description + "','" + tags + "','" + date + "','" + parent_id + "');");
+        state.execute("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
+                id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
         close(state, rs);
         return id;
     }
 
     public static void editProject(int id, String title, String description, String tags, Long date) throws SQLException{
         Statement state = connect();
-        state.execute("UPDATE Project SET title = '" + title + "', description = '" + description + "', tags = '" + tags + "', date = '" + date + "' WHERE id = '" + id + "';");
+        state.execute("UPDATE Project SET title = '" + title + "', description = '" + description  + "', date = '" + date + "' WHERE id = '" + id + "';");
+        /* TODO
         for (Integer subProject : getSubProjects(id)) {
             editTags(subProject, tags);
         }
+         */
         close(state);
     }
-
+    /*
     private static void editTags(int id, String tags) throws SQLException{
         Statement state = connect();
         String newTags = tags.replace("/", ",") + "/" + getProject(id).getTags().split("/")[1];
@@ -58,7 +60,7 @@ public class ProjectDB extends Database {
         }
         close(state);
     }
-
+    */
     public static void deleteProject(int id) throws SQLException{
         Statement state = connect();
         for (Integer subProject : getSubProjects(id)) {
@@ -102,14 +104,13 @@ public class ProjectDB extends Database {
         ResultSet rs = null;
         Project res = null;
         try {
-            rs = state.executeQuery("SELECT title,description,tags,date,parent_id FROM Project WHERE id='" + id + "';");
+            rs = state.executeQuery("SELECT title,description,date,parent_id FROM Project WHERE id='" + id + "';");
 
             String title = rs.getString("title");
             String description = rs.getString("description");
-            String tags = rs.getString("tags");
             Long date = rs.getLong("date");
             int parent_id = rs.getInt("parent_id");
-            res = new Project(id, title, description, tags, date, parent_id);
+            res = new Project(id, title, description, date, parent_id);
         } catch (Exception ignored) {
         }
 
@@ -224,6 +225,78 @@ public class ProjectDB extends Database {
     }
 
 
+    public static int createTag(String description, int color) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
+        int id;
+        try {   // Generate id
+            rs = state.executeQuery("SELECT id, MAX(id) FROM Tag;");
+            id = rs.getInt("id");
+            id++;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            id = 1;
+        }
+        state.execute("INSERT INTO Tag (id, description, color) VALUES('" +
+                id + "','" + description + "','" + color + "');");
+        close(rs, state);
+        return id;
+    }
 
+    public static void editTag(int id, String description, int color) throws SQLException{
+        Statement state = connect();
+        state.execute("UPDATE Tag SET description = '" + description +"', color = '" + color + "' WHERE id = '" + id + "';");
+        close(state);
+    }
 
+    public static void deleteTag(int id) throws SQLException{
+        Statement state = connect();
+        state.execute("DELETE FROM Tag WHERE id = '" + id + "';");
+        close(state);
+    }
+
+    public static Tag getTag(int id) throws SQLException{
+        Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
+        Tag res = new Tag(id, rs.getString("description"), rs.getInt("color"));
+        close(state, rs);
+        return res;
+    }
+
+    public static void addTag(int tag_id, int project_id) throws SQLException{
+        Statement state = connect();
+        state.execute("INSERT INTO Tag_projects(tag_id, project_id) VALUES('" +
+                tag_id + "','" + project_id + "');");
+        close(state);
+    }
+
+    public static void removeTag(int tag_id, int project_id) throws SQLException{
+        Statement state = connect();
+        state.execute("DELETE FROM Tag_projects WHERE tag_id = '" + tag_id + "' AND project_id = '" + project_id +"';");
+        close(state);
+    }
+
+    public static List<Tag> getTags(int project_id) throws SQLException{
+        Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT tag_id FROM Tag_projects WHERE project_id='" + project_id + "';");
+        List<Tag> res = new ArrayList<>();
+        while (rs.next()){
+            res.add(getTag(rs.getInt("tag_id")));
+        }
+        close(state, rs);
+        return res;
+    }
+
+    public static int getTagID(String title) throws SQLException {
+        Statement state = connect();
+        int id = 0;
+        try{
+            ResultSet rs = state.executeQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
+            id = rs.getInt("id");
+        }
+        catch (Exception ignored){};
+
+        close(state);
+        return id;
+    }
 }

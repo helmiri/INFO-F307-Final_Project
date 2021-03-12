@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
-import be.ac.ulb.infof307.g06.database.ProjectDB.Task;
-
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Tag;
+import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
@@ -39,19 +39,19 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private TextField parentProject;
     @FXML
-    private TreeTableView<ProjectDB.Project> treeProjects;
+    private TreeTableView<Project> treeProjects;
     @FXML
-    private TreeTableColumn<ProjectDB.Project, String> treeProjectColumn;
-    private TreeItem<ProjectDB.Project> root = new TreeItem<ProjectDB.Project>();
+    private TreeTableColumn<Project, String> treeProjectColumn;
+    private TreeItem<Project> root = new TreeItem<Project>();
     @FXML
     private Button addProjectBtn;
 
     // ----------------TASK---------------
 
     @FXML
-    private TableView<ProjectDB.Task> taskTable;
+    private TableView<Task> taskTable;
     @FXML
-    private TableColumn<ProjectDB.Task,String> taskColumn;
+    private TableColumn<Task,String> taskColumn;
     @FXML
     private Button addTaskbtn;
     @FXML
@@ -111,8 +111,8 @@ public class ProjectsViewController implements Initializable {
 
     @FXML
     private void initTree(){
-        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<ProjectDB.Project, String>("title"));
-        taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
+        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
+        taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         taskTable.setEditable(true);
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         treeProjects.setRoot(root);
@@ -138,7 +138,7 @@ public class ProjectsViewController implements Initializable {
      * @param parent;
      * @throws SQLException;
      */
-    public void getProjects(List<Integer> projects, TreeItem<ProjectDB.Project> parent) throws SQLException{
+    public void getProjects(List<Integer> projects, TreeItem<Project> parent) throws SQLException{
         treeProjects.setShowRoot(false);
         for(Integer project : projects){
             Project childProject= ProjectDB.getProject(project);
@@ -147,7 +147,7 @@ public class ProjectsViewController implements Initializable {
             projectSelection.getItems().add(title);
             int childID= ProjectDB.getProjectID(title);
 
-            TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(childProject);
+            TreeItem<Project> child = new TreeItem<Project>(childProject);
             Global.TreeMap.put(childID, child);
             if (parentID== 0){
                 root.getChildren().add(child);
@@ -176,11 +176,11 @@ public class ProjectsViewController implements Initializable {
         else if (parentProject.getText() == "" || ProjectDB.getProjectID(parentProject.getText())!=0){
             if(parentProject.getText() != ""){ parentID= ProjectDB.getProjectID(parentProject.getText());}
 
-            int newProjectID = ProjectDB.createProject(nameProject.getText(),descriptionProject.getText(),tagsProject.getText(),dateProject.getValue().toEpochDay(),parentID);
+            int newProjectID = ProjectDB.createProject(nameProject.getText(),descriptionProject.getText(),dateProject.getValue().toEpochDay(),parentID);
             projectSelection.getItems().add(nameProject.getText());
             ProjectDB.addCollaborator(newProjectID, Global.userID);
 
-            TreeItem<ProjectDB.Project> child = new TreeItem<ProjectDB.Project>(ProjectDB.getProject(newProjectID));
+            TreeItem<Project> child = new TreeItem<Project>(ProjectDB.getProject(newProjectID));
             Global.TreeMap.put(newProjectID, child);
             errorText.setText("");
 
@@ -226,10 +226,9 @@ public class ProjectsViewController implements Initializable {
     private void showDetailsProject(ActionEvent event) throws SQLException{
         String projectName = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
         int projectID= ProjectDB.getProjectID(projectName);
-        ProjectDB.Project showProject= ProjectDB.getProject(projectID);
+        Project showProject= ProjectDB.getProject(projectID);
         String description= showProject.getDescription();
-        String tags=showProject.getTags();
-
+        List<Tag> tags = ProjectDB.getTags(projectID);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Details");
         alert.setHeaderText(null);
@@ -271,15 +270,15 @@ public class ProjectsViewController implements Initializable {
         if(projectSelection.getSelectionModel().getSelectedItem()!=null) {
             String selected = projectSelection.getSelectionModel().getSelectedItem();
             int projectID = ProjectDB.getProjectID(selected);
-            ProjectDB.Project project = ProjectDB.getProject(projectID);
+            Project project = ProjectDB.getProject(projectID);
             String description = project.getDescription();
-            String tags = project.getTags();
+            List<Tag> tags = ProjectDB.getTags(projectID);
             LocalDate date = LocalDate.ofEpochDay(project.getDate());
 
             newdescription.setText(description);
             newDateProject.setValue(date);
             newNameProject.setText(selected);
-            newTagsProject.setText(tags);
+            //newTagsProject.setText(tags); TODO
         }
     }
 
@@ -296,8 +295,8 @@ public class ProjectsViewController implements Initializable {
             String projectName = taskParent.getText();
             int projectID = ProjectDB.getProjectID(projectName);
             int task = ProjectDB.createTask(descriptionTask.getText(), projectID);
-            List<ProjectDB.Task> taskList =  ProjectDB.getTasks(projectID);
-            ObservableList<ProjectDB.Task> otaskList = FXCollections.observableArrayList(taskList);
+            List<Task> taskList =  ProjectDB.getTasks(projectID);
+            ObservableList<Task> otaskList = FXCollections.observableArrayList(taskList);
             taskTable.setItems(otaskList);
         }
     }
@@ -311,8 +310,8 @@ public class ProjectsViewController implements Initializable {
         if( treeProjects.getSelectionModel().getSelectedItem()!=null && treeProjects.getSelectionModel().getSelectedItem().getValue() !=null) {
             String projectTitle = treeProjects.getSelectionModel().getSelectedItem().getValue().getTitle();
             int projectID = ProjectDB.getProjectID(projectTitle);
-            List<ProjectDB.Task> taskList = ProjectDB.getTasks(projectID);
-            ObservableList<ProjectDB.Task> oTaskList = FXCollections.observableArrayList(taskList);
+            List<Task> taskList = ProjectDB.getTasks(projectID);
+            ObservableList<Task> oTaskList = FXCollections.observableArrayList(taskList);
             taskTable.setItems(oTaskList);
         }
     }

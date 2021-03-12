@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.database.*;
+
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.database.ProjectDB;

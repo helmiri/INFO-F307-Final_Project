@@ -4,15 +4,13 @@ public class Project {
     int id;
     String title;
     String description;
-    String tags;
     Long date;
     int parent_id;
 
-    public Project(int id, String title, String description, String tags, Long date, int parent_id) {
+    public Project(int id, String title, String description, Long date, int parent_id) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.tags = tags;
         this.date = date;
         this.parent_id = parent_id;
     }
@@ -27,10 +25,6 @@ public class Project {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getTags() {
-        return tags;
     }
 
     public Long getDate() {

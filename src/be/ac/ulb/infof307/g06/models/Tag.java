@@ -5,9 +5,9 @@ import java.awt.*;
 public class Tag {
     int id;
     String description;
-    Color color;
+    int color;
 
-    public Tag(int id, String description, Color color){
+    public Tag(int id, String description, int color){
         this.id = id;
         this.description =description;
         this.color = color;
@@ -16,12 +16,10 @@ public class Tag {
     public int getId() {
         return id;
     }
-
     public String getDescription() {
         return description;
     }
-
-    public Color getColor() {
+    public int getColor() {
         return color;
     }
 }

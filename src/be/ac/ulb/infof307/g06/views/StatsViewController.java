@@ -2,8 +2,8 @@ package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.database.ProjectDB.Project;
 import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,7 +46,7 @@ public class StatsViewController implements Initializable {
     @FXML
     private TreeTableColumn<Integer, String> estimatedColumn;
 
-    private TreeItem<ProjectDB.Project> root = new TreeItem<ProjectDB.Project>();
+    private TreeItem<Project> root = new TreeItem<Project>();
 
 
     //---------------METHODE----------------
