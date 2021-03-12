@@ -21,6 +21,7 @@ import org.controlsfx.control.CheckComboBox;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -188,6 +189,13 @@ public class ProjectsViewController implements Initializable {
             if(parentProject.getText() != ""){ parentID= ProjectDB.getProjectID(parentProject.getText());}
 
             int newProjectID = ProjectDB.createProject(nameProject.getText(),descriptionProject.getText(),dateProject.getValue().toEpochDay(),parentID);
+
+            //tags
+            ObservableList<String> tags = tagsProject.getCheckModel().getCheckedItems();
+            for (int i=0; i<tags.size(); i++){
+                ProjectDB.addTag(ProjectDB.getTagID(tags.get(i)), newProjectID);
+            }
+
             projectSelection.getItems().add(nameProject.getText());
             ProjectDB.addCollaborator(newProjectID, Global.userID);
 
@@ -251,7 +259,7 @@ public class ProjectsViewController implements Initializable {
         alert.setHeaderText(null);
         alert.getDialogPane().setMinWidth(600);
         alert.setResizable(false);
-        alert.setContentText("DESCRIPTION:\n" +description+"\n\n"+"TAGS:\n"+tags);
+        alert.setContentText("DESCRIPTION:\n" +description+"\n\n"+"TAGS:\n"+tagStrings);
         alert.showAndWait();
     }
 

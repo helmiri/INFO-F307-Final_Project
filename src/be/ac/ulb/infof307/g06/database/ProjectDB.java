@@ -27,15 +27,16 @@ public class ProjectDB extends Database {
             id = 1;
         }
 
+
+
+        state.execute("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
+        id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
         if (parent_id != 0){    // Add the parent tags to the current tags
-            List<Tag> parent_tags = new ArrayList<>();
-            parent_tags = getTags(parent_id);
+            List<Tag> parent_tags = getTags(parent_id);
             for (int i=0; i<parent_tags.size(); i++){
                 addTag(parent_tags.get(i).getId(), id);
             }
         }
-        state.execute("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
-                id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
         close(state, rs);
         return id;
     }
@@ -263,10 +264,28 @@ public class ProjectDB extends Database {
         return res;
     }
 
-    public static void addTag(int tag_id, int project_id) throws SQLException{
+    public static List<Tag> getAllTags() throws SQLException{
         Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT id, description, color FROM Tag;");
+        List<Tag> res = new ArrayList<>();
+        while (rs.next()){
+            res.add(new Tag(rs.getInt("id"), rs.getString("description"), rs.getInt("color")));
+        }
+        close(state, rs);
+        return res;
+    }
+
+
+
+    public static void addTag(int tag_id, int project_id) throws SQLException {
+        Statement state = connect();
+        List<Tag> tags = getTags(project_id);
+        List<String> tagsString = new ArrayList<>();
+        for (int i=0; i<tags.size(); i++){tagsString.add(tags.get(i).getDescription()); }
+        if (!tagsString.contains(getTag(tag_id).getDescription())) {
         state.execute("INSERT INTO Tag_projects(tag_id, project_id) VALUES('" +
                 tag_id + "','" + project_id + "');");
+        }
         close(state);
     }
 
