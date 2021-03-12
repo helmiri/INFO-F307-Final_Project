@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
+import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private DatePicker dateProject;
     @FXML
-    private TextField tagsProject;
+    private CheckComboBox tagsProject;
     @FXML
     private TextField parentProject;
     @FXML
@@ -45,9 +46,7 @@ public class ProjectsViewController implements Initializable {
     private TreeItem<Project> root = new TreeItem<Project>();
     @FXML
     private Button addProjectBtn;
-
     // ----------------TASK---------------
-
     @FXML
     private TableView<Task> taskTable;
     @FXML
@@ -60,9 +59,7 @@ public class ProjectsViewController implements Initializable {
     private TextArea descriptionTask;
     @FXML
     private TextField taskParent;
-
     //---------------EDIT PROJECTS----------
-
     @FXML
     private Button EditProjectBtn;
     @FXML
@@ -77,7 +74,6 @@ public class ProjectsViewController implements Initializable {
     private TextField newTagsProject;
     @FXML
     private Text errorText;
-
     //---------------METHODES----------------
 
     /**
@@ -90,6 +86,7 @@ public class ProjectsViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTree();
         try {
+            initComboBox();
             loadProjects();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -109,8 +106,22 @@ public class ProjectsViewController implements Initializable {
         else if( event.getSource()== backBtn) { Main.showMainMenuScene(); }
     }
 
+    private void initComboBox() throws SQLException{
+        /*
+        ProjectDB.createTag("tag1", 0);
+        ProjectDB.createTag("tag2", 0);
+        ProjectDB.createTag("tag3", 0);
+        */
+        final ObservableList<String> tags = FXCollections.observableArrayList();
+        List<Tag> tagsList = ProjectDB.getAllTags();
+        for (int i = 0; i <tagsList.size(); i++) {
+            tags.add(tagsList.get(i).getDescription());
+        }
+        tagsProject.getItems().addAll(tags);
+    }
+
     @FXML
-    private void initTree(){
+    private void initTree() {
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         taskTable.setEditable(true);
@@ -228,7 +239,13 @@ public class ProjectsViewController implements Initializable {
         int projectID= ProjectDB.getProjectID(projectName);
         Project showProject= ProjectDB.getProject(projectID);
         String description= showProject.getDescription();
+
         List<Tag> tags = ProjectDB.getTags(projectID);
+        List<String> tagStrings = new ArrayList<>();
+        for (int i = 0; i<tags.size(); i++){
+            tagStrings.add(tags.get(i).getDescription());
+        }
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Details");
         alert.setHeaderText(null);
@@ -244,7 +261,6 @@ public class ProjectsViewController implements Initializable {
      */
     @FXML
     private void editProject() throws SQLException{
-
         if (projectSelection.getSelectionModel().getSelectedItem()==null){
             errorText.setText("Please select a project.");}
         else if (ProjectDB.getProjectID(newNameProject.getText()) != 0 ) {
@@ -272,7 +288,7 @@ public class ProjectsViewController implements Initializable {
             int projectID = ProjectDB.getProjectID(selected);
             Project project = ProjectDB.getProject(projectID);
             String description = project.getDescription();
-            List<Tag> tags = ProjectDB.getTags(projectID);
+            //List<Tag> tags = ProjectDB.getTags(projectID);
             LocalDate date = LocalDate.ofEpochDay(project.getDate());
 
             newdescription.setText(description);
