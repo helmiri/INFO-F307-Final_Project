@@ -29,7 +29,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/LoginView.fxml"));
+        loader.setLocation(Main.class.getResource("views/LoginView.fxml"));
         mainLayout = loader.load();
 
         // Display scene
@@ -53,7 +53,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/LoginView.fxml"));
+        loader.setLocation(Main.class.getResource("views/LoginView.fxml"));
 
         // Setup the new page.
         AnchorPane connectionAnchor = loader.load();
@@ -69,7 +69,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/SignupView.fxml"));
+        loader.setLocation(Main.class.getResource("views/SignUpView.fxml"));
 
         // Setup the new page.
         AnchorPane registerAnchor = loader.load();
@@ -90,7 +90,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/StatsView.fxml"));
+        loader.setLocation(Main.class.getResource("views/StatsView.fxml"));
 
         // Setup the new page.
         AnchorPane statisticsAnchor = loader.load();
@@ -112,7 +112,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/ProjectsView.fxml"));
+        loader.setLocation(Main.class.getResource("views/ProjectsView.fxml"));
 
         // Setup the new page.
         AnchorPane projectManagementAnchor = loader.load();
@@ -129,7 +129,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/TermsV2.fxml"));
+        loader.setLocation(Main.class.getResource("views/TermsV2.fxml"));
         AnchorPane conditionsAnchor = loader.load();
 
         // Setup the new stage
@@ -161,7 +161,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/MenuView.fxml"));
+        loader.setLocation(Main.class.getResource("views/MenuView.fxml"));
 
         // Setup the new stage
         AnchorPane maineMenuAnchor = loader.load();
@@ -182,7 +182,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("JavaUI/sample/ProjectMenu.fxml"));
+        loader.setLocation(Main.class.getResource("views/ProjectMenu.fxml"));
 
         // Setup the new stage
         AnchorPane projectMenuAnchor = loader.load();
