@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.views;
 
+import be.ac.ulb.infof307.g06.controllers.ProjectController;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -72,6 +73,8 @@ public class ProjectsViewController {
     private TextField newTagsProject;
     @FXML
     private Text errorText;
+    //----------------CONTROLLER--------------
+    private ProjectController controller;
     //---------------METHODES----------------
 
     /**
@@ -81,10 +84,10 @@ public class ProjectsViewController {
      */
     @FXML
     private void events(ActionEvent event) throws Exception {
-        if( event.getSource()== addTaskbtn)    { addTask(); }
-        else if( event.getSource()== addProjectBtn) { addProject(); }
-        else if( event.getSource()== EditProjectBtn) {editProject();}
-        else if( event.getSource()== backBtn) { Main.showMainMenuScene(); }
+        //if( event.getSource()== addTaskbtn){ controller.addTask(); }
+        if( event.getSource()== addProjectBtn){ controller.addProject(); }
+        //else if( event.getSource()== EditProjectBtn){editProject();}
+        else if( event.getSource()== backBtn){ Main.showMainMenuScene(); }
     }
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
     @FXML
@@ -190,6 +193,7 @@ public class ProjectsViewController {
      * Edits a project
      * @throws SQLException;
      */
+    /*
     @FXML
     private void editProject() throws SQLException{
         if (projectSelection.getSelectionModel().getSelectedItem()==null){
