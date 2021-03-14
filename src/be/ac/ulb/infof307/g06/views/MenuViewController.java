@@ -1,6 +1,8 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -48,15 +50,29 @@ public class MenuViewController {
 
     @FXML
     private void menuEvents(ActionEvent event) throws Exception {
-        if( event.getSource() == projectAccessBtn) { Main.showProjectMenuScene();} //Access to the projects management menu
-        else if( event.getSource() == logOutBtn) { Main.showLoginScene();} //Loging out
-        else if( event.getSource() == mainMenuBtn) {Main.showMainMenuScene(); }
-        else if( event.getSource() == statsAccessBtn) {Main.showStatisticsScene();}
-        else if( event.getSource() == settingsAccessBtn) {Main.showSettingsMenuScene();}
-        else if(event.getSource()  == projectManagementBtn){Main.showProjectManagementScene();}
-        else if( event.getSource() ==tagsBtn){ System.out.println("test tags Button");}
-        else if( event.getSource() == languageBtn){ System.out.println("test language button");}
-        else if( event.getSource() == backBtn){Main.showMainMenuScene();}
+
+        if (event.getSource() == projectAccessBtn) {
+            Main.showProjectMenuScene();
+        } //Access to the projects management menu
+        else if (event.getSource() == logOutBtn) {
+            UserDB.disconnectUser(Global.userID);
+            Main.showLoginScene();
+        } //Loging out
+        else if (event.getSource() == mainMenuBtn) {
+            Main.showMainMenuScene();
+        } else if (event.getSource() == statsAccessBtn) {
+            Main.showStatisticsScene();
+        } else if (event.getSource() == settingsAccessBtn) {
+            Main.showSettingsMenuScene();
+        } else if (event.getSource() == projectManagementBtn) {
+            Main.showProjectManagementScene();
+        } else if (event.getSource() == tagsBtn) {
+            System.out.println("test tags Button");
+        } else if (event.getSource() == languageBtn) {
+            System.out.println("test language button");
+        } else if (event.getSource() == backBtn) {
+            Main.showMainMenuScene();
+        }
 
     }
 }
