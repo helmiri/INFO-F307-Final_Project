@@ -1,6 +1,10 @@
 
 package be.ac.ulb.infof307.g06.database;
-import be.ac.ulb.infof307.g06.models.*;
+
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Tag;
+import be.ac.ulb.infof307.g06.models.Task;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -150,7 +154,7 @@ public class ProjectDB extends Database {
         while (rs.next()) {
             res.add(rs.getInt("user_id"));
         }
-        close(rs);
+        close(rs, state);
         return res;
     }
 
@@ -159,7 +163,7 @@ public class ProjectDB extends Database {
         int res;
         ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Collaborator WHERE project_id='" + project_id + "';");
         res = rs.getInt("COUNT(*)");
-        close(rs);
+        close(rs, state);
         return res;
     }
 
@@ -170,7 +174,7 @@ public class ProjectDB extends Database {
         while (rs.next()) {
             res.add(rs.getInt("project_id"));
         }
-        close(rs);
+        close(rs, state);
         return res;
     }
 
@@ -221,7 +225,7 @@ public class ProjectDB extends Database {
         int res;
         ResultSet rs = state.executeQuery("SELECT COUNT(*) FROM Task WHERE project_id='" + project_id + "';");
         res = rs.getInt("COUNT(*)");
-        close(rs);
+        close(rs, state);
         return res;
     }
 
@@ -308,14 +312,15 @@ public class ProjectDB extends Database {
 
     public static int getTagID(String title) throws SQLException {
         Statement state = connect();
+        ResultSet rs = null;
         int id = 0;
         try{
-            ResultSet rs = state.executeQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
+            rs = state.executeQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
             id = rs.getInt("id");
         }
         catch (Exception ignored){};
 
-        close(state);
+        close(state, rs);
         return id;
     }
 }
