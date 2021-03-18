@@ -12,5 +12,6 @@
     <orderEntry type="library" name="controlsfx" level="project" />
     <orderEntry type="library" name="javafx" level="project" />
     <orderEntry type="library" name="sqlite" level="project" />
+    <orderEntry type="library" name="dropbox-core-sdk-3.1.5" level="project" />
   </component>
 </module>
