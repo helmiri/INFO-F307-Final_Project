@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g06;
 
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,10 +44,10 @@ public class TestDatabase {
         new ProjectDB("test/be/ac/ulb/infof307/g06/testDB.db");
     }
 
-    @AfterAll
-    public static void close() throws SQLException {
-        db.close();
-    }
+//    @AfterAll
+//    public static void close() throws SQLException {
+//        db.close();
+//    }
 
     @BeforeEach
     private void prepareUserData() throws SQLException {
@@ -62,6 +61,7 @@ public class TestDatabase {
                 state1.setString(j + 1, testData.get(i).get(dbFields.get(j)));
             }
             state1.execute();
+            state1.close();
         }
     }
 
@@ -76,5 +76,6 @@ public class TestDatabase {
         state.executeUpdate("DELETE FROM Project");
         state.executeUpdate("DELETE FROM Collaborator");
         state.executeUpdate("DELETE FROM Task");
+        state.close();
     }
 }
