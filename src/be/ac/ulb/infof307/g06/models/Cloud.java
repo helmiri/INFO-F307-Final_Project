@@ -8,25 +8,20 @@ import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.users.FullAccount;
 
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class Cloud {
-    private static final String ACCESS_TOKEN = "s9ifuzucCEEAAAAAAAAAAStAeLKov4CFRnm8kfR9sgN00Knv0PTVdU2yXo7IzLgW";
 
-    public static void main(String args[]) throws DbxException, IOException {
+    public static DbxClientV2 connect(String ACCESS_TOKEN, String clientidentifier) throws DbxException, IOException {
         // Create Dropbox client
-        DbxRequestConfig config = new DbxRequestConfig("Group6Project", "en_US");
+        DbxRequestConfig config = new DbxRequestConfig(clientidentifier, "en_US");
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
 
         // Get current account info
         FullAccount account = client.users().getCurrentAccount();
         System.out.println(account.getName().getDisplayName());
 
-        // Get files and folder metadata from Dropbox root directory
+        // TODO: faudra trouver un moyen de renvoyer les fichiers contenus dans la dropbox pour que l'utilisateur sache ce qu'il s'y contient.
         ListFolderResult result = client.files().listFolder("");
         while (true) {
             for (Metadata metadata : result.getEntries()) {
@@ -39,20 +34,20 @@ public class Cloud {
 
             result = client.files().listFolderContinue(result.getCursor());
         }
-
-        // Upload "happy.png" to Dropbox
-        try (InputStream in = new FileInputStream("/Users/horatiul/Desktop/happy.png")) {
-            FileMetadata metadata = client.files().uploadBuilder("/happy-uploaded-java.png")
+        return client;
+    }
+    public static void uploadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
+        try (InputStream in = new FileInputStream(path)) {
+            FileMetadata metadata = client.files().uploadBuilder(filename)
                     .uploadAndFinish(in);
         }
+    }
 
-        // ------
-        // Downloading a file using the Dropbox Java library
-        String localPath = "/Users/horatiul/Desktop/happy-downloaded-java.png";
+    public static void downloadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
+        String localPath = path;
         OutputStream outputStream = new FileOutputStream(localPath);
         FileMetadata metadata = client.files()
-                .downloadBuilder("/happy.png")
+                .downloadBuilder(filename)
                 .download(outputStream);
-
     }
 }
