@@ -120,4 +120,17 @@ public class UserDB extends Database {
         state.executeUpdate("UPDATE users SET status=false WHERE id='" + userID + "'");
         close(state);
     }
+
+    public static String getAccToken(String userName) throws SQLException {
+        Statement state = connect();
+        String res = state.executeQuery("SELECT accToken from users where userName='" + userName + "'").getString("accToken");
+        close(state);
+        return res;
+    }
+
+    public static void addAccToken(String token, String userName) throws SQLException {
+        Statement state = connect();
+        state.executeUpdate("UPDATE users SET accToken='" + token + "' where userName='" + userName + "'");
+        close(state);
+    }
 }
