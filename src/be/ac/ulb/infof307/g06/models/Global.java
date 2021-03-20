@@ -17,6 +17,11 @@ public class Global {
     public static String username ;
     public static String passwd ;
 
+    public static TreeItem<Project> root;
+    public static ProjectsViewController projectsView;
+    //Edit project's name
+    public static String currentProject;
+
     //The user ID
     public static int userID;
 

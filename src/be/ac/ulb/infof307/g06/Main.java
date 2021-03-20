@@ -112,7 +112,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/ProjectsView.fxml"));
+        loader.setLocation(Main.class.getResource("views/ProjectViews/ProjectsViewV2.fxml"));
 
         // Setup the new page.
         AnchorPane projectManagementAnchor = loader.load();
@@ -208,6 +208,43 @@ public class Main extends Application {
         AnchorPane settingsMenuAnchor = loader.load();
         mainLayout.getChildren().setAll(settingsMenuAnchor);
     }
+
+    public static void showAddProjectStage() throws Exception{
+
+        // Load the fxml
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/ProjectViews/AddProjectView.fxml"));
+        AnchorPane conditionsAnchor = loader.load();
+
+        // Setup the new stage
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add project");
+        stage.setScene(new Scene(conditionsAnchor, 541, 473));
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    public static void showEditProjectStage() throws Exception{
+
+        // Load the fxml
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/ProjectViews/EditProjectView.fxml"));
+        AnchorPane conditionsAnchor = loader.load();
+
+        // Setup the new stage
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Edit project");
+        stage.setScene(new Scene(conditionsAnchor, 541, 473));
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    public static void closeStage(){ stage.close(); }
+
 
     public static void main(String[] args) { launch(args); }
 }
