@@ -1,6 +1,9 @@
 package be.ac.ulb.infof307.g06;
 
+import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.models.Global;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -21,14 +24,25 @@ public class Main extends Application {
      * @throws Exception;
      */
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         // Set main stage
+        Global.userID = 0;
         Main.primaryStage = primaryStage;
         Main.primaryStage.setTitle("Projet génie logiciel");
+        // Disconnect user before closing
+        Main.primaryStage.setOnCloseRequest(e -> {
+            try {
+                if (Global.userID != 0) UserDB.disconnectUser(Global.userID);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            Platform.exit();
+            System.exit(0);
+        });
 
         // Load the fxml
-        FXMLLoader loader =  new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/LoginView.fxml"));
         mainLayout = loader.load();
 
