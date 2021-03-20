@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.models;
 
 import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import javafx.scene.control.TreeItem;
 
 import java.util.HashMap;

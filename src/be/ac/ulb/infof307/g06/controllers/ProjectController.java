@@ -10,8 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
-
-import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -19,10 +17,12 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import be.ac.ulb.infof307.g06.Main;
+import java.util.ArrayList;
 
-public class ProjectController implements Initializable {
-    private ProjectsViewController view= new ProjectsViewController();
-    private TreeItem<Project> root = new TreeItem<Project>();
+public class ProjectController{
 
     public void init(ProjectsViewController view, TreeItem<Project> root) {
         Global.projectsView = view;
@@ -73,16 +73,16 @@ public class ProjectController implements Initializable {
             Global.TreeMap.put(childID, child);
 
             if (parentID== 0){
-                view.addChild(root, child);
+                Global.projectsView.addChild(Global.root, child);
             } else {
-                view.addChild(Global.TreeMap.get(parentID), child);
+                Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
             }
         }
         Global.projectsView.refresh();
 
     }
 
-    public void addProject() throws SQLException{
+    public void addProject(ProjectInputViewController addView) throws SQLException{
         //TODO: add conditions to projects creation
         int parentID=0;
         String nameProject = addView.getNameProject();
@@ -98,7 +98,7 @@ public class ProjectController implements Initializable {
             addView.setError("Cannot create a project without a date.");}
         else if (parentProject == "" || ProjectDB.getProjectID(parentProject)!=0){
             if(parentProject != ""){ parentID= ProjectDB.getProjectID(parentProject);}
-
+            System.out.println("addProject " + dateProject.toEpochDay());
             int newProjectID = ProjectDB.createProject(nameProject,descriptionProject,dateProject.toEpochDay(),parentID);
 
             //tags
@@ -114,13 +114,39 @@ public class ProjectController implements Initializable {
             addView.setError("");
 
             if (parentID == 0) {
-                view.addChild(root,child);
+                Global.projectsView.addChild(Global.root,child);
             } else {
-                view.addChild(Global.TreeMap.get(parentID), child);
+                Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
             }
         }
         Main.closeStage();
     }
+
+
+    public void editProject(ProjectInputViewController inputView) throws SQLException{
+        int projectID = ProjectDB.getProjectID(inputView.getNameProject());
+        if (projectID != 0 && projectID != ProjectDB.getProjectID(Global.currentProject)){
+            inputView.setError("Cannot edit the project with such a title.");}
+        else if (inputView.getNameProject().equals("")){
+            inputView.setError("Cannot edit a project with an empty name.");}
+        else {
+            ProjectDB.editProject(
+                    ProjectDB.getProjectID(Global.currentProject),
+                    inputView.getNameProject(),
+                    inputView.getDescriptionProject(),
+                    inputView.getDateProject().toEpochDay()
+            );
+            List<Integer> tags = new ArrayList<>();
+            ObservableList<String> newTags = inputView.getSelectedTags();
+            for(int i=0; i<newTags.size();i++){
+                tags.add(ProjectDB.getTagID(newTags.get(i)));
+            }
+            ProjectDB.editTags(projectID, tags);
+            inputView.setError("");
+            init(Global.projectsView, Global.root);
+        }
+    }
+
 
     public void editTask(String description, String newDescription, Task task) throws SQLException {
         if (newDescription==""){deleteTask(task);}
