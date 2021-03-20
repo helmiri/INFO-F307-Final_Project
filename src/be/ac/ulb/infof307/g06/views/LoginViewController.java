@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public class LoginViewController {
     // --------------------- ATTRIBUTS -------------------------
@@ -68,8 +69,19 @@ public class LoginViewController {
         switch (Global.userID) {
             case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong");
             case -1 -> loginErrMsg.setText("This user is already connected");
-            default -> Main.showMainMenuScene();
+            default -> {
+                setUserInfo(user);
+                Main.showMainMenuScene();
+            }
         }
+    }
+
+    private void setUserInfo(String userName) throws SQLException {
+        Map<String, String> info = UserDB.getUserInfo(userName);
+        Global.userName = userName;
+        Global.email = info.get("email");
+        Global.firstName = info.get("firstName");
+        Global.lastName = info.get("lastName");
     }
 }
 
