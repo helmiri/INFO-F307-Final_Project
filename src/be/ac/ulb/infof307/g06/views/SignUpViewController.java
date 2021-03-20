@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +48,7 @@ public class SignUpViewController {
         if( event.getSource()== signUpBtn)  { signUpConditions()        ;}
         if( event.getSource()== acceptConditionsBtn){
             if(acceptConditionsBox.isSelected()){
-                Global.userID= UserDB.addUser(Global.firstName,Global.lastName,Global.username,Global.email,Global.passwd);
+                Global.userID = UserDB.addUser(Global.firstName, Global.lastName, Global.userName, Global.email, Global.passwd);
                 Main.closeConditionsStage();
                 Main.showMainMenuScene();
             }
@@ -70,11 +71,14 @@ public class SignUpViewController {
             Global.firstName = firstNameField.getText();
             Global.lastName = lastNameField.getText();
             Global.email = emailField.getText();
-            Global.username = signUpUsernameField.getText();
+            Global.userName = signUpUsernameField.getText();
             Global.passwd = signUpPasswordField.getText();
             //TODO: what if 2 users have the same email address?
-            if (!(UserDB.userExists(Global.username))) { Main.showConditionsStage(); }
-            else{signUpTxtPopup.setText("This user already exists");}
+            if (!(UserDB.userExists(Global.userName))) {
+                Main.showConditionsStage();
+            } else {
+                signUpTxtPopup.setText("This user already exists");
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Wrong enters");
