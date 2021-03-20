@@ -133,4 +133,20 @@ public class UserDB extends Database {
         state.executeUpdate("UPDATE users SET accToken='" + token + "' where userName='" + userName + "'");
         close(state);
     }
+
+    public static void setUserInfo(String userName, String fName, String lName, String email, String newPassword) throws SQLException {
+        Statement state = connect();
+        setField(userName, fName, "fName", state);
+        setField(userName, lName, "lName", state);
+        setField(userName, email, "email", state);
+        setField(userName, newPassword, "password", state);
+        close(state);
+    }
+
+    private static void setField(String userName, String info, String field, Statement state) throws SQLException {
+        if (info.isBlank()) {
+            return;
+        }
+        state.executeUpdate("UPDATE users SET " + field + "='" + info + "' WHERE userName='" + userName + "'");
+    }
 }
