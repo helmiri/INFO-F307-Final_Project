@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.models;
 
-import be.ac.ulb.infof307.g06.models.Project;
 import javafx.scene.control.TreeItem;
 
 import java.util.HashMap;
@@ -13,9 +12,9 @@ public class Global {
     //Sign up variables
     public static String firstName;
     public static String lastName;
-    public static String email ;
-    public static String username ;
-    public static String passwd ;
+    public static String email;
+    public static String userName;
+    public static String passwd;
 
     //The user ID
     public static int userID;
