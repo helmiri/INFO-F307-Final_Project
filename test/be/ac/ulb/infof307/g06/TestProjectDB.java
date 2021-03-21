@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06;
 
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import org.junit.jupiter.api.*;
 
@@ -162,42 +163,87 @@ class TestProjectDB {
     }
 
     @Test
-    void editTags() {
+    void createTag() throws SQLException {
+        int id = ProjectDB.createTag("tag1", 0);
+        assertEquals("tag1", ProjectDB.getTag(id).getDescription());
     }
 
     @Test
-    void createTag() {
+    void editTag() throws SQLException {
+        int id = ProjectDB.createTag("tag1", 0);
+        ProjectDB.editTag(id, "newtag1", 1);
+        assertEquals("newtag1", ProjectDB.getTag(id).getDescription());
     }
 
     @Test
-    void editTag() {
+    void deleteTag() throws SQLException {
+        int id = ProjectDB.createTag("tag1", 0);
+        ProjectDB.deleteTag(id);
+        assertNull(ProjectDB.getTag(id));
     }
 
     @Test
-    void deleteTag() {
+    void addTag() throws SQLException {
+        int id1 = ProjectDB.createTag("tag1", 0);
+        int id2 = ProjectDB.createTag("tag2", 0);
+        ProjectDB.addTag(id1, 1);
+        ProjectDB.addTag(id2, 1);
+
+        List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag2"));
+        List<String> actual = new ArrayList<>();
+        for (int i=0;i<ProjectDB.getTags(1).size();i++){
+            actual.add(ProjectDB.getTags(1).get(i).getDescription());
+        }
+        assertEquals(expected, actual);
     }
 
     @Test
-    void getTag() {
+    void editTags() throws SQLException {
+        int id1 = ProjectDB.createTag("tag1", 0);
+        int id2 = ProjectDB.createTag("tag2", 0);
+        int id3 = ProjectDB.createTag("tag3", 0);
+        ProjectDB.addTag(id1, 1);
+        ProjectDB.addTag(id2, 1);
+        List<Integer> newTags = new ArrayList<>(Arrays.asList(id1,id3));
+        ProjectDB.editTags(1, newTags);
+        List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag3"));
+        List<String> actual = new ArrayList<>();
+        for (int i=0;i<ProjectDB.getTags(1).size();i++){
+            actual.add(ProjectDB.getTags(1).get(i).getDescription());
+        }
+        assertEquals(expected, actual);
+
     }
 
     @Test
-    void getAllTags() {
+    void removeTag() throws SQLException, IOException, ClassNotFoundException {
+        setUp();
+        int id1 = ProjectDB.createTag("tag1", 0);
+        int id2 = ProjectDB.createTag("tag2", 0);
+        ProjectDB.addTag(id1, 1);
+        ProjectDB.addTag(id2, 1);
+        ProjectDB.removeTag(1, id1);
+        List<String> expected = new ArrayList<>(Arrays.asList("tag2"));
+        List<String> actual = new ArrayList<>();
+        for (int i=0;i<ProjectDB.getTags(1).size();i++){
+            actual.add(ProjectDB.getTags(1).get(i).getDescription());
+        }
+        assertEquals(expected, actual);
     }
 
     @Test
-    void addTag() {
-    }
-
-    @Test
-    void removeTag() {
-    }
-
-    @Test
-    void getTags() {
-    }
-
-    @Test
-    void getTagID() {
+    void getAllTags() throws SQLException, IOException, ClassNotFoundException {
+        setUp();
+        int id1 = ProjectDB.createTag("tag1", 0);
+        int id2 = ProjectDB.createTag("tag2", 0);
+        int id3 = ProjectDB.createTag("tag3", 0);
+        ProjectDB.addTag(id1, 1);
+        ProjectDB.addTag(id2, 1);
+        List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag2", "tag3"));
+        List<String> actual = new ArrayList<>();
+        for (int i=0;i<ProjectDB.getAllTags().size();i++){
+            actual.add(ProjectDB.getAllTags().get(i).getDescription());
+        }
+        assertEquals(expected, actual);
     }
 }

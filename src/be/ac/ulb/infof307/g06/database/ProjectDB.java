@@ -53,24 +53,6 @@ public class ProjectDB extends Database {
         close(state);
     }
 
-    public static void editTags(int project_id, List<Integer> tags_id) throws SQLException{
-        Statement state = connect();
-        List<Tag> oldTags = getTags(project_id);
-
-        for(int i=0;i<oldTags.size();i++){
-            System.out.println(oldTags.get(i).getId());
-            removeTag(oldTags.get(i).getId(), project_id);
-        }
-
-        for(int i=0;i<tags_id.size();i++){
-            addTag(tags_id.get(i), project_id);
-        }
-        for (int i=0; i<getSubProjects(project_id).size(); i++){
-            editSubTags(getSubProjects(project_id).get(i), oldTags, tags_id);
-        }
-        close(state);
-    }
-
     private static void editSubTags(int project_id, List<Tag> oldTags, List<Integer> newTags) throws SQLException{
         Statement state = connect();
         for(int i=0;i<oldTags.size();i++){
@@ -264,7 +246,6 @@ public class ProjectDB extends Database {
         ResultSet rs = null;
         int id = 0;
         if (getTagID(description) == 0){
-
             try {   // Generate id
                 rs = state.executeQuery("SELECT id, MAX(id) FROM Tag;");
                 id = rs.getInt("id");
@@ -276,6 +257,8 @@ public class ProjectDB extends Database {
             state.execute("INSERT INTO Tag (id, description, color) VALUES('" +
                     id + "','" + description + "','" + color + "');");
             close(rs, state);
+        } else {
+            return getTagID(description);
         }
         return id;
     }
@@ -299,8 +282,10 @@ public class ProjectDB extends Database {
         try {
         rs = state.executeQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
         res = new Tag(id, rs.getString("description"), rs.getInt("color"));
+
         }catch (Exception e){
             res = null;
+            System.out.println(e);
         }
         close(state, rs);
         return res;
@@ -321,7 +306,9 @@ public class ProjectDB extends Database {
         Statement state = connect();
         List<Tag> tags = getTags(project_id);
         List<String> tagsString = new ArrayList<>();
-        for (int i=0; i<tags.size(); i++){tagsString.add(tags.get(i).getDescription()); }
+        for (Tag tag : tags) {
+            tagsString.add(tag.getDescription());
+        }
         if (!tagsString.contains(getTag(tag_id).getDescription())) {
         state.execute("INSERT INTO Tag_projects(tag_id, project_id) VALUES('" +
                 tag_id + "','" + project_id + "');");
@@ -335,12 +322,32 @@ public class ProjectDB extends Database {
         close(state);
     }
 
+    public static void editTags(int project_id, List<Integer> tags_id) throws SQLException{
+        Statement state = connect();
+        List<Tag> oldTags = getTags(project_id);
+
+        for(int i=0;i<oldTags.size();i++){
+            System.out.println(oldTags.get(i).getId());
+            removeTag(oldTags.get(i).getId(), project_id);
+        }
+
+        for(int i=0;i<tags_id.size();i++){
+            addTag(tags_id.get(i), project_id);
+        }
+        for (int i=0; i<getSubProjects(project_id).size(); i++){
+            editSubTags(getSubProjects(project_id).get(i), oldTags, tags_id);
+        }
+        close(state);
+    }
+
     public static List<Tag> getTags(int project_id) throws SQLException{
         Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT tag_id FROM Tag_projects WHERE project_id='" + project_id + "';");
         List<Tag> res = new ArrayList<>();
         while (rs.next()){
-            res.add(getTag(rs.getInt("tag_id")));
+            if (getTag(rs.getInt("tag_id")) != null){
+                res.add(getTag(rs.getInt("tag_id")));
+            }
         }
         close(state, rs);
         return res;
