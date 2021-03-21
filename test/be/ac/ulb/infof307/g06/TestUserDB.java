@@ -37,26 +37,31 @@ public class TestUserDB extends TestDatabase {
         assertFalse(UserDB.userExists("doesNotExist"));
 
         Statement state = db.createStatement();
+        ResultSet res = null;
         for (int i = 0; i < 10; i++) {
-            ResultSet res = state.executeQuery("Select userName from users where userName='" + testData.get(i).get("userName") + "'");
+            res = state.executeQuery("Select userName from users where userName='" + testData.get(i).get("userName") + "'");
             assertTrue(res.next());
         }
+        state.close();
+        res.close();
     }
 
     @Test
     @DisplayName("Data validation")
     public void testValidateData() throws SQLException {
         Statement state = db.createStatement();
+        ResultSet res = null;
         for (int i = 0; i < 10; i++) {
-            ResultSet res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
+            res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
             assertTrue(res.next());
+            res.close();
         }
 
         assertEquals(0, UserDB.validateData("DoesNotExist", "password"));
         assertEquals(0, UserDB.validateData("userName", "wrongPasswd"));
 
         for (int i = 0; i < 10; i++) {
-            System.out.println(UserDB.validateData(testData.get(i).get("userName"), testData.get(i).get("password")));
+            assertEquals(i + 1, UserDB.validateData(testData.get(i).get("userName"), testData.get(i).get("password")));
         }
     }
 
@@ -84,7 +89,7 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Get user invitations")
     public void testGetInvitations() throws SQLException {
-        testSendInvitation();
+        UserDB.sendInvitation(1, 1, 2);
         List<Invitation> invitations = UserDB.getInvitations(2);
         assertEquals(invitations.get(0).getProject_id(), 1);
     }
@@ -92,7 +97,7 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Remove invitations")
     public void testRemoveInvitation() throws SQLException {
-        testSendInvitation();
+        UserDB.sendInvitation(1, 1, 2);
         UserDB.removeInvitation(1, 2);
         List<Invitation> invitations = UserDB.getInvitations(2);
         assertEquals(invitations.size(), 0);

@@ -5,9 +5,6 @@ import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 
-import be.ac.ulb.infof307.g06.models.*;
-import javafx.collections.ObservableList;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -263,6 +260,7 @@ public class ProjectDB extends Database {
                     id + "','" + description + "','" + color + "');");
             close(rs, state);
         } else {
+            close(state);
             return getTagID(description);
         }
         return id;

@@ -151,8 +151,8 @@ public class UserDB extends Database {
             System.out.println(e.getMessage());
             id = 1;
         }
-        state.execute("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('"  + id + "','" + project_id + "', '" + sender_id + "','" + receiver_id + "');");
-        close(state);
+        state.execute("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + project_id + "', '" + sender_id + "','" + receiver_id + "');");
+        close(state, rs);
         return id;
     }
 
