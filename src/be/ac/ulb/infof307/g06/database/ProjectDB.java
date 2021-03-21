@@ -20,7 +20,6 @@ public class ProjectDB extends Database {
         super(dbName);
     }
 
-
     public static int createProject(String title, String description, Long date, int parent_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
@@ -40,8 +39,8 @@ public class ProjectDB extends Database {
         id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
         if (parent_id != 0){    // Add the parent tags to the current tags
             List<Tag> parent_tags = getTags(parent_id);
-            for (int i=0; i<parent_tags.size(); i++){
-                addTag(parent_tags.get(i).getId(), id);
+            for (Tag parent_tag : parent_tags) {
+                addTag(parent_tag.getId(), id);
             }
         }
         close(state, rs);
@@ -72,7 +71,7 @@ public class ProjectDB extends Database {
         close(state);
     }
 
-    public static void editSubTags(int project_id, List<Tag> oldTags, List<Integer> newTags) throws SQLException{
+    private static void editSubTags(int project_id, List<Tag> oldTags, List<Integer> newTags) throws SQLException{
         Statement state = connect();
         for(int i=0;i<oldTags.size();i++){
             removeTag(oldTags.get(i).getId(), project_id);
@@ -86,21 +85,21 @@ public class ProjectDB extends Database {
         close(state);
     }
 
-
-
     public static void deleteProject(int id) throws SQLException{
         Statement state = connect();
-        for (Integer subProject : getSubProjects(id)) {
+
+        for (Integer subProject : getSubProjects(id)){
             deleteProject(subProject);
         }
+
+
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + id + "';");
         state.execute("DELETE FROM Task WHERE project_id = '" + id + "';");
         state.execute("DELETE FROM Project WHERE id = '" + id + "';");
         close(state);
     }
 
-
-    public static List<Integer> getSubProjects(int id) throws SQLException {
+    public static List<Integer> getSubProjects(int id) throws SQLException{
         Statement state = connect();
         List<Integer> subProjects = new ArrayList<>();
         ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE parent_id = '" + id + "';");
@@ -110,7 +109,6 @@ public class ProjectDB extends Database {
         close(state, rs);
         return subProjects;
     }
-
 
     public static int getProjectID(String title) throws SQLException {
         Statement state = connect();
@@ -145,23 +143,14 @@ public class ProjectDB extends Database {
         return res;
     }
 
-    public static int addCollaborator(int project_id, int user_id) throws SQLException {
+    public static void addCollaborator(int project_id, int user_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
-        int id;
-        try {   // Generate id
-            rs = state.executeQuery("SELECT id, MAX(id) FROM Collaborator;");
-            id = rs.getInt("id");
-            id++;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            id = 1;
+        if (!getCollaborators(project_id).contains(user_id)){
+            state.execute("INSERT INTO Collaborator (project_id, user_id) VALUES ('" + project_id + "','" + user_id + "');");
         }
-        state.execute("INSERT INTO Collaborator (id, project_id, user_id) VALUES ('" + id + "','" + project_id + "','" + user_id + "');");
         close(rs, state);
-        return id;
     }
-
 
     public static void deleteCollaborator(int project_id, int user_id) throws SQLException{
         Statement state = connect();
@@ -203,6 +192,11 @@ public class ProjectDB extends Database {
     public static int createTask(String description, int project_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
+        for (int i=0; i<getTasks(project_id).size();i++){
+            if (getTasks(project_id).get(i).getDescription().equals(description)){
+                return 0;
+            }
+        }
         int id;
         try {   // Generate id
             rs = state.executeQuery("SELECT id, MAX(id) FROM Task;");
@@ -230,6 +224,20 @@ public class ProjectDB extends Database {
         close(state);
     }
 
+    public static Task getTask(int id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
+        Task res;
+        try {
+            rs = state.executeQuery("SELECT description FROM Task WHERE id='" + id + "';");
+            res = new Task(rs.getString("description"), id);
+        }catch (Exception e){
+            res = null;
+        }
+        close(state, rs);
+        return res;
+    }
+
     public static List<Task> getTasks(int project_id) throws SQLException{
         Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT description FROM Task WHERE project_id='" + project_id + "';");
@@ -250,7 +258,6 @@ public class ProjectDB extends Database {
         close(rs, state);
         return res;
     }
-
 
     public static int createTag(String description, int color) throws SQLException {
         Statement state = connect();
@@ -287,14 +294,15 @@ public class ProjectDB extends Database {
 
     public static Tag getTag(int id) throws SQLException{
         Statement state = connect();
+        ResultSet rs = null;
         Tag res;
         try {
-        ResultSet rs = state.executeQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
+        rs = state.executeQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
         res = new Tag(id, rs.getString("description"), rs.getInt("color"));
-        close(state, rs);
         }catch (Exception e){
             res = null;
         }
+        close(state, rs);
         return res;
     }
 

@@ -58,7 +58,7 @@ public abstract class Database {
     protected void createTables() throws SQLException {
         Statement state = connect();
         state.execute("CREATE TABLE IF NOT EXISTS Project(id Integer, title varchar(20), description varchar(20), date Long, parent_id Integer);");
-        state.execute("CREATE TABLE IF NOT EXISTS Collaborator(id Integer, project_id Integer, user_id Integer);");
+        state.execute("CREATE TABLE IF NOT EXISTS Collaborator(project_id Integer, user_id Integer);");
         state.execute("CREATE TABLE IF NOT EXISTS Task(id Integer, description varchar(20), project_id Integer);");
         state.execute("CREATE TABLE IF NOT EXISTS Tag(id Integer, description varchar(20), color Integer);");
         state.execute("CREATE TABLE IF NOT EXISTS Tag_projects(tag_id Integer, project_id Integer);");
