@@ -74,7 +74,6 @@ public class ProjectDB extends Database {
             deleteProject(subProject);
         }
 
-
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + id + "';");
         state.execute("DELETE FROM Task WHERE project_id = '" + id + "';");
         state.execute("DELETE FROM Project WHERE id = '" + id + "';");

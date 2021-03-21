@@ -2,19 +2,20 @@ package be.ac.ulb.infof307.g06;
 
 
 import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.models.Invitation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TestUserDB extends TestDatabase {
-
 
     public TestUserDB() throws ClassNotFoundException {
     }
@@ -69,4 +70,32 @@ public class TestUserDB extends TestDatabase {
             assertEquals(testData.get(i).get("email"), usrInfo.get("email"));
         }
     }
+
+    @Test
+    @DisplayName("Send invitation")
+    public void testSendInvitation() throws SQLException {
+        int id1 = UserDB.sendInvitation(1, 1, 2);
+        Invitation invitation = UserDB.getInvitation(id1);
+        assertEquals(1, invitation.getProject_id());
+        assertEquals(1, invitation.getSender_id());
+        assertEquals(2, invitation.getReceiver_id());
+    }
+
+    @Test
+    @DisplayName("Get user invitations")
+    public void testGetInvitations() throws SQLException {
+        testSendInvitation();
+        List<Invitation> invitations = UserDB.getInvitations(2);
+        assertEquals(invitations.get(0).getProject_id(), 1);
+    }
+
+    @Test
+    @DisplayName("Remove invitations")
+    public void testRemoveInvitation() throws SQLException {
+        testSendInvitation();
+        UserDB.removeInvitation(1, 2);
+        List<Invitation> invitations = UserDB.getInvitations(2);
+        assertEquals(invitations.size(), 0);
+    }
+
 }
