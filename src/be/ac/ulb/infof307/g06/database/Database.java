@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class Database {
+public class Database {
     protected static Connection db;
     protected static String dbURL;
 
