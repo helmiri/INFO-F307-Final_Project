@@ -12,6 +12,7 @@ public class AddProjectViewController extends ProjectInputViewController{
     @Override
     protected void events(ActionEvent event) throws SQLException {
         if (event.getSource() == addProjectBtn) {
+            System.out.println("test");
             controller.addProject(this);
         }
     }

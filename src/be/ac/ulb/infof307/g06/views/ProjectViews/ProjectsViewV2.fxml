@@ -21,7 +21,7 @@
       <Polygon fill="#4fc3f70d" layoutX="720.0" layoutY="-284.0" points="467.5, 1184.0, 780.0, 285.0, 780.0, 1184.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="1249.0" layoutY="-476.0" points="-374.0, 1376.0, 251.0, 476.0, 251.0, 1376.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="1173.0" layoutY="-456.0" points="-192.0, 1356.0, 327.0, 457.0, 327.0, 1356.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4fc3f70d" layoutX="1135.0" layoutY="-481.0" points="-56.0, 1381.0, 365.0, 481.0, 365.0, 1381.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="1121.0" layoutY="-480.0" points="-56.0, 1381.0, 365.0, 481.0, 365.0, 1381.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <TreeTableView fx:id="treeProjects" layoutY="1.0" onMouseClicked="#displayProject" prefHeight="900.0" prefWidth="322.0">
          <columns>
             <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
@@ -41,11 +41,23 @@
             <Font name="Calibri" size="12.0" />
          </font>
       </Text>
-      <Pane layoutX="354.0" layoutY="69.0" prefHeight="727.0" prefWidth="1070.0" style="-fx-background-color: #FFFFFF;">
+      <Pane layoutX="354.0" layoutY="80.0" prefHeight="727.0" prefWidth="1070.0" style="-fx-background-color: #FFFFFF;">
          <children>
-            <TableView fx:id="taskTable" layoutX="21.0" layoutY="346.0" prefHeight="317.0" prefWidth="771.0">
+            <TableView fx:id="collaboratorsTable" layoutX="709.0" layoutY="346.0" prefHeight="317.0" prefWidth="313.0">
+              <columns>
+                <TableColumn fx:id="collaboratorsColumn" prefWidth="312.0" text="Collaborators" />
+              </columns>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#deleteCollaborator" text="Delete" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <TableView fx:id="taskTable" layoutX="21.0" layoutY="346.0" prefHeight="317.0" prefWidth="625.0">
                <columns>
-                  <TableColumn fx:id="taskColumn" onEditCommit="#editTask" prefWidth="770.0" text="Tasks" />
+                  <TableColumn fx:id="taskColumn" onEditCommit="#editTask" prefWidth="631.0" text="Tasks" />
                </columns>
                <contextMenu>
                   <ContextMenu>
@@ -69,8 +81,10 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="addTaskbtn" layoutX="800.0" layoutY="674.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="111.0" text="ADD" />
-            <TextArea fx:id="descriptionTask" layoutX="21.0" layoutY="674.0" prefHeight="37.0" prefWidth="771.0" />
+            <Button fx:id="addTaskbtn" layoutX="552.0" layoutY="675.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="95.0" text="ADD" />
+            <TextArea fx:id="descriptionTask" layoutX="21.0" layoutY="674.0" prefHeight="38.0" prefWidth="519.0" />
+            <TextArea fx:id="collaboratorsName" layoutX="709.0" layoutY="675.0" prefHeight="38.0" prefWidth="224.0" />
+            <Button fx:id="addCollaboratorsBtn" layoutX="951.0" layoutY="675.0" mnemonicParsing="false" onAction="#addCollaborator" prefHeight="37.0" prefWidth="69.0" text="ADD" />
          </children>
       </Pane>
       <Button fx:id="addBtn" layoutX="354.0" layoutY="817.0" mnemonicParsing="false" onAction="#events" prefHeight="54.0" prefWidth="111.0" style="-fx-background-color: #4fc3f7;" text="ADD" />

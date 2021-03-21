@@ -67,6 +67,18 @@ public class ProjectsViewController implements Initializable {
     private TextArea descriptionTask;
     @FXML
     private TextField taskParent;
+
+    //--------------COLLABORATORS----------
+
+    @FXML
+    private TableView<String> collaboratorsTable;
+    @FXML
+    private TableColumn<String, String> collaboratorsColumn;
+    @FXML
+    private Button addCollaboratorsBtn;
+    @FXML
+    private TextArea collaboratorsName;
+
     //---------------EDIT PROJECTS----------
 
     //----------------CONTROLLER--------------
@@ -168,6 +180,12 @@ public class ProjectsViewController implements Initializable {
     }
 
 
+    public void deleteCollaborator() throws SQLException{
+        String collaborator = getSelectedUser();
+        controller.deleteCollaborator(collaborator, getSelectedProject().getValue().getId());
+        collaboratorsTable.getItems().removeAll(collaborator);
+    }
+
     @FXML
     public void displayTask() throws SQLException {
         TreeItem<Project> selectedProject = getSelectedProject();
@@ -191,6 +209,15 @@ public class ProjectsViewController implements Initializable {
         controller.deleteTask(task);
     }
 
+    public void addCollaborator() throws SQLException{
+        if(collaboratorsName.getText() != ""){
+            if(!controller.addCollaborator(collaboratorsName.getText(), getSelectedProject().getValue().getId())){
+                // TODO Show "error user doesn't exist" message
+            } else {
+                // TODO Show "invitation sent" message
+            }
+        }
+    }
     @FXML
     public Task getSelectedTask(){
         Task selectedTask = taskTable.getSelectionModel().getSelectedItem();

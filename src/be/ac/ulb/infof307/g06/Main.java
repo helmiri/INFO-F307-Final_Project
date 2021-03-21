@@ -257,6 +257,22 @@ public class Main extends Application {
         stage.show();
     }
 
+    public static  void showInvitationStage() throws Exception{
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/InvitationView.fxml"));
+        AnchorPane invitationAnchor = loader.load();
+
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Invitation");
+        stage.setScene(new Scene(invitationAnchor, 541, 473));
+        stage.centerOnScreen();;
+        stage.setResizable(false);
+        stage.show();
+
+    }
+
     public static void closeStage(){ stage.close(); }
 
 

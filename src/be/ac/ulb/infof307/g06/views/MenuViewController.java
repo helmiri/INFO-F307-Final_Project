@@ -29,6 +29,8 @@ public class MenuViewController {
     @FXML
     private Button helpBtn;
 
+
+
     //----------- PROJECTS MENU -----------
 
     @FXML
