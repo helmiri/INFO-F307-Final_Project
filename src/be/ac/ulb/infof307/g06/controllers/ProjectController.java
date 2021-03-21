@@ -84,27 +84,28 @@ public class ProjectController{
 
     public void addProject(ProjectInputViewController addView) throws SQLException{
         //TODO: add conditions to projects creation
+
         int parentID=0;
         String nameProject = addView.getNameProject();
         String descriptionProject = addView.getDescriptionProject();
         LocalDate dateProject = addView.getDateProject();
         String parentProject = addView.getParentProjectName();
-        if(nameProject == "" ) {
+        if(nameProject.equals("")) {
             addView.setError("Cannot add a project with an empty title.");}
         //else if(!validateName(nameProject.getText())){ErrorText.setText("Project's name is invalid (must contain 1 to 20 characters and at least one letter");}
         else if (ProjectDB.getProjectID(nameProject) != 0){
             addView.setError("A project with the same title already exists.");}
         else if(dateProject == null){
             addView.setError("Cannot create a project without a date.");}
-        else if (parentProject == "" || ProjectDB.getProjectID(parentProject)!=0){
-            if(parentProject != ""){ parentID= ProjectDB.getProjectID(parentProject);}
+
+        else if (parentProject.equals("") || ProjectDB.getProjectID(parentProject)!=0){
+            if(!parentProject.equals("")){ parentID= ProjectDB.getProjectID(parentProject);}
             System.out.println("addProject " + dateProject.toEpochDay());
             int newProjectID = ProjectDB.createProject(nameProject,descriptionProject,dateProject.toEpochDay(),parentID);
-
             //tags
             ObservableList<String> tags = addView.getSelectedTags();//
-            for (int i=0; i<tags.size(); i++){
-                ProjectDB.addTag(ProjectDB.getTagID(tags.get(i)), newProjectID);
+            for (String tag : tags) {
+                ProjectDB.addTag(ProjectDB.getTagID(tag), newProjectID);
             }
 
             ProjectDB.addCollaborator(newProjectID, Global.userID);
@@ -138,8 +139,8 @@ public class ProjectController{
             );
             List<Integer> tags = new ArrayList<>();
             ObservableList<String> newTags = inputView.getSelectedTags();
-            for(int i=0; i<newTags.size();i++){
-                tags.add(ProjectDB.getTagID(newTags.get(i)));
+            for (String newTag : newTags) {
+                tags.add(ProjectDB.getTagID(newTag));
             }
             ProjectDB.editTags(projectID, tags);
             inputView.setError("");
@@ -149,7 +150,7 @@ public class ProjectController{
 
 
     public void editTask(String description, String newDescription, Task task) throws SQLException {
-        if (newDescription==""){deleteTask(task);}
+        if (newDescription.equals("")){deleteTask(task);}
         else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
         Global.projectsView.displayTask();
     }

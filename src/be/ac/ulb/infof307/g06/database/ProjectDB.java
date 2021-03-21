@@ -130,12 +130,18 @@ public class ProjectDB extends Database {
         if (!getCollaborators(project_id).contains(user_id)){
             state.execute("INSERT INTO Collaborator (project_id, user_id) VALUES ('" + project_id + "','" + user_id + "');");
         }
+        for (Integer subProject : getSubProjects(project_id)){
+            addCollaborator(subProject, user_id);
+        }
         close(rs, state);
     }
 
     public static void deleteCollaborator(int project_id, int user_id) throws SQLException{
         Statement state = connect();
         state.execute("DELETE FROM Collaborator WHERE project_id = '" + project_id + "' and user_id = '" + user_id + "';");
+        for (Integer subProject : getSubProjects(project_id)){
+            deleteCollaborator(subProject, user_id);
+        }
         close(state);
     }
 

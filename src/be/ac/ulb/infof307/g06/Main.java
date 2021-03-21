@@ -45,7 +45,6 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/LoginView.fxml"));
         mainLayout = loader.load();
-
         // Display scene
         Scene scene = new Scene(mainLayout);
         primaryStage.setResizable(false);

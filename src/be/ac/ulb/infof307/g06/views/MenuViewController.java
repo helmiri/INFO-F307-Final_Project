@@ -1,13 +1,23 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.controllers.ProjectController;
 import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
-public class MenuViewController {
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class MenuViewController implements Initializable {
 
     // --------- MAIN MENU ------------
     /* DONE */
@@ -48,7 +58,27 @@ public class MenuViewController {
     private Button languageBtn;
     @FXML
     private Button backBtn;
+    private MainController controller;
 
+    public void showInvitation(int project_id, int sender_id)throws java.lang.Exception{
+        Project project = ProjectDB.getProject(project_id);
+        Global.popupProjectTitle = project.getTitle();
+        Global.popupProjectDescription = project.getDescription();
+        Global.popupSenderUsername = UserDB.getUserInfo(sender_id).get("uName");
+        Main.showInvitationStage();
+    }
+
+    public void initialize(URL url, ResourceBundle resourceBundle){
+        controller = new MainController();
+        controller.init(this);
+        try {
+            controller.checkInvites();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void menuEvents(ActionEvent event) throws Exception {

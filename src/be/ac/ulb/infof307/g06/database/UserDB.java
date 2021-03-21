@@ -110,8 +110,9 @@ public class UserDB extends Database {
         }
 
         Statement state = connect();
-        ResultSet usrInfo = state.executeQuery("Select fName, lName, email, status from users where userName='" + userName + "'");
+        ResultSet usrInfo = state.executeQuery("Select id, fName, lName, email, status from users where userName='" + userName + "'");
 
+        res.put("id", Integer.toString(usrInfo.getInt("id")));
         res.put("fName", usrInfo.getString("fName"));
         res.put("lName", usrInfo.getString("lName"));
         res.put("email", usrInfo.getString("email"));

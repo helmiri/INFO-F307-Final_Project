@@ -28,4 +28,10 @@ public class Global {
 
     //Map that contains the user's projects
     public static Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
+
+    public static String popupProjectTitle;
+    public static String popupProjectDescription;
+    public static String popupSenderUsername;
+
 }
+

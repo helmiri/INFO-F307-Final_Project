@@ -8,6 +8,7 @@ import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -127,8 +128,11 @@ public class ProjectsViewController implements Initializable {
     public void initTree() {
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+        collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         taskTable.setEditable(true);
+        collaboratorsTable.setEditable(true);
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         treeProjects.setRoot(root);
     }
 
@@ -207,6 +211,7 @@ public class ProjectsViewController implements Initializable {
     public void deleteTask() throws SQLException{
         Task task = getSelectedTask();
         controller.deleteTask(task);
+        taskTable.getItems().removeAll(task);
     }
 
     public void addCollaborator() throws SQLException{
@@ -220,9 +225,12 @@ public class ProjectsViewController implements Initializable {
     }
     @FXML
     public Task getSelectedTask(){
-        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
-        taskTable.getItems().removeAll(selectedTask);
-        return selectedTask;
+        return taskTable.getSelectionModel().getSelectedItem();
+    }
+
+    @FXML
+    public String getSelectedUser(){
+        return collaboratorsTable.getSelectionModel().getSelectedItem();
     }
 
     @FXML
