@@ -1,11 +1,13 @@
 package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
+import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
+import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -216,4 +218,27 @@ public class ProjectController{
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(date * 86400000L);
     }
+
+    public ObservableList<String> getCollaborators(TreeItem<Project> project) throws SQLException{
+        List<Integer> collaborators_id = ProjectDB.getCollaborators(project.getValue().getId());
+        List<String> collaboratorsList = new ArrayList<>();
+        for(Integer integer : collaborators_id) {
+            collaboratorsList.add(UserDB.getUserInfo(integer).get("uName"));
+        }
+        return FXCollections.observableArrayList(collaboratorsList);
+    }
+
+    public void deleteCollaborator(String username,int project) throws SQLException{
+        System.out.println(project + " " + Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+        ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+    }
+
+    public Boolean addCollaborator(String username, int project)throws SQLException{
+        if (!UserDB.userExists(username)){return false;}
+        int receiverID = Integer.parseInt(UserDB.getUserInfo(username).get("id"));
+        if (ProjectDB.getCollaborators(project).contains(receiverID)){return true;}
+        UserDB.sendInvitation(project, Global.userID, receiverID);
+        return true;
+    }
+
 }

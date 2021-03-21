@@ -120,6 +120,19 @@ public class UserDB extends Database {
         return res;
     }
 
+    public static Map<String, String> getUserInfo(int id) throws SQLException {
+        Map<String, String> res = new HashMap<>();
+        Statement state = connect();
+        ResultSet usrInfo = state.executeQuery("Select userName, fName, lName, email, status from users where id='" + id + "'");
+
+        res.put("uName", usrInfo.getString("userName"));
+        res.put("fName", usrInfo.getString("fName"));
+        res.put("lName", usrInfo.getString("lName"));
+        res.put("email", usrInfo.getString("email"));
+        close(state, usrInfo);
+        return res;
+    }
+
     public static void disconnectUser(int userID) throws SQLException {
         Statement state = connect();
         state.executeUpdate("UPDATE users SET status=false WHERE id='" + userID + "'");

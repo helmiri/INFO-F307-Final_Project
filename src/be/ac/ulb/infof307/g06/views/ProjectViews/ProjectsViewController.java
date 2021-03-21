@@ -197,6 +197,13 @@ public class ProjectsViewController implements Initializable {
         taskTable.setItems(oTaskList);
     }
 
+    @FXML
+    public void displayCollaborators() throws SQLException {
+        TreeItem<Project> selectedProject = getSelectedProject();
+        ObservableList<String> oCollaboratorsList = controller.getCollaborators(selectedProject);
+        collaboratorsTable.setItems(oCollaboratorsList);
+    }
+
     public void editTask(TableColumn.CellEditEvent event) throws SQLException {
         Task task = (Task) event.getRowValue();
         String newDescription = (String) event.getNewValue();
@@ -249,6 +256,7 @@ public class ProjectsViewController implements Initializable {
             projectsTitle.setText(title);
             projectsTags.setText(String.valueOf(tagsName));
             displayTask();
+            displayCollaborators();
         }catch(NullPointerException throwables){
             projectsDescription.setText("");
             projectsDate.setText("");
