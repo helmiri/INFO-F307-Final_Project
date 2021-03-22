@@ -28,6 +28,7 @@ public class ProjectInputViewController implements Initializable {
     @FXML
     protected TextField parentProject;
 
+
     @FXML
     protected Text errorText;
     protected ProjectController controller;

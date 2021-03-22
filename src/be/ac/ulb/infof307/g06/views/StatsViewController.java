@@ -9,13 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class StatsViewController implements Initializable {
-    // Boutons
-
+    //-------------- ATTRIBUTES ----------------
     @FXML
     private Button exportBtn;
     @FXML
@@ -27,14 +24,13 @@ public class StatsViewController implements Initializable {
     @FXML
     private TreeTableColumn<Statistics, String> projectsColumn;
     @FXML
-    private TreeTableColumn<Integer, String> collaboratorsColumn;
-
+    private TreeTableColumn<Statistics, String> collaboratorsColumn;
     @FXML
-    private TreeTableColumn<Integer, String> tasksColumn;
-
+    private TreeTableColumn<Statistics, String> tasksColumn;
+    /*
     @FXML
-    private TreeTableColumn<Integer, String> realColumn;
-
+    private TreeTableColumn<Statistics, String> realColumn;
+    */
     @FXML
     private TreeTableColumn<Statistics, String> estimatedColumn;
     private final TreeItem<Statistics> root = new TreeItem<>();
@@ -43,6 +39,7 @@ public class StatsViewController implements Initializable {
     /**
      * Initializes the tree table view for the statistics of the project +
      * loads user's projects and initializes the map.
+     *
      * @param url;
      * @param resourceBundle;
      */
@@ -53,6 +50,7 @@ public class StatsViewController implements Initializable {
 
     /**
      * The main method for button's events
+     *
      * @param event;
      * @throws Exception;
      */
@@ -62,6 +60,9 @@ public class StatsViewController implements Initializable {
         else if(event.getSource() == logOutBtn) { Main.showLoginScene(); }
     }
 
+    /**
+     * Initializes the tree table with values
+     */
     @FXML
     public void initTree() {
         projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));

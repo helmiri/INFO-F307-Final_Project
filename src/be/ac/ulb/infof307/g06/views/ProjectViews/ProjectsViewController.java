@@ -124,6 +124,7 @@ public class ProjectsViewController implements Initializable {
         else if( event.getSource()== backBtn){ Main.showMainMenuScene(); }
     }
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
+
     @FXML
     public void initTree() {
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
