@@ -31,6 +31,7 @@ public class Main extends Application {
         Main.primaryStage = primaryStage;
         Main.primaryStage.setTitle("Projet génie logiciel");
         // Disconnect user before closing
+
         Main.primaryStage.setOnCloseRequest(e -> {
             try {
                 if (Global.userID != 0) UserDB.disconnectUser(Global.userID);
@@ -40,6 +41,7 @@ public class Main extends Application {
             Platform.exit();
             System.exit(0);
         });
+
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();

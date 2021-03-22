@@ -241,4 +241,6 @@ public class ProjectController{
         return true;
     }
 
+    public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
+
 }

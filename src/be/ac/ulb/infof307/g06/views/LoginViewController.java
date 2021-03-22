@@ -65,6 +65,7 @@ public class LoginViewController {
         String user = logInUsernameField.getText();
 
         Global.userID = UserDB.validateData(user, passwd);
+
         switch (Global.userID) {
             case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong");
             case -1 -> loginErrMsg.setText("This user is already connected");

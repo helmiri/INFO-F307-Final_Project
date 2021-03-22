@@ -254,7 +254,8 @@ public class ProjectsViewController implements Initializable {
             projectsDescription.setText(description);
             projectsDate.setText(controller.dateToString(date));
             projectsTitle.setText(title);
-            projectsTags.setText(String.valueOf(tagsName));
+            String tagsList = controller.listToString(tagsName);
+            projectsTags.setText(tagsList);
             displayTask();
             displayCollaborators();
         }catch(NullPointerException throwables){

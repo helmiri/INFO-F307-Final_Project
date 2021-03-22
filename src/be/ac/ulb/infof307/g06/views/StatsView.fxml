@@ -68,11 +68,10 @@
       </Button>
       <TreeTableView fx:id="projectsTreeView" layoutX="300.0" layoutY="194.0" prefHeight="534.0" prefWidth="1028.0" style="-fx-background-color: #00000056;">
         <columns>
-          <TreeTableColumn fx:id="projectsColumn" prefWidth="332.0" text="Projects" />
-            <TreeTableColumn fx:id="collaboratorsColumn" prefWidth="369.0" text="Collaborators" />
-            <TreeTableColumn fx:id="tasksColumn" prefWidth="135.0" text="Tasks" />
-            <TreeTableColumn fx:id="realColumn" prefWidth="75.0" text="Real" />
-            <TreeTableColumn fx:id="estimatedColumn" prefWidth="97.0" text="Estimated" />
+          <TreeTableColumn fx:id="projectsColumn" prefWidth="220.0" text="Projects" />
+            <TreeTableColumn fx:id="collaboratorsColumn" prefWidth="387.0" text="Collaborators" />
+            <TreeTableColumn fx:id="tasksColumn" prefWidth="328.0" text="Tasks" />
+            <TreeTableColumn fx:id="estimatedColumn" prefWidth="92.0" text="Estimated" />
         </columns>
       </TreeTableView>
    </children>
