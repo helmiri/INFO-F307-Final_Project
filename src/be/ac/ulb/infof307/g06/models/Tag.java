@@ -1,7 +1,5 @@
 package be.ac.ulb.infof307.g06.models;
 
-import java.awt.*;
-
 public class Tag {
     int id;
     String description;
@@ -16,10 +14,16 @@ public class Tag {
     public int getId() {
         return id;
     }
+
     public String getDescription() {
         return description;
     }
+
     public int getColor() {
         return color;
+    }
+
+    public int getSize() {
+        return 4 + description.length() + 4;
     }
 }

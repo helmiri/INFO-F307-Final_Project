@@ -9,6 +9,15 @@ public class Task {
         this.projectID = id;
     }
 
-    public String getDescription() {return description;}
-    public int getProjectID(){return projectID;}
+    public String getDescription() {
+        return description;
+    }
+
+    public int getProjectID() {
+        return projectID;
+    }
+
+    public int getSize() {
+        return description.length() + 4;
+    }
 }
