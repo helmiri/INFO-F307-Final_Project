@@ -1,20 +1,25 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.controllers.SignUpController;
 import be.ac.ulb.infof307.g06.database.UserDB;
-import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.UserInformations;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignUpViewController {
-    // ---------SIGN UP---------
+    //-------------- ATTRIBUTES ----------------
+    @FXML
+    private Button signUpBtn;
+    @FXML
+    private Button backBtn;
     @FXML
     private TextField firstNameField;
     @FXML
@@ -28,30 +33,20 @@ public class SignUpViewController {
     @FXML
     private TextField passwordConfirmationField;
     @FXML
-    private Button signUpBtn;
-    @FXML
     private Text signUpTxtPopup;
+    private final SignUpController controller=new SignUpController();
+    //---------------- METHODS ----------------
 
+    /**
+     * Button's events.
+     *
+     * @param event ActionEvent
+     * @throws SQLException throws database exceptions
+     * @throws IOException throws In and Out exceptions
+     */
     @FXML
-    private Button backBtn;
-
-    // ---------TERMS AND CONDITIONS---------
-    @FXML
-    private Button acceptConditionsBtn;
-    @FXML
-    private CheckBox acceptConditionsBox;
-
-
-    @FXML
-    private void signUpEvents(ActionEvent event) throws Exception{
-        if( event.getSource()== signUpBtn)  { signUpConditions()        ;}
-        if( event.getSource()== acceptConditionsBtn){
-            if(acceptConditionsBox.isSelected()){
-                Global.userID= UserDB.addUser(Global.firstName,Global.lastName,Global.username,Global.email,Global.passwd);
-                Main.closeConditionsStage();
-                Main.showMainMenuScene();
-            }
-        }
+    private void signUpEvents(ActionEvent event) throws IOException, SQLException {
+        if( event.getSource()== signUpBtn)  { signUpConditions() ;}
         else if( event.getSource()== backBtn){ Main.showLoginScene();}
     }
 
@@ -60,87 +55,32 @@ public class SignUpViewController {
      * @throws Exception
      */
     @FXML
-    private void signUpConditions() throws Exception{
-        if (validateFirstName()
-                && validateLastName()
-                && validateUsername(signUpUsernameField)
-                && validatePassword(signUpPasswordField)
-                && validateEmail()
+    private void signUpConditions() throws SQLException, IOException {
+        if (       controller.validateTextField(lastNameField,"^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
+                && controller.validateTextField(firstNameField,"^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
+                && controller.validateTextField(signUpUsernameField,"^[^±!@£$%^&*+§¡€#¢§¶•ª º«\\/<>?:;|=.,]{6,16}$")
+                && controller.validateTextField(signUpPasswordField,"((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})")
+                && controller.validateTextField(emailField, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
                 && passwordConfirmationField.getText().equals(signUpPasswordField.getText())) {
-            Global.firstName = firstNameField.getText();
-            Global.lastName = lastNameField.getText();
-            Global.email = emailField.getText();
-            Global.username = signUpUsernameField.getText();
-            Global.passwd = signUpPasswordField.getText();
-            //TODO: what if 2 users have the same email address?
-            if (!(UserDB.userExists(Global.username))) { Main.showConditionsStage(); }
-            else{signUpTxtPopup.setText("This user already exists");}
+            controller.setInformations(firstNameField.getText(),lastNameField.getText(),emailField.getText(),signUpUsernameField.getText(),signUpPasswordField.getText());
+            if (!(UserDB.userExists(UserInformations.getUsername()))) { Main.showConditionsStage(); }
+            else{signUpTxtPopup.setText("This user already exists!");}
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Wrong enters");
-            alert.setHeaderText(null);
-            alert.getDialogPane().setMinWidth(900);
-            alert.setContentText("One of the sign up options is wrong:\n" +
-                    "   - The last name and the first name must not contain any special characters\n" +
-                    "   - The email Address must be a valid one: 'an.example@gmail.com'\n" +
-                    "   - The username must not contain any special characters or spaces (8 to 16 chars)\n" +
-                    "   - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)\n");
-            alert.showAndWait();
+            alertWindow();
         }
     }
 
     /**
-     * Checks if the string as at least one character(special characters excepted) and has 1 to 64 characters
-     * @return boolean;
+     *  Creates an alert window.
      */
     @FXML
-    private boolean validateLastName(){
-        Pattern p = Pattern.compile("^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$");
-        Matcher m = p.matcher(lastNameField.getText());
-        return m.matches();
-    }
-
-    /**
-     * Checks if the string as at least one character(special characters excepted) and has 1 to 64 characters
-     * @return boolean;
-     */
-    @FXML
-    private boolean validateFirstName(){
-        Pattern p = Pattern.compile("^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$");
-        Matcher m = p.matcher(firstNameField.getText());
-        return m.matches();
-    }
-
-    /**
-     * Checks if the mail address is valid
-     * @return boolean;
-     */
-    @FXML
-    private boolean validateEmail(){
-        Pattern p = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
-        Matcher m = p.matcher(emailField.getText());
-        return m.matches();
-    }
-
-    /**
-     * Checks if the string has no special characters and has 6 to 16 characters
-     * @return boolean;
-     */
-    @FXML
-    private boolean validateUsername(TextField field){
-        Pattern p = Pattern.compile("^[^±!@£$%^&*+§¡€#¢§¶•ª º«\\/<>?:;|=.,]{6,16}$");
-        Matcher m = p.matcher(field.getText());
-        return m.matches();
-    }
-
-    /**
-     * Checks if the string as at least one upper and one lower case letter, one special character in the list and has 6 to 16 characters
-     * @return boolean;
-     */
-    @FXML
-    private boolean validatePassword(TextField field){
-        Pattern p = Pattern.compile("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})");
-        Matcher m = p.matcher(field.getText());
-        return m.matches();
+    private void alertWindow(){
+        //TODO à mettre dans le main controller
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Wrong enters");
+        alert.setHeaderText(null);
+        alert.getDialogPane().setMinWidth(900);
+        alert.setContentText("One of the sign up options is wrong:\n   - The last name and the first name must not contain any special characters\n   - The email Address must be a valid one: 'an.example@gmail.com'\n   - The username must not contain any special characters or spaces (8 to 16 chars)\n   - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)\n");
+        alert.showAndWait();
     }
 }

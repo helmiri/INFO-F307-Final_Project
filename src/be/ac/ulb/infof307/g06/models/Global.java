@@ -11,13 +11,6 @@ import java.util.Map;
  *  A class that contains globals variables
  */
 public class Global {
-    //Sign up variables
-    public static String firstName;
-    public static String lastName;
-    public static String email ;
-    public static String username ;
-    public static String passwd ;
-
     public static TreeItem<Project> root;
     public static ProjectsViewController projectsView;
     //Edit project's name

@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Main extends Application {
@@ -59,12 +60,15 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showLoginScene() throws Exception{
+    public static void showLoginScene() throws IOException {
 
         // Set main stage
+        primaryStage.setResizable(true);
         primaryStage.setHeight(465);
         primaryStage.setWidth(715);
         primaryStage.centerOnScreen();
+        primaryStage.setResizable(false);
+
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
@@ -80,7 +84,7 @@ public class Main extends Application {
      *
      * @throws Exception
      */
-    public static void showSignUpScene() throws Exception{
+    public static void showSignUpScene() throws IOException {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
@@ -140,7 +144,7 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showConditionsStage() throws Exception{
+    public static void showConditionsStage() throws IOException {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
@@ -157,17 +161,11 @@ public class Main extends Application {
     }
 
     /**
-     * Closes terms & conditions stage
-     */
-    public static void closeConditionsStage() {stage.close();}
-
-
-    /**
      * Shows the main menu scene
      *
      * @throws Exception;
      */
-    public static void showMainMenuScene() throws Exception {
+    public static void showMainMenuScene() throws IOException {
 
         // Set main stage
         primaryStage.setHeight(940);
@@ -274,6 +272,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Closes the actual stage.
+     */
     public static void closeStage(){ stage.close(); }
 
 
