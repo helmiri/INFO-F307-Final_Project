@@ -1,6 +1,7 @@
 
 package be.ac.ulb.infof307.g06.database;
 
+import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -17,6 +18,20 @@ public class ProjectDB extends Database {
         super(dbName);
     }
 
+    protected static void updateSize(int size) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
+        int diskusage = 0;
+        try {
+            rs = state.executeQuery("SELECT diskUsage FROM users WHERE id='" + Global.userID + "'");
+            diskusage = rs.getInt("diskUsage");
+            diskusage += size;
+            state.executeUpdate("UPDATE users SET diskUsage='" + diskusage + "'");
+        } catch (Exception e) {
+        }
+
+        close(state, rs);
+    }
 
     public static int createProject(String title, String description, Long date, int parent_id) throws SQLException {
         Statement state = connect();
@@ -32,16 +47,24 @@ public class ProjectDB extends Database {
         }
 
 
-
         state.execute("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
-        id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
-        if (parent_id != 0){    // Add the parent tags to the current tags
-            List<Tag> parent_tags = getTags(parent_id);
-            for (int i=0; i<parent_tags.size(); i++){
+                id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
+        List<Tag> parent_tags = new ArrayList<>();
+        if (parent_id != 0) {    // Add the parent tags to the current tags
+            parent_tags = getTags(parent_id);
+            for (int i = 0; i < parent_tags.size(); i++) {
                 addTag(parent_tags.get(i).getId(), id);
             }
         }
         close(state, rs);
+
+//        int size = 0;
+//
+//        for (Tag tag : parent_tags){
+//            size += tag.getSize();
+//        }
+//
+//        updateSize(-getProject(id).getSize() - size);
         return id;
     }
 
@@ -112,6 +135,16 @@ public class ProjectDB extends Database {
         for (Integer projectID : projectIDs) {
             current = getProject(projectID);
             total += current.getSize();
+            // Each collaborator counted separately (id only)
+            total += getCollaborators(projectID).size() * 4;
+            for (Tag tag : getTags(projectID)) {
+                total += tag.getSize();
+            }
+
+            for (Task task : getTasks(projectID)) {
+                total += task.getSize();
+            }
+
             for (Integer subID : ProjectDB.getSubProjects(projectID)) {
                 total += getProjectsSize(subID);
             }
