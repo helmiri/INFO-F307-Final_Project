@@ -4,6 +4,7 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.ListFolderBuilder;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 
@@ -19,17 +20,16 @@ public class Cloud {
         DbxRequestConfig config = new DbxRequestConfig(clientidentifier, "en_US");
         Global.dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
 
-        // Get current account info
 //        FullAccount account = Global.dboxClient.users().getCurrentAccount();
 //        System.out.println(account.getName().getDisplayName());
 
-        // TODO: faudra trouver un moyen de renvoyer les fichiers contenus dans la dropbox pour que l'utilisateur sache ce qu'il s'y contient.
 
         return Global.dboxClient;
     }
 
     public static List<String> getFiles() throws DbxException {
-        ListFolderResult result = Global.dboxClient.files().listFolder("");
+        ListFolderBuilder listFolderBuilder = Global.dboxClient.files().listFolderBuilder("");
+        ListFolderResult result = listFolderBuilder.withRecursive(true).start();
         List<String> res = new ArrayList<>();
         while (true) {
             for (Metadata metadata : result.getEntries()) {
@@ -45,17 +45,17 @@ public class Cloud {
         return res;
     }
 
-    public static void uploadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
-        try (InputStream in = new FileInputStream(path)) {
-            FileMetadata metadata = client.files().uploadBuilder(filename)
-                    .uploadAndFinish(in);
-        }
+    public static void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
+        InputStream in = new FileInputStream(localFilePath);
+        FileMetadata metadata = Global.dboxClient.files().uploadBuilder(cloudFilePath)
+                .uploadAndFinish(in);
+
     }
 
-    public static void downloadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
-        OutputStream outputStream = new FileOutputStream(path);
-        FileMetadata metadata = client.files()
-                .downloadBuilder(filename)
+    public static void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
+        OutputStream outputStream = new FileOutputStream(localFilePath);
+        FileMetadata metadata = Global.dboxClient.files()
+                .downloadBuilder(cloudFilePath)
                 .download(outputStream);
     }
 }
