@@ -51,8 +51,10 @@ public class SignUpViewController {
     }
 
     /**
-     * Creates an account with the sign up informations if they are valid, if not, shows up a pop up window
-     * @throws Exception
+     * Creates an account with the sign up informations if they are valid, if not, shows up a pop up window.
+     *
+     * @throws SQLException throws database exceptions
+     * @throws IOException throws In and Out exceptions
      */
     @FXML
     private void signUpConditions() throws SQLException, IOException {
