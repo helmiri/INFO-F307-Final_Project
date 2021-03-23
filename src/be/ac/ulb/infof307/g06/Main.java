@@ -46,7 +46,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/LoginView.fxml"));
+        loader.setLocation(Main.class.getResource("views/ConnectionsViews/LoginView.fxml"));
         mainLayout = loader.load();
         // Display scene
         Scene scene = new Scene(mainLayout);
@@ -72,7 +72,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/LoginView.fxml"));
+        loader.setLocation(Main.class.getResource("views/ConnectionsViews/LoginView.fxml"));
 
         // Setup the new page.
         AnchorPane connectionAnchor = loader.load();
@@ -86,9 +86,15 @@ public class Main extends Application {
      */
     public static void showSignUpScene() throws IOException {
 
+        // Set main stage
+        primaryStage.setResizable(true);
+        primaryStage.setHeight(465);
+        primaryStage.setWidth(715);
+        primaryStage.centerOnScreen();
+        primaryStage.setResizable(false);
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/SignUpView.fxml"));
+        loader.setLocation(Main.class.getResource("views/ConnectionsViews/SignUpView.fxml"));
 
         // Setup the new page.
         AnchorPane registerAnchor = loader.load();
@@ -103,6 +109,7 @@ public class Main extends Application {
     public static void showStatisticsScene() throws Exception{
 
         // Set main stage
+        primaryStage.setResizable(true);
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
@@ -114,6 +121,7 @@ public class Main extends Application {
         // Setup the new page.
         AnchorPane statisticsAnchor = loader.load();
         mainLayout.getChildren().setAll(statisticsAnchor);
+        primaryStage.setResizable(false);
 
     }
 
@@ -125,6 +133,7 @@ public class Main extends Application {
     public static void showProjectManagementScene() throws Exception{
 
         // Set main stage
+        primaryStage.setResizable(true);
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
@@ -136,6 +145,7 @@ public class Main extends Application {
         // Setup the new page.
         AnchorPane projectManagementAnchor = loader.load();
         mainLayout.getChildren().setAll(projectManagementAnchor);
+        primaryStage.setResizable(false);
 
     }
 
@@ -148,7 +158,7 @@ public class Main extends Application {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/TermsV2.fxml"));
+        loader.setLocation(Main.class.getResource("views/ConnectionsViews/TermsV2.fxml"));
         AnchorPane conditionsAnchor = loader.load();
 
         // Setup the new stage
@@ -168,6 +178,7 @@ public class Main extends Application {
     public static void showMainMenuScene() throws IOException {
 
         // Set main stage
+        primaryStage.setResizable(true);
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
@@ -179,6 +190,7 @@ public class Main extends Application {
         // Setup the new stage
         AnchorPane maineMenuAnchor = loader.load();
         mainLayout.getChildren().setAll(maineMenuAnchor);
+        primaryStage.setResizable(false);
     }
 
     /**
@@ -189,6 +201,7 @@ public class Main extends Application {
     public static void showProjectMenuScene() throws Exception {
 
         // Set main stage
+        primaryStage.setResizable(true);
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
@@ -200,6 +213,7 @@ public class Main extends Application {
         // Setup the new stage
         AnchorPane projectMenuAnchor = loader.load();
         mainLayout.getChildren().setAll(projectMenuAnchor);
+        primaryStage.setResizable(false);
     }
 
     /**
@@ -209,6 +223,7 @@ public class Main extends Application {
      */
     public static void showSettingsMenuScene() throws Exception {
         // Set main stage
+        primaryStage.setResizable(true);
         primaryStage.setHeight(940);
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
@@ -220,6 +235,7 @@ public class Main extends Application {
         // Setup the new stage
         AnchorPane settingsMenuAnchor = loader.load();
         mainLayout.getChildren().setAll(settingsMenuAnchor);
+        primaryStage.setResizable(false);
     }
 
     public static void showAddProjectStage() throws Exception{
@@ -276,7 +292,5 @@ public class Main extends Application {
      * Closes the actual stage.
      */
     public static void closeStage(){ stage.close(); }
-
-
     public static void main(String[] args) { launch(args); }
 }
