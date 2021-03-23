@@ -1,6 +1,7 @@
 
 package be.ac.ulb.infof307.g06.database;
 
+import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
 
 import java.sql.PreparedStatement;
@@ -16,7 +17,7 @@ import java.util.Map;
  *
  */
 public class UserDB extends Database {
-    private int diskLimit = 1073741824;
+    private static int diskLimit = 1073741824;
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
@@ -36,17 +37,22 @@ public class UserDB extends Database {
     public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         connect();
         String[] key = {"id"};
-        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)", key);
+        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, diskUsage) VALUES (?,?,?,?,?,?)", key);
         state.setString(1, fName);
         state.setString(2, lName);
         state.setString(3, userName);
         state.setString(4, email);
         state.setString(5, password);
+        state.setInt(6, diskLimit);
         state.execute();
         ResultSet rs = state.getGeneratedKeys();
         int res = rs.getInt(1);
         close(state, rs);
         return res;
+    }
+
+    public int getMaxLimit() {
+        return diskLimit;
     }
 
     /**
@@ -210,5 +216,18 @@ public class UserDB extends Database {
             return;
         }
         state.executeUpdate("UPDATE users SET " + field + "='" + info + "' WHERE userName='" + userName + "'");
+    }
+
+    public static int getDiskUsage() throws SQLException {
+        Statement state = connect();
+        ResultSet res = state.executeQuery("SELECT diskUsage from users where id='" + Global.userID + "'");
+        int disk = res.getInt("diskUsage");
+        return diskLimit - disk;
+    }
+
+    public static void updateDiskUsage(int diff) throws SQLException {
+        Statement state = connect();
+        state.executeUpdate("UPDATE users SET diskUsage='" + (diskLimit - getDiskUsage() + diff) + "' where id='" + Global.userID + "'");
+        close(state);
     }
 }
