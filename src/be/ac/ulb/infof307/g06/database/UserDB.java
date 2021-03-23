@@ -12,6 +12,7 @@ import java.util.Map;
  *
  */
 public class UserDB extends Database {
+    private int diskLimit = 1073741824;
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
