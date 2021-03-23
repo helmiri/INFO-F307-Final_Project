@@ -128,9 +128,9 @@ public class UserDB extends Database {
         return res;
     }
 
-    public static void addAccToken(String token, String userName) throws SQLException {
+    public static void addAccToken(String token, String clientID, String userName) throws SQLException {
         Statement state = connect();
-        state.executeUpdate("UPDATE users SET accToken='" + token + "' where userName='" + userName + "'");
+        state.executeUpdate("UPDATE users SET accToken='" + token + "', clientID='" + clientID + "' where userName='" + userName + "'");
         close(state);
     }
 

@@ -76,7 +76,7 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Add access token")
     public void testAddAccToken() throws SQLException {
-        UserDB.addAccToken("Random_Token_String", "User_1_userName");
+        UserDB.addAccToken("Random_Token_String", "CLIENTID", "User_1_userName");
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("SELECT accToken from users where userName='User_1_userName'");
         String token = res.getString("accToken");

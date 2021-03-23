@@ -12,17 +12,18 @@ import java.io.*;
 
 public class Cloud {
 
+
     public static DbxClientV2 connect(String ACCESS_TOKEN, String clientidentifier) throws DbxException, IOException {
         // Create Dropbox client
         DbxRequestConfig config = new DbxRequestConfig(clientidentifier, "en_US");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+        Global.dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
 
         // Get current account info
-        FullAccount account = client.users().getCurrentAccount();
-        System.out.println(account.getName().getDisplayName());
+        FullAccount account = Global.dboxClient.users().getCurrentAccount();
+//        System.out.println(account.getName().getDisplayName());
 
         // TODO: faudra trouver un moyen de renvoyer les fichiers contenus dans la dropbox pour que l'utilisateur sache ce qu'il s'y contient.
-        ListFolderResult result = client.files().listFolder("");
+        ListFolderResult result = Global.dboxClient.files().listFolder("");
         while (true) {
             for (Metadata metadata : result.getEntries()) {
                 System.out.println(metadata.getPathLower());
@@ -32,10 +33,11 @@ public class Cloud {
                 break;
             }
 
-            result = client.files().listFolderContinue(result.getCursor());
+            result = Global.dboxClient.files().listFolderContinue(result.getCursor());
         }
-        return client;
+        return Global.dboxClient;
     }
+
     public static void uploadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
         try (InputStream in = new FileInputStream(path)) {
             FileMetadata metadata = client.files().uploadBuilder(filename)
@@ -44,8 +46,7 @@ public class Cloud {
     }
 
     public static void downloadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
-        String localPath = path;
-        OutputStream outputStream = new FileOutputStream(localPath);
+        OutputStream outputStream = new FileOutputStream(path);
         FileMetadata metadata = client.files()
                 .downloadBuilder(filename)
                 .download(outputStream);
