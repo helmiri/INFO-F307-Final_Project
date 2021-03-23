@@ -93,16 +93,32 @@ public class ProjectDB extends Database {
     public static int getProjectID(String title) throws SQLException {
         Statement state = connect();
         int id = 0;
-        try{
+        try {
             ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
 
             id = rs.getInt("id");
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored){};
+        ;
 
         close(state);
         return id;
     }
+
+    public static int getProjectsSize(int userID) throws SQLException {
+        List<Integer> projectIDs = getUserProjects(userID);
+        Project current;
+        int total = 0;
+        for (Integer projectID : projectIDs) {
+            current = getProject(projectID);
+            total += current.getSize();
+            for (Integer subID : ProjectDB.getSubProjects(projectID)) {
+                total += getProjectsSize(subID);
+            }
+        }
+        return total;
+    }
+
 
     public static Project getProject(int id) throws SQLException {
         Statement state = connect();
