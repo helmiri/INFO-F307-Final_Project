@@ -6,9 +6,10 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
-import com.dropbox.core.v2.users.FullAccount;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cloud {
 
@@ -19,14 +20,20 @@ public class Cloud {
         Global.dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
 
         // Get current account info
-        FullAccount account = Global.dboxClient.users().getCurrentAccount();
+//        FullAccount account = Global.dboxClient.users().getCurrentAccount();
 //        System.out.println(account.getName().getDisplayName());
 
         // TODO: faudra trouver un moyen de renvoyer les fichiers contenus dans la dropbox pour que l'utilisateur sache ce qu'il s'y contient.
+
+        return Global.dboxClient;
+    }
+
+    public static List<String> getFiles() throws DbxException {
         ListFolderResult result = Global.dboxClient.files().listFolder("");
+        List<String> res = new ArrayList<>();
         while (true) {
             for (Metadata metadata : result.getEntries()) {
-                System.out.println(metadata.getPathLower());
+                res.add(metadata.getPathLower());
             }
 
             if (!result.getHasMore()) {
@@ -35,7 +42,7 @@ public class Cloud {
 
             result = Global.dboxClient.files().listFolderContinue(result.getCursor());
         }
-        return Global.dboxClient;
+        return res;
     }
 
     public static void uploadFile(DbxClientV2 client, String path, String filename) throws IOException, DbxException {
