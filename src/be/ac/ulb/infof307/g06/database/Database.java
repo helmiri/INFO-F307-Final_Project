@@ -64,6 +64,7 @@ public class Database {
         state.execute("CREATE TABLE IF NOT EXISTS Tag_projects(tag_id Integer, project_id Integer);");
         state.execute("CREATE TABLE IF NOT EXISTS Invitations(id Integer, project_id Integer, user1_id Integer, user2_id Integer);");
         state.execute("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20),email varchar(40),password varchar(20), status boolean, primary key (id));");
+        state.execute("CREATE TABLE IF NOT EXISTS tasks_users(task_id Integer, user_id Integer);");
         close(state);
     }
 }
