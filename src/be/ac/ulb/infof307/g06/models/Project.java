@@ -34,4 +34,16 @@ public class Project {
     public int getParent_id() {
         return parent_id;
     }
+
+    public int getSize() {
+        int res = 0;
+
+        // id, parent_id, date
+        res += 4 + 4 + 8;
+
+        // Title, description
+        res += title.length() + description.length();
+
+        return res;
+    }
 }
