@@ -1,11 +1,15 @@
 
 package be.ac.ulb.infof307.g06.database;
 
+import be.ac.ulb.infof307.g06.models.Invitation;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -107,8 +111,22 @@ public class UserDB extends Database {
         }
 
         Statement state = connect();
-        ResultSet usrInfo = state.executeQuery("Select fName, lName, email, status from users where userName='" + userName + "'");
+        ResultSet usrInfo = state.executeQuery("Select id, fName, lName, email, status from users where userName='" + userName + "'");
 
+        res.put("id", Integer.toString(usrInfo.getInt("id")));
+        res.put("fName", usrInfo.getString("fName"));
+        res.put("lName", usrInfo.getString("lName"));
+        res.put("email", usrInfo.getString("email"));
+        close(state, usrInfo);
+        return res;
+    }
+
+    public static Map<String, String> getUserInfo(int id) throws SQLException {
+        Map<String, String> res = new HashMap<>();
+        Statement state = connect();
+        ResultSet usrInfo = state.executeQuery("Select userName, fName, lName, email, status from users where id='" + id + "'");
+
+        res.put("uName", usrInfo.getString("userName"));
         res.put("fName", usrInfo.getString("fName"));
         res.put("lName", usrInfo.getString("lName"));
         res.put("email", usrInfo.getString("email"));
@@ -121,6 +139,49 @@ public class UserDB extends Database {
         state.executeUpdate("UPDATE users SET status=false WHERE id='" + userID + "'");
         close(state);
     }
+
+    public static int  sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
+        int id;
+        try {   // Generate id
+            rs = state.executeQuery("SELECT id, MAX(id) FROM Invitations;");
+            id = rs.getInt("id");
+            id++;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            id = 1;
+        }
+        state.execute("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + project_id + "', '" + sender_id + "','" + receiver_id + "');");
+        close(state, rs);
+        return id;
+    }
+
+    public static void removeInvitation(int project_id, int receiver_id) throws SQLException {
+        Statement state = connect();
+        state.execute("DELETE FROM Invitations WHERE project_id = '" + project_id + "' AND user2_id = '" + receiver_id + "';");
+        close(state);
+    }
+
+    public static List<Invitation> getInvitations(int user_id) throws SQLException{
+        List<Invitation> invitations = new ArrayList<>();
+        Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT id, project_id, user1_id FROM Invitations WHERE user2_id = '" + user_id + "';");
+        while (rs.next()) {
+            invitations.add(new Invitation(rs.getInt("id"), rs.getInt("project_id"), rs.getInt("user1_id"), user_id));
+        }
+        close(state, rs);
+        return invitations;
+    }
+    public static Invitation getInvitation(int id) throws SQLException{
+        Invitation invitation;
+        Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT id, project_id, user1_id, user2_id FROM Invitations WHERE id = '" + id + "';");
+        invitation = new Invitation(rs.getInt("id"), rs.getInt("project_id"), rs.getInt("user1_id"), rs.getInt("user2_id"));
+        close(state, rs);
+        return invitation;
+    }
+
 
     public static String getAccToken(String userName) throws SQLException {
         Statement state = connect();

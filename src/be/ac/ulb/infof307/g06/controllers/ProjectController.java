@@ -1,34 +1,40 @@
 package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
+import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
-import be.ac.ulb.infof307.g06.views.ProjectsViewController;
+import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
+import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
+import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeItem;
-
-import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import be.ac.ulb.infof307.g06.Main;
+import java.util.ArrayList;
 
-public class ProjectController implements Initializable {
-    private ProjectsViewController view= new ProjectsViewController();
-    private TreeItem<Project> root = new TreeItem<Project>();
+public class ProjectController{
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void init(ProjectsViewController view, TreeItem<Project> root) {
+        Global.projectsView = view;
+        Global.root = root;
         view.initTree();
         try {
-            initComboBox();
+            ProjectDB.createTag("tag1",0);
+            ProjectDB.createTag("tag2",0);
+            ProjectDB.createTag("tag3",0);
+            //initComboBox();
             view.clearProjects();
             Global.TreeMap.clear();
 
@@ -40,13 +46,14 @@ public class ProjectController implements Initializable {
         }
     }
 
-    public void initComboBox() throws SQLException{
+    public void initComboBox(ProjectInputViewController inputView) throws SQLException{
+
         final ObservableList<String> tags = FXCollections.observableArrayList();
         List<Tag> tagsList = ProjectDB.getAllTags();
         for (Tag tag : tagsList) {
             tags.add(tag.getDescription());
         }
-        view.addTags(tags);
+        inputView.addTags(tags);
     }
 
     /**
@@ -55,6 +62,7 @@ public class ProjectController implements Initializable {
      * @throws SQLException;
      */
     public void getProjects(List<Integer> projects) throws SQLException{
+        Global.projectsView.showRoot();
         for(Integer project : projects){
             Project childProject= ProjectDB.getProject(project);
             int parentID= childProject.getParent_id();
@@ -67,56 +75,86 @@ public class ProjectController implements Initializable {
             Global.TreeMap.put(childID, child);
 
             if (parentID== 0){
-                view.addChild(root, child);
+                Global.projectsView.addChild(Global.root, child);
             } else {
-                view.addChild(Global.TreeMap.get(parentID), child);
+                Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
             }
         }
+        Global.projectsView.refresh();
 
     }
 
-    public void addProject() throws SQLException{
+    public void addProject(ProjectInputViewController addView) throws SQLException{
         //TODO: add conditions to projects creation
+
         int parentID=0;
-        String nameProject = view.getNameProject();
-        String descriptionProject = view.getDescriptionProject();
-        LocalDate dateProject = view.getDateProject();
-        String parentProject = view.getParentProjectName();
-        if(nameProject == "" ) {
-            view.setError("Cannot add a project with an empty title.");}
+        String nameProject = addView.getNameProject();
+        String descriptionProject = addView.getDescriptionProject();
+        LocalDate dateProject = addView.getDateProject();
+        String parentProject = addView.getParentProjectName();
+        if(nameProject.equals("")) {
+            addView.setError("Cannot add a project with an empty title.");}
         //else if(!validateName(nameProject.getText())){ErrorText.setText("Project's name is invalid (must contain 1 to 20 characters and at least one letter");}
         else if (ProjectDB.getProjectID(nameProject) != 0){
-            view.setError("A project with the same title already exists.");}
+            addView.setError("A project with the same title already exists.");}
         else if(dateProject == null){
-            view.setError("Cannot create a project without a date.");}
-        else if (parentProject == "" || ProjectDB.getProjectID(parentProject)!=0){
-            if(parentProject != ""){ parentID= ProjectDB.getProjectID(parentProject);}
+            addView.setError("Cannot create a project without a date.");}
 
+        else if (parentProject.equals("") || ProjectDB.getProjectID(parentProject)!=0){
+            if(!parentProject.equals("")){ parentID= ProjectDB.getProjectID(parentProject);}
+            System.out.println("addProject " + dateProject.toEpochDay());
             int newProjectID = ProjectDB.createProject(nameProject,descriptionProject,dateProject.toEpochDay(),parentID);
-
             //tags
-            ObservableList<String> tags = view.getSelectedTags();//
-            for (int i=0; i<tags.size(); i++){
-                ProjectDB.addTag(ProjectDB.getTagID(tags.get(i)), newProjectID);
+            ObservableList<String> tags = addView.getSelectedTags();//
+            for (String tag : tags) {
+                ProjectDB.addTag(ProjectDB.getTagID(tag), newProjectID);
             }
 
             ProjectDB.addCollaborator(newProjectID, Global.userID);
 
             TreeItem<Project> child = new TreeItem<Project>(ProjectDB.getProject(newProjectID));
             Global.TreeMap.put(newProjectID, child);
-            view.setError("");
+            addView.setError("");
 
             if (parentID == 0) {
-                view.addChild(root,child);
+                Global.projectsView.addChild(Global.root,child);
             } else {
-                view.addChild(Global.TreeMap.get(parentID), child);
+                Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
             }
+        }
+        Main.closeStage();
+    }
+
+
+    public void editProject(ProjectInputViewController inputView) throws SQLException{
+        int projectID = ProjectDB.getProjectID(inputView.getNameProject());
+        if (projectID != 0 && projectID != ProjectDB.getProjectID(Global.currentProject)){
+            inputView.setError("Cannot edit the project with such a title.");}
+        else if (inputView.getNameProject().equals("")){
+            inputView.setError("Cannot edit a project with an empty name.");}
+        else {
+            ProjectDB.editProject(
+                    ProjectDB.getProjectID(Global.currentProject),
+                    inputView.getNameProject(),
+                    inputView.getDescriptionProject(),
+                    inputView.getDateProject().toEpochDay()
+            );
+            List<Integer> tags = new ArrayList<>();
+            ObservableList<String> newTags = inputView.getSelectedTags();
+            for (String newTag : newTags) {
+                tags.add(ProjectDB.getTagID(newTag));
+            }
+            ProjectDB.editTags(projectID, tags);
+            inputView.setError("");
+            init(Global.projectsView, Global.root);
         }
     }
 
+
     public void editTask(String description, String newDescription, Task task) throws SQLException {
-        if(validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
-        view.displayTask();
+        if (newDescription.equals("")){deleteTask(task);}
+        else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
+        Global.projectsView.displayTask();
     }
 
     /**
@@ -124,8 +162,6 @@ public class ProjectController implements Initializable {
      * @throws Exception;
      * @throws SQLException;
      */
-
-
     public void addTask(String taskDescription, String taskParent) throws Exception, SQLException {
         //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
         if (!taskParent.equals("") || ProjectDB.getProjectID(taskParent) != 0) {
@@ -142,8 +178,6 @@ public class ProjectController implements Initializable {
      * Displays it in the table view
      * @throws SQLException;
      */
-
-
     public ObservableList<Task> getTasks(TreeItem<Project> selectedProject) throws SQLException {
         if( selectedProject!=null && selectedProject.getValue() !=null) {
             String projectTitle = selectedProject.getValue().getTitle();
@@ -177,5 +211,36 @@ public class ProjectController implements Initializable {
         Matcher m = p.matcher(text);
         return m.matches();
     }
+
+    public String dateToString(Long date){
+        System.out.println("long date dateToString " + date);
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(date * 86400000L);
+    }
+
+    public ObservableList<String> getCollaborators(TreeItem<Project> project) throws SQLException{
+        List<Integer> collaborators_id = ProjectDB.getCollaborators(project.getValue().getId());
+        List<String> collaboratorsList = new ArrayList<>();
+        for(Integer integer : collaborators_id) {
+            collaboratorsList.add(UserDB.getUserInfo(integer).get("uName"));
+        }
+        return FXCollections.observableArrayList(collaboratorsList);
+    }
+
+    public void deleteCollaborator(String username,int project) throws SQLException{
+        System.out.println(project + " " + Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+        ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+    }
+
+    public Boolean addCollaborator(String username, int project)throws SQLException{
+        if (!UserDB.userExists(username)){return false;}
+        int receiverID = Integer.parseInt(UserDB.getUserInfo(username).get("id"));
+        if (ProjectDB.getCollaborators(project).contains(receiverID)){return true;}
+        UserDB.sendInvitation(project, Global.userID, receiverID);
+        return true;
+    }
+
+    public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
 
 }

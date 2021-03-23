@@ -1,5 +1,7 @@
 package be.ac.ulb.infof307.g06.models;
 
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import com.dropbox.core.v2.DbxClientV2;
 import javafx.scene.control.TreeItem;
 
@@ -17,6 +19,11 @@ public class Global {
     public static String userName;
     public static String passwd;
 
+    public static TreeItem<Project> root;
+    public static ProjectsViewController projectsView;
+    //Edit project's name
+    public static String currentProject;
+
     //The user ID
     public static int userID;
 
@@ -25,4 +32,10 @@ public class Global {
 
     // Cloud service
     public static DbxClientV2 dboxClient;
+
+    public static String popupProjectTitle;
+    public static String popupProjectDescription;
+    public static String popupSenderUsername;
+
 }
+
