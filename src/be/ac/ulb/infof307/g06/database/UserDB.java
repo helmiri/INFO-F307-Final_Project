@@ -17,7 +17,7 @@ import java.util.Map;
  *
  */
 public class UserDB extends Database {
-    private static int diskLimit = 1073741824;
+    private static int diskLimit = 268435456;
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
@@ -222,12 +222,13 @@ public class UserDB extends Database {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT diskUsage from users where id='" + Global.userID + "'");
         int disk = res.getInt("diskUsage");
-        return diskLimit - disk;
+        close(state, res);
+        return disk;
     }
 
     public static void updateDiskUsage(int diff) throws SQLException {
         Statement state = connect();
-        state.executeUpdate("UPDATE users SET diskUsage='" + (diskLimit - getDiskUsage() + diff) + "' where id='" + Global.userID + "'");
+        state.executeUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + Global.userID + "'");
         close(state);
     }
 }

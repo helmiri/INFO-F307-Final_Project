@@ -1,4 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers;
+
+import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
@@ -7,22 +9,19 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
-import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
+
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import be.ac.ulb.infof307.g06.Main;
-import java.util.ArrayList;
 
 public class ProjectController{
 
@@ -81,7 +80,6 @@ public class ProjectController{
             }
         }
         Global.projectsView.refresh();
-
     }
 
     public void addProject(ProjectInputViewController addView) throws SQLException{
@@ -122,6 +120,7 @@ public class ProjectController{
                 Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
             }
         }
+        UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         Main.closeStage();
     }
 
@@ -148,6 +147,7 @@ public class ProjectController{
             inputView.setError("");
             init(Global.projectsView, Global.root);
         }
+        UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
     }
 
 
@@ -155,6 +155,7 @@ public class ProjectController{
         if (newDescription.equals("")){deleteTask(task);}
         else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
         Global.projectsView.displayTask();
+        UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
     }
 
     /**
@@ -168,18 +169,21 @@ public class ProjectController{
             int projectID = ProjectDB.getProjectID(taskParent);
             ProjectDB.createTask(taskDescription, projectID);
         }
+        UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
     }
 
-    public void deleteTask(Task task) throws SQLException{
-        ProjectDB.deleteTask(task.getDescription(),task.getProjectID());
+    public void deleteTask(Task task) throws SQLException {
+        ProjectDB.deleteTask(task.getDescription(), task.getProjectID());
+        UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
     }
 
     /**
      * Displays it in the table view
+     *
      * @throws SQLException;
      */
     public ObservableList<Task> getTasks(TreeItem<Project> selectedProject) throws SQLException {
-        if( selectedProject!=null && selectedProject.getValue() !=null) {
+        if (selectedProject != null && selectedProject.getValue() != null) {
             String projectTitle = selectedProject.getValue().getTitle();
             int projectID = ProjectDB.getProjectID(projectTitle);
             List<Task> taskList = ProjectDB.getTasks(projectID);
@@ -231,6 +235,7 @@ public class ProjectController{
     public void deleteCollaborator(String username,int project) throws SQLException{
         System.out.println(project + " " + Integer.parseInt(UserDB.getUserInfo(username).get("id")));
         ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+        UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
     }
 
     public Boolean addCollaborator(String username, int project)throws SQLException{

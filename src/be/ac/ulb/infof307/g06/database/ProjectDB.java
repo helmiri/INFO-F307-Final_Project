@@ -57,14 +57,6 @@ public class ProjectDB extends Database {
             }
         }
         close(state, rs);
-
-//        int size = 0;
-//
-//        for (Tag tag : parent_tags){
-//            size += tag.getSize();
-//        }
-//
-//        updateSize(-getProject(id).getSize() - size);
         return id;
     }
 
@@ -115,39 +107,45 @@ public class ProjectDB extends Database {
 
     public static int getProjectID(String title) throws SQLException {
         Statement state = connect();
+        ResultSet rs = null;
         int id = 0;
         try {
-            ResultSet rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
+            rs = state.executeQuery("SELECT id FROM Project WHERE title='" + title + "';");
 
             id = rs.getInt("id");
         } catch (Exception ignored) {
         }
-        ;
 
-        close(state);
+
+        close(state, rs);
         return id;
     }
 
-    public static int getProjectsSize(int userID) throws SQLException {
-        List<Integer> projectIDs = getUserProjects(userID);
+    public static int getSizeOnDisk() throws SQLException {
         Project current;
         int total = 0;
-        for (Integer projectID : projectIDs) {
-            current = getProject(projectID);
-            total += current.getSize();
-            // Each collaborator counted separately (id only)
-            total += getCollaborators(projectID).size() * 4;
-            for (Tag tag : getTags(projectID)) {
-                total += tag.getSize();
-            }
+        for (Integer projectID : getUserProjects(Global.userID)) {
+            total += getProjectInfoSize(projectID);
+        }
+        return total;
+    }
 
-            for (Task task : getTasks(projectID)) {
-                total += task.getSize();
-            }
+    private static int getProjectInfoSize(Integer projectID) throws SQLException {
+        int total = getProject(projectID).getSize();
 
-            for (Integer subID : ProjectDB.getSubProjects(projectID)) {
-                total += getProjectsSize(subID);
-            }
+        // Collaborators size id => int => 4 bytes
+        total += getCollaborators(projectID).size() * 4;
+
+        for (Tag tag : getTags(projectID)) {
+            total += tag.getSize();
+        }
+
+        for (Task task : getTasks(projectID)) {
+            total += task.getSize();
+        }
+
+        for (Integer subID : ProjectDB.getSubProjects(projectID)) {
+            total += getProjectInfoSize(subID);
         }
         return total;
     }
