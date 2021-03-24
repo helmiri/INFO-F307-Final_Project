@@ -37,13 +37,13 @@ public class UserDB extends Database {
     public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         connect();
         String[] key = {"id"};
-        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, diskUsage) VALUES (?,?,?,?,?,?)", key);
+        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)", key);
         state.setString(1, fName);
         state.setString(2, lName);
         state.setString(3, userName);
         state.setString(4, email);
         state.setString(5, password);
-        state.setInt(6, diskLimit);
+//        state.setInt(6, diskLimit);
         state.execute();
         ResultSet rs = state.getGeneratedKeys();
         int res = rs.getInt(1);
@@ -226,9 +226,28 @@ public class UserDB extends Database {
         return disk;
     }
 
+    public static int availableDisk() throws SQLException {
+        return getDiskLimit() - getDiskUsage();
+    }
+
     public static void updateDiskUsage(int diff) throws SQLException {
         Statement state = connect();
         state.executeUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + Global.userID + "'");
         close(state);
     }
+
+    private static int getDiskLimit() throws SQLException {
+        Statement state = connect();
+        ResultSet res = state.executeQuery("SELECT diskLimit FROM admin");
+        int limit = res.getInt("diskLimit");
+        close(state, res);
+        return limit;
+    }
+
+    public static void setAdmin(int diskLimit) throws SQLException {
+        Statement state = connect();
+        state.executeUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + Global.userID + "," + diskLimit + ")");
+        close(state);
+    }
+
 }
