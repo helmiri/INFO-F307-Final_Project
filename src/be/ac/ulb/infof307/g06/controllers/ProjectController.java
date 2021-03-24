@@ -7,11 +7,15 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
+import com.google.gson.Gson;
 import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
+
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -22,7 +26,13 @@ import java.util.regex.Pattern;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import be.ac.ulb.infof307.g06.Main;
+import org.rauschig.jarchivelib.ArchiveFormat;
+import org.rauschig.jarchivelib.Archiver;
+import org.rauschig.jarchivelib.ArchiverFactory;
+import org.rauschig.jarchivelib.CompressionType;
+
 import java.util.ArrayList;
+
 
 public class ProjectController{
 
@@ -54,6 +64,14 @@ public class ProjectController{
             tags.add(tag.getDescription());
         }
         inputView.addTags(tags);
+    }
+    public void initProjectExport(ProjectInputViewController inputView) throws SQLException{
+        final ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
+        List<Integer> ProjectIDList = ProjectDB.getUserProjects(Global.userID);
+        for (Integer projectID : ProjectIDList) {
+            projectsTitleList.add(ProjectDB.getProject(projectID).getTitle());
+        }
+        //inputView.addProjectTitle(projectsTitleList);//i
     }
 
     /**
@@ -239,8 +257,100 @@ public class ProjectController{
         if (ProjectDB.getCollaborators(project).contains(receiverID)){return true;}
         UserDB.sendInvitation(project, Global.userID, receiverID);
         return true;
+
     }
+
 
     public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
 
+    public boolean exportProject(Project project,String path, String filetxt,int id){
+            final int ID = project.getId();
+            save(project,filetxt);
+            try {
+                final List<Task> tasks = ProjectDB.getTasks(ID);
+                for (Task task : tasks) {
+                    save(task, filetxt);
+                }
+                final List<Tag> tags = ProjectDB.getTags(ID);
+                for (Tag tag : tags) {
+                    save(tag, filetxt);
+                }
+                final List<Integer> subProjects = ProjectDB.getSubProjects(id);
+                for (Integer sub : subProjects) {
+                    exportProject(ProjectDB.getProject(sub),path,filetxt,id);
+                }
+                if (ID == id) {
+                    System.out.println("ajaja");
+                    zip(project.getTitle(),filetxt, path);
+                }
+                return true;
+            }
+            catch(Exception ignored) {return false;}
+        
+    }
+
+
+
+    public static boolean zip(String archiveName, String source, String destination) {
+        try {
+            File src = new File(source);
+            File dest = new File(destination);
+            Archiver archiver =
+                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+            archiver.create(archiveName, dest, src);
+            System.out.println("test");
+            return true;
+        }catch (Exception ignored) {return false;}
+    }
+
+    public static boolean unzip(final String source, final String destination){
+        try {
+            Archiver archiver =
+                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+            File archive = new File(source);
+            File dest = new File(destination);
+            System.out.println("WARNINGS are normal");
+            archiver.extract(archive, dest); // WARNING OK
+            return true;
+        }catch (Exception ignored) {return false;}
+    }
+
+    // title, description, date, parent_id
+    public static boolean save(final Project project, final String fileName) {
+        try {
+            Gson gson = new Gson();
+            String projectString = gson.toJson(project);
+            FileWriter fw = new FileWriter(fileName, true);
+            fw.write("Project " + projectString + "\n");
+            fw.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+
+    // title, description, date, parent_id
+    public static boolean save(final Task task, final String fileName) {
+        try {
+            Gson gson = new Gson();
+            String taskString = gson.toJson(task);
+            FileWriter fw = new FileWriter(fileName, true);
+            fw.write("Task " + taskString + "\n");
+            fw.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+
+    // title, description, date, parent_id
+    public static boolean save(final Tag tag, final String fileName) {
+        try {
+            Gson gson = new Gson();
+            String tagString = gson.toJson(tag);
+            FileWriter fw = new FileWriter(fileName, true);
+            fw.write("Tag " + tagString + "\n");
+            fw.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
 }

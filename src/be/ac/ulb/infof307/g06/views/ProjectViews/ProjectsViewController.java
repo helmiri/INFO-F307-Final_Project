@@ -80,6 +80,15 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private TextArea collaboratorsName;
 
+    //---------Import--Export-----------------
+    @FXML
+    private Button  exportProjectBtn;
+    //@FXML
+    //private Button importBtn;
+
+
+
+
     //---------------EDIT PROJECTS----------
 
     //----------------CONTROLLER--------------
@@ -113,7 +122,7 @@ public class ProjectsViewController implements Initializable {
      */
     @FXML
     private void events(ActionEvent event) throws Exception {
-        if( event.getSource()== addTaskbtn){ addTask(); }
+        if( event.getSource()== addTaskbtn){ addTask();}
         //else if( event.getSource()== EditProjectBtn){editProject();}
         else if( event.getSource()== addBtn ) {Main.showAddProjectStage(); }
         else if( event.getSource()== editBtn ) {
@@ -122,7 +131,9 @@ public class ProjectsViewController implements Initializable {
                 Main.showEditProjectStage();}
         }
         else if( event.getSource()== backBtn){ Main.showMainMenuScene(); }
+        else if (event.getSource()==exportProjectBtn){exportProject();}
     }
+    //public String getProjectExport(){return String.valueOf(projectExportList.getValue()); }
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
 
     @FXML
@@ -220,6 +231,19 @@ public class ProjectsViewController implements Initializable {
         Task task = getSelectedTask();
         controller.deleteTask(task);
         taskTable.getItems().removeAll(task);
+    }
+    public void exportProject(){
+        TreeItem<Project> selectedProject = getSelectedProject();
+        if(selectedProject!= null && selectedProject.getValue()!=null){
+            System.out.println(selectedProject.getValue().getTitle());
+            controller.exportProject(selectedProject.getValue(),
+                    "C:\\Users\\hodai\\Desktop\\ulb_2020_2021",
+                    "C:\\Users\\hodai\\Desktop\\ulb_2020_2021\\est.txt",
+                    selectedProject.getValue().getId());
+        }
+        else {
+            System.out.println("aucun projet");
+        }
     }
 
     public void addCollaborator() throws SQLException{
