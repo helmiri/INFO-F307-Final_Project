@@ -16,6 +16,7 @@ public class Main extends Application {
     private static Stage primaryStage;
     private static AnchorPane mainLayout;
     private static Stage stage;
+    private static boolean firstBoot;
 
     /**
      * Starts the main window
@@ -25,7 +26,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        new UserDB("Database.db");
+        firstBoot = UserDB.isFirstBoot();
         // Set main stage
         Global.userID = 0;
         Main.primaryStage = primaryStage;
@@ -168,6 +170,12 @@ public class Main extends Application {
      * @throws Exception;
      */
     public static void showMainMenuScene() throws Exception {
+
+        // First launch popup after signing up. User is the administrator by default
+        // Prompt disk limit choice.
+        if (firstBoot) {
+            UserDB.setAdmin(999);
+        }
 
         // Set main stage
         primaryStage.setHeight(940);
