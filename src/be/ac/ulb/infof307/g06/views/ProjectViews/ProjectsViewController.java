@@ -8,6 +8,7 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
+import impl.org.controlsfx.skin.CheckComboBoxSkin;
 import javafx.collections.FXCollections;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -123,8 +124,10 @@ public class ProjectsViewController implements Initializable {
      * @param event ;
      * @throws Exception;
      */
+
     @FXML
     private void events(ActionEvent event) throws Exception {
+
         if( event.getSource()== addTaskbtn){ addTask();}
         //else if( event.getSource()== EditProjectBtn){editProject();}
         else if( event.getSource()== addBtn ) {Main.showAddProjectStage(); }
@@ -302,8 +305,8 @@ public class ProjectsViewController implements Initializable {
     }
 
     @FXML
-    public void onTaskCollaboratorSelected() throws SQLException{
-        //SELECTION CHECKCOMBOBOX
+    public void onTaskCollaboratorSelected(ActionEvent event) throws SQLException{
+
     }
 
     @FXML
