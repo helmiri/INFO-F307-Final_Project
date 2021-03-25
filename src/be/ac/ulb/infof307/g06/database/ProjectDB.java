@@ -250,7 +250,9 @@ public class ProjectDB extends Database {
     public static void addTaskCollaborator(int task_id, int user_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
-        state.execute("INSERT INTO tasks_users (task_id, user_id) VALUES ('" + task_id + "','" + user_id + "');");
+        if (!getTaskCollaborator(task_id).contains(user_id)){
+            state.execute("INSERT INTO tasks_users (task_id, user_id) VALUES ('" + task_id + "','" + user_id + "');");
+        }
         close(rs, state);
     }
 

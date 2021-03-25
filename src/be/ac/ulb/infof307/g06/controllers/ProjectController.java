@@ -58,12 +58,20 @@ public class ProjectController{
 
     public void initTaskCollaborators (ProjectsViewController view) throws SQLException{
         ObservableList<String> names = FXCollections.observableArrayList();
-        List<Integer> collaborators = ProjectDB.getCollaborators(ProjectDB.getProjectID(Global.currentProject)); // TODO
+        List<Integer> collaborators = ProjectDB.getCollaborators(view.getSelectedProject().getValue().getId());
         for (Integer collaborator : collaborators) {
             names.add((UserDB.getUserInfo(collaborator).get("uName")));
         }
-
         view.insertCollaborator(names);
+    }
+
+    public List<String> getCheckedCollaborators (ProjectsViewController view, Task task) throws SQLException{
+        ObservableList<String> checked = FXCollections.observableArrayList();
+        List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
+        for (Integer collaborator : collaborators) {
+            checked.add((UserDB.getUserInfo(collaborator).get("uName")));
+        }
+        return checked;
     }
 
     public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) throws SQLException{

@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.ProjectController;
+import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -139,7 +140,7 @@ public class ProjectsViewController implements Initializable {
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
 
     @FXML
-    public void initTree() {
+    public void initTree(){
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
@@ -148,6 +149,23 @@ public class ProjectsViewController implements Initializable {
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         treeProjects.setRoot(root);
+        taskTable.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Task task, boolean empty) {
+                super.updateItem(task, empty);
+                try {
+                    if (task == null)
+                        setStyle("");
+                    else if (ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID))
+                        setStyle("-fx-background-color: #baffba;");
+                    else if (!ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID))
+                        setStyle("-fx-background-color: #ffd7d1;");
+                    else
+                        setStyle("");
+                } catch (SQLException e) {
+                }
+            }
+        });
     }
 
     /**
@@ -166,8 +184,16 @@ public class ProjectsViewController implements Initializable {
         parent.getChildren().add(child);
     }
 
-    public void insertCollaborator(ObservableList<String> names){
+    public void insertCollaborator(ObservableList<String> names) throws SQLException{
         collabComboBox.getItems().addAll(names);
+        ObservableList<String> items = collabComboBox.getItems();
+        for(String item : items){
+            System.out.println("in " + item);
+            if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item.toString()).get("id")))){
+                System.out.println("in " + item);
+                collabComboBox.getItemBooleanProperty(item).set(true);
+            }
+        }
     }
 
     /**
