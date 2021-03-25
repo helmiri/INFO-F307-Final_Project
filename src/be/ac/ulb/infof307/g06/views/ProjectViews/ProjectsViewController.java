@@ -293,6 +293,10 @@ public class ProjectsViewController implements Initializable {
         controller.assignCollaborators(selectedCollaborators, selectedTask);
     }
 
+    @FXML
+    public void onTaskSelected() throws SQLException{
+        //Click sur le task
+    }
 
     @FXML
     public Task getSelectedTask(){

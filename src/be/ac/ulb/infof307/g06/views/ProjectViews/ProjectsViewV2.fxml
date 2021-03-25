@@ -56,7 +56,7 @@
                   </ContextMenu>
                </contextMenu>
             </TableView>
-            <TableView fx:id="taskTable" layoutX="21.0" layoutY="346.0" prefHeight="317.0" prefWidth="625.0">
+            <TableView fx:id="taskTable" layoutX="21.0" layoutY="346.0" onContextMenuRequested="#onTaskSelected" prefHeight="317.0" prefWidth="625.0">
                <columns>
                   <TableColumn fx:id="taskColumn" onEditCommit="#editTask" prefWidth="631.0" text="Tasks" />
                </columns>
