@@ -79,6 +79,8 @@ public class ProjectsViewController implements Initializable {
     private Button addCollaboratorsBtn;
     @FXML
     private TextArea collaboratorsName;
+    @FXML
+    private CheckComboBox<String> collabComboBox;
 
     //---------Import--Export-----------------
     @FXML
@@ -255,6 +257,15 @@ public class ProjectsViewController implements Initializable {
             }
         }
     }
+
+    @FXML
+    public void assignCollaborators() throws SQLException{
+        ObservableList<String> selectedCollaborators = collabComboBox.getCheckModel().getCheckedItems();
+        Task selectedTask = getSelectedTask();
+        controller.assignCollaborators(selectedCollaborators, selectedTask);
+    }
+
+
     @FXML
     public Task getSelectedTask(){
         return taskTable.getSelectionModel().getSelectedItem();
