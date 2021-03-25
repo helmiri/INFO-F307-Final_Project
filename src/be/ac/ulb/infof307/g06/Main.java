@@ -288,6 +288,23 @@ public class Main extends Application {
 
     }
 
+    public static void showTagsMenu() throws Exception {
+        // Set main stage
+        primaryStage.setResizable(true);
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
+
+        // Load the fxml
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/Tags.fxml"));
+
+        // Setup the new stage
+        AnchorPane tagsMenuAnchor = loader.load();
+        mainLayout.getChildren().setAll(tagsMenuAnchor);
+        primaryStage.setResizable(false);
+    }
+
     /**
      * Closes the actual stage.
      */

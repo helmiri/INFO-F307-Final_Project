@@ -37,8 +37,16 @@ public class TagsViewController {
     @FXML
     private Button backBtn;
     @FXML
+    private Button addBtn;
+    @FXML
     private TableView<Tag> defaultTagsTableView;
     @FXML
     private TableColumn<Tag, String> defaultTagsColumn;
 
+    @FXML
+    private void tagsEvent(ActionEvent event) throws Exception{
+        if(event.getSource() == backBtn) {
+            Main.showSettingsMenuScene();
+        }
+    }
 }
