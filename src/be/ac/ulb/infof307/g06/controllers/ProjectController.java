@@ -74,8 +74,11 @@ public class ProjectController{
         return checked;
     }
 
-    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) throws SQLException{
-        for (String collaborator : collaborators) {
+    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask, int project_id) throws SQLException{
+        for (Integer c: ProjectDB.getCollaborators(project_id)){
+            ProjectDB.deleteTaskCollaborator(selectedTask.getId(), c);
+        }
+        for (String collaborator : collaborators){
             ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
         }
     }

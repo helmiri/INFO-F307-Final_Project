@@ -186,14 +186,7 @@ public class ProjectsViewController implements Initializable {
 
     public void insertCollaborator(ObservableList<String> names) throws SQLException{
         collabComboBox.getItems().addAll(names);
-        ObservableList<String> items = collabComboBox.getItems();
-        for(String item : items){
-            System.out.println("in " + item);
-            if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item.toString()).get("id")))){
-                System.out.println("in " + item);
-                collabComboBox.getItemBooleanProperty(item).set(true);
-            }
-        }
+
     }
 
     /**
@@ -252,6 +245,7 @@ public class ProjectsViewController implements Initializable {
         String description = task.getDescription();//
         controller.editTask(description, newDescription, task);
     }
+
     public void addTask() throws Exception{
         controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
         displayTask();
@@ -262,6 +256,7 @@ public class ProjectsViewController implements Initializable {
         controller.deleteTask(task);
         taskTable.getItems().removeAll(task);
     }
+
     public void exportProject(){
         TreeItem<Project> selectedProject = getSelectedProject();
         if(selectedProject!= null && selectedProject.getValue()!=null){
@@ -290,12 +285,20 @@ public class ProjectsViewController implements Initializable {
     public void assignCollaborators() throws SQLException{
         ObservableList<String> selectedCollaborators = collabComboBox.getCheckModel().getCheckedItems();
         Task selectedTask = getSelectedTask();
-        controller.assignCollaborators(selectedCollaborators, selectedTask);
+        controller.assignCollaborators(selectedCollaborators, selectedTask, getSelectedProject().getValue().getId());
+        displayTask();
     }
 
     @FXML
     public void onTaskSelected() throws SQLException{
-        //Click sur le task
+        ObservableList<String> items = collabComboBox.getItems();
+        for(String item : items){
+            collabComboBox.getItemBooleanProperty(item).set(false);
+            if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item.toString()).get("id")))){
+                System.out.println("in " + item);
+                collabComboBox.getItemBooleanProperty(item).set(true);
+            }
+        }
     }
 
     @FXML
