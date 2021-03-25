@@ -66,7 +66,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Delete" />
                         <MenuItem mnemonicParsing="false" onAction="#assignCollaborators" text="Assign collaborator">
                            <graphic>
-                              <CheckComboBox fx:id="collabComboBox" />
+                              <CheckComboBox fx:id="collabComboBox" onMouseClicked="#onTaskCollaboratorSelected" />
                            </graphic></MenuItem>
                      </items>
                   </ContextMenu>

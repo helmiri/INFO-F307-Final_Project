@@ -302,6 +302,11 @@ public class ProjectsViewController implements Initializable {
     }
 
     @FXML
+    public void onTaskCollaboratorSelected() throws SQLException{
+        //SELECTION CHECKCOMBOBOX
+    }
+
+    @FXML
     public Task getSelectedTask(){
         return taskTable.getSelectionModel().getSelectedItem();
     }
