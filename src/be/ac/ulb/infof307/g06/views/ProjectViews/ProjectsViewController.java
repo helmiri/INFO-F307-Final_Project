@@ -166,7 +166,9 @@ public class ProjectsViewController implements Initializable {
         parent.getChildren().add(child);
     }
 
-
+    public void insertCollaborator(ObservableList<String> names){
+        collabComboBox.getItems().addAll(names);
+    }
 
     /**
      * Creates a project and add it to the Database and the map + displays it in the tree table view
@@ -294,6 +296,7 @@ public class ProjectsViewController implements Initializable {
             projectsTags.setText(tagsList);
             displayTask();
             displayCollaborators();
+            controller.initTaskCollaborators(this);
         }catch(NullPointerException throwables){
             projectsDescription.setText("");
             projectsDate.setText("");

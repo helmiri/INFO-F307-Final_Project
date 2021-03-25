@@ -44,7 +44,7 @@ public class ProjectController{
             ProjectDB.createTag("tag1",0);
             ProjectDB.createTag("tag2",0);
             ProjectDB.createTag("tag3",0);
-            //initComboBox();
+
             view.clearProjects();
             Global.TreeMap.clear();
 
@@ -53,6 +53,22 @@ public class ProjectController{
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    public void initTaskCollaborators (ProjectsViewController view) throws SQLException{
+        ObservableList<String> names = FXCollections.observableArrayList();
+        List<Integer> collaborators = ProjectDB.getCollaborators(ProjectDB.getProjectID(Global.currentProject)); // TODO
+        for (Integer collaborator : collaborators) {
+            names.add((UserDB.getUserInfo(collaborator).get("uName")));
+        }
+
+        view.insertCollaborator(names);
+    }
+
+    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) throws SQLException{
+        for (String collaborator : collaborators) {
+            ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
         }
     }
 
