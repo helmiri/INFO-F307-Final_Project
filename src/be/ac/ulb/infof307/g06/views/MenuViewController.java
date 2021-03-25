@@ -99,12 +99,11 @@ public class MenuViewController implements Initializable {
         } else if (event.getSource() == projectManagementBtn) {
             Main.showProjectManagementScene();
         } else if (event.getSource() == tagsBtn) {
-            System.out.println("test tags Button");
+            Main.showTagsMenu();
         } else if (event.getSource() == languageBtn) {
             System.out.println("test language button");
         } else if (event.getSource() == backBtn) {
             Main.showMainMenuScene();
         }
-
     }
 }
