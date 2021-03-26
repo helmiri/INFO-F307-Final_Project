@@ -12,6 +12,7 @@ public class UserInformations {
     public static String getEmail() { return email; }
     public static String getUsername() { return username; }
     public static String getPasswd() { return passwd; }
+
     public static void setFirstName(String firstName) { UserInformations.firstName = firstName; }
     public static void setLastName(String lastName) { UserInformations.lastName = lastName; }
     public static void setEmail(String email) { UserInformations.email = email; }

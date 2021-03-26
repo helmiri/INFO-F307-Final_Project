@@ -5,9 +5,18 @@ public class Project {
     String title;
     String description;
     Long date;
-    int parent_id;
-
-    public Project(int id, String title, String description, Long date, int parent_id) {
+    int projectId;
+    //-------------- METHODS ----------------
+    /**
+     * Constructor.
+     *
+     * @param id int
+     * @param title String
+     * @param description String
+     * @param date Long
+     * @param projectId int
+     */
+    public Project(int id, String title, String description, Long date, int projectId) {
         this.id = id;
         this.title = title;
         this.description = description;

@@ -8,11 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
-
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -131,7 +128,5 @@ public class StatsViewController implements Initializable {
      *
      * @param msg String
      */
-    public void setMsg(String msg){
-        msgExportText.setText(msg);
-    }
+    public void setMsg(String msg){ msgExportText.setText(msg); }
 }

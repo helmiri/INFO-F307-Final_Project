@@ -15,7 +15,7 @@
    <children>
       <HBox layoutX="259.0" layoutY="350.0" spacing="40.0">
          <children>
-            <Button fx:id="tagsBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#menuEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="tagsBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -27,7 +27,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="languageBtn" mnemonicParsing="false" onAction="#menuEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="languageBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
@@ -39,19 +39,19 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" onAction="#menuEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="#f2f1f0">
+            <Button mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#menuEvents" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="#f2f1f0">
+            <Button mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
             </Button>
          </children>
       </HBox>
-      <Button fx:id="backBtn" layoutX="1252.0" layoutY="816.0" mnemonicParsing="false" onAction="#menuEvents" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="BACK" textFill="WHITE">
+      <Button fx:id="backBtn" layoutX="1252.0" layoutY="816.0" mnemonicParsing="false" onAction="#events" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="BACK" textFill="WHITE">
          <font>
             <Font name="Calibri" size="24.0" />
          </font></Button>

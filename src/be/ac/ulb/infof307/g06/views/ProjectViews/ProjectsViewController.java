@@ -8,7 +8,6 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
-import impl.org.controlsfx.skin.CheckComboBoxSkin;
 import javafx.collections.FXCollections;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -27,88 +26,64 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
-
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
 public class ProjectsViewController implements Initializable {
     //----------ATTRIBUTES---------
-    // ---------PROJECTS MENU------
     @FXML
-    private TreeTableView<Project> treeProjects;
+    private Button exportProjectBtn;
     @FXML
-    private TreeTableColumn<Project, String> treeProjectColumn;
-
-    private TreeItem<Project> root = new TreeItem<Project>();
-    @FXML
-    private Button addProjectBtn;
-    @FXML
-    private TextArea projectsTags;
-
-    @FXML
-    private TextArea projectsDescription;
-
-    @FXML
-    private Text projectsTitle;
-
-    @FXML
-    private Label projectsDate;
-
+    private Button importProjectBtn;
     @FXML
     private Button addBtn;
     @FXML
     private Button editBtn;
-    // ----------------TASK---------------
-    @FXML
-    private TableView<Task> taskTable;
-    @FXML
-    private TableColumn<Task,String> taskColumn;
     @FXML
     private Button addTaskbtn;
     @FXML
     private Button backBtn;
     @FXML
-    private TextArea descriptionTask;
-    @FXML
-    private TextField taskParent;
-
-    //--------------COLLABORATORS----------
-
-    @FXML
-    private TableView<String> collaboratorsTable;
-    @FXML
-    private TableColumn<String, String> collaboratorsColumn;
-    @FXML
     private Button addCollaboratorsBtn;
+    @FXML
+    private Label projectsDate;
+    @FXML
+    private Text projectsTitle;
+    @FXML
+    private TextArea projectsTags;
+    @FXML
+    private TextArea projectsDescription;
+    @FXML
+    private TextArea descriptionTask;
     @FXML
     private TextArea collaboratorsName;
     @FXML
+    private TextField taskParent;
+    @FXML
     private CheckComboBox<String> collabComboBox;
-
-    //---------Import--Export-----------------
     @FXML
-    private Button  exportProjectBtn;
+    private TableView<Task> taskTable;
     @FXML
-    private Button importProjectBtn;
-
-
-
-
-    //---------------EDIT PROJECTS----------
-
-    //----------------CONTROLLER--------------
+    private TableView<String> collaboratorsTable;
+    @FXML
+    private TableColumn<Task,String> taskColumn;
+    @FXML
+    private TableColumn<String, String> collaboratorsColumn;
+    @FXML
+    private TreeTableView<Project> treeProjects;
+    @FXML
+    private TreeTableColumn<Project, String> treeProjectColumn;
+    private TreeItem<Project> root = new TreeItem<Project>();
     private ProjectController controller;
     //---------------METHODES----------------
 
     /**
-     * The main method for button's events
-     * @param ;
-     * @throws Exception;
+     * Initializes the controller and launchs the init method.
+     *
+     * @param url URL
+     * @param resourceBundle ResourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -116,29 +91,31 @@ public class ProjectsViewController implements Initializable {
         controller.init(this, root);
     }
 
-    @FXML
-    public void showRoot(){
-        treeProjects.setShowRoot(false);
-    }
-    @FXML
-    public void refresh(){
-        treeProjects.setShowRoot(true);
-    }
 
     /**
-     * The main method for button's events
-     * @param event ;
-     * @throws Exception;
+     * Hides the tree table root.
      */
+    @FXML
+    public void hideRoot(){ treeProjects.setShowRoot(false); }
 
+    /**
+     * Sho<s the tree table root.
+     */
+    @FXML
+    public void refresh(){ treeProjects.setShowRoot(true); }
+
+    /**
+     * The main method for button's events.
+     *
+     * @param event ActionEvent
+     * @throws Exception
+     */
     @FXML
     private void events(ActionEvent event) throws Exception {
-
         if( event.getSource()== addTaskbtn){ addTask();}
-        //else if( event.getSource()== EditProjectBtn){editProject();}
         else if( event.getSource()== addBtn ) {Main.showAddProjectStage(); }
         else if( event.getSource()== editBtn ) {
-            if (projectsTitle.getText()!= ""){
+            if (!projectsTitle.getText().equals("")){
                 Global.currentProject = projectsTitle.getText();
                 Main.showEditProjectStage();}
         }
@@ -146,9 +123,18 @@ public class ProjectsViewController implements Initializable {
         else if (event.getSource()==exportProjectBtn){exportProject();}
         else if(event.getSource()==importProjectBtn){importProject();}
     }
+
+    /**
+     * Returns the selected item in the tree table.
+     *
+     * @return TreeItem<Project>
+     */
     //public String getProjectExport(){return String.valueOf(projectExportList.getValue()); }
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
 
+    /**
+     * Initializes all the columns and some tables.
+     */
     @FXML
     public void initTree(){
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
@@ -179,8 +165,8 @@ public class ProjectsViewController implements Initializable {
     }
 
     /**
-     * Clears the tables and the map(to refresh when needed)
-     * @throws SQLException;
+     * Clears the project's table.
+     *
      */
     public void clearProjects(){
         treeProjects.getRoot().getChildren().clear();
@@ -189,52 +175,58 @@ public class ProjectsViewController implements Initializable {
         projectSelection.setPromptText("Select project")*/
     }
 
-    @FXML
-    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
-        parent.getChildren().add(child);
-    }
-
-    public void insertCollaborator(ObservableList<String> names) throws SQLException{
-        collabComboBox.getItems().addAll(names);
-
-    }
-
     /**
-     * Creates a project and add it to the Database and the map + displays it in the tree table view
-     * @throws SQLException;
+     * Adds a child to a parent in the tree.
+     *
+     * @param parent TreeItem<Project>
+     * @param child TreeItem<Project>
      */
+    @FXML
+    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){ parent.getChildren().add(child); }
 
 
     /**
-     * Deletes a project in the Database and in the tree table view
-     * @param event;
-     * @throws SQLException;
+     * Adds collaborators to the combobox with the collaborators in it.
+     *
+     * @param names ObservableList<String>
+     */
+    public void insertCollaborator(ObservableList<String> names){ collabComboBox.getItems().addAll(names); }
+
+    /**
+     * Deletes a project in the Database and in the tree table view.
+     *
+     * @throws SQLException
      */
     @SuppressWarnings("unchecked")
     @FXML
-    private void deleteProject(ActionEvent event) throws SQLException{
+    private void deleteProject() throws SQLException{
         if(treeProjects.getSelectionModel().getSelectedItem()!= null && treeProjects.getSelectionModel().getSelectedItem().getValue()!=null) {
             Project child= treeProjects.getSelectionModel().getSelectedItem().getValue();
             String projectName = child.getTitle();
             int projectID = ProjectDB.getProjectID(projectName);
             ProjectDB.deleteProject(projectID);
             int parentID = child.getParent_id();
-
-            if (parentID == 0) {
-                root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
-            } else {
-                Global.TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
-            }
+            if (parentID == 0) { root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem()); }
+            else { Global.TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem()); }
         }
     }
 
-
+    /**
+     * Deletes a collaborator from the database and the table.
+     *
+     * @throws SQLException
+     */
     public void deleteCollaborator() throws SQLException{
         String collaborator = getSelectedUser();
         controller.deleteCollaborator(collaborator, getSelectedProject().getValue().getId());
         collaboratorsTable.getItems().removeAll(collaborator);
     }
 
+    /**
+     * Displays tasks on the table.
+     *
+     * @throws SQLException
+     */
     @FXML
     public void displayTask() throws SQLException {
         TreeItem<Project> selectedProject = getSelectedProject();
@@ -242,6 +234,11 @@ public class ProjectsViewController implements Initializable {
         taskTable.setItems(oTaskList);
     }
 
+    /**
+     * Displays collaborators on the table.
+     *
+     * @throws SQLException
+     */
     @FXML
     public void displayCollaborators() throws SQLException {
         TreeItem<Project> selectedProject = getSelectedProject();
@@ -249,6 +246,12 @@ public class ProjectsViewController implements Initializable {
         collaboratorsTable.setItems(oCollaboratorsList);
     }
 
+    /**
+     * Sets the row to the new value when we double click on it.
+     *
+     * @param event TableColumn.CellEditEvent
+     * @throws SQLException
+     */
     public void editTask(TableColumn.CellEditEvent event) throws SQLException {
         Task task = (Task) event.getRowValue();
         String newDescription = (String) event.getNewValue();
@@ -256,17 +259,30 @@ public class ProjectsViewController implements Initializable {
         controller.editTask(description, newDescription, task);
     }
 
+    /**
+     * Adds a task to the table and displays the table to refresh it.
+     *
+     * @throws Exception
+     */
     public void addTask() throws Exception{
         controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
         displayTask();
     }
 
+    /**
+     * Deletes the selected task in the table and in the database.
+     *
+     * @throws SQLException
+     */
     public void deleteTask() throws SQLException{
         Task task = getSelectedTask();
         controller.deleteTask(task);
         taskTable.getItems().removeAll(task);
     }
 
+    /**
+     * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
+     */
     public void exportProject(){
         TreeItem<Project> selectedProject = getSelectedProject();
         if(selectedProject!= null && selectedProject.getValue()!=null) {
@@ -284,6 +300,10 @@ public class ProjectsViewController implements Initializable {
             }
         }
     }
+
+    /**
+     * Imports the file selected from a file chooser stage.
+     */
     public void importProject() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("src"));
@@ -293,7 +313,6 @@ public class ProjectsViewController implements Initializable {
             boolean succeed =controller.importProject(selectedArchive.getAbsolutePath());
             Main.alertImport(succeed);
         }
-
     }
 
     public void addCollaborator() throws SQLException{
@@ -306,6 +325,11 @@ public class ProjectsViewController implements Initializable {
         }
     }
 
+    /**
+     *
+     *
+     * @throws SQLException
+     */
     @FXML
     public void assignCollaborators() throws SQLException{
         ObservableList<String> selectedCollaborators = collabComboBox.getCheckModel().getCheckedItems();
@@ -314,6 +338,11 @@ public class ProjectsViewController implements Initializable {
         displayTask();
     }
 
+    /**
+     *
+     *
+     * @throws SQLException
+     */
     @FXML
     public void onTaskSelected() throws SQLException{
         ObservableList<String> items = collabComboBox.getItems();
@@ -326,21 +355,36 @@ public class ProjectsViewController implements Initializable {
         }
     }
 
+    /**
+     *
+     *
+     * @param event ActionEvent
+     * @throws SQLException
+     */
     @FXML
-    public void onTaskCollaboratorSelected(ActionEvent event) throws SQLException{
+    public void onTaskCollaboratorSelected(ActionEvent event) throws SQLException{ }
 
-    }
-
+    /**
+     * Returns the selected task.
+     *
+     * @return Task
+     */
     @FXML
-    public Task getSelectedTask(){
-        return taskTable.getSelectionModel().getSelectedItem();
-    }
+    public Task getSelectedTask(){ return taskTable.getSelectionModel().getSelectedItem(); }
 
+    /**
+     * Returns the selected user in the collaborators table.
+     *
+     * @return String
+     */
     @FXML
-    public String getSelectedUser(){
-        return collaboratorsTable.getSelectionModel().getSelectedItem();
-    }
+    public String getSelectedUser(){ return collaboratorsTable.getSelectionModel().getSelectedItem(); }
 
+    /**
+     * Displays informations of the selected project.
+     *
+     * @throws SQLException
+     */
     @FXML
     public void displayProject() throws SQLException {
         try {
@@ -365,7 +409,5 @@ public class ProjectsViewController implements Initializable {
             projectsDate.setText("");
             projectsTitle.setText("");
         }
-
     }
-
 }

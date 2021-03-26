@@ -13,12 +13,12 @@
    <children>
       <HBox layoutX="303.0" layoutY="363.0" spacing="40.0">
          <children>
-            <Button fx:id="projectManagementBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#menuEvents" prefHeight="201.0" prefWidth="432.0" style="-fx-background-color: #4fc3f7;" text="MANAGE PROJECTS " textFill="#f2f1f0">
+            <Button fx:id="projectManagementBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="432.0" style="-fx-background-color: #4fc3f7;" text="MANAGE PROJECTS " textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>
             </Button>
-            <Button fx:id="statsAccessBtn" mnemonicParsing="false" onAction="#menuEvents" prefHeight="201.0" prefWidth="422.0" style="-fx-background-color: #4fc3f7;" text=" STATISTICS" textFill="#f2f1f0">
+            <Button fx:id="statsAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="422.0" style="-fx-background-color: #4fc3f7;" text=" STATISTICS" textFill="#f2f1f0">
                <font>
                   <Font size="36.0" />
                </font>

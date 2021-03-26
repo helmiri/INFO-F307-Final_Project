@@ -15,15 +15,8 @@ public class Invitation {
         return id;
     }
 
-    public int getProject_id() {
-        return project_id;
-    }
-
-    public int getSender_id() {
-        return sender_id;
-    }
-
-    public int getReceiver_id() {
-        return receiver_id;
-    }
+    public int getId() { return id; }
+    public int getProject_id() { return projectId; }
+    public int getSender_id() { return senderId; }
+    public int getReceiver_id() { return receiverId; }
 }
