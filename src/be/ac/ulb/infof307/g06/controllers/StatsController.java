@@ -201,14 +201,17 @@ public class StatsController {
      * @param path String
      * @throws IOException
      */
-    public static void write(String chosenString, final String fileName,String path) {
+    public void write(String chosenString, final String fileName,String path) {
         try {
             FileWriter fw = new FileWriter(path + fileName, true);
             fw.write(chosenString + "\n");
             fw.close();
+            statsView.setMsg("The exportation succeeded.");
         }
         catch (IOException throwables){
             System.out.println("The exportation failed.");
+            statsView.setMsg("The exportation failed.");
+
         }
     }
 
@@ -233,9 +236,13 @@ public class StatsController {
             csv.write(content);
             csv.close();
             System.out.println("Finished (csv)!");
+            statsView.setMsg("The exportation succeeded.");
+
         }
         catch(Exception ignored) {
             System.out.println("The exportation failed.");
+            statsView.setMsg("The exportation failed.");
+
         }
     }
 

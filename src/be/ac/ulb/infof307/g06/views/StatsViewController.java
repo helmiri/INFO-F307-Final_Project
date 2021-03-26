@@ -7,12 +7,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.text.Text;
+
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -29,6 +31,8 @@ public class StatsViewController implements Initializable {
     private Button logOutBtn;
     @FXML
     private TextField fileNameTextField;
+    @FXML
+    private Text msgExportText;
     @FXML
     private TreeTableView<Statistics> projectsTreeView;
     @FXML
@@ -120,5 +124,14 @@ public class StatsViewController implements Initializable {
                 else { controller.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
             }
         }
+    }
+
+    /**
+     * Sets text message for exportation.
+     *
+     * @param msg String
+     */
+    public void setMsg(String msg){
+        msgExportText.setText(msg);
     }
 }
