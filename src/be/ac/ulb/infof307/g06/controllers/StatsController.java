@@ -146,8 +146,7 @@ public class StatsController {
      * @param root TreeItem<Statistics>
      * @throws SQLException
      */
-    public void exportStatsAsJson(String fileName,TreeItem<Statistics> root) throws SQLException{
-        String path = System.getProperty("user.home")+ "\\Downloads";
+    public void exportStatsAsJson(String fileName,String path,TreeItem<Statistics> root) throws SQLException{
         Gson gson = new Gson();
         String finalString="{\n";
         for(int i=0;i<root.getChildren().size();i++) {

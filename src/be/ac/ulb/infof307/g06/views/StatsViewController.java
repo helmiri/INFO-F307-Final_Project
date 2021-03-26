@@ -7,6 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.FileNotFoundException;;
 import java.net.URL;
 import java.sql.SQLException;
@@ -102,16 +107,18 @@ public class StatsViewController implements Initializable {
      * @throws SQLException
      */
     public void exports(ActionEvent event) throws FileNotFoundException, SQLException {
-        String home = System.getProperty("user.home");
-        String path = home+ "\\Downloads";
         String fileName = fileNameTextField.getText();
-        if(event.getSource() == exportJSONBtn) {
-            if (fileName.equals("")){ controller.exportStatsAsJson("\\Statistics.json",root); }
-            else{ controller.exportStatsAsJson("\\"+ fileName+".json",root); }
-        }
-        else if(event.getSource() == exportCSVBtn) {
-            if (fileName.equals("")){ controller.exportStatsAsCSV("\\Statistics.csv",path, root); }
-            else{ controller.exportStatsAsCSV("\\"+ fileName+".csv",path, root); }
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("src"));
+        File selectedDirectory = directoryChooser.showDialog(new Stage());
+        if (selectedDirectory != null) {
+            if (event.getSource() == exportJSONBtn) {
+                if (fileName.equals("")) { controller.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
+                else { controller.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }
+            } else if (event.getSource() == exportCSVBtn) {
+                if (fileName.equals("")) { controller.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
+                else { controller.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
+            }
         }
     }
 }
