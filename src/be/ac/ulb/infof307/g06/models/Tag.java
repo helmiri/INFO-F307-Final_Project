@@ -1,7 +1,8 @@
 package be.ac.ulb.infof307.g06.models;
 
+import java.awt.*;
+
 public class Tag {
-    //-------------- ATTRIBUTES ----------------
     int id;
     String description;
     int color;

@@ -280,6 +280,22 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.show();
     }
+    public static void showEditTaskStage() throws Exception{
+
+        // Load the fxml
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/TaskEditView.fxml"));
+        AnchorPane conditionsAnchor = loader.load();
+
+        // Setup the new stage
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Edit task");
+        stage.setScene(new Scene(conditionsAnchor, 435, 256));
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.show();
+    }
 
     public static  void showInvitationStage() throws Exception{
 

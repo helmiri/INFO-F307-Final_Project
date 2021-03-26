@@ -27,5 +27,8 @@ public class Global {
     public static String popupProjectDescription;
     public static String popupSenderUsername;
 
+    public static String popupTaskTitle;
+    public static String popupTaskNewName;
+
 }
 

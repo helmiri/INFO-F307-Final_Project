@@ -8,31 +8,34 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import com.google.gson.Gson;
+import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import be.ac.ulb.infof307.g06.Main;
-import org.rauschig.jarchivelib.*;
+import org.rauschig.jarchivelib.ArchiveFormat;
+import org.rauschig.jarchivelib.Archiver;
+import org.rauschig.jarchivelib.ArchiverFactory;
+import org.rauschig.jarchivelib.CompressionType;
+
 import java.util.ArrayList;
 
+
 public class ProjectController{
-    /**
-     * Initializes the view, the root, trees and clears the projects table+ the map to "reload" them.
-     *
-     * @param view ProjectsViewController
-     * @param root TreeItem<Project>
-     */
+
     public void init(ProjectsViewController view, TreeItem<Project> root) {
         Global.projectsView = view;
         Global.root = root;
@@ -43,8 +46,10 @@ public class ProjectController{
             ProjectDB.createTag("tag3",0);
             view.clearProjects();
             Global.TreeMap.clear();
+
             List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
             getProjects(projectsArray);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -89,6 +94,7 @@ public class ProjectController{
      * @throws SQLException
      */
     public void initComboBox(ProjectInputViewController inputView) throws SQLException{
+
         final ObservableList<String> tags = FXCollections.observableArrayList();
         List<Tag> tagsList = ProjectDB.getAllTags();
         for (Tag tag : tagsList) {
@@ -96,13 +102,6 @@ public class ProjectController{
         }
         inputView.addTags(tags);
     }
-
-    /**
-     *
-     *
-     * @param inputView ProjectInputViewController
-     * @throws SQLException
-     */
     public void initProjectExport(ProjectInputViewController inputView) throws SQLException{
         final ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
         List<Integer> ProjectIDList = ProjectDB.getUserProjects(Global.userID);
@@ -113,71 +112,75 @@ public class ProjectController{
     }
 
     /**
-     * Initializes the map and displays projects on the tree table view.
-     *
+     * Initializes the map and display projects on the tree table view
      * @param projects List<Integer>;
      * @throws SQLException;
      */
     public void getProjects(List<Integer> projects) throws SQLException{
-        Global.projectsView.hideRoot();
+        Global.projectsView.showRoot();
         for(Integer project : projects){
             Project childProject= ProjectDB.getProject(project);
             int parentID= childProject.getParent_id();
+
             String title= childProject.getTitle();
+            //projectSelection.getItems().add(title);//
             int childID= ProjectDB.getProjectID(title);
+
             TreeItem<Project> child = new TreeItem<Project>(childProject);
             Global.TreeMap.put(childID, child);
-            if (parentID== 0){ Global.projectsView.addChild(Global.root, child); }
-            else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
+
+            if (parentID== 0){
+                Global.projectsView.addChild(Global.root, child);
+            } else {
+                Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
+            }
         }
         Global.projectsView.refresh();
 
     }
 
-    /**
-     * Adds a project to the tree, the map and the database.
-     *
-     * @param addView ProjectInputViewController
-     * @throws SQLException
-     */
     public void addProject(ProjectInputViewController addView) throws SQLException{
         //TODO: add conditions to projects creation
+
         int parentID=0;
         String nameProject = addView.getNameProject();
         String descriptionProject = addView.getDescriptionProject();
         LocalDate dateProject = addView.getDateProject();
         String parentProject = addView.getParentProjectName();
+        if(nameProject.equals("")) {
+            addView.setError("Cannot add a project with an empty title.");}
+        //else if(!validateName(nameProject.getText())){ErrorText.setText("Project's name is invalid (must contain 1 to 20 characters and at least one letter");}
+        else if (ProjectDB.getProjectID(nameProject) != 0){
+            addView.setError("A project with the same title already exists.");}
+        else if(dateProject == null){
+            addView.setError("Cannot create a project without a date.");}
 
-        if(nameProject.equals("")) { addView.setError("Cannot add a project with an empty title.");}
-        else if (ProjectDB.getProjectID(nameProject) != 0){ addView.setError("A project with the same title already exists.");}
-        else if(dateProject == null){ addView.setError("Cannot create a project without a date.");}
         else if (parentProject.equals("") || ProjectDB.getProjectID(parentProject)!=0){
-
             if(!parentProject.equals("")){ parentID= ProjectDB.getProjectID(parentProject);}
+            System.out.println("addProject " + dateProject.toEpochDay());
             int newProjectID = ProjectDB.createProject(nameProject,descriptionProject,dateProject.toEpochDay(),parentID);
+            //tags
             ObservableList<String> tags = addView.getSelectedTags();//
-
             for (String tag : tags) {
                 ProjectDB.addTag(ProjectDB.getTagID(tag), newProjectID);
             }
 
             ProjectDB.addCollaborator(newProjectID, Global.userID);
+
             TreeItem<Project> child = new TreeItem<Project>(ProjectDB.getProject(newProjectID));
             Global.TreeMap.put(newProjectID, child);
             addView.setError("");
 
-            if (parentID == 0) { Global.projectsView.addChild(Global.root,child); }
-            else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
+            if (parentID == 0) {
+                Global.projectsView.addChild(Global.root,child);
+            } else {
+                Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
+            }
         }
         Main.closeStage();
     }
 
-    /**
-     * Changes a project's informations with the new ones.
-     *
-     * @param inputView ProjectInputViewController
-     * @throws SQLException
-     */
+
     public void editProject(ProjectInputViewController inputView) throws SQLException{
         int projectID = ProjectDB.getProjectID(inputView.getNameProject());
         if (projectID != 0 && projectID != ProjectDB.getProjectID(Global.currentProject)){
@@ -185,7 +188,12 @@ public class ProjectController{
         else if (inputView.getNameProject().equals("")){
             inputView.setError("Cannot edit a project with an empty name.");}
         else {
-            ProjectDB.editProject(ProjectDB.getProjectID(Global.currentProject), inputView.getNameProject(), inputView.getDescriptionProject(), inputView.getDateProject().toEpochDay());
+            ProjectDB.editProject(
+                    ProjectDB.getProjectID(Global.currentProject),
+                    inputView.getNameProject(),
+                    inputView.getDescriptionProject(),
+                    inputView.getDateProject().toEpochDay()
+            );
             List<Integer> tags = new ArrayList<>();
             ObservableList<String> newTags = inputView.getSelectedTags();
             for (String newTag : newTags) {
@@ -197,14 +205,7 @@ public class ProjectController{
         }
     }
 
-    /**
-     * Changes the description of a task and displays it
-     *
-     * @param description String
-     * @param newDescription String
-     * @param task Task
-     * @throws SQLException
-     */
+
     public void editTask(String description, String newDescription, Task task) throws SQLException {
         if (newDescription.equals("")){deleteTask(task);}
         else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
@@ -212,8 +213,7 @@ public class ProjectController{
     }
 
     /**
-     * Adds a task to the parent project, adds it to the database.
-     *
+     * Adds a task to the parent project, adds it to the database
      * @throws Exception;
      * @throws SQLException;
      */
@@ -225,17 +225,12 @@ public class ProjectController{
         }
     }
 
-    /**
-     * Deletes a task from the database and the table.
-     *
-     * @param task Task
-     * @throws SQLException
-     */
-    public void deleteTask(Task task) throws SQLException{ ProjectDB.deleteTask(task.getDescription(),task.getProjectID()); }
+    public void deleteTask(Task task) throws SQLException{
+        ProjectDB.deleteTask(task.getDescription(),task.getProjectID());
+    }
 
     /**
-     * Displays it in the table view.
-     *
+     * Displays it in the table view
      * @throws SQLException;
      */
     public ObservableList<Task> getTasks(TreeItem<Project> selectedProject) throws SQLException {
@@ -261,23 +256,24 @@ public class ProjectController{
     }
 
     /**
-     * Changes a Long format date to a string date.
-     *
-     * @param date Long
-     * @return
+     *  Checks if the string has at least one alphabet character and as 1 to 20 characters
+     * @param text;
+     * @return boolean;
      */
+    @FXML
+    private boolean validateName(String text){
+        Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,20}$");
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
+
     public String dateToString(Long date){
+        System.out.println("long date dateToString " + date);
+
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(date * 86400000L);
     }
 
-    /**
-     * Returns collaborators' id of a project.
-     *
-     * @param project TreeItem<Project>
-     * @return ObservableList<String>
-     * @throws SQLException
-     */
     public ObservableList<String> getCollaborators(TreeItem<Project> project) throws SQLException{
         List<Integer> collaborators_id = ProjectDB.getCollaborators(project.getValue().getId());
         List<String> collaboratorsList = new ArrayList<>();
@@ -287,26 +283,11 @@ public class ProjectController{
         return FXCollections.observableArrayList(collaboratorsList);
     }
 
-    /**
-     * Deletes a collaborator linked to a project from the database.
-     *
-     * @param username String
-     * @param project int
-     * @throws SQLException
-     */
     public void deleteCollaborator(String username,int project) throws SQLException{
         System.out.println(project + " " + Integer.parseInt(UserDB.getUserInfo(username).get("id")));
         ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
     }
 
-    /**
-     * Adds a collaborator to a project and in the database.
-     *
-     * @param username String
-     * @param project int
-     * @return Boolean
-     * @throws SQLException
-     */
     public Boolean addCollaborator(String username, int project)throws SQLException{
         if (!UserDB.userExists(username)){return false;}
         int receiverID = Integer.parseInt(UserDB.getUserInfo(username).get("id"));
@@ -316,102 +297,37 @@ public class ProjectController{
 
     }
 
-    /**
-     * Returns the string of a list without brackets.
-     *
-     * @param list ObservableList<String>
-     * @return String
-     */
+
     public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
 
-    /**
-     *
-     *
-     * @param project Project
-     * @param path String
-     * @param filetxt String
-     * @param id int
-     * @return
-     */
-    public boolean exportProject(Project project,String path, String filetxt,int id) {
-        final int ID = project.getId();
-        save(project, filetxt);
-        try {
-            final List<Task> tasks = ProjectDB.getTasks(ID);
-            for (Task task : tasks) {
-                save(task, filetxt);
-            }
-            final List<Tag> tags = ProjectDB.getTags(ID);
-            for (Tag tag : tags) {
-                save(tag, filetxt);
-            }
-            final List<Integer> subProjects = ProjectDB.getSubProjects(ID);
-            for (Integer sub : subProjects) {
-                exportProject(ProjectDB.getProject(sub), path, filetxt, id);
-            }
-            if (ID == id) {
-                System.out.println("ajaja");
-                zip(project.getTitle(), filetxt, path);
-                deleteFile(filetxt);
-            }
-            return true;
-        } catch (Exception ignored) {
-            return false;
-        }
-    }
-
-    /**
-     *
-     *
-     * @param filetxt String
-     * @return boolean
-     */
-    public boolean importProject(String filetxt) {
-        boolean a =valideArchive(filetxt);
-        System.out.println(a);
-        boolean b= unzip(filetxt,"C:\\Users\\hodai\\Download");
-        boolean c= isProjectInDb("C:\\Users\\hodai\\Download\\file.txt");
-        boolean d= isValidFile("C:\\Users\\hodai\\Download\\file.txt");
-        return d;
-        //verif c'est un zip , si oui on dezipe ta braillette
-        //on verif la base de donnée si il y est as déja
-    }
-
-    /**
-     *
-     *
-     * @param archivePath String
-     * @return boolean
-     */
-    public static boolean valideArchive(final String archivePath) {
-        try {
-            Archiver archiver =
-                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-            File archive = new File(archivePath);
-            ArchiveStream stream = archiver.stream(archive);
-            ArchiveEntry entry;
-            int count = 0;
-            while((entry = stream.getNextEntry()) != null) {
-                ++count;
-                String name = entry.getName();
-                if (count > 1 || name.substring(name.length()-4, name.length()-1).equals(".txt")) {
-                    return false;
+    public boolean exportProject(Project project,String path, String filetxt,int id){
+            final int ID = project.getId();
+            save(project,filetxt);
+            try {
+                final List<Task> tasks = ProjectDB.getTasks(ID);
+                for (Task task : tasks) {
+                    save(task, filetxt);
                 }
+                final List<Tag> tags = ProjectDB.getTags(ID);
+                for (Tag tag : tags) {
+                    save(tag, filetxt);
+                }
+                final List<Integer> subProjects = ProjectDB.getSubProjects(id);
+                for (Integer sub : subProjects) {
+                    exportProject(ProjectDB.getProject(sub),path,filetxt,id);
+                }
+                if (ID == id) {
+                    System.out.println("ajaja");
+                    zip(project.getTitle(),filetxt, path);
+                }
+                return true;
             }
-            stream.close();
-            return true;
-        }
-        catch(Exception ignored) {return false;}
+            catch(Exception ignored) {return false;}
+        
     }
 
-    /**
-     *
-     *
-     * @param archiveName String
-     * @param source String
-     * @param destination String
-     * @return boolean
-     */
+
+
     public static boolean zip(String archiveName, String source, String destination) {
         try {
             File src = new File(source);
@@ -424,13 +340,6 @@ public class ProjectController{
         }catch (Exception ignored) {return false;}
     }
 
-    /**
-     *
-     *
-     * @param source String
-     * @param destination String
-     * @return boolean
-     */
     public static boolean unzip(final String source, final String destination){
         try {
             Archiver archiver =
@@ -443,142 +352,41 @@ public class ProjectController{
         }catch (Exception ignored) {return false;}
     }
 
-    /**
-     * Saves project.
-     *
-     * @param project Project
-     * @param fileName String
-     * @return boolean
-     */
     // title, description, date, parent_id
     public static boolean save(final Project project, final String fileName) {
         try {
             Gson gson = new Gson();
             String projectString = gson.toJson(project);
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write("'Project' :" + projectString + ",\n");
+            fw.write("Project " + projectString + "\n");
             fw.close();
             return true;
         }
         catch(Exception ignored) {return false;}
     }
 
-    /**
-     * Saves task.
-     *
-     * @param task Project
-     * @param fileName String
-     * @return boolean
-     */
     // title, description, date, parent_id
     public static boolean save(final Task task, final String fileName) {
         try {
             Gson gson = new Gson();
             String taskString = gson.toJson(task);
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write("'Task' :" + taskString + ",\n");
+            fw.write("Task " + taskString + "\n");
             fw.close();
             return true;
         }
         catch(Exception ignored) {return false;}
     }
 
-    /**
-     * Saves tag.
-     *
-     * @param tag Project
-     * @param fileName String
-     * @return boolean
-     */
     // title, description, date, parent_id
     public static boolean save(final Tag tag, final String fileName) {
         try {
             Gson gson = new Gson();
             String tagString = gson.toJson(tag);
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write("'Tag' :" + tagString + ",\n");
+            fw.write("Tag " + tagString + "\n");
             fw.close();
             return true;
-        }
-        catch(Exception ignored) {return false;}
-    }
-
-    /**
-     *
-     *
-     * @param fileTxt String
-     * @return boolean
-     */
-    public static boolean isProjectInDb(String fileTxt){
-        try {
-            File file = new File(fileTxt);
-            Scanner reader = new Scanner(file);
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                if (line.substring(0, 7).equals("Project")) {
-                    System.out.println("c'est un projet: " + line.substring(8));
-                    Gson gson = new Gson();
-                    Project project = gson.fromJson(line.substring(8), Project.class);
-                    if(ProjectDB.getProjectID(project.getTitle())!=0){
-                        reader.close();
-                        return true;
-                    }
-                }
-            }
-            reader.close();
-            return false;
-        } catch (Exception e) {return false;}
-
-    }
-
-    /**
-     * Checks if the file is valid.
-     *
-     * @param fileTxt String
-     * @return boolean : true if the file is valid or false if is not.
-     */
-    public static boolean isValidFile( String fileTxt){
-        try {
-            File file = new File(fileTxt);
-            Scanner reader = new Scanner(file);
-            Gson gson = new Gson();
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                if (line.substring(0, 7).equals("Project")) {
-                    System.out.println("c'est un projet: " + line.substring(8));
-                    Project project = gson.fromJson(line.substring(8), Project.class);
-                }
-                else if(line.substring(0, 4).equals("Task")) {
-                    System.out.println("c'est un projet: " + line.substring(5));
-                    Task task = gson.fromJson(line.substring(5), Task.class);
-                }
-                else if(line.substring(0, 3).equals("Tag")) {
-                    System.out.println("c'est un projet: " + line.substring(4));
-                    Tag tag = gson.fromJson(line.substring(4), Tag.class);
-                }
-                else{
-                    reader.close();
-                    return false;
-                }
-
-            }
-            reader.close();
-            return true;
-        } catch (Exception e) {return false;}
-
-    }
-
-    /**
-     *
-     *
-     * @param fileName String
-     * @return boolean
-     */
-    public static boolean deleteFile(final String fileName) {
-        try {
-            File myObj = new File(fileName);
-            if (myObj.delete()) {return true;}
-            else {return false;}
         }
         catch(Exception ignored) {return false;}
     }

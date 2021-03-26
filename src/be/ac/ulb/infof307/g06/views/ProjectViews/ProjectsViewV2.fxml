@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import org.controlsfx.control.*?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController">
    <children>
       <Polygon fill="#4fc3f70d" layoutX="720.0" layoutY="-284.0" points="467.5, 1184.0, 780.0, 285.0, 780.0, 1184.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="1249.0" layoutY="-476.0" points="-374.0, 1376.0, 251.0, 476.0, 251.0, 1376.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="1173.0" layoutY="-456.0" points="-192.0, 1356.0, 327.0, 457.0, 327.0, 1356.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="1121.0" layoutY="-480.0" points="-56.0, 1381.0, 365.0, 481.0, 365.0, 1381.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <TreeTableView fx:id="treeProjects" layoutY="1.0" onMouseClicked="#displayProject" prefHeight="900.0" prefWidth="322.0">
+      <TreeTableView fx:id="treeProjects" layoutY="1.0" onMouseClicked="#displayProject" prefHeight="849.0" prefWidth="322.0">
          <columns>
             <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
          </columns>
@@ -25,64 +37,84 @@
          </contextMenu>
       </TreeTableView>
       <Accordion layoutX="467.0" layoutY="755.0" />
-      <Button fx:id="backBtn" layoutX="1385.0" layoutY="822.0" mnemonicParsing="false" onAction="#events" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back" textFill="WHITE" />
-      <Text fx:id="errorText" fill="RED" layoutX="354.0" layoutY="847.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="519.0">
-         <font>
-            <Font name="Calibri" size="12.0" />
-         </font>
-      </Text>
-      <Pane layoutX="354.0" layoutY="80.0" prefHeight="727.0" prefWidth="1070.0" style="-fx-background-color: #FFFFFF;">
+      <Pane layoutX="331.0" layoutY="-14.0" prefHeight="900.0" prefWidth="1176.0">
          <children>
-            <TableView fx:id="collaboratorsTable" layoutX="709.0" layoutY="346.0" prefHeight="317.0" prefWidth="313.0">
-              <columns>
-                <TableColumn fx:id="collaboratorsColumn" prefWidth="312.0" text="Collaborators" />
-              </columns>
-               <contextMenu>
-                  <ContextMenu>
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#deleteCollaborator" text="Delete" />
-                    </items>
-                  </ContextMenu>
-               </contextMenu>
-            </TableView>
-            <TableView fx:id="taskTable" layoutX="21.0" layoutY="346.0" onContextMenuRequested="#onTaskSelected" prefHeight="317.0" prefWidth="625.0">
-               <columns>
-                  <TableColumn fx:id="taskColumn" onEditCommit="#editTask" prefWidth="631.0" text="Tasks" />
-               </columns>
-               <contextMenu>
-                  <ContextMenu>
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Delete" />
-                        <MenuItem mnemonicParsing="false" onAction="#assignCollaborators" text="Assign collaborator">
-                           <graphic>
-                              <CheckComboBox fx:id="collabComboBox" onMouseClicked="#onTaskCollaboratorSelected" />
-                           </graphic></MenuItem>
-                     </items>
-                  </ContextMenu>
-               </contextMenu>
-            </TableView>
-            <TextArea fx:id="projectsTags" disable="true" layoutX="607.0" layoutY="34.0" prefHeight="37.0" prefWidth="450.0" />
-            <Text layoutX="554.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TAGS:" wrappingWidth="42.23828125" />
-            <TextArea fx:id="projectsDescription" disable="true" layoutX="54.0" layoutY="120.0" prefHeight="200.0" prefWidth="500.0" />
-            <Text fx:id="projectsTitle" layoutX="54.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="463.0">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Text>
-            <Button fx:id="editBtn" layoutX="596.0" layoutY="183.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Edit" />
-            <Label fx:id="projectsDate" layoutX="708.0" layoutY="156.0" prefHeight="27.0" prefWidth="348.0" textAlignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="addTaskbtn" layoutX="552.0" layoutY="675.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="95.0" text="ADD" />
-            <TextArea fx:id="descriptionTask" layoutX="21.0" layoutY="674.0" prefHeight="38.0" prefWidth="519.0" />
-            <TextArea fx:id="collaboratorsName" layoutX="709.0" layoutY="675.0" prefHeight="38.0" prefWidth="224.0" />
-            <Button fx:id="addCollaboratorsBtn" layoutX="951.0" layoutY="675.0" mnemonicParsing="false" onAction="#addCollaborator" prefHeight="37.0" prefWidth="69.0" text="ADD" />
-            <Button fx:id="exportProjectBtn" layoutX="205.0" layoutY="71.0" mnemonicParsing="false" onAction="#events" text="Export" />
-            <Button fx:id="importProjectBtn" layoutX="278.0" layoutY="71.0" mnemonicParsing="false" onAction="#events" text="Import" />
+            <Button fx:id="backBtn" layoutX="1056.0" layoutY="833.0" mnemonicParsing="false" onAction="#events" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back" textFill="WHITE" />
+            <Pane layoutX="89.0" layoutY="31.0" prefHeight="394.0" prefWidth="546.0">
+               <children>
+                  <Text fx:id="projectsTitle" layoutX="33.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Project" textAlignment="CENTER" wrappingWidth="463.0">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="projectsDate" layoutX="39.0" layoutY="277.0" prefHeight="27.0" prefWidth="450.0" text="Date" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="projectsDescription" disable="true" layoutX="39.0" layoutY="138.0" prefHeight="118.0" prefWidth="450.0" promptText="DESCRIPTION" />
+                  <Button fx:id="exportProjectBtn" layoutX="391.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Export" />
+                  <Button fx:id="editBtn" layoutX="459.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Edit" />
+                  <ListView fx:id="projectTags" layoutX="37.0" layoutY="85.0" orientation="HORIZONTAL" prefHeight="43.0" prefWidth="450.0" />
+               </children>
+            </Pane>
+            <Pane layoutX="89.0" layoutY="465.0" prefHeight="459.0" prefWidth="546.0">
+               <children>
+                  <TableView fx:id="taskTable" layoutX="25.0" layoutY="44.0" onMouseClicked="#onTaskSelected" prefHeight="317.0" prefWidth="512.0">
+                     <columns>
+                        <TableColumn fx:id="taskColumn" prefWidth="510.0" text="Tasks" />
+                     </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showTaskEdition" text="Edit" />
+                              <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Delete" />
+                           </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TableView>
+                  <Button fx:id="addTaskbtn" layoutX="442.0" layoutY="374.0" mnemonicParsing="false" onAction="#events" prefHeight="43.0" prefWidth="90.0" style="-fx-background-color: #4fc3f7;" text="ADD" />
+                  <TextArea fx:id="descriptionTask" layoutX="25.0" layoutY="371.0" prefHeight="48.0" prefWidth="413.0" />
+               </children>
+            </Pane>
+            <Pane layoutX="664.0" layoutY="14.0" prefHeight="440.0" prefWidth="330.0">
+               <children>
+                  <TableView fx:id="collaboratorsTable" layoutX="60.0" layoutY="8.0" prefHeight="317.0" prefWidth="210.0">
+                    <columns>
+                      <TableColumn fx:id="collaboratorsColumn" prefWidth="208.0" text="Project Collaborators" />
+                    </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#deleteCollaborator" text="Delete" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TableView>
+                  <Button fx:id="addCollaboratorsBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false" onAction="#addCollaborator" prefHeight="37.0" prefWidth="210.0" text="ADD" />
+                  <TextArea fx:id="collaboratorsName" layoutX="60.0" layoutY="340.0" prefHeight="12.0" prefWidth="210.0" />
+               </children>
+            </Pane>
+            <Pane layoutX="664.0" layoutY="465.0" prefHeight="440.0" prefWidth="330.0">
+               <children>
+                  <TableView fx:id="taskCollaboratorTable" layoutX="60.0" layoutY="8.0" prefHeight="317.0" prefWidth="210.0">
+                     <columns>
+                        <TableColumn fx:id="taskCollaboratorColumn" prefWidth="208.0" text="Task Collaborators" />
+                     </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#deleteTaskCollaborator" text="Delete" />
+                           </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TableView>
+                  <Button fx:id="assignTaskCollaboratorBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="210.0" text="ADD" />
+                  <CheckComboBox fx:id="collabComboBox" layoutX="60.0" layoutY="338.0" prefHeight="37.0" prefWidth="210.0" />
+               </children>
+            </Pane>
          </children>
       </Pane>
-      <Button fx:id="addBtn" layoutX="354.0" layoutY="817.0" mnemonicParsing="false" onAction="#events" prefHeight="54.0" prefWidth="111.0" style="-fx-background-color: #4fc3f7;" text="ADD" />
+      <Button fx:id="addBtn" layoutY="850.0" mnemonicParsing="false" onAction="#events" prefHeight="48.0" prefWidth="322.0" style="-fx-background-color: #4fc3f7;" text="ADD" />
    </children>
 </AnchorPane>
