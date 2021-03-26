@@ -16,7 +16,7 @@ public class Global {
     public static ProjectsViewController projectsView;
     //Edit project's name
     public static String currentProject;
-
+    public static Task selectedTask;
     //The user ID
     public static int userID;
 

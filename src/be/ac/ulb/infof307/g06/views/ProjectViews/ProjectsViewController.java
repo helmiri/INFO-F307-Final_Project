@@ -23,7 +23,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
 import org.controlsfx.control.CheckComboBox;
-import java.io.File;
+import javafx.util.Callback;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -161,14 +161,19 @@ public class ProjectsViewController implements Initializable {
 
     @FXML
     public void initTree(){
-        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
-        taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-        collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
-        taskTable.setEditable(true);
-        collaboratorsTable.setEditable(true);
-        taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         treeProjects.setRoot(root);
+        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
+
+        collaboratorsTable.setEditable(true);
+        collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
+        collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        taskCollaboratorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
+        taskCollaboratorColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+        taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        taskTable.setEditable(true);
         taskTable.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Task task, boolean empty) {
@@ -186,6 +191,7 @@ public class ProjectsViewController implements Initializable {
                 }
             }
         });
+
     }
 
     /**
@@ -200,8 +206,17 @@ public class ProjectsViewController implements Initializable {
     }
 
     @FXML
-    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){ parent.getChildren().add(child); }
+    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
+        parent.getChildren().add(child);
+    }
 
+    public void insertCollaborator(ObservableList<String> names){
+        collabComboBox.getItems().setAll(names);
+    }
+
+    public void insertTaskCollaborators(ObservableList<String> names){
+        taskCollaboratorTable.setItems(names);
+    }
 
     /**
      * Creates a project and add it to the Database and the map + displays it in the tree table view
@@ -300,7 +315,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     public void assignCollaborators() throws SQLException{
         ObservableList<String> selectedCollaborators = collabComboBox.getCheckModel().getCheckedItems();
-        Task selectedTask = getSelectedTask();
+        Task selectedTask = Global.selectedTask;
         controller.assignCollaborators(selectedCollaborators, selectedTask, getSelectedProject().getValue().getId());
         displayTask();
     }
@@ -312,12 +327,16 @@ public class ProjectsViewController implements Initializable {
 
     @FXML
     public void onTaskSelected() throws SQLException{
-        ObservableList<String> items = collabComboBox.getItems();
-        for(String item : items){
-            collabComboBox.getItemBooleanProperty(item).set(false);
-            if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item.toString()).get("id")))){
-                System.out.println("in " + item);
-                collabComboBox.getItemBooleanProperty(item).set(true);
+        if (getSelectedTask() != null) {
+            Global.selectedTask = getSelectedTask();
+            controller.initTaskCollaborators(this, Global.selectedTask);
+            controller.initTaskCollaborators(this, getSelectedTask());
+            ObservableList<String> items = collabComboBox.getItems();
+            for (String item : items) {
+                collabComboBox.getItemBooleanProperty(item).set(false);
+                if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item.toString()).get("id")))) {
+                    collabComboBox.getItemBooleanProperty(item).set(true);
+                }
             }
         }
     }
@@ -327,11 +346,12 @@ public class ProjectsViewController implements Initializable {
         return taskTable.getSelectionModel().getSelectedItem();
     }
 
-    /**
-     * Returns the selected user in the collaborators table.
-     *
-     * @return String
-     */
+    @FXML
+    public String getSelectedTaskCollaborator(){
+        return taskCollaboratorTable.getSelectionModel().getSelectedItem();
+    }
+
+
     @FXML
     public String getSelectedUser(){
         return collaboratorsTable.getSelectionModel().getSelectedItem();
@@ -341,6 +361,7 @@ public class ProjectsViewController implements Initializable {
     public void displayProject() throws SQLException {
         try {
             TreeItem<Project> selectedProject = getSelectedProject();
+
             String description = selectedProject.getValue().getDescription();
             String title = selectedProject.getValue().getTitle();
             Long date = selectedProject.getValue().getDate();
@@ -351,15 +372,39 @@ public class ProjectsViewController implements Initializable {
             projectsDescription.setText(description);
             projectsDate.setText(controller.dateToString(date));
             projectsTitle.setText(title);
-            String tagsList = controller.listToString(tagsName);
-            projectsTags.setText(tagsList);
+            projectTags.setItems(tagsName);
             displayTask();
             displayCollaborators();
-            controller.initTaskCollaborators(this);
+
+            controller.initCollaborators(this);
+
+            projectTags.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                @Override
+                public ListCell<String> call(ListView<String> p) {
+                    ListCell<String> cell = new ListCell<String>() {
+                        @Override
+                        protected void updateItem(String t, boolean bln) {
+                            super.updateItem(t, bln);
+                            try {
+                                if (t != null){
+                                    System.out.println(t);
+                                    setText(t);
+                                    setStyle("-fx-text-fill: "+ ProjectDB.getTag(ProjectDB.getTagID(t)).getColor()+";");
+                                }
+
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            });
+
+
         }catch(NullPointerException throwables){
-            projectsDescription.setText("");
-            projectsDate.setText("");
-            projectsTitle.setText("");
+            System.out.println(throwables);
+
         }
 
     }

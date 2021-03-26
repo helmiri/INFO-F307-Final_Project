@@ -5,22 +5,21 @@ import java.awt.*;
 public class Tag {
     int id;
     String description;
-    int color;
-    //-------------- METHODS ----------------
-    /**
-     * Constructor.
-     *
-     * @param id int
-     * @param description String
-     * @param color int
-     */
-    public Tag(int id, String description, int color){
+    String color;
+
+    public Tag(int id, String description, String color){
         this.id = id;
         this.description =description;
         this.color = color;
     }
 
-    public int getId() { return id; }
-    public String getDescription() { return description; }
-    public int getColor() { return color; }
+    public int getId() {
+        return id;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getColor() {
+        return color;
+    }
 }

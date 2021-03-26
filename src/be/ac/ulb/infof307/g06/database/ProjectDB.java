@@ -30,8 +30,6 @@ public class ProjectDB extends Database {
             id = 1;
         }
 
-
-
         state.execute("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
         id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
         if (parent_id != 0){    // Add the parent tags to the current tags
@@ -202,7 +200,14 @@ public class ProjectDB extends Database {
 
     public static void editTask(String prev_description, String new_description, int project_id) throws SQLException{
         Statement state = connect();
-        state.execute("UPDATE Task SET description = '" + new_description + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
+        List<Task> tasks = getTasks(project_id);
+        List<String> taskNames = new ArrayList<>();
+        for (Task task : tasks) {
+            taskNames.add(task.getDescription());
+        }
+        if (!taskNames.contains(new_description)) {
+            state.execute("UPDATE Task SET description = '" + new_description + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
+        }
         close(state);
     }
 
@@ -286,7 +291,7 @@ public class ProjectDB extends Database {
 
     // ----------- TAGS ---------------
 
-    public static int createTag(String description, int color) throws SQLException {
+    public static int createTag(String description, String color) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
         int id = 0;
@@ -309,7 +314,7 @@ public class ProjectDB extends Database {
         return id;
     }
 
-    public static void editTag(int id, String description, int color) throws SQLException{
+    public static void editTag(int id, String description, String color) throws SQLException{
         Statement state = connect();
         state.execute("UPDATE Tag SET description = '" + description +"', color = '" + color + "' WHERE id = '" + id + "';");
         close(state);
@@ -327,7 +332,7 @@ public class ProjectDB extends Database {
         Tag res;
         try {
         rs = state.executeQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
-        res = new Tag(id, rs.getString("description"), rs.getInt("color"));
+        res = new Tag(id, rs.getString("description"), rs.getString("color"));
 
         }catch (Exception e){
             res = null;
@@ -342,7 +347,7 @@ public class ProjectDB extends Database {
         ResultSet rs = state.executeQuery("SELECT id, description, color FROM Tag;");
         List<Tag> res = new ArrayList<>();
         while (rs.next()){
-            res.add(new Tag(rs.getInt("id"), rs.getString("description"), rs.getInt("color")));
+            res.add(new Tag(rs.getInt("id"), rs.getString("description"), rs.getString("color")));
         }
         close(state, rs);
         return res;

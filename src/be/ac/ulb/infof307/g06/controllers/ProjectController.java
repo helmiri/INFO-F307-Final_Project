@@ -41,9 +41,10 @@ public class ProjectController{
         Global.root = root;
         view.initTree();
         try {
-            ProjectDB.createTag("tag1",0);
-            ProjectDB.createTag("tag2",0);
-            ProjectDB.createTag("tag3",0);
+            ProjectDB.createTag("tag1","#4287f5");
+            ProjectDB.createTag("tag2","#ffffff");
+            ProjectDB.createTag("tag3","#000000");
+
             view.clearProjects();
             Global.TreeMap.clear();
 
@@ -55,13 +56,7 @@ public class ProjectController{
         }
     }
 
-    /**
-     *
-     *
-     * @param view ProjectsViewController
-     * @throws SQLException
-     */
-    public void initTaskCollaborators (ProjectsViewController view) throws SQLException{
+    public void initCollaborators (ProjectsViewController view) throws SQLException{
         ObservableList<String> names = FXCollections.observableArrayList();
         List<Integer> collaborators = ProjectDB.getCollaborators(view.getSelectedProject().getValue().getId());
         for (Integer collaborator : collaborators) {
@@ -70,29 +65,36 @@ public class ProjectController{
         view.insertCollaborator(names);
     }
 
-    /**
-     *
-     *
-     * @param collaborators ObservableList<String>
-     * @param selectedTask Task
-     * @param projectId int
-     * @throws SQLException
-     */
-    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask, int projectId) throws SQLException{
-        for (Integer c: ProjectDB.getCollaborators(projectId)){
-            ProjectDB.deleteTaskCollaborator(selectedTask.getId(), c);
+    public void initTaskCollaborators (ProjectsViewController view, Task task) throws SQLException{
+        if (task != null) {
+            ObservableList<String> names = FXCollections.observableArrayList();
+            List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
+            for (Integer collaborator : collaborators) {
+                names.add((UserDB.getUserInfo(collaborator).get("uName")));
+            }
+            view.insertTaskCollaborators(names);
         }
+    }
+
+    public List<String> getCheckedCollaborators (ProjectsViewController view, Task task) throws SQLException{
+        ObservableList<String> checked = FXCollections.observableArrayList();
+        List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
+        for (Integer collaborator : collaborators) {
+            checked.add((UserDB.getUserInfo(collaborator).get("uName")));
+        }
+        return checked;
+    }
+
+    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask, int project_id) throws SQLException{
         for (String collaborator : collaborators){
             ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
         }
     }
 
-    /**
-     * Initializes the tags combobox.
-     *
-     * @param inputView ProjectInputViewController
-     * @throws SQLException
-     */
+    public void deleteTaskCollaborator(String collaborator, Task selectedTask) throws SQLException{
+        ProjectDB.deleteTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
+    }
+
     public void initComboBox(ProjectInputViewController inputView) throws SQLException{
 
         final ObservableList<String> tags = FXCollections.observableArrayList();
@@ -207,6 +209,12 @@ public class ProjectController{
 
 
     public void editTask(String description, String newDescription, Task task) throws SQLException {
+        List<Task> tasks = ProjectDB.getTasks(task.getProjectID());
+        List<String> taskNames = new ArrayList<>();
+        for (Task task2 : tasks) {
+            taskNames.add(task2.getDescription());
+        }
+        if (taskNames.contains(newDescription)){Global.projectsView.showAlert("Task already exists");return;}
         if (newDescription.equals("")){deleteTask(task);}
         else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
         Global.projectsView.displayTask();
@@ -219,6 +227,12 @@ public class ProjectController{
      */
     public void addTask(String taskDescription, String taskParent) throws Exception, SQLException {
         //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
+        List<Task> tasks = ProjectDB.getTasks(ProjectDB.getProjectID(taskParent));
+        List<String> taskNames = new ArrayList<>();
+        for (Task task : tasks) {
+            taskNames.add(task.getDescription());
+        }
+        if (taskNames.contains(taskDescription)){Global.projectsView.showAlert("Task already exists");return;}
         if (!taskParent.equals("") || ProjectDB.getProjectID(taskParent) != 0) {
             int projectID = ProjectDB.getProjectID(taskParent);
             ProjectDB.createTask(taskDescription, projectID);
