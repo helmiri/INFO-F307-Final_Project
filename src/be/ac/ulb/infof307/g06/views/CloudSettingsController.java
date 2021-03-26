@@ -15,6 +15,7 @@ public class CloudSettingsController {
     public TextField clientIDField;
     public Button saveBtn;
     public AnchorPane anchorPane;
+    public Button helpBtn;
 
     public void events(ActionEvent actionEvent) throws Exception {
 
@@ -22,7 +23,12 @@ public class CloudSettingsController {
             Main.showSettingsMenuScene();
         } else if (actionEvent.getSource() == saveBtn) {
             saveSettings();
+        } else if (actionEvent.getSource() == helpBtn) {
+            showHelp();
         }
+    }
+
+    private void showHelp() {
     }
 
     public void saveSettings() throws SQLException {
