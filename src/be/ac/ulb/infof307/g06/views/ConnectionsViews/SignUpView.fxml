@@ -43,12 +43,12 @@
                </GridPane.margin>
             </PasswordField>
             <PasswordField fx:id="passwordConfirmationField" alignment="CENTER" layoutX="469.0" layoutY="225.0" promptText="confirm password" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Button id="connectionBtn" fx:id="signUpBtn" mnemonicParsing="false" onAction="#signUpEvents" prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button id="connectionBtn" fx:id="signUpBtn" mnemonicParsing="false" onAction="#events" prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </Button>
-            <Button id="registerBtn" fx:id="backBtn" mnemonicParsing="false" onAction="#signUpEvents" prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="BACK" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="6">
+            <Button id="registerBtn" fx:id="backBtn" mnemonicParsing="false" onAction="#events" prefHeight="45.0" prefWidth="170.0" style="-fx-background-color: #4fc3f7;" text="BACK" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>

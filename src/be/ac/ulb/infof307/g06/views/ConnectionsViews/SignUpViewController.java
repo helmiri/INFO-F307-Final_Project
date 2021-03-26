@@ -45,7 +45,7 @@ public class SignUpViewController {
      * @throws IOException throws In and Out exceptions
      */
     @FXML
-    private void signUpEvents(ActionEvent event) throws IOException, SQLException {
+    private void events(ActionEvent event) throws IOException, SQLException {
         if( event.getSource()== signUpBtn)  { signUpConditions() ;}
         else if( event.getSource()== backBtn){ Main.showLoginScene();}
     }
@@ -82,7 +82,11 @@ public class SignUpViewController {
         alert.setTitle("Wrong enters");
         alert.setHeaderText(null);
         alert.getDialogPane().setMinWidth(900);
-        alert.setContentText("One of the sign up options is wrong:\n   - The last name and the first name must not contain any special characters\n   - The email Address must be a valid one: 'an.example@gmail.com'\n   - The username must not contain any special characters or spaces (8 to 16 chars)\n   - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)\n");
+        alert.setContentText("One of the sign up options is wrong:\n   " +
+                "- The last name and the first name must not contain any special characters\n   " +
+                "- The email Address must be a valid one: 'an.example@gmail.com'\n   " +
+                "- The username must not contain any special characters or spaces (8 to 16 chars)\n   " +
+                "- The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)\n");
         alert.showAndWait();
     }
 }

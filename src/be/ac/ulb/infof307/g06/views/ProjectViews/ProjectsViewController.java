@@ -269,22 +269,19 @@ public class ProjectsViewController implements Initializable {
 
     public void exportProject(){
         TreeItem<Project> selectedProject = getSelectedProject();
-        if(selectedProject!= null && selectedProject.getValue()!=null){
+        if(selectedProject!= null && selectedProject.getValue()!=null) {
             System.out.println(selectedProject.getValue().getTitle());
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File("src"));
             File selectedDirectory = directoryChooser.showDialog(new Stage());
-            if (selectedDirectory!=null) {
+            if (selectedDirectory != null) {
                 System.out.println(selectedDirectory.getAbsolutePath());
-
-                boolean succeed =controller.exportProject(selectedProject.getValue(),
+                boolean succeed = controller.exportProject(selectedProject.getValue(),
                         selectedDirectory.getAbsolutePath(),
-                        selectedDirectory.getAbsolutePath()+"/file.txt",
+                        selectedDirectory.getAbsolutePath() + "/file.txt",
                         selectedProject.getValue().getId());
                 Main.alertExport(succeed);
-
             }
-
         }
     }
     public void importProject() {

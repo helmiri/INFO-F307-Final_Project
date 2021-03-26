@@ -1,9 +1,6 @@
 package be.ac.ulb.infof307.g06.models;
 
-import java.util.List;
-
 public class Statistics {
-    Integer id;
     String title;
     String collaborators;
     String tasks;
@@ -17,7 +14,6 @@ public class Statistics {
         //this.realDate=finalDate;
         this.estimatedDate=estimatedDate;
     }
-
     public String getTitle() { return title; }
     public String getCollaborators() { return collaborators; }
     public String getTasks() { return tasks; }

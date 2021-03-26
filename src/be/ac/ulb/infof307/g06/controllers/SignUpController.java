@@ -9,19 +9,6 @@ import java.util.regex.Pattern;
 
 public class SignUpController {
     /**
-     * Validates the user's inputs according to a pattern given.
-     *
-     * @param field TextField
-     * @param pattern String
-     * @return boolean
-     */
-    public boolean validateTextField(TextField field, String pattern){
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(field.getText());
-        return m.matches();
-    }
-
-    /**
      * Sets an ID for the user added in the database.
      *
      * @return int UserID
@@ -46,5 +33,18 @@ public class SignUpController {
         UserInformations.setEmail(email);
         UserInformations.setUsername(username);
         UserInformations.setPasswd(password);
+    }
+
+    /**
+     * Validates the user's inputs according to a pattern given.
+     *
+     * @param field TextField
+     * @param pattern String
+     * @return boolean
+     */
+    public boolean validateTextField(TextField field, String pattern){
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(field.getText());
+        return m.matches();
     }
 }

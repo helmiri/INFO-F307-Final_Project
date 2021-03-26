@@ -1,5 +1,4 @@
 package be.ac.ulb.infof307.g06.views;
-
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.controllers.StatsController;
 import be.ac.ulb.infof307.g06.models.Statistics;
@@ -8,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import java.io.FileNotFoundException;;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StatsViewController implements Initializable {
@@ -44,9 +45,7 @@ public class StatsViewController implements Initializable {
      * @param resourceBundle;
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        controller.init(this, root);
-    }
+    public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(this, root); }
 
     /**
      * The main method for button's events
@@ -55,9 +54,10 @@ public class StatsViewController implements Initializable {
      * @throws Exception;
      */
     @FXML
-    private void buttonEvents(ActionEvent event) throws Exception {
+    private void events(ActionEvent event) throws Exception {
         if(event.getSource() == backToProjectMenu) { Main.showProjectMenuScene(); }
         else if(event.getSource() == logOutBtn) { Main.showLoginScene(); }
+        else if(event.getSource() == exportJSONBtn || event.getSource() ==exportCSVBtn){exports(event);}
     }
 
     /**
@@ -88,5 +88,26 @@ public class StatsViewController implements Initializable {
      */
     public void addChild(TreeItem<Statistics> parent, TreeItem<Statistics> child){
         parent.getChildren().add(child);
+    }
+
+    /**
+     * Executes the right export method
+     *
+     * @param event ActionEvent
+     * @throws FileNotFoundException
+     * @throws SQLException
+     */
+    public void exports(ActionEvent event) throws FileNotFoundException, SQLException {
+        String home = System.getProperty("user.home");
+        String path = home+ "\\Downloads";
+        String fileName = fileNameTextField.getText();
+        if(event.getSource() == exportJSONBtn) {
+            if (fileName.equals("")){ controller.exportStatsAsJson("\\Statistics.json",root); }
+            else{ controller.exportStatsAsJson("\\"+ fileName+".json",root); }
+        }
+        else if(event.getSource() == exportCSVBtn) {
+            if (fileName.equals("")){ controller.exportStatsAsCSV("\\Statistics.csv",path, root); }
+            else{ controller.exportStatsAsCSV("\\"+ fileName+".csv",path, root); }
+        }
     }
 }

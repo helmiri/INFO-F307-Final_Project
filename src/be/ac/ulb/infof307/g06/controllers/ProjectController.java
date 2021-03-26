@@ -374,7 +374,7 @@ public class ProjectController{
             Gson gson = new Gson();
             String projectString = gson.toJson(project);
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write("Project " + projectString + "\n");
+            fw.write("'Project' :" + projectString + ",\n");
             fw.close();
             return true;
         }
@@ -387,7 +387,7 @@ public class ProjectController{
             Gson gson = new Gson();
             String taskString = gson.toJson(task);
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write("Task " + taskString + "\n");
+            fw.write("'Task' :" + taskString + ",\n");
             fw.close();
             return true;
         }
@@ -400,7 +400,7 @@ public class ProjectController{
             Gson gson = new Gson();
             String tagString = gson.toJson(tag);
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write("Tag " + tagString + "\n");
+            fw.write("'Tag' :" + tagString + ",\n");
             fw.close();
             return true;
         }
