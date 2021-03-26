@@ -17,6 +17,10 @@ import java.util.List;
 
 public class Cloud {
 
+    public static void main(String[] args) throws IOException, DbxException, NoSuchAlgorithmException {
+        connect("1dmwFHhIn68AAAAAAAAAAWnTZgaV7cg_T72aWassPUk4EC7TFZr0iU4lW2tFhpqC", "INFOF307");
+        downloadFile("README.md", "/README.md");
+    }
 
     public static DbxClientV2 connect(String ACCESS_TOKEN, String clientidentifier) throws DbxException, IOException {
         // Create Dropbox client
@@ -65,10 +69,8 @@ public class Cloud {
         outputStream.close();
         File tempFile = new File(tempPath);
         File localFile = new File(localFilePath);
-        String tempHash = getFileChecksum(MessageDigest.getInstance("SHA-256"), tempFile);
-        String hash = getFileChecksum(MessageDigest.getInstance("SHA-256"), localFile);
 
-        if (hash.equals(tempHash)) {
+        if (metadata.getContentHash().equals(dropBoxHash(localFilePath))) {
             tempFile.delete();
             return 0;
         } else {
@@ -78,35 +80,20 @@ public class Cloud {
         }
     }
 
-    private static String getFileChecksum(MessageDigest digest, File file) throws IOException {
-        //Get file input stream for reading the file content
-        FileInputStream fis = new FileInputStream(file);
 
-        //Create byte array to read data in chunks
-        byte[] byteArray = new byte[4096];
-        int bytesCount = 0;
-
-        //Read file data and update in message digest
-        while ((bytesCount = fis.read(byteArray)) != -1) {
-            digest.update(byteArray, 0, bytesCount);
+    private static String dropBoxHash(String file) {
+        MessageDigest hasher = new DropBoxContentHasher();
+        byte[] buf = new byte[1024];
+        try (InputStream in = new FileInputStream(file)) {
+            while (true) {
+                int n = in.read(buf);
+                if (n < 0) break;  // EOF
+                hasher.update(buf, 0, n);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        ;
-
-        //close the stream; We don't need it now.
-        fis.close();
-
-        //Get the hash's bytes
-        byte[] bytes = digest.digest();
-
-        //This bytes[] has bytes in decimal format;
-        //Convert it to hexadecimal format
-        StringBuilder sb = new StringBuilder();
-        for (byte aByte : bytes) {
-            sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-        }
-
-        //return complete hash
-        return sb.toString();
+        return DropBoxContentHasher.hex(hasher.digest());
     }
 
 }
