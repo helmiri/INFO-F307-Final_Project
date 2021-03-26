@@ -9,10 +9,15 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
+import com.google.gson.Gson;
+import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
+
+import java.io.File;
+import java.io.FileWriter;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -22,6 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import be.ac.ulb.infof307.g06.Main;
+import org.rauschig.jarchivelib.ArchiveFormat;
+import org.rauschig.jarchivelib.Archiver;
+import org.rauschig.jarchivelib.ArchiverFactory;
+import org.rauschig.jarchivelib.CompressionType;
+
+import java.util.ArrayList;
+
 
 public class ProjectController{
 
@@ -30,10 +45,10 @@ public class ProjectController{
         Global.root = root;
         view.initTree();
         try {
-            ProjectDB.createTag("tag1",0);
-            ProjectDB.createTag("tag2",0);
-            ProjectDB.createTag("tag3",0);
-            //initComboBox();
+            ProjectDB.createTag("tag1","#4287f5");
+            ProjectDB.createTag("tag2","#ffffff");
+            ProjectDB.createTag("tag3","#000000");
+
             view.clearProjects();
             Global.TreeMap.clear();
 
@@ -45,6 +60,45 @@ public class ProjectController{
         }
     }
 
+    public void initCollaborators (ProjectsViewController view) throws SQLException{
+        ObservableList<String> names = FXCollections.observableArrayList();
+        List<Integer> collaborators = ProjectDB.getCollaborators(view.getSelectedProject().getValue().getId());
+        for (Integer collaborator : collaborators) {
+            names.add((UserDB.getUserInfo(collaborator).get("uName")));
+        }
+        view.insertCollaborator(names);
+    }
+
+    public void initTaskCollaborators (ProjectsViewController view, Task task) throws SQLException{
+        if (task != null) {
+            ObservableList<String> names = FXCollections.observableArrayList();
+            List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
+            for (Integer collaborator : collaborators) {
+                names.add((UserDB.getUserInfo(collaborator).get("uName")));
+            }
+            view.insertTaskCollaborators(names);
+        }
+    }
+
+    public List<String> getCheckedCollaborators (ProjectsViewController view, Task task) throws SQLException{
+        ObservableList<String> checked = FXCollections.observableArrayList();
+        List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
+        for (Integer collaborator : collaborators) {
+            checked.add((UserDB.getUserInfo(collaborator).get("uName")));
+        }
+        return checked;
+    }
+
+    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask, int project_id) throws SQLException{
+        for (String collaborator : collaborators){
+            ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
+        }
+    }
+
+    public void deleteTaskCollaborator(String collaborator, Task selectedTask) throws SQLException{
+        ProjectDB.deleteTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
+    }
+
     public void initComboBox(ProjectInputViewController inputView) throws SQLException{
 
         final ObservableList<String> tags = FXCollections.observableArrayList();
@@ -53,6 +107,14 @@ public class ProjectController{
             tags.add(tag.getDescription());
         }
         inputView.addTags(tags);
+    }
+    public void initProjectExport(ProjectInputViewController inputView) throws SQLException{
+        final ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
+        List<Integer> ProjectIDList = ProjectDB.getUserProjects(Global.userID);
+        for (Integer projectID : ProjectIDList) {
+            projectsTitleList.add(ProjectDB.getProject(projectID).getTitle());
+        }
+        //inputView.addProjectTitle(projectsTitleList);//i
     }
 
     /**
@@ -80,6 +142,7 @@ public class ProjectController{
             }
         }
         Global.projectsView.refresh();
+
     }
 
     public void addProject(ProjectInputViewController addView) throws SQLException{
@@ -152,6 +215,12 @@ public class ProjectController{
 
 
     public void editTask(String description, String newDescription, Task task) throws SQLException {
+        List<Task> tasks = ProjectDB.getTasks(task.getProjectID());
+        List<String> taskNames = new ArrayList<>();
+        for (Task task2 : tasks) {
+            taskNames.add(task2.getDescription());
+        }
+        if (taskNames.contains(newDescription)){Global.projectsView.showAlert("Task already exists");return;}
         if (newDescription.equals("")){deleteTask(task);}
         else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
         Global.projectsView.displayTask();
@@ -165,6 +234,12 @@ public class ProjectController{
      */
     public void addTask(String taskDescription, String taskParent) throws Exception, SQLException {
         //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
+        List<Task> tasks = ProjectDB.getTasks(ProjectDB.getProjectID(taskParent));
+        List<String> taskNames = new ArrayList<>();
+        for (Task task : tasks) {
+            taskNames.add(task.getDescription());
+        }
+        if (taskNames.contains(taskDescription)){Global.projectsView.showAlert("Task already exists");return;}
         if (!taskParent.equals("") || ProjectDB.getProjectID(taskParent) != 0) {
             int projectID = ProjectDB.getProjectID(taskParent);
             ProjectDB.createTask(taskDescription, projectID);
@@ -244,8 +319,100 @@ public class ProjectController{
         if (ProjectDB.getCollaborators(project).contains(receiverID)){return true;}
         UserDB.sendInvitation(project, Global.userID, receiverID);
         return true;
+
     }
+
 
     public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
 
+    public boolean exportProject(Project project,String path, String filetxt,int id){
+            final int ID = project.getId();
+            save(project,filetxt);
+            try {
+                final List<Task> tasks = ProjectDB.getTasks(ID);
+                for (Task task : tasks) {
+                    save(task, filetxt);
+                }
+                final List<Tag> tags = ProjectDB.getTags(ID);
+                for (Tag tag : tags) {
+                    save(tag, filetxt);
+                }
+                final List<Integer> subProjects = ProjectDB.getSubProjects(id);
+                for (Integer sub : subProjects) {
+                    exportProject(ProjectDB.getProject(sub),path,filetxt,id);
+                }
+                if (ID == id) {
+                    System.out.println("ajaja");
+                    zip(project.getTitle(),filetxt, path);
+                }
+                return true;
+            }
+            catch(Exception ignored) {return false;}
+
+    }
+
+
+
+    public static boolean zip(String archiveName, String source, String destination) {
+        try {
+            File src = new File(source);
+            File dest = new File(destination);
+            Archiver archiver =
+                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+            archiver.create(archiveName, dest, src);
+            System.out.println("test");
+            return true;
+        }catch (Exception ignored) {return false;}
+    }
+
+    public static boolean unzip(final String source, final String destination){
+        try {
+            Archiver archiver =
+                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+            File archive = new File(source);
+            File dest = new File(destination);
+            System.out.println("WARNINGS are normal");
+            archiver.extract(archive, dest); // WARNING OK
+            return true;
+        }catch (Exception ignored) {return false;}
+    }
+
+    // title, description, date, parent_id
+    public static boolean save(final Project project, final String fileName) {
+        try {
+            Gson gson = new Gson();
+            String projectString = gson.toJson(project);
+            FileWriter fw = new FileWriter(fileName, true);
+            fw.write("Project " + projectString + "\n");
+            fw.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+
+    // title, description, date, parent_id
+    public static boolean save(final Task task, final String fileName) {
+        try {
+            Gson gson = new Gson();
+            String taskString = gson.toJson(task);
+            FileWriter fw = new FileWriter(fileName, true);
+            fw.write("Task " + taskString + "\n");
+            fw.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+
+    // title, description, date, parent_id
+    public static boolean save(final Tag tag, final String fileName) {
+        try {
+            Gson gson = new Gson();
+            String tagString = gson.toJson(tag);
+            FileWriter fw = new FileWriter(fileName, true);
+            fw.write("Tag " + tagString + "\n");
+            fw.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
 }

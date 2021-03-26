@@ -12,6 +12,7 @@ import java.util.Map;
  *  A class that contains globals variables
  */
 public class Global {
+    //-------------- ATTRIBUTES ----------------
     //Sign up variables
     public static String firstName;
     public static String lastName;
@@ -23,7 +24,7 @@ public class Global {
     public static ProjectsViewController projectsView;
     //Edit project's name
     public static String currentProject;
-
+    public static Task selectedTask;
     //The user ID
     public static int userID;
 
@@ -36,6 +37,9 @@ public class Global {
     public static String popupProjectTitle;
     public static String popupProjectDescription;
     public static String popupSenderUsername;
+
+    public static String popupTaskTitle;
+    public static String popupTaskNewName;
 
 }
 

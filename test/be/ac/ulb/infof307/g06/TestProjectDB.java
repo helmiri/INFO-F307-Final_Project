@@ -164,28 +164,28 @@ class TestProjectDB {
 
     @Test
     void createTag() throws SQLException {
-        int id = ProjectDB.createTag("tag1", 0);
+        int id = ProjectDB.createTag("tag1", "#ffffff");
         assertEquals("tag1", ProjectDB.getTag(id).getDescription());
     }
 
     @Test
     void editTag() throws SQLException {
-        int id = ProjectDB.createTag("tag1", 0);
-        ProjectDB.editTag(id, "newtag1", 1);
+        int id = ProjectDB.createTag("tag1", "#ffffff");
+        ProjectDB.editTag(id, "newtag1", "#ffffff");
         assertEquals("newtag1", ProjectDB.getTag(id).getDescription());
     }
 
     @Test
     void deleteTag() throws SQLException {
-        int id = ProjectDB.createTag("tag1", 0);
+        int id = ProjectDB.createTag("tag1", "#ffffff");
         ProjectDB.deleteTag(id);
         assertNull(ProjectDB.getTag(id));
     }
 
     @Test
     void addTag() throws SQLException {
-        int id1 = ProjectDB.createTag("tag1", 0);
-        int id2 = ProjectDB.createTag("tag2", 0);
+        int id1 = ProjectDB.createTag("tag1", "#ffffff");
+        int id2 = ProjectDB.createTag("tag2", "#ffffff");
         ProjectDB.addTag(id1, 1);
         ProjectDB.addTag(id2, 1);
 
@@ -199,9 +199,9 @@ class TestProjectDB {
 
     @Test
     void editTags() throws SQLException {
-        int id1 = ProjectDB.createTag("tag1", 0);
-        int id2 = ProjectDB.createTag("tag2", 0);
-        int id3 = ProjectDB.createTag("tag3", 0);
+        int id1 = ProjectDB.createTag("tag1", "#ffffff");
+        int id2 = ProjectDB.createTag("tag2", "#ffffff");
+        int id3 = ProjectDB.createTag("tag3", "#ffffff");
         ProjectDB.addTag(id1, 1);
         ProjectDB.addTag(id2, 1);
         List<Integer> newTags = new ArrayList<>(Arrays.asList(id1,id3));
@@ -218,8 +218,8 @@ class TestProjectDB {
     @Test
     void removeTag() throws SQLException, IOException, ClassNotFoundException {
         setUp();
-        int id1 = ProjectDB.createTag("tag1", 0);
-        int id2 = ProjectDB.createTag("tag2", 0);
+        int id1 = ProjectDB.createTag("tag1", "#ffffff");
+        int id2 = ProjectDB.createTag("tag2", "#ffffff");
         ProjectDB.addTag(id1, 1);
         ProjectDB.addTag(id2, 1);
         ProjectDB.removeTag(1, id1);
@@ -234,9 +234,9 @@ class TestProjectDB {
     @Test
     void getAllTags() throws SQLException, IOException, ClassNotFoundException {
         setUp();
-        int id1 = ProjectDB.createTag("tag1", 0);
-        int id2 = ProjectDB.createTag("tag2", 0);
-        int id3 = ProjectDB.createTag("tag3", 0);
+        int id1 = ProjectDB.createTag("tag1", "#ffffff");
+        int id2 = ProjectDB.createTag("tag2", "#ffffff");
+        int id3 = ProjectDB.createTag("tag3", "#ffffff");
         ProjectDB.addTag(id1, 1);
         ProjectDB.addTag(id2, 1);
         List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag2", "tag3"));

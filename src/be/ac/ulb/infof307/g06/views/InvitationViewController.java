@@ -9,34 +9,41 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
 public class InvitationViewController implements Initializable {
-    //------------INVITATION--------------
-
+    //-------------- ATTRIBUTES ----------------
     @FXML
     private Button acceptBtn;
     @FXML
     private Button declineBtn;
     @FXML
+    private TextField descriptionTextField;
+    @FXML
     private TextField senderNameTextField;
     @FXML
     private TextField projectNameTextField;
-    @FXML
-    private TextField descriptionTextField;
-
+    //--------------- METHODS ----------------
+    /**
+     * Launchs the initFields method.
+     *
+     * @param url URL
+     * @param resourceBundle ResourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        try{
-            initFields();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        try{ initFields(); }
+        catch (SQLException throwables) { throwables.printStackTrace();}
     }
+
+    /**
+     * Initializes the fields related to the edition of a project.
+     *
+     * @throws SQLException throws SQLException
+     */
     @FXML
     public void initFields() throws SQLException {
         String projectName = Global.popupProjectTitle;
@@ -47,6 +54,12 @@ public class InvitationViewController implements Initializable {
         descriptionTextField.setText(projectDescription);
     }
 
+    /**
+     * The main method for button's events.
+     *
+     * @param event ActionEvent
+     * @throws SQLException throws SQLException
+     */
     @FXML
     public void events(ActionEvent event) throws SQLException {
         if(event.getSource() == acceptBtn){
@@ -59,11 +72,21 @@ public class InvitationViewController implements Initializable {
         }
     }
 
+    /**
+     * Accepts an invitation.
+     *
+     * @throws SQLException throws SQLException
+     */
     public void acceptInvitation() throws SQLException{
         ProjectDB.addCollaborator(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
         UserDB.removeInvitation(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
     }
 
+    /**
+     * Declines an invitation.
+     *
+     * @throws SQLException throws SQLException
+     */
     public void declineInvitation()throws SQLException{
         UserDB.removeInvitation(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
     }

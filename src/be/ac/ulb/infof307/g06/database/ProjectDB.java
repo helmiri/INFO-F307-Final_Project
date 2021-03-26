@@ -46,8 +46,6 @@ public class ProjectDB extends Database {
             id = 1;
         }
 
-
-
         state.execute("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
         id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
         if (parent_id != 0){    // Add the parent tags to the current tags
@@ -170,6 +168,8 @@ public class ProjectDB extends Database {
         return res;
     }
 
+    // ---------------- COLLABORATORS ----------------
+
     public static void addCollaborator(int project_id, int user_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
@@ -222,6 +222,8 @@ public class ProjectDB extends Database {
         return res;
     }
 
+    // ---------------TASKS --------------
+
     public static int createTask(String description, int project_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
@@ -247,7 +249,14 @@ public class ProjectDB extends Database {
 
     public static void editTask(String prev_description, String new_description, int project_id) throws SQLException{
         Statement state = connect();
-        state.execute("UPDATE Task SET description = '" + new_description + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
+        List<Task> tasks = getTasks(project_id);
+        List<String> taskNames = new ArrayList<>();
+        for (Task task : tasks) {
+            taskNames.add(task.getDescription());
+        }
+        if (!taskNames.contains(new_description)) {
+            state.execute("UPDATE Task SET description = '" + new_description + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
+        }
         close(state);
     }
 
@@ -262,8 +271,8 @@ public class ProjectDB extends Database {
         ResultSet rs = null;
         Task res;
         try {
-            rs = state.executeQuery("SELECT description FROM Task WHERE id='" + id + "';");
-            res = new Task(rs.getString("description"), id);
+            rs = state.executeQuery("SELECT id, description FROM Task WHERE id='" + id + "';");
+            res = new Task(rs.getInt("id"),rs.getString("description"), id);
         }catch (Exception e){
             res = null;
         }
@@ -273,11 +282,11 @@ public class ProjectDB extends Database {
 
     public static List<Task> getTasks(int project_id) throws SQLException{
         Statement state = connect();
-        ResultSet rs = state.executeQuery("SELECT description FROM Task WHERE project_id='" + project_id + "';");
+        ResultSet rs = state.executeQuery("SELECT id, description FROM Task WHERE project_id='" + project_id + "';");
         List<Task> res = new ArrayList<>();
 
         while (rs.next()){
-            res.add(new Task(rs.getString("description"), project_id));
+            res.add(new Task(rs.getInt("id"),rs.getString("description"), project_id));
         }
         close(state, rs);
         return res;
@@ -292,7 +301,46 @@ public class ProjectDB extends Database {
         return res;
     }
 
-    public static int createTag(String description, int color) throws SQLException {
+    public static void addTaskCollaborator(int task_id, int user_id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = null;
+        if (!getTaskCollaborator(task_id).contains(user_id)){
+            state.execute("INSERT INTO tasks_users (task_id, user_id) VALUES ('" + task_id + "','" + user_id + "');");
+        }
+        close(rs, state);
+    }
+
+    public static void deleteTaskCollaborator(int task_id, int user_id) throws SQLException{
+        Statement state = connect();
+        state.execute("DELETE FROM tasks_users WHERE task_id = '" + task_id + "' and user_id = '" + user_id + "';");
+        close(state);
+    }
+
+    public static List<Integer> getTaskCollaborator(int task_id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT user_id FROM tasks_users WHERE task_id='" + task_id + "';");
+        List<Integer> res = new ArrayList<>();
+        while (rs.next()) {
+            res.add(rs.getInt("user_id"));
+        }
+        close(rs, state);
+        return res;
+    }
+
+    public static List<Task> getUserTasks(int user_id) throws SQLException {
+        Statement state = connect();
+        ResultSet rs = state.executeQuery("SELECT task_id FROM tasks_users WHERE user_id='" + user_id + "';");
+        List<Task> res = new ArrayList<>();
+        while (rs.next()) {
+            res.add(getTask(rs.getInt("task_id")));
+        }
+        close(rs, state);
+        return res;
+    }
+
+    // ----------- TAGS ---------------
+
+    public static int createTag(String description, String color) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
         int id = 0;
@@ -315,7 +363,7 @@ public class ProjectDB extends Database {
         return id;
     }
 
-    public static void editTag(int id, String description, int color) throws SQLException{
+    public static void editTag(int id, String description, String color) throws SQLException{
         Statement state = connect();
         state.execute("UPDATE Tag SET description = '" + description +"', color = '" + color + "' WHERE id = '" + id + "';");
         close(state);
@@ -333,7 +381,7 @@ public class ProjectDB extends Database {
         Tag res;
         try {
         rs = state.executeQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
-        res = new Tag(id, rs.getString("description"), rs.getInt("color"));
+        res = new Tag(id, rs.getString("description"), rs.getString("color"));
 
         }catch (Exception e){
             res = null;
@@ -348,7 +396,7 @@ public class ProjectDB extends Database {
         ResultSet rs = state.executeQuery("SELECT id, description, color FROM Tag;");
         List<Tag> res = new ArrayList<>();
         while (rs.next()){
-            res.add(new Tag(rs.getInt("id"), rs.getString("description"), rs.getInt("color")));
+            res.add(new Tag(rs.getInt("id"), rs.getString("description"), rs.getString("color")));
         }
         close(state, rs);
         return res;

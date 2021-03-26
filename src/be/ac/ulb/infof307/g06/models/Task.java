@@ -1,12 +1,23 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class Task {
+    //-------------- ATTRIBUTES ----------------
+    int id;
     String description;
     int projectID;
 
-    public Task(String description, int id) {
+    //-------------- METHODS ----------------
+    /**
+     * Constructor.
+     *
+     * @param id int
+     * @param description String
+     * @param projectID int
+     */
+    public Task(int id, String description, int projectID) {
+        this.id = id;
         this.description = description;
-        this.projectID = id;
+        this.projectID = projectID;
     }
 
     public String getDescription() {
@@ -20,4 +31,5 @@ public class Task {
     public int getSize() {
         return description.length() + 4;
     }
+    public int getId() { return id; }
 }

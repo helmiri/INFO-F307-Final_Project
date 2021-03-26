@@ -6,13 +6,20 @@ import javafx.scene.control.Button;
 import java.sql.SQLException;
 
 public class AddProjectViewController extends ProjectInputViewController{
+    //-------------- ATTRIBUTE ----------------
     @FXML
     private Button addProjectBtn;
 
+    //--------------- METHOD ----------------
+    /**
+     * The main method for button's events
+     *
+     * @param event ActionEvent
+     * @throws SQLException throws SQLException
+     */
     @Override
     protected void events(ActionEvent event) throws SQLException {
         if (event.getSource() == addProjectBtn) {
-            System.out.println("test");
             controller.addProject(this);
         }
     }
