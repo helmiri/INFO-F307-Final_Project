@@ -6,11 +6,13 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class Main extends Application {
     private static Stage primaryStage;
@@ -172,9 +174,8 @@ public class Main extends Application {
     public static void showMainMenuScene() throws Exception {
 
         // First launch popup after signing up. User is the administrator by default
-        // Prompt disk limit choice.
         if (firstBoot) {
-            UserDB.setAdmin(999);
+            UserDB.setAdmin(firstBootPopup() * 1000000);
         }
 
         // Set main stage
@@ -276,14 +277,33 @@ public class Main extends Application {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Invitation");
         stage.setScene(new Scene(invitationAnchor, 541, 473));
-        stage.centerOnScreen();;
+        stage.centerOnScreen();
+        ;
         stage.setResizable(false);
         stage.show();
 
     }
 
-    public static void closeStage(){ stage.close(); }
+    public static void closeStage() {
+        stage.close();
+    }
 
+    public static Integer firstBootPopup() {
+        TextInputDialog dialog = new TextInputDialog("256");
+        dialog.setTitle("First Boot");
+        dialog.setHeaderText("You've been assigned as the administrator. " +
+                "Please set a Memory limit that will be applied to all users");
 
-    public static void main(String[] args) { launch(args); }
+        Optional<String> result = dialog.showAndWait();
+
+        String res = result.get();
+        if (res.isBlank()) {
+            res = "256";
+        }
+        return Integer.parseInt(res);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
