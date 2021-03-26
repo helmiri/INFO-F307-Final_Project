@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="windows">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/javafx/windows/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/javafx/windows/lib" recursive="false" />
+  </library>
+</component>
