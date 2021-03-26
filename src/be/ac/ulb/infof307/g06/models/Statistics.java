@@ -1,13 +1,23 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class Statistics {
+    //-------------- ATTRIBUTES ----------------
     String title;
     String collaborators;
     String tasks;
     String finalDate;
     String estimatedDate;
-
-    public Statistics(Integer id,String title,String collaborators,String tasks,String estimatedDate){
+    //-------------- METHODS ----------------
+    /**
+     * Constructor.
+     *
+     * @param id int
+     * @param title int
+     * @param collaborators String
+     * @param tasks String
+     * @param estimatedDate String
+     */
+    public Statistics(Integer id, String title, String collaborators, String tasks, String estimatedDate){
         this.title=title;
         this.collaborators=collaborators;
         this.tasks=tasks;

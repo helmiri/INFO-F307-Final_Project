@@ -1,12 +1,14 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class UserInformations {
+    //-------------- ATTRIBUTES ----------------
     private static String firstName;
     private static String lastName;
     private static String email;
     private static String username;
     private static String passwd;
 
+    //-------------- METHODS ----------------
     public static String getFirstName() { return firstName; }
     public static String getLastName() { return lastName; }
     public static String getEmail() { return email; }

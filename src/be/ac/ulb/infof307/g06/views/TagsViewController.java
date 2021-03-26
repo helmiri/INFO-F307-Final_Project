@@ -29,22 +29,23 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class TagsViewController {
-    //---------DEFAULT TAGS---------
-    @FXML
-    private ColorPicker tagsColorPicker;
-    @FXML
-    private TextField defaultTagNameTextField;
+    //-------------- ATTRIBUTES ----------------
     @FXML
     private Button backBtn;
     @FXML
     private Button addBtn;
     @FXML
+    private ColorPicker tagsColorPicker;
+    @FXML
+    private TextField defaultTagNameTextField;
+    @FXML
     private TableView<Tag> defaultTagsTableView;
     @FXML
     private TableColumn<Tag, String> defaultTagsColumn;
 
+    //--------------- METHODS ----------------
     @FXML
-    private void tagsEvent(ActionEvent event) throws Exception{
+    private void events(ActionEvent event) throws Exception{
         if(event.getSource() == backBtn) {
             Main.showSettingsMenuScene();
         }

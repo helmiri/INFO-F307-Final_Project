@@ -11,6 +11,7 @@ import java.util.Map;
  *  A class that contains globals variables
  */
 public class Global {
+    //-------------- ATTRIBUTES ----------------
     public static TreeItem<Project> root;
     public static ProjectsViewController projectsView;
     //Edit project's name

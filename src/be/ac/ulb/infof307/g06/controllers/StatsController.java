@@ -215,7 +215,6 @@ public class StatsController {
         }
     }
 
-
     /**
      * Exports the statistics in CSV file.
      *

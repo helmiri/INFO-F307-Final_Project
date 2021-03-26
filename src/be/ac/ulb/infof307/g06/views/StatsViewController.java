@@ -1,4 +1,5 @@
 package be.ac.ulb.infof307.g06.views;
+
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.controllers.StatsController;
 import be.ac.ulb.infof307.g06.models.Statistics;
@@ -48,8 +49,7 @@ public class StatsViewController implements Initializable {
     private final StatsController controller= new StatsController();
     //--------------- METHODS ----------------
     /**
-     * Initializes the tree table view for the statistics of the project +
-     * loads user's projects and initializes the map.
+     * Lauchs init method from the controller.
      *
      * @param url;
      * @param resourceBundle;
@@ -58,7 +58,7 @@ public class StatsViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(this, root); }
 
     /**
-     * The main method for button's events
+     * The main method for button's events.
      *
      * @param event;
      * @throws Exception;
@@ -71,7 +71,7 @@ public class StatsViewController implements Initializable {
     }
 
     /**
-     * Initializes the tree table with values
+     * Initializes the tree table with values.
      */
     @FXML
     public void initTree() {
@@ -84,14 +84,14 @@ public class StatsViewController implements Initializable {
     }
 
     /**
-     * Shows root in the tree table view
+     * Shows root in the tree table view.
      *
      * @param root TreeItem<Statistics>
      */
     public void expandRoot(TreeItem<Statistics> root){root.setExpanded(true);}
 
     /**
-     * Adds a child to the related parent in the TreeTableView
+     * Adds a child to the related parent in the TreeTableView.
      *
      * @param parent TreeItem<Statistics>
      * @param child TreeItem<Statistics>
@@ -101,7 +101,7 @@ public class StatsViewController implements Initializable {
     }
 
     /**
-     * Executes the right export method
+     * Executes the right export method.
      *
      * @param event ActionEvent
      * @throws FileNotFoundException

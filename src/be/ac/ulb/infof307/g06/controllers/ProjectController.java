@@ -8,18 +8,14 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import com.google.gson.Gson;
-import com.sun.source.tree.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -69,8 +65,16 @@ public class ProjectController{
         view.insertCollaborator(names);
     }
 
-    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask, int project_id) throws SQLException{
-        for (Integer c: ProjectDB.getCollaborators(project_id)){
+    /**
+     *
+     *
+     * @param collaborators ObservableList<String>
+     * @param selectedTask Task
+     * @param projectId int
+     * @throws SQLException
+     */
+    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask, int projectId) throws SQLException{
+        for (Integer c: ProjectDB.getCollaborators(projectId)){
             ProjectDB.deleteTaskCollaborator(selectedTask.getId(), c);
         }
         for (String collaborator : collaborators){
@@ -439,6 +443,13 @@ public class ProjectController{
         }catch (Exception ignored) {return false;}
     }
 
+    /**
+     * Saves project.
+     *
+     * @param project Project
+     * @param fileName String
+     * @return boolean
+     */
     // title, description, date, parent_id
     public static boolean save(final Project project, final String fileName) {
         try {
@@ -452,6 +463,13 @@ public class ProjectController{
         catch(Exception ignored) {return false;}
     }
 
+    /**
+     * Saves task.
+     *
+     * @param task Project
+     * @param fileName String
+     * @return boolean
+     */
     // title, description, date, parent_id
     public static boolean save(final Task task, final String fileName) {
         try {
@@ -465,6 +483,13 @@ public class ProjectController{
         catch(Exception ignored) {return false;}
     }
 
+    /**
+     * Saves tag.
+     *
+     * @param tag Project
+     * @param fileName String
+     * @return boolean
+     */
     // title, description, date, parent_id
     public static boolean save(final Tag tag, final String fileName) {
         try {
@@ -477,6 +502,13 @@ public class ProjectController{
         }
         catch(Exception ignored) {return false;}
     }
+
+    /**
+     *
+     *
+     * @param fileTxt String
+     * @return boolean
+     */
     public static boolean isProjectInDb(String fileTxt){
         try {
             File file = new File(fileTxt);
@@ -498,7 +530,14 @@ public class ProjectController{
         } catch (Exception e) {return false;}
 
     }
-    public static boolean isValideFile( String fileTxt){
+
+    /**
+     * Checks if the file is valid.
+     *
+     * @param fileTxt String
+     * @return boolean : true if the file is valid or false if is not.
+     */
+    public static boolean isValidFile( String fileTxt){
         try {
             File file = new File(fileTxt);
             Scanner reader = new Scanner(file);
@@ -528,9 +567,16 @@ public class ProjectController{
         } catch (Exception e) {return false;}
 
     }
-    public static boolean deleteFile(final String FileName) {
+
+    /**
+     *
+     *
+     * @param fileName String
+     * @return boolean
+     */
+    public static boolean deleteFile(final String fileName) {
         try {
-            File myObj = new File(FileName);
+            File myObj = new File(fileName);
             if (myObj.delete()) {return true;}
             else {return false;}
         }

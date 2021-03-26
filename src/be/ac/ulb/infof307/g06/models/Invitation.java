@@ -1,18 +1,25 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class Invitation {
+    //-------------- ATTRIBUTES ----------------
     int id;
-    int project_id;
-    int sender_id;
-    int receiver_id;
-    public Invitation(int id, int project_id, int sender_id, int receiver_id) {
+    int projectId;
+    int senderId;
+    int receiverId;
+    //-------------- METHODS ----------------
+    /**
+     * Constructor.
+     *
+     * @param id int
+     * @param projectId int
+     * @param senderId int
+     * @param receiverId int
+     */
+    public Invitation(int id, int projectId, int senderId, int receiverId) {
         this.id = id;
-        this.project_id = project_id;
-        this.sender_id = sender_id;
-        this.receiver_id = receiver_id;
-    }
-    public int getId() {
-        return id;
+        this.projectId = projectId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 
     public int getId() { return id; }

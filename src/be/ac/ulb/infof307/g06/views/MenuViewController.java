@@ -48,26 +48,29 @@ public class MenuViewController implements Initializable {
     private Button backBtn;
     private MainController controller;
 
-    public void showInvitation(int project_id, int sender_id)throws java.lang.Exception{
-        Project project = ProjectDB.getProject(project_id);
-        Global.popupProjectTitle = project.getTitle();
-        Global.popupProjectDescription = project.getDescription();
-        Global.popupSenderUsername = UserDB.getUserInfo(sender_id).get("uName");
-        Main.showInvitationStage();
-    }
-
+    //--------------- METHODS ----------------
+    /**
+     * Initializes the controller and checks the invitations.
+     *
+     * @param url URL
+     * @param resourceBundle ResourceBundle
+     */
     public void initialize(URL url, ResourceBundle resourceBundle){
         controller = new MainController();
         controller.init(this);
         try {
             controller.checkInvites();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * The main method for button's events.
+     *
+     * @param event ActionEvent
+     * @throws SQLException throws SQLException
+     */
     @FXML
     private void events(ActionEvent event) throws Exception {
         if (event.getSource() == projectAccessBtn) { Main.showProjectMenuScene(); }
@@ -81,5 +84,20 @@ public class MenuViewController implements Initializable {
         else if (event.getSource() == tagsBtn) { Main.showTagsMenu(); }
         else if (event.getSource() == languageBtn) { System.out.println("test language button"); }
         else if (event.getSource() == backBtn) { Main.showMainMenuScene(); }
+    }
+
+    /**
+     * Shows invitation popup.
+     *
+     * @param projectId int
+     * @param senderId int
+     * @throws java.lang.Exception throws Exception
+     */
+    public void showInvitation(int projectId, int senderId)throws java.lang.Exception{
+        Project project = ProjectDB.getProject(projectId);
+        Global.popupProjectTitle = project.getTitle();
+        Global.popupProjectDescription = project.getDescription();
+        Global.popupSenderUsername = UserDB.getUserInfo(senderId).get("uName");
+        Main.showInvitationStage();
     }
 }
