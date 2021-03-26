@@ -45,15 +45,17 @@ public class SignUpViewController {
 
     @FXML
     private void signUpEvents(ActionEvent event) throws Exception{
-        if( event.getSource()== signUpBtn)  { signUpConditions()        ;}
-        if( event.getSource()== acceptConditionsBtn){
-            if(acceptConditionsBox.isSelected()){
+        if (event.getSource() == signUpBtn) {
+            signUpConditions();
+        }
+        if (event.getSource() == acceptConditionsBtn) {
+            if (acceptConditionsBox.isSelected()) {
                 Global.userID = UserDB.addUser(Global.firstName, Global.lastName, Global.userName, Global.email, Global.passwd);
-                Main.closeConditionsStage();
                 Main.showMainMenuScene();
             }
+        } else if (event.getSource() == backBtn) {
+            Main.showLoginScene();
         }
-        else if( event.getSource()== backBtn){ Main.showLoginScene();}
     }
 
     /**

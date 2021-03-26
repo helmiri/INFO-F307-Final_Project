@@ -7,22 +7,15 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
-
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
-
-
-import java.io.File;
 
 public class Main extends Application {
     private static Stage primaryStage;
@@ -188,7 +181,7 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showMainMenuScene() throws IOException {
+    public static void showMainMenuScene() throws IOException, SQLException {
 
         // First launch popup after signing up. User is the administrator by default
         if (firstBoot) {
@@ -379,8 +372,6 @@ public class Main extends Application {
     /**
      * Closes the actual stage.
      */
-    public static void closeStage(){ stage.close(); }
-    public static void main(String[] args) { launch(args); }
     public static void closeStage() {
         stage.close();
     }

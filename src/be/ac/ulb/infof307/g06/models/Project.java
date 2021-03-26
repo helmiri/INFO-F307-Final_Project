@@ -37,9 +37,6 @@ public class Project {
         return date;
     }
 
-    public int getParent_id() {
-        return parent_id;
-    }
 
     public int getSize() {
         int res = 0;
@@ -53,8 +50,6 @@ public class Project {
         return res;
     }
     public int getId() { return id; }
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public Long getDate() { return date; }
+
     public int getParent_id() { return projectId; }
 }
