@@ -23,6 +23,35 @@ public class Main extends Application {
     private static Stage stage;
     private static boolean firstBoot;
 
+    public static void showCloudSetting() throws IOException {
+        primaryStage.setHeight(940);
+        primaryStage.setWidth(1515);
+        primaryStage.centerOnScreen();
+
+        // Load the fxml
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/CloudSettings.fxml"));
+
+        // Setup the new stage
+        AnchorPane tagsMenuAnchor = loader.load();
+        mainLayout.getChildren().setAll(tagsMenuAnchor);
+        primaryStage.setResizable(false);
+    }
+
+    public static void showCloudDownload() throws IOException {
+
+        primaryStage.centerOnScreen();
+
+        // Load the fxml
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/ProjectViews/CloudTable.fxml"));
+
+        // Setup the new stage
+        AnchorPane tagsMenuAnchor = loader.load();
+        mainLayout.getChildren().setAll(tagsMenuAnchor);
+        primaryStage.setResizable(false);
+    }
+
     /**
      * Starts the main window
      *
@@ -217,6 +246,7 @@ public class Main extends Application {
         primaryStage.setWidth(1515);
         primaryStage.centerOnScreen();
 
+
         // Load the fxml
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/ProjectMenu.fxml"));
@@ -279,7 +309,7 @@ public class Main extends Application {
         stage.setTitle("Edit project");
         stage.setScene(new Scene(conditionsAnchor, 541, 473));
         stage.centerOnScreen();
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
     }
     public static void showEditTaskStage() throws Exception{
