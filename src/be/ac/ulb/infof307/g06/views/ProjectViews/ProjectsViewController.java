@@ -23,8 +23,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -87,8 +93,8 @@ public class ProjectsViewController implements Initializable {
     //---------Import--Export-----------------
     @FXML
     private Button  exportProjectBtn;
-    //@FXML
-    //private Button importBtn;
+    @FXML
+    private Button importProjectBtn;
 
 
 
@@ -138,6 +144,7 @@ public class ProjectsViewController implements Initializable {
         }
         else if( event.getSource()== backBtn){ Main.showMainMenuScene(); }
         else if (event.getSource()==exportProjectBtn){exportProject();}
+        else if(event.getSource()==importProjectBtn){importProject();}
     }
     //public String getProjectExport(){return String.valueOf(projectExportList.getValue()); }
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
@@ -264,14 +271,32 @@ public class ProjectsViewController implements Initializable {
         TreeItem<Project> selectedProject = getSelectedProject();
         if(selectedProject!= null && selectedProject.getValue()!=null){
             System.out.println(selectedProject.getValue().getTitle());
-            controller.exportProject(selectedProject.getValue(),
-                    "C:\\Users\\hodai\\Desktop\\ulb_2020_2021",
-                    "C:\\Users\\hodai\\Desktop\\ulb_2020_2021\\est.txt",
-                    selectedProject.getValue().getId());
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setInitialDirectory(new File("src"));
+            File selectedDirectory = directoryChooser.showDialog(new Stage());
+            if (selectedDirectory!=null) {
+                System.out.println(selectedDirectory.getAbsolutePath());
+
+                boolean succeed =controller.exportProject(selectedProject.getValue(),
+                        selectedDirectory.getAbsolutePath(),
+                        selectedDirectory.getAbsolutePath()+"/file.txt",
+                        selectedProject.getValue().getId());
+                Main.alertExport(succeed);
+
+            }
+
         }
-        else {
-            System.out.println("aucun projet");
+    }
+    public void importProject() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("src"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
+        File selectedArchive = fileChooser.showOpenDialog(new Stage());
+        if (selectedArchive != null) {
+            boolean succeed =controller.importProject(selectedArchive.getAbsolutePath());
+            Main.alertImport(succeed);
         }
+
     }
 
     public void addCollaborator() throws SQLException{

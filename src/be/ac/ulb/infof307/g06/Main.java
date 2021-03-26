@@ -4,14 +4,23 @@ import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
+
+
+import java.io.File;
 
 public class Main extends Application {
     private static Stage primaryStage;
@@ -304,6 +313,43 @@ public class Main extends Application {
         mainLayout.getChildren().setAll(tagsMenuAnchor);
         primaryStage.setResizable(false);
     }
+
+    @FXML
+    public static void alertExport(boolean succeed){
+        //TODO à mettre dans le main controller
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Export");
+        alert.setHeaderText(null);
+        alert.getDialogPane().setMinWidth(900);
+        if(succeed){
+            alert.setContentText("Congrat,your project is exported");
+            alert.showAndWait();
+        }
+
+        else {
+        alert.setContentText("Sorry, failed to export your project");
+        alert.showAndWait();
+    }
+}
+
+    @FXML
+    public static void alertImport(boolean succeed){
+        //TODO à mettre dans le main controller
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Import");
+        alert.setHeaderText(null);
+        alert.getDialogPane().setMinWidth(900);
+        if(succeed){
+            alert.setContentText("Congrat,your project is imported");
+            alert.showAndWait();
+        }
+
+        else {
+            alert.setContentText("Sorry, failed to import your project");
+            alert.showAndWait();
+        }
+    }
+
 
     /**
      * Closes the actual stage.

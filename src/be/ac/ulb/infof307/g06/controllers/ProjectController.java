@@ -21,15 +21,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import be.ac.ulb.infof307.g06.Main;
-import org.rauschig.jarchivelib.ArchiveFormat;
-import org.rauschig.jarchivelib.Archiver;
-import org.rauschig.jarchivelib.ArchiverFactory;
-import org.rauschig.jarchivelib.CompressionType;
+import org.rauschig.jarchivelib.*;
 
 import java.util.ArrayList;
 
@@ -281,31 +279,68 @@ public class ProjectController{
 
     public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
 
-    public boolean exportProject(Project project,String path, String filetxt,int id){
-            final int ID = project.getId();
-            save(project,filetxt);
-            try {
-                final List<Task> tasks = ProjectDB.getTasks(ID);
-                for (Task task : tasks) {
-                    save(task, filetxt);
-                }
-                final List<Tag> tags = ProjectDB.getTags(ID);
-                for (Tag tag : tags) {
-                    save(tag, filetxt);
-                }
-                final List<Integer> subProjects = ProjectDB.getSubProjects(id);
-                for (Integer sub : subProjects) {
-                    exportProject(ProjectDB.getProject(sub),path,filetxt,id);
-                }
-                if (ID == id) {
-                    System.out.println("ajaja");
-                    zip(project.getTitle(),filetxt, path);
-                }
-                return true;
+    public boolean exportProject(Project project,String path, String filetxt,int id) {
+        final int ID = project.getId();
+        save(project, filetxt);
+        try {
+            final List<Task> tasks = ProjectDB.getTasks(ID);
+            for (Task task : tasks) {
+                save(task, filetxt);
             }
-            catch(Exception ignored) {return false;}
-        
+            final List<Tag> tags = ProjectDB.getTags(ID);
+            for (Tag tag : tags) {
+                save(tag, filetxt);
+            }
+            final List<Integer> subProjects = ProjectDB.getSubProjects(ID);
+            for (Integer sub : subProjects) {
+                exportProject(ProjectDB.getProject(sub), path, filetxt, id);
+            }
+            if (ID == id) {
+                System.out.println("ajaja");
+                zip(project.getTitle(), filetxt, path);
+                deleteFile(filetxt);
+            }
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
+        
+    public boolean importProject(String filetxt) {
+
+
+        boolean a =valideArchive(filetxt);
+        System.out.println(a);
+        boolean b= unzip(filetxt,"C:\\Users\\hodai\\Download");
+        boolean c= isProjectInDb("C:\\Users\\hodai\\Download\\file.txt");
+        boolean d= isValideFile("C:\\Users\\hodai\\Download\\file.txt");
+
+        return d;
+
+        //verif c'est un zip , si oui on dezipe ta braillette
+        //on verif la base de donnée si il y est as déja
+    }
+    public static boolean valideArchive(final String archivePath) {
+        try {
+            Archiver archiver =
+                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+            File archive = new File(archivePath);
+            ArchiveStream stream = archiver.stream(archive);
+            ArchiveEntry entry;
+            int count = 0;
+            while((entry = stream.getNextEntry()) != null) {
+                ++count;
+                String name = entry.getName();
+                if (count > 1 || name.substring(name.length()-4, name.length()-1).equals(".txt")) {
+                    return false;
+                }
+            }
+            stream.close();
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+
 
 
 
@@ -368,6 +403,65 @@ public class ProjectController{
             fw.write("Tag " + tagString + "\n");
             fw.close();
             return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+    public static boolean isProjectInDb(String fileTxt){
+        try {
+            File file = new File(fileTxt);
+            Scanner reader = new Scanner(file);
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                if (line.substring(0, 7).equals("Project")) {
+                    System.out.println("c'est un projet: " + line.substring(8));
+                    Gson gson = new Gson();
+                    Project project = gson.fromJson(line.substring(8), Project.class);
+                    if(ProjectDB.getProjectID(project.getTitle())!=0){
+                        reader.close();
+                        return true;
+                    }
+                }
+            }
+            reader.close();
+            return false;
+        } catch (Exception e) {return false;}
+
+    }
+    public static boolean isValideFile( String fileTxt){
+        try {
+            File file = new File(fileTxt);
+            Scanner reader = new Scanner(file);
+            Gson gson = new Gson();
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                if (line.substring(0, 7).equals("Project")) {
+                    System.out.println("c'est un projet: " + line.substring(8));
+                    Project project = gson.fromJson(line.substring(8), Project.class);
+                }
+                else if(line.substring(0, 4).equals("Task")) {
+                    System.out.println("c'est un projet: " + line.substring(5));
+                    Task task = gson.fromJson(line.substring(5), Task.class);
+                }
+                else if(line.substring(0, 3).equals("Tag")) {
+                    System.out.println("c'est un projet: " + line.substring(4));
+                    Tag tag = gson.fromJson(line.substring(4), Tag.class);
+                }
+                else{
+                    reader.close();
+                    return false;
+                }
+
+            }
+            reader.close();
+            return true;
+        } catch (Exception e) {return false;}
+
+    }
+    public static boolean deleteFile(final String FileName) {
+        try {
+            File myObj = new File(FileName);
+            if (myObj.delete()) {return true;}
+            else {return false;}
         }
         catch(Exception ignored) {return false;}
     }
