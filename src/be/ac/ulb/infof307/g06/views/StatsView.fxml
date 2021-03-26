@@ -68,12 +68,12 @@
          </font>
       </Button>
       <TreeTableView fx:id="projectsTreeView" layoutX="300.0" layoutY="194.0" prefHeight="534.0" prefWidth="1028.0" style="-fx-background-color: #00000056;">
-        <columns>
-          <TreeTableColumn fx:id="projectsColumn" prefWidth="220.0" text="Projects" />
+         <columns>
+            <TreeTableColumn fx:id="projectsColumn" prefWidth="220.0" text="Projects" />
             <TreeTableColumn fx:id="collaboratorsColumn" prefWidth="387.0" text="Collaborators" />
             <TreeTableColumn fx:id="tasksColumn" prefWidth="328.0" text="Tasks" />
             <TreeTableColumn fx:id="estimatedColumn" prefWidth="92.0" text="Estimated" />
-        </columns>
+         </columns>
       </TreeTableView>
       <Button fx:id="exportCSVBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="1172.0" layoutY="766.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#events" prefHeight="51.0" prefWidth="74.0" style="-fx-background-color: #4fc3f7;" text=".csv" textFill="WHITE">
          <font>

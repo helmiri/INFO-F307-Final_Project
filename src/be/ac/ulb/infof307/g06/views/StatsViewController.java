@@ -15,11 +15,15 @@ import java.util.ResourceBundle;
 public class StatsViewController implements Initializable {
     //-------------- ATTRIBUTES ----------------
     @FXML
-    private Button exportBtn;
+    private Button exportJSONBtn;
+    @FXML
+    private Button exportCSVBtn;
     @FXML
     private Button backToProjectMenu;
     @FXML
     private Button logOutBtn;
+    @FXML
+    private TextField fileNameTextField;
     @FXML
     private TreeTableView<Statistics> projectsTreeView;
     @FXML
