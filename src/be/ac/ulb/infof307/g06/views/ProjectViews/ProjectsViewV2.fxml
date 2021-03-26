@@ -56,11 +56,12 @@
                   <Button fx:id="exportProjectBtn" layoutX="391.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Export" />
                   <Button fx:id="editBtn" layoutX="459.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Edit" />
                   <ListView fx:id="projectTags" layoutX="37.0" layoutY="85.0" orientation="HORIZONTAL" prefHeight="43.0" prefWidth="450.0" />
+                  <Button fx:id="importProjectBtn" layoutX="324.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Import" />
                </children>
             </Pane>
             <Pane layoutX="89.0" layoutY="465.0" prefHeight="459.0" prefWidth="546.0">
                <children>
-                  <TableView fx:id="taskTable" layoutX="25.0" layoutY="44.0" onMouseClicked="#onTaskSelected" prefHeight="317.0" prefWidth="512.0">
+                  <TableView fx:id="taskTable" editable="true" layoutX="25.0" layoutY="44.0" onMouseClicked="#onTaskSelected" prefHeight="317.0" prefWidth="512.0">
                      <columns>
                         <TableColumn fx:id="taskColumn" prefWidth="510.0" text="Tasks" />
                      </columns>

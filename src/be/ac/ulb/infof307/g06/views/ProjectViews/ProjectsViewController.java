@@ -22,130 +22,109 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 import javafx.util.Callback;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
 public class ProjectsViewController implements Initializable {
     //----------ATTRIBUTES---------
-    // ---------PROJECTS MENU------
     @FXML
-    private TreeTableView<Project> treeProjects;
+    private Button exportProjectBtn;
     @FXML
-    private TreeTableColumn<Project, String> treeProjectColumn;
-
-    private TreeItem<Project> root = new TreeItem<Project>();
-    @FXML
-    private Button addProjectBtn;
-
-    @FXML
-    private ListView<String> projectTags;
-
-    @FXML
-    private TextArea projectsDescription;
-
-    @FXML
-    private Text projectsTitle;
-
-    @FXML
-    private Label projectsDate;
-
+    private Button importProjectBtn;
     @FXML
     private Button addBtn;
     @FXML
     private Button editBtn;
-    // ----------------TASK---------------
-    @FXML
-    private TableView<Task> taskTable;
-    @FXML
-    private TableColumn<Task,String> taskColumn;
     @FXML
     private Button addTaskbtn;
     @FXML
     private Button backBtn;
     @FXML
+    private Button addCollaboratorsBtn;
+    @FXML
+    private Button assignTaskCollaboratorBtn;
+    @FXML
+    private Label projectsDate;
+    @FXML
+    private Text projectsTitle;
+    @FXML
+    private TextArea projectsTags;
+    @FXML
+    private TextArea projectsDescription;
+    @FXML
     private TextArea descriptionTask;
+    @FXML
+    private TextArea collaboratorsName;
     @FXML
     private TextField taskParent;
     @FXML
-    private TextField taskName;
+    private CheckComboBox<String> collabComboBox;
     @FXML
-    private Button editTaskBtn;
-
-
-    //---------------TASK COLLABORATORS------------
-
+    private ListView<String> projectTags;
+    @FXML
+    private TableView<Task> taskTable;
+    @FXML
+    private TableView<String> collaboratorsTable;
     @FXML
     private TableView<String> taskCollaboratorTable;
     @FXML
     private TableColumn<String, String> taskCollaboratorColumn;
     @FXML
-    private Button assignTaskCollaboratorBtn;
-    @FXML
-    private CheckComboBox<String> collabComboBox;
-
-
-
-    //-------------- PROJECT COLLABORATORS----------
-
-    @FXML
-    private TableView<String> collaboratorsTable;
+    private TableColumn<Task,String> taskColumn;
     @FXML
     private TableColumn<String, String> collaboratorsColumn;
     @FXML
-    private Button addCollaboratorsBtn;
+    private TreeTableView<Project> treeProjects;
     @FXML
-    private TextArea collaboratorsName;
-
-
-    //---------Import--Export-----------------
-    @FXML
-    private Button  exportProjectBtn;
-    //@FXML
-    //private Button importBtn;
-
-
-
-
-    //---------------EDIT PROJECTS----------
-
-    //----------------CONTROLLER--------------
+    private TreeTableColumn<Project, String> treeProjectColumn;
+    private TreeItem<Project> root = new TreeItem<Project>();
     private ProjectController controller;
+
     //---------------METHODES----------------
 
     /**
-     * The main method for button's events
-     * @param ;
-     * @throws Exception;
+     * Initializes the controller and launchs the init method.
+     *
+     * @param url URL
+     * @param resourceBundle ResourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         controller = new ProjectController();
         controller.init(this, root);
     }
-
+    /**
+     * Hides the tree table root.
+     */
     @FXML
-    public void showRoot(){
+    public void hideRoot(){
         treeProjects.setShowRoot(false);
     }
+
+    /**
+     * Shows the tree table root.
+     */
     @FXML
     public void refresh(){
         treeProjects.setShowRoot(true);
     }
 
     /**
-     * The main method for button's events
-     * @param event ;
-     * @throws Exception;
+     * The main method for button's events.
+     *
+     * @param event ActionEvent
+     * @throws Exception
      */
     @FXML
     private void events(ActionEvent event) throws Exception {
         if( event.getSource()== addTaskbtn){ addTask();}
-
-        //else if( event.getSource()== EditProjectBtn){editProject();}
         else if( event.getSource()== addBtn ) {Main.showAddProjectStage(); }
         else if( event.getSource() == assignTaskCollaboratorBtn){assignCollaborators();}
         else if( event.getSource()== editBtn ) {
@@ -155,10 +134,20 @@ public class ProjectsViewController implements Initializable {
         }
         else if( event.getSource()== backBtn){ Main.showMainMenuScene(); }
         else if (event.getSource()==exportProjectBtn){exportProject();}
+        else if(event.getSource()==importProjectBtn){importProject();}
     }
+
+    /**
+     * Returns the selected item in the tree table.
+     *
+     * @return TreeItem<Project>
+     */
     //public String getProjectExport(){return String.valueOf(projectExportList.getValue()); }
     public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
 
+    /**
+     * Initializes all the columns and some tables.
+     */
     @FXML
     public void initTree(){
         treeProjects.setRoot(root);
@@ -173,7 +162,7 @@ public class ProjectsViewController implements Initializable {
 
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        taskTable.setEditable(true);
+        taskTable.setEditable(false);
         taskTable.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Task task, boolean empty) {
@@ -191,12 +180,11 @@ public class ProjectsViewController implements Initializable {
                 }
             }
         });
-
     }
 
     /**
-     * Clears the tables and the map(to refresh when needed)
-     * @throws SQLException;
+     * Clears the project's table.
+     *
      */
     public void clearProjects(){
         treeProjects.getRoot().getChildren().clear();
@@ -205,11 +193,22 @@ public class ProjectsViewController implements Initializable {
         projectSelection.setPromptText("Select project")*/
     }
 
+    /**
+     * Adds a child to a parent in the tree.
+     *
+     * @param parent TreeItem<Project>
+     * @param child TreeItem<Project>
+     */
     @FXML
     public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
         parent.getChildren().add(child);
     }
 
+    /**
+     * Adds collaborators to the combobox with the collaborators in it.
+     *
+     * @param names ObservableList<String>
+     */
     public void insertCollaborator(ObservableList<String> names){
         collabComboBox.getItems().setAll(names);
     }
@@ -219,15 +218,9 @@ public class ProjectsViewController implements Initializable {
     }
 
     /**
-     * Creates a project and add it to the Database and the map + displays it in the tree table view
-     * @throws SQLException;
-     */
-
-
-    /**
-     * Deletes a project in the Database and in the tree table view
-     * @param event;
-     * @throws SQLException;
+     * Deletes a project in the Database and in the tree table view.
+     *
+     * @throws SQLException
      */
     @SuppressWarnings("unchecked")
     @FXML
@@ -247,8 +240,11 @@ public class ProjectsViewController implements Initializable {
         }
     }
 
-
-
+    /**
+     * Displays tasks on the table.
+     *
+     * @throws SQLException
+     */
     @FXML
     public void displayTask() throws SQLException {
         TreeItem<Project> selectedProject = getSelectedProject();
@@ -256,45 +252,88 @@ public class ProjectsViewController implements Initializable {
         taskTable.setItems(oTaskList);
     }
 
+    /**
+     * Shows the edit task stage for the selected task.
+     *
+     * @throws SQLException
+     */
     public void showTaskEdition() throws Exception {
         Global.selectedTask = getSelectedTask();
         Main.showEditTaskStage();
     }
 
-
+    /**
+     * Adds a task to the table and displays the table to refresh it.
+     *
+     * @throws Exception
+     */
     public void addTask() throws Exception{
         controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
         displayTask();
     }
 
+    /**
+     * Deletes the selected task in the table and in the database.
+     *
+     * @throws SQLException
+     */
     public void deleteTask() throws SQLException{
         Task task = getSelectedTask();
         controller.deleteTask(task);
         taskTable.getItems().removeAll(task);
     }
 
+    /**
+     * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
+     */
     public void exportProject(){
         TreeItem<Project> selectedProject = getSelectedProject();
-        if(selectedProject!= null && selectedProject.getValue()!=null){
+        if(selectedProject!= null && selectedProject.getValue()!=null) {
             System.out.println(selectedProject.getValue().getTitle());
-            controller.exportProject(selectedProject.getValue(),
-                    "C:\\Users\\hodai\\Desktop\\ulb_2020_2021",
-                    "C:\\Users\\hodai\\Desktop\\ulb_2020_2021\\est.txt",
-                    selectedProject.getValue().getId());
-        }
-        else {
-            System.out.println("aucun projet");
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setInitialDirectory(new File("src"));
+            File selectedDirectory = directoryChooser.showDialog(new Stage());
+            if (selectedDirectory != null) {
+                System.out.println(selectedDirectory.getAbsolutePath());
+                boolean succeed = controller.exportProject(selectedProject.getValue(),
+                        selectedDirectory.getAbsolutePath(),
+                        selectedDirectory.getAbsolutePath() + "/file.txt",
+                        selectedProject.getValue().getId());
+                Main.alertExport(succeed);
+            }
         }
     }
 
+    /**
+     * Imports the file selected from a file chooser stage.
+     */
+    public void importProject() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("src"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
+        File selectedArchive = fileChooser.showOpenDialog(new Stage());
+        if (selectedArchive != null) {
+            boolean succeed =controller.importProject(selectedArchive.getAbsolutePath());
+            Main.alertImport(succeed);
+        }
+    }
 
+    /**
+     * Deletes a collaborator from the database and the table.
+     *
+     * @throws SQLException
+     */
     public void deleteCollaborator() throws SQLException{
         String collaborator = getSelectedUser();
         controller.deleteCollaborator(collaborator, getSelectedProject().getValue().getId());
         collaboratorsTable.getItems().removeAll(collaborator);
     }
 
-
+    /**
+     * Displays collaborators on the table.
+     *
+     * @throws SQLException
+     */
     @FXML
     public void displayCollaborators() throws SQLException {
         TreeItem<Project> selectedProject = getSelectedProject();
@@ -312,6 +351,11 @@ public class ProjectsViewController implements Initializable {
         }
     }
 
+    /**
+     *
+     *
+     * @throws SQLException
+     */
     @FXML
     public void assignCollaborators() throws SQLException{
         ObservableList<String> selectedCollaborators = collabComboBox.getCheckModel().getCheckedItems();
@@ -325,6 +369,11 @@ public class ProjectsViewController implements Initializable {
         controller.deleteTaskCollaborator(getSelectedTaskCollaborator(),Global.selectedTask);
     }
 
+    /**
+     *
+     *
+     * @throws SQLException
+     */
     @FXML
     public void onTaskSelected() throws SQLException{
         if (getSelectedTask() != null) {
@@ -341,6 +390,11 @@ public class ProjectsViewController implements Initializable {
         }
     }
 
+    /**
+     * Returns the selected task.
+     *
+     * @return Task
+     */
     @FXML
     public Task getSelectedTask(){
         return taskTable.getSelectionModel().getSelectedItem();
@@ -351,17 +405,23 @@ public class ProjectsViewController implements Initializable {
         return taskCollaboratorTable.getSelectionModel().getSelectedItem();
     }
 
-
+    /**
+     * Returns the selected user in the collaborators table.
+     *
+     * @return String
+     */
     @FXML
-    public String getSelectedUser(){
-        return collaboratorsTable.getSelectionModel().getSelectedItem();
-    }
+    public String getSelectedUser(){ return collaboratorsTable.getSelectionModel().getSelectedItem(); }
 
+    /**
+     * Displays informations of the selected project.
+     *
+     * @throws SQLException
+     */
     @FXML
     public void displayProject() throws SQLException {
         try {
             TreeItem<Project> selectedProject = getSelectedProject();
-
             String description = selectedProject.getValue().getDescription();
             String title = selectedProject.getValue().getTitle();
             Long date = selectedProject.getValue().getDate();
@@ -375,7 +435,6 @@ public class ProjectsViewController implements Initializable {
             projectTags.setItems(tagsName);
             displayTask();
             displayCollaborators();
-
             controller.initCollaborators(this);
 
             projectTags.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -400,8 +459,6 @@ public class ProjectsViewController implements Initializable {
                     return cell;
                 }
             });
-
-
         }catch(NullPointerException throwables){
             System.out.println(throwables);
 
@@ -416,5 +473,4 @@ public class ProjectsViewController implements Initializable {
         alert.setContentText(message);
         alert.show();
     }
-
 }
