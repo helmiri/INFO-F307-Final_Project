@@ -21,10 +21,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
-
+import java.awt.Color.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -37,6 +38,8 @@ public class TagsViewController implements Initializable{
     @FXML
     private Button addBtn;
     @FXML
+    private Button updateBtn;
+    @FXML
     private ColorPicker tagsColorPicker;
     @FXML
     private TextField defaultTagNameTextField;
@@ -44,6 +47,7 @@ public class TagsViewController implements Initializable{
     private TableView<Tag> defaultTagsTableView;
     @FXML
     private TableColumn<Tag, String> defaultTagsColumn;
+
     private SettingsController controller;
     //--------------- METHODS ----------------
     @FXML
@@ -51,6 +55,31 @@ public class TagsViewController implements Initializable{
         if(event.getSource() == backBtn) {
             Main.showSettingsMenuScene();
         }
+        if(event.getSource() == addBtn ) {
+            controller.addTag(this, defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
+            refresh();
+        }
+        if (event.getSource() == updateBtn){
+            controller.editTag(this, Global.selectedTag, defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
+            refresh();
+        }
+    }
+
+    public static String toRGBCode( Color color )
+    {
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+    }
+
+    public static Color toColor(String hexCode){
+        java.awt.Color c =  java.awt.Color.decode(hexCode);
+        int r = c.getRed();
+        int g = c.getGreen();
+        int b = c.getBlue();
+        javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.rgb(r, g, b);
+        return fxColor;
     }
 
     @Override
