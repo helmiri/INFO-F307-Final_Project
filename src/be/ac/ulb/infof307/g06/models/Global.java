@@ -19,7 +19,7 @@ public class Global {
     public static Task selectedTask;
     //The user ID
     public static int userID;
-
+    public static Tag selectedTag;
     //Map that contains the user's projects
     public static Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
 

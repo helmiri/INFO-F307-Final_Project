@@ -52,6 +52,21 @@ public class ProjectController{
         }
     }
 
+    public void getProjectInfo(ProjectsViewController view,  TreeItem<Project> selectedProject) throws SQLException{
+        try{
+        String description = selectedProject.getValue().getDescription();
+        String title = selectedProject.getValue().getTitle();
+        Long date = selectedProject.getValue().getDate();
+        int id = selectedProject.getValue().getId();
+        List<Tag> tags = ProjectDB.getTags(id);
+        ObservableList<String> tagsName = FXCollections.observableArrayList();
+        for (Tag tag : tags) { tagsName.add(tag.getDescription()); System.out.println("Add tag " + tag.getDescription()); }
+        view.displayProject(title, description, date, tagsName);
+        }catch(NullPointerException throwables){
+            // TODO Show error
+        }
+    }
+
     /**
      *
      *

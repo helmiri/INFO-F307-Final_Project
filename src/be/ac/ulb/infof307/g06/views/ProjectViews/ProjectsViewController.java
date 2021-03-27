@@ -55,8 +55,6 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private Text projectsTitle;
     @FXML
-    private TextArea projectsTags;
-    @FXML
     private TextArea projectsDescription;
     @FXML
     private TextArea descriptionTask;
@@ -156,12 +154,39 @@ public class ProjectsViewController implements Initializable {
         collaboratorsTable.setEditable(true);
         collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        collaboratorsTable.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
 
         taskCollaboratorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         taskCollaboratorColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
+        taskCollaboratorTable.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
+        projectTags.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> p) {
+                ListCell<String> cell = new ListCell<String>() {
+                    @Override
+                    protected void updateItem(String t, boolean bln) {
+                        super.updateItem(t, bln);
+                        try {
+                            if (t != null){
+                                System.out.println("load tags " + t);
+                                setText(t);
+                                setStyle("-fx-background-color: "+ ProjectDB.getTag(ProjectDB.getTagID(t)).getColor()+";");
+                            } else {
+                                setText(null);
+                                setGraphic(null);
+                                setStyle(null);
+                            }
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        taskTable.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
         taskTable.setEditable(false);
         taskTable.setRowFactory(tv -> new TableRow<>() {
             @Override
@@ -173,7 +198,7 @@ public class ProjectsViewController implements Initializable {
                     else if (ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID))
                         setStyle("-fx-background-color: #baffba;");
                     else if (!ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID))
-                        setStyle("-fx-background-color: #ffd7d1;");
+                        setStyle("-fx-background-color: #ffffff;");
                     else
                         setStyle("");
                 } catch (SQLException e) {
@@ -344,9 +369,9 @@ public class ProjectsViewController implements Initializable {
     public void addCollaborator() throws SQLException{
         if(collaboratorsName.getText() != ""){
             if(!controller.addCollaborator(collaboratorsName.getText(), getSelectedProject().getValue().getId())){
-                // TODO Show "error user doesn't exist" message
+                showAlert("User " + collaboratorsName.getText() + " doesn't exist.");
             } else {
-                // TODO Show "invitation sent" message
+                showAlert("Invitation sent to " + collaboratorsName.getText() + ".");
             }
         }
     }
@@ -419,51 +444,20 @@ public class ProjectsViewController implements Initializable {
      * @throws SQLException
      */
     @FXML
-    public void displayProject() throws SQLException {
-        try {
-            TreeItem<Project> selectedProject = getSelectedProject();
-            String description = selectedProject.getValue().getDescription();
-            String title = selectedProject.getValue().getTitle();
-            Long date = selectedProject.getValue().getDate();
-            int id = selectedProject.getValue().getId();
-            List<Tag> tags = ProjectDB.getTags(id);
-            ObservableList<String> tagsName = FXCollections.observableArrayList();
-            for (Tag tag : tags) { tagsName.add(tag.getDescription()); }
-            projectsDescription.setText(description);
-            projectsDate.setText(controller.dateToString(date));
-            projectsTitle.setText(title);
-            projectTags.setItems(tagsName);
-            displayTask();
-            displayCollaborators();
-            controller.initCollaborators(this);
+    public void displayProject(String title, String description, Long date, ObservableList<String> tagsName) throws SQLException {
+        projectsDescription.setText(description);
+        projectsDate.setText(controller.dateToString(date));
+        projectsTitle.setText(title);
+        displayTask();
+        displayCollaborators();
+        controller.initCollaborators(this);
+        projectTags.setItems(tagsName);
+    }
 
-            projectTags.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-                @Override
-                public ListCell<String> call(ListView<String> p) {
-                    ListCell<String> cell = new ListCell<String>() {
-                        @Override
-                        protected void updateItem(String t, boolean bln) {
-                            super.updateItem(t, bln);
-                            try {
-                                if (t != null){
-                                    System.out.println(t);
-                                    setText(t);
-                                    setStyle("-fx-background-color: "+ ProjectDB.getTag(ProjectDB.getTagID(t)).getColor()+";");
-                                }
-
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
-                            }
-                        }
-                    };
-                    return cell;
-                }
-            });
-        }catch(NullPointerException throwables){
-            System.out.println(throwables);
-
-        }
-
+    @FXML
+    public void onProjectSelected() throws  SQLException{
+        TreeItem<Project> selectedProject = getSelectedProject();
+        controller.getProjectInfo(this, selectedProject);
     }
 
     public void showAlert(String message){

@@ -87,13 +87,36 @@ public class TagsViewController implements Initializable{
         controller = new SettingsController();
         defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        defaultTagsTableView.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
         defaultTagsTableView.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Tag tag, boolean empty) {
                 if (tag != null) {
                     super.updateItem(tag, empty);
                     setText(tag.getDescription());
-                    System.out.println(tag.getDescription());
+                    setStyle("-fx-background-color: " + tag.getColor() + ";");
+                }
+            }
+        });
+        try {
+            Global.selectedTag = ProjectDB.getAllTags().get(0);
+            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
+            tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
+            defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void refresh(){
+        defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
+        defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        defaultTagsTableView.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Tag tag, boolean empty) {
+                if (tag != null) {
+                    super.updateItem(tag, empty);
+                    setText(tag.getDescription());
                     setStyle("-fx-background-color: " + tag.getColor() + ";");
                 }
             }
@@ -104,4 +127,31 @@ public class TagsViewController implements Initializable{
             throwables.printStackTrace();
         }
     }
+
+    @FXML
+    public Tag getSelectedTag(){
+        return defaultTagsTableView.getSelectionModel().getSelectedItem();
+    }
+    @FXML
+    public void onTagSelected(){
+        Global.selectedTag = getSelectedTag();
+        if (Global.selectedTag!= null ){
+            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
+            tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
+        }
+    }
+   @FXML
+    public void deleteTag() throws SQLException{
+        controller.deleteTag(Global.selectedTag);
+        refresh();
+    }
+    public void showAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
+
+
 }
