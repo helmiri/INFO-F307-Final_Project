@@ -1,8 +1,6 @@
 package be.ac.ulb.infof307.g06.models;
 
-import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
-import com.dropbox.core.v2.DbxClientV2;
 import javafx.scene.control.TreeItem;
 
 import java.util.HashMap;
@@ -30,9 +28,6 @@ public class Global {
 
     //Map that contains the user's projects
     public static Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
-
-    // Cloud service
-    public static DbxClientV2 dboxClient;
 
     public static String popupProjectTitle;
     public static String popupProjectDescription;
