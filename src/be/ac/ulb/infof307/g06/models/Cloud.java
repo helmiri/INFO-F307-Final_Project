@@ -15,46 +15,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("ALL")
 public class Cloud {
+    private static DbxClientV2 dboxClient;
 
-    public static void main(String[] args) throws IOException, DbxException, NoSuchAlgorithmException {
-        connect("1dmwFHhIn68AAAAAAAAAAWnTZgaV7cg_T72aWassPUk4EC7TFZr0iU4lW2tFhpqC", "INFOF307");
-        downloadFile("README.md", "/README.md");
-    }
-
-    public static DbxClientV2 connect(String ACCESS_TOKEN, String clientidentifier) throws DbxException, IOException {
+    public static void init(String ACCESS_TOKEN, String clientidentifier) throws DbxException, IOException {
         // Create Dropbox client
         DbxRequestConfig config = new DbxRequestConfig(clientidentifier, "en_US");
-        Global.dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
+        dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
 
 //        FullAccount account = Global.dboxClient.users().getCurrentAccount();
 //        System.out.println(account.getName().getDisplayName());
-
-
-        return Global.dboxClient;
     }
 
-    public static List<String> getFiles() throws DbxException {
-        ListFolderBuilder listFolderBuilder = Global.dboxClient.files().listFolderBuilder("");
+    public static List<Metadata> getFiles() throws DbxException {
+        ListFolderBuilder listFolderBuilder = dboxClient.files().listFolderBuilder("");
         ListFolderResult result = listFolderBuilder.withRecursive(true).start();
-        List<String> res = new ArrayList<>();
+        List<Metadata> res = new ArrayList<>();
+
+
         while (true) {
-            for (Metadata metadata : result.getEntries()) {
-                res.add(metadata.getPathLower());
-            }
+            res.addAll(result.getEntries());
 
             if (!result.getHasMore()) {
                 break;
             }
 
-            result = Global.dboxClient.files().listFolderContinue(result.getCursor());
+            result = dboxClient.files().listFolderContinue(result.getCursor());
         }
+
         return res;
+    }
+
+    public static List<Metadata> filterFolders(List<Metadata> entries) {
+        List<Metadata> folders = new ArrayList<>();
+
+        for (int i = 0; i < entries.size(); i++) {
+            for (int j = 0; j < entries.size(); j++) {
+                if (entries.get(j).getPathDisplay().contains(entries.get(i).getPathDisplay())
+                        && !entries.get(j).getPathDisplay().equals(entries.get(i).getPathDisplay())) {
+                    folders.add(entries.get(i));
+                    entries.remove(i);
+                }
+            }
+        }
+        return folders;
     }
 
     public static void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
         InputStream in = new FileInputStream(localFilePath);
-        FileMetadata metadata = Global.dboxClient.files().uploadBuilder(cloudFilePath)
+        FileMetadata metadata = dboxClient.files().uploadBuilder(cloudFilePath)
                 .uploadAndFinish(in);
         in.close();
     }
@@ -62,7 +72,7 @@ public class Cloud {
     public static int downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
         String tempPath = localFilePath + ".temp";
         OutputStream outputStream = new FileOutputStream(tempPath);
-        FileMetadata metadata = Global.dboxClient.files()
+        FileMetadata metadata = dboxClient.files()
                 .downloadBuilder(cloudFilePath)
                 .download(outputStream);
 
