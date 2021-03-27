@@ -1,4 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers;
+
+import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
@@ -13,9 +15,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
+import org.rauschig.jarchivelib.*;
+
 import java.io.File;
 import java.io.FileWriter;
-
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,12 +28,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import be.ac.ulb.infof307.g06.Main;
-import org.rauschig.jarchivelib.*;
-
-import java.util.ArrayList;
 
 
 public class ProjectController{
@@ -309,7 +306,6 @@ public class ProjectController{
      * @param task Task
      * @throws SQLException
      */
-    public void deleteTask(Task task) throws SQLException{ ProjectDB.deleteTask(task.getDescription(),task.getProjectID()); }
     public void deleteTask(Task task) throws SQLException {
         ProjectDB.deleteTask(task.getDescription(), task.getProjectID());
         UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
