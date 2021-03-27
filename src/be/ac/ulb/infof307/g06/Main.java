@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06;
 
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
+import com.dropbox.core.DbxException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,23 +34,25 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/CloudSettings.fxml"));
 
         // Setup the new stage
-        AnchorPane tagsMenuAnchor = loader.load();
-        mainLayout.getChildren().setAll(tagsMenuAnchor);
+        AnchorPane settingsAnchor = loader.load();
+        mainLayout.getChildren().setAll(settingsAnchor);
         primaryStage.setResizable(false);
     }
 
-    public static void showCloudDownload() throws IOException {
+    public static void showCloudDownload() throws IOException, DbxException {
 
-        primaryStage.centerOnScreen();
-
-        // Load the fxml
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/ProjectViews/CloudTable.fxml"));
 
         // Setup the new stage
-        AnchorPane tagsMenuAnchor = loader.load();
-        mainLayout.getChildren().setAll(tagsMenuAnchor);
-        primaryStage.setResizable(false);
+        stage = new Stage();
+        stage.setResizable(false);
+        stage.centerOnScreen();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Files");
+        stage.setScene(new Scene(loader.load()));
+        stage.centerOnScreen();
+        stage.show();
     }
 
     /**
