@@ -117,12 +117,21 @@ public class UserDB extends Database {
         }
 
         Statement state = connect();
-        ResultSet usrInfo = state.executeQuery("Select id, fName, lName, email, status from users where userName='" + userName + "'");
+        ResultSet usrInfo = state.executeQuery("Select id, fName, lName, email, accToken, clientID from users where userName='" + userName + "'");
 
         res.put("id", Integer.toString(usrInfo.getInt("id")));
         res.put("fName", usrInfo.getString("fName"));
         res.put("lName", usrInfo.getString("lName"));
         res.put("email", usrInfo.getString("email"));
+        res.put("accToken", "");
+        res.put("clientID", "");
+
+        if (!usrInfo.getString("accToken").isEmpty()) {
+            res.put("accToken", usrInfo.getString("accToken"));
+        }
+        if (!usrInfo.getString("clientID").isEmpty()) {
+            res.put("clientID", usrInfo.getString("clientID"));
+        }
         close(state, usrInfo);
         return res;
     }
@@ -189,11 +198,14 @@ public class UserDB extends Database {
     }
 
 
-    public static String getAccToken(String userName) throws SQLException {
+    public static HashMap<String, String> getCloudCredentials() throws SQLException {
         Statement state = connect();
-        String res = state.executeQuery("SELECT accToken from users where userName='" + userName + "'").getString("accToken");
-        close(state);
-        return res;
+        ResultSet res = state.executeQuery("SELECT accToken, clientID from users where id='" + Global.userID + "'");
+        HashMap<String, String> credentials = new HashMap<>();
+        credentials.put("accToken", res.getString("accToken"));
+        credentials.put("clientID", res.getString("clientID"));
+        close(state, res);
+        return credentials;
     }
 
     public static void addAccToken(String token, String clientID) throws SQLException {
