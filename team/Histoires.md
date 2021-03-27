@@ -14,13 +14,13 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | 1 | [1](#Histoire-1) | Histoire 1 |  | 2 | 30 | / |
 | 2 | 2 | Histoire 2 |  | 2 | 33 | / |
 |   | 3 | Histoire 3 |  | 3 | 18 |  |
-|   | 4 | Histoire 4 |  | 1 | 35 |  |
+|   | 4 | Histoire 4 |  | 1 | 37 |  |
 |   | 5 | Histoire 5 |  | 1 | 35 |  |
 |   | 6 | Histoire 6 |  | 1 | 24 |  |
 |   | 7 | Histoire 7 |  | 3 | 8 |  |
 |   | 8 | Histoire 8 |  | 3 | 10 |  |
-|   | 9 | Histoire 9 |  | 1 | 25 |  |
-| 3 | 10 | Histoire 10 |  | 2 | 25 | / |
+|   | 9 | Histoire 9 |  | 1 | 21 |  |
+| 3 | 10 | Histoire 10 |  | 2 | 12 | / |
 |   | 11 | Histoire 11 |  | 3 | 12 |  |
 |   | 12 | Histoire 12 |  | 2 | 25 |  |
 |   | 13 | Histoire 13 |  | 1 | 25 |  |
@@ -41,6 +41,14 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Description
 
+### Refactoring Iteration 2
+- Respect du MVC. 4h
+- Respect du TDD. 1h
+- Documentation.  5h
+
+# Refactoring Iteration 3
+- MVC. 5h
+- Documentation. 5h
 
 ### Histoire 1
 **Instructions originales:**
@@ -69,14 +77,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 ### Histoire 3
 **Instructions originales:**
 -  Spécifier une date de début et/ou de fin aux tâches du projet. 1h
--  Choisir une date via une interface calendrier. 10h
--  Spécifier la date de début et le temps attribué pour le projet. 2h 
--  Priorité des tâches en fonction du temps. 6h
-
-:question: **Question:**  
-- Peut-on avoir plusieurs tâches en même temps, si oui comment l'afficher?
-- Doit-on avoir fini une tâche avant de pouvoir se lancer dans la 2e?
-- Doit-on prendre en compte la complexité des tâches pour la priorité?
+-  Choisir une date via une interface calendrier. 1h
+-  Spécifier la date de début et le temps attribué pour le projet. 2h
+-  Priorité des tâches en fonction du temps. 5h
 
 
 ### Histoire 4
@@ -87,7 +90,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Faire en sorte de voir le début et la fin d'une tâche. 5h
 
 **Tâches en plus:** 
-- Penser à tout type d'utilisateur (handicape, daltonisme,..) 1h
+- Penser à tout type d'utilisateur (handicape, daltonisme,..). 3h
 - Créer potentiellement 3 types d'affichage (par jour,par semaine et par mois). 3h
 
 :question: **Question:** 
@@ -152,7 +155,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Chaque utilisateur dispose d'une quantité d'espace disque définie par l'administrateur. 5h
 - L'espace peut être étendu grâce à l'aide de services de stockage cloud. 10h
 - Possibilité d'exporter ses projets vers le service web désiré ainsi qu'importer des fichiers de celui-ci. 2h
-- L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois. 7h
+- L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois. 3h
 - Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur. 1h
 
 :question: **Question:** 
@@ -161,8 +164,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 10
 **Instructions originales:**
-- Intégration d'un système de rappels pour les projets et les tâches avec une date d'échéance.(via l'application ou par l'intégration d'une application calendrier externe). 20h
-- Si les rappels se font via l'application, ceux ci doivent être présentés à l'utilisateur lors du démarrage du logiciel, avec la possibilité de soit validé les rappels, soit de les reporter à une date ultérieure. 5h
+- Intégration d'un système de rappels pour les projets et les tâches avec une date d'échéance.(via l'application ou par l'intégration d'une application calendrier externe). 10h
+- Si les rappels se font via l'application, ceux ci doivent être présentés à l'utilisateur lors du démarrage du logiciel, avec la possibilité de soit validé les rappels, soit de les reporter à une date ultérieure. 2h
 
 :question: **Question:** 
 - Sous quelle forme doit apparaître le rappel lors du démarrage de l'application?
@@ -193,5 +196,4 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Garantit l'absence de modifications non autorisées. 10h
 
 :question: **Question:** 
-- Pouvons-nous utiliser une database basée sur du cloud (MongoDB Atlas).
-
+- /
