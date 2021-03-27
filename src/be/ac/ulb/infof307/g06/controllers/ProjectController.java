@@ -396,54 +396,42 @@ public class ProjectController{
      */
     public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
 
+
     /**
      *
-     *
-     * @param project Project
-     * @param archivePath String
-     * @param JsonFIle String
-     * @param rootID int
+     * @param project
+     * @param fw
      * @return
+     * @throws IOException
      */
-    public boolean exportProject(Project project, String archivePath, String JsonFIle, int rootID) {
-        try {
-            final int ID = project.getId();
-            saveProject(project, JsonFIle);
-            saveTasks(ProjectDB.getTasks(ID), JsonFIle);
-            saveTags(ProjectDB.getTags(ID), JsonFIle);
-            for (Integer subProject : ProjectDB.getSubProjects(ID)) {
-                exportProject(ProjectDB.getProject(subProject), archivePath, JsonFIle, rootID);
-            }
-            if (ID == rootID) {
-                System.out.println("ajaja");
-                zip(project.getTitle(), JsonFIle, archivePath);
-                deleteFile(JsonFIle);
-            }
-            return true;
-        } catch (Exception ignored) {return false;}
-    }
-
-    public boolean exportProject1(Project project, String archivePath, String jsonFile) {
+    public boolean exportProject1(Project project, FileWriter fw) throws IOException {
         try {
             final int ID = project.getId();
             FileWriter fw = new FileWriter(jsonFile, true);
             saveProject69(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), jsonFile);
             for (Integer subProject : ProjectDB.getSubProjects(ID)) {
-                exportProject1(ProjectDB.getProject(subProject), archivePath, jsonFile);
                 fw.write(",");
+                exportProject1(ProjectDB.getProject(subProject), fw);
             }
             fw.close();
             return true;
         } catch (Exception ignored) {return false;}
     }
 
+    /**
+     *
+     * @param project
+     * @param archivePath
+     * @param jsonFile
+     * @return
+     */
     public boolean exportProject2(Project project, String archivePath, String jsonFile) {
         try {
             final int ID = project.getId();
             FileWriter fw = new FileWriter(jsonFile, true);
-            fw.write("[");
-            exportProject1(project, archivePath, jsonFile);
-            fw.write("]");
+            fw.write("1[");
+            exportProject1(project, fw);
+            fw.write("]2");
             fw.close();
             zip(project.getTitle(), jsonFile, archivePath);
             deleteFile(jsonFile);
@@ -453,18 +441,41 @@ public class ProjectController{
 
     /**
      *
+     * @param project
+     * @param tasks
+     * @param tags
+     * @param fw
+     * @return
+     */
+    public static boolean saveProject(Project project, List<Task> tasks, List<Tag> tags, FileWriter fw) {
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            fw.write("[");
+            gson.toJson(project, fw);
+            fw.write(",");
+            gson.toJson(tasks, fw);
+            fw.write(",");
+            gson.toJson(tags, fw);
+            fw.write("]");
+            return true;
+        }
+        catch(Exception ignored) {return false;}
+    }
+
+    /**
+     *
      *
      * @param filetxt String
      * @return boolean
      */
     public boolean importProject(String filetxt) {
-        boolean a =valideArchive(filetxt);
-        System.out.println(a);
-        boolean b= unzip(filetxt,"C:\\Users\\hodai\\Download");
-        boolean c= isProjectInDb("C:\\Users\\hodai\\Download\\file.txt");
-        boolean d= isValidFile("C:\\Users\\hodai\\Download\\file.txt");
+        //boolean a = valideArchive(filetxt);
+        unzip(filetxt,"C:\\Users\\hodai\\Download");
+        //parse();
+        return true;
+        //boolean c = isProjectInDb("C:\\Users\\hodai\\Download\\file.txt");
+        //boolean d = isValidFile("C:\\Users\\hodai\\Download\\file.txt");
         // ajouter dans la db
-        return d;
         //verif c'est un zip , si oui on dezipe ta braillette
         //on verif la base de donnée si il y est as déja
     }
@@ -486,7 +497,7 @@ public class ProjectController{
             while((entry = stream.getNextEntry()) != null) {
                 ++count;
                 String name = entry.getName();
-                if (count > 1 || name.substring(name.length()-4, name.length()-1).equals(".txt")) {
+                if (count > 1 || ! name.substring(name.length()-4).equals(".json")) {
                     return false;
                 }
             }
@@ -536,81 +547,6 @@ public class ProjectController{
     }
 
     /**
-     * Saves project.
-     *
-     * @param project Project
-     * @param filePath String
-     * @return boolean
-     */
-    public static boolean saveProject(final Project project, String filePath) {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileWriter fw = new FileWriter(filePath, true);
-            fw.write("[");
-            gson.toJson(project, fw);
-            fw.write(",");
-            fw.close();
-            return true;
-        }
-        catch(Exception ignored) {return false;}
-    }
-
-    public static boolean saveProject69(Project project, List<Task> tasks, List<Tag> tags, String jsonPath) {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileWriter fw = new FileWriter(jsonPath, true);
-            fw.write("[");
-            gson.toJson(project, fw);
-            fw.write(",");
-            gson.toJson(tasks, fw);
-            fw.write(",");
-            gson.toJson(tags, fw);
-            fw.write("]");
-            fw.close();
-            return true;
-        }
-        catch(Exception ignored) {return false;}
-    }
-
-    /**
-     * Saves task.
-     *
-     * @param task Project
-     * @param filePath String
-     * @return boolean
-     */
-    public static boolean saveTasks(final List<Task> task, final String filePath) {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileWriter fw = new FileWriter(filePath, true);
-            gson.toJson(task, fw);
-            fw.write(",");
-            fw.close();
-            return true;
-        }
-        catch(Exception ignored) {return false;}
-    }
-
-    /**
-     * Saves tag.
-     *
-     * @param tag Project
-     * @param filePath String
-     * @return boolean
-     */
-    public static boolean saveTags(final List<Tag> tag, final String filePath) {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileWriter fw = new FileWriter(filePath, true);
-            gson.toJson(tag, fw);
-            fw.write("]");
-            fw.close();
-            return true;
-        }
-        catch(Exception ignored) {return false;}
-    }
-
-    /**
      *
      *
      * @param fileTxt String
@@ -635,7 +571,6 @@ public class ProjectController{
             reader.close();
             return false;
         } catch (Exception e) {return false;}
-
     }
 
     /**
@@ -667,7 +602,6 @@ public class ProjectController{
                     reader.close();
                     return false;
                 }
-
             }
             reader.close();
             return true;
@@ -690,3 +624,4 @@ public class ProjectController{
         catch(Exception ignored) {return false;}
     }
 }
+
