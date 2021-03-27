@@ -147,7 +147,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Possibilité d'exporter les statistiques en ".csv", ".json". 2h, G3
 
 :question: **Question:** 
-- /
+- Est-ce qu'il doit y avoir des statistiques globales?(la somme du nombre de tâches restantes, tous les collaborateurs,...)
 
 
 ### Histoire 9
