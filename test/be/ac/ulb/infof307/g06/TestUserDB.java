@@ -124,6 +124,6 @@ public class TestUserDB extends TestDatabase {
         Statement state = db.createStatement();
         state.executeUpdate("UPDATE users SET accToken='RANDOM_TOKEN' where userName='User_1_userName'");
         state.close();
-        assertEquals("RANDOM_TOKEN", UserDB.getAccToken("User_1_userName"));
+        assertEquals("RANDOM_TOKEN", UserDB.getCloudCredentials());
     }
 }
