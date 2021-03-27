@@ -448,7 +448,7 @@ public class ProjectsViewController implements Initializable {
                                 if (t != null){
                                     System.out.println(t);
                                     setText(t);
-                                    setStyle("-fx-text-fill: "+ ProjectDB.getTag(ProjectDB.getTagID(t)).getColor()+";");
+                                    setStyle("-fx-background-color: "+ ProjectDB.getTag(ProjectDB.getTagID(t)).getColor()+";");
                                 }
 
                             } catch (SQLException throwables) {
