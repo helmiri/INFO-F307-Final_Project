@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -201,7 +202,7 @@ public class ProjectController{
         String parentProject = addView.getParentProjectName();
 
         if(nameProject.equals("")) { addView.setError("Cannot add a project with an empty title.");}
-        else if (ProjectDB.getProjectID(nameProject) != 0){ addView.setError("A project with the same title already exists.");}
+        //else if (ProjectDB.getProjectID(nameProject) != 0){ addView.setError("A project with the same title already exists.");}
         else if(dateProject == null){ addView.setError("Cannot create a project without a date.");}
         else if (parentProject.equals("") || ProjectDB.getProjectID(parentProject)!=0){
 
@@ -407,15 +408,15 @@ public class ProjectController{
     public boolean exportProject1(Project project, FileWriter fw) throws IOException {
         try {
             final int ID = project.getId();
-            FileWriter fw = new FileWriter(jsonFile, true);
-            saveProject69(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), jsonFile);
+            saveProject(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), fw);
             for (Integer subProject : ProjectDB.getSubProjects(ID)) {
                 fw.write(",");
                 exportProject1(ProjectDB.getProject(subProject), fw);
             }
-            fw.close();
             return true;
-        } catch (Exception ignored) {return false;}
+        } catch (Exception ignored) {
+            fw.close();
+            return false;}
     }
 
     /**
@@ -429,9 +430,9 @@ public class ProjectController{
         try {
             final int ID = project.getId();
             FileWriter fw = new FileWriter(jsonFile, true);
-            fw.write("1[");
+            fw.write("[");
             exportProject1(project, fw);
-            fw.write("]2");
+            fw.write("]");
             fw.close();
             zip(project.getTitle(), jsonFile, archivePath);
             deleteFile(jsonFile);
