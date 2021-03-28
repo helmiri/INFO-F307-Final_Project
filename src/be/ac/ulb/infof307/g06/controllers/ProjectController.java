@@ -18,8 +18,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
@@ -27,7 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import be.ac.ulb.infof307.g06.Main;
+
+import javafx.stage.Modality;
 import org.rauschig.jarchivelib.*;
 
 

@@ -20,13 +20,68 @@ import java.util.List;
 public class MainController extends Application {
     //-------------- ATTRIBUTES ----------------
     private MenuViewController view;
+    private static Stage primaryStage;
+    private static AnchorPane mainLayout;
+    private static Stage stage;
+    //--------------- METHODS ----------------
+
+    /**
+     * Starts the main window
+     *
+     * @param primaryStage2 Main Stage
+     * @throws Exception;
+     */
+    @Override
+    public void start(Stage primaryStage2) throws Exception {
+        // Set main stage
+        Global.userID = 0;
+        primaryStage = primaryStage2;
+        primaryStage.setTitle("Projet génie logiciel");
+        // Disconnect user before closing
+
+        primaryStage.setOnCloseRequest(e -> {
+            try {
+                if (Global.userID != 0) UserDB.disconnectUser(Global.userID);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            Platform.exit();
+            System.exit(0);
+        });
+        // Load the fxml
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(LoginViewController.class.getResource("LoginView.fxml"));
+        mainLayout = loader.load();
+        // Display scene
+        Scene scene = new Scene(mainLayout);
+        primaryStage.setResizable(false);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void showMainMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MenuViewController.class.getResource("MenuView.fxml"));
+        load(loader, 940, 1515);
+    }
+
+    public static void showProjectMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MenuViewController.class.getResource("ProjectMenu.fxml"));
+        load(loader, 940, 1515);
+    }
+
+    public static void showInvitationStage() {
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(MenuViewController.class.getResource("InvitationView.fxml"));
+        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader );
+    }
 
     /**
      * Initializes the main view.
      *
      * @param view MenuViewController
      */
-    //--------------- METHODS ----------------
     public void init(MenuViewController view){
         this.view = view;
     }
