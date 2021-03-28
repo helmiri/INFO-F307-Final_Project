@@ -98,7 +98,7 @@ public class MenuViewController implements Initializable {
      * @param senderId int
      * @throws java.lang.Exception throws Exception
      */
-    public void showInvitation(int projectId, int senderId)throws java.lang.Exception{
+    public void showInvitation(int projectId, int senderId)throws Exception{
         Project project = ProjectDB.getProject(projectId);
         Global.popupProjectTitle = project.getTitle();
         Global.popupProjectDescription = project.getDescription();

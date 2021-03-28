@@ -25,19 +25,19 @@ public class Project {
         this.projectId = projectId;
     }
 
-    public String getTitle() {
-        return title;
+    public Project(){
+        this.id = 0;
+        this.title = "";
+        this.description = "";
+        this.date = 0L;
+        this.projectId = 0;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Long getDate() {
-        return date;
-    }
-
-
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public Long getDate() { return date; }
+    public int getParent_id() { return projectId; }
     public int getSize() {
         int res = 0;
 
@@ -49,7 +49,4 @@ public class Project {
 
         return res;
     }
-    public int getId() { return id; }
-
-    public int getParent_id() { return projectId; }
 }

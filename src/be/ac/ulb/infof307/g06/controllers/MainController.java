@@ -1,19 +1,19 @@
 package be.ac.ulb.infof307.g06.controllers;
 
+import be.ac.ulb.infof307.g06.database.ProjectDB;
+import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.stage.Modality;
+import javafx.scene.control.Alert;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -42,7 +42,7 @@ public class MainController extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             try {
-                if (Global.userID != 0) UserDB.disconnectUser();
+                if (Global.userID != 0) UserDB.disconnectUser(Global.userID);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -124,7 +124,7 @@ public class MainController extends Application {
             stage.setResizable(false);
             stage.show();
         }catch(IOException e){
-            alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred when loading the window.",400 );
+            alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred when loading the window.");
         }
 
     }
@@ -132,11 +132,23 @@ public class MainController extends Application {
     public static void closeStage(){ stage.close(); }
     public static void main(String[] args) { launch(args); }
 
-    public static void alertWindow(Alert.AlertType type, String title,String message,Integer minWidth){
+    public static void invitation(Boolean accept,String project, int user){
+        try {
+            if (accept) {
+                ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user);
+            }
+            UserDB.removeInvitation(ProjectDB.getProjectID(project), user);
+        }catch(SQLException e){
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in processing invitation: \n" + e);
+        }
+
+    }
+
+    public static void alertWindow(Alert.AlertType type, String title,String message){
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.getDialogPane().setMinWidth(minWidth);
+        alert.getDialogPane().setMinWidth(400);
         alert.setContentText(message);
         alert.showAndWait();
     }

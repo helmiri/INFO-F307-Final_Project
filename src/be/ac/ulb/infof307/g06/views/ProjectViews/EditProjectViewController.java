@@ -1,13 +1,13 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.controllers.ProjectController;
+import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -29,8 +29,8 @@ public class EditProjectViewController extends ProjectInputViewController{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         super.initialize(url, resourceBundle);
-        try { initFields(); }
-        catch (SQLException throwables) { throwables.printStackTrace(); }
+        initFields();
+
     }
 
     /**
@@ -40,7 +40,7 @@ public class EditProjectViewController extends ProjectInputViewController{
      * @throws SQLException throws SQLException
      */
     @Override
-    protected void events(ActionEvent event) throws SQLException {
+    protected void events(ActionEvent event){
         if (event.getSource() == editProjectBtn) {
             controller.editProject(this);
             MainController.closeStage();
@@ -53,9 +53,8 @@ public class EditProjectViewController extends ProjectInputViewController{
      * @throws SQLException throws SQLException
      */
     @FXML
-    public void initFields() throws SQLException {
-        int id = ProjectDB.getProjectID(Global.currentProject);
-        Project project= ProjectDB.getProject(id);
+    public void initFields(){
+        Project project= ProjectController.getProject(Global.currentProject);
         nameProject.setText(project.getTitle());
         descriptionProject.setText(project.getDescription());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
