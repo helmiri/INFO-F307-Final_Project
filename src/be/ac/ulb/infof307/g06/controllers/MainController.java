@@ -79,6 +79,7 @@ public class MainController extends Application {
         MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
     }
 
+    //--------------- METHODS ----------------
     /**
      * Initializes the main view.
      *
@@ -91,30 +92,34 @@ public class MainController extends Application {
     /**
      * Checks the invitation requests.
      *
-     * @throws SQLException throws SQLException
+     * @throws SQLException        throws SQLException
      * @throws java.lang.Exception throws Exception
      */
-    public void checkInvites()throws SQLException, java.lang.Exception{
+    public void checkInvites() throws SQLException, java.lang.Exception {
         List<Invitation> invitations = UserDB.getInvitations(Global.userID);
         for (Invitation invitation : invitations) {
             view.showInvitation(invitation.getProject_id(), invitation.getSender_id());
         }
     }
 
-    public static void load(FXMLLoader loader,Integer height,Integer width) throws IOException {
-        // Set main stage
-        primaryStage.setResizable(true);
-        primaryStage.setHeight(height);
-        primaryStage.setWidth(width);
-        primaryStage.centerOnScreen();
-        primaryStage.setResizable(false);
+    public static void load(FXMLLoader loader, Integer height, Integer width) {
+        try {
+            // Set main stage
+            primaryStage.setResizable(true);
+            primaryStage.setHeight(height);
+            primaryStage.setWidth(width);
+            primaryStage.centerOnScreen();
+            primaryStage.setResizable(false);
 
-        // Setup the new page.
-        AnchorPane connectionAnchor = loader.load();
-        mainLayout.getChildren().setAll(connectionAnchor);
+            // Setup the new page.
+            AnchorPane connectionAnchor = loader.load();
+            mainLayout.getChildren().setAll(connectionAnchor);
+        } catch (IOException e) {
+            alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred when loading the window.");
+        }
     }
 
-    public static void showStage(String title, Integer width, Integer height, Modality modality, FXMLLoader loader ){
+    public static void showStage(String title, Integer width, Integer height, Modality modality, FXMLLoader loader) {
         try {
             AnchorPane conditionsAnchor = loader.load();
             stage = new Stage();

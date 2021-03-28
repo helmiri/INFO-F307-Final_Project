@@ -28,20 +28,26 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="logInUsernameField" alignment="CENTER" promptText="username" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <PasswordField fx:id="logInPasswordField" alignment="CENTER" promptText="password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <TextField fx:id="logInUsernameField" alignment="CENTER" promptText="username" GridPane.columnIndex="2"
+                       GridPane.rowIndex="1"/>
+            <PasswordField fx:id="logInPasswordField" alignment="CENTER" promptText="password" GridPane.columnIndex="2"
+                           GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
-                  <Insets />
+                  <Insets/>
                </GridPane.margin>
             </PasswordField>
-            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#events" prefHeight="45.0" prefWidth="204.0" style="-fx-background-color: #4fc3f7;" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+            <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#logInEvents"
+                    prefHeight="45.0" prefWidth="204.0" style="-fx-background-color: #4fc3f7;" text="LOG IN"
+                    textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <font>
-                  <Font name="Calibri Bold" size="24.0" />
+                  <Font name="Calibri Bold" size="24.0"/>
                </font>
             </Button>
-            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#events" prefHeight="45.0" prefWidth="226.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#logInEvents"
+                    prefHeight="45.0" prefWidth="226.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP"
+                    textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
-                  <Font name="Calibri Bold" size="24.0" />
+                  <Font name="Calibri Bold" size="24.0"/>
                </font>
             </Button>
          </children>

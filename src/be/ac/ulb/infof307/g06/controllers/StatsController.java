@@ -7,7 +7,7 @@ import be.ac.ulb.infof307.g06.models.Statistics;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.StatsViewController;
+import be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController;
 import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,24 +34,26 @@ public class StatsController {
      * @param view StatsViewController
      * @param root TreeItem<Statistics>
      */
-    public void init(StatsViewController view,TreeItem<Statistics> root){
+    public void init(StatsViewController view, TreeItem<Statistics> root) {
         statsView = view;
         statsView.initTree();
-        List<Integer> projectsArray = null;
+        List<Integer> projectsArray;
         try {
             projectsArray = getProjects();
-            setStats(projectsArray,root);
-
+            setStats(projectsArray, root);
         } catch (DatabaseException e) {
-            view.showAlert("An error has occurred with the database.");
+            statsView.showAlert("An error has occurred with the database.");
         }
 
     }
 
+    /**
+     * Sets the loader to show the statistics scene.
+     */
     public static void show() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
-        MainController.load(loader,940,1515);
+        MainController.load(loader, 940, 1515);
     }
 
     /**
@@ -171,25 +173,28 @@ public class StatsController {
      * Transforms the tree table view into strings and writes it down in a file.
      *
      * @param fileName String
-     * @param root TreeItem<Statistics>
-     * @throws SQLException
+     * @param root     TreeItem<Statistics>
      */
-    public void exportStatsAsJson(String fileName,String path,TreeItem<Statistics> root) throws SQLException {
-        Gson gson = new Gson();
-        String finalString = "{\n";
+    public void exportStatsAsJson(String fileName, String path, TreeItem<Statistics> root) {
+        try {
+            Gson gson = new Gson();
+            String finalString = "{\n";
 
-        for (int i = 0; i < root.getChildren().size(); i++) {
-            Statistics child = root.getChildren().get(i).getValue();
-            String treeBranchString = "";
-            String title = child.getTitle();
-            int id = ProjectDB.getProjectID(title);
-            treeBranchString = statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
-            String infoStat = gson.toJson(child);
-            String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
-            treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
-            finalString += treeBranchString;
+            for (int i = 0; i < root.getChildren().size(); i++) {
+                Statistics child = root.getChildren().get(i).getValue();
+                String treeBranchString = "";
+                String title = child.getTitle();
+                int id = ProjectDB.getProjectID(title);
+                treeBranchString = statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
+                String infoStat = gson.toJson(child);
+                String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
+                treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
+                finalString += treeBranchString;
+            }
+            write(finalString + "}", fileName, path);
+        } catch (SQLException e) {
+            statsView.showAlert("An error has occurred during the exportation. Couldn't find some informations in the database");
         }
-        write(finalString + "}", fileName, path);
     }
 
     /**
@@ -200,7 +205,6 @@ public class StatsController {
      * @param treeBranchString String
      * @param root TreeItem<Statistics>
      * @return String
-     * @throws SQLException
      */
     public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Statistics> root) throws SQLException {
         List<Integer> projectsID = ProjectDB.getSubProjects(id);
@@ -223,12 +227,11 @@ public class StatsController {
     }
 
     /**
-     * Writes informations in a file.
+     * Writes informations in a file for a json format.
      *
      * @param chosenString String
-     * @param fileName String
-     * @param path String
-     * @throws IOException
+     * @param fileName     String
+     * @param path         String
      */
     public void write(String chosenString, final String fileName,String path) {
         try {
@@ -236,11 +239,8 @@ public class StatsController {
             fw.write(chosenString + "\n");
             fw.close();
             statsView.setMsg("The exportation succeeded.");
-        }
-        catch (IOException throwables){
-            System.out.println("The exportation failed.");
+        } catch (IOException e) {
             statsView.setMsg("The exportation failed.");
-
         }
     }
 
@@ -248,29 +248,26 @@ public class StatsController {
      * Exports the statistics in CSV file.
      *
      * @param fileName String : name given to the file
-     * @param path String : path given for the destination of the file exported
-     * @param root TreeItem<Statistics> : root of the TreeTableView
+     * @param path     String : path given for the destination of the file exported
+     * @param root     TreeItem<Statistics> : root of the TreeTableView
      */
-    public void exportStatsAsCSV(final String fileName, String path, TreeItem<Statistics> root) throws FileNotFoundException {
-        PrintWriter csv = new PrintWriter(path+fileName);
-        // Name of columns
-        String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "EstimatedDate"+ "," + "Parent ID" + "\r\n";
+    public void exportStatsAsCSV(final String fileName, String path, TreeItem<Statistics> root) {
         try {
-            for(int i=0;i<root.getChildren().size();i++) {
+            PrintWriter csv = new PrintWriter(path + fileName);
+            // Name of columns
+            String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "EstimatedDate" + "," + "Parent ID" + "\r\n";
+            for (int i = 0; i < root.getChildren().size(); i++) {
                 String mainProjectTitle = root.getChildren().get(i).getValue().getTitle();
                 int mainProjectID = ProjectDB.getProjectID(mainProjectTitle);
-                content = toCSVFormat(mainProjectID, root.getChildren().get(i).getValue(),content, root.getChildren().get(i));
+                content = statsToCSVString(mainProjectID, root.getChildren().get(i).getValue(), content, root.getChildren().get(i));
             }
             csv.write(content);
             csv.close();
-            System.out.println("Finished (csv)!");
             statsView.setMsg("The exportation succeeded.");
-
-        }
-        catch(Exception ignored) {
-            System.out.println("The exportation failed.");
+        } catch (FileNotFoundException e) {
+            statsView.showAlert("Couldn't find or access to this file.");
+        } catch (SQLException e) {
             statsView.setMsg("The exportation failed.");
-
         }
     }
 
@@ -278,20 +275,19 @@ public class StatsController {
      * Returns CSV format.
      *
      * @param currentStatID Integer : ID of the current object statistics
-     * @param currentStat Statistics : the information to add in the content
-     * @param content String : CSV format
-     * @param root TreeItem<Statistics> : root of the TreeTableView
+     * @param currentStat   Statistics : the information to add in the content
+     * @param content       String : CSV format
+     * @param root          TreeItem<Statistics> : root of the TreeTableView
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
-    public static String toCSVFormat(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
-        if(ProjectDB.getSubProjects(currentStatID).size()==0){
-            content += currentStatID+ ","+ currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," +  '"' + currentStat.getTasks() +  '"' + "," + currentStat.getEstimatedDate()+ "," + ProjectDB.getProject(currentStatID).getParent_id()+ "\r\n";
-        }
-        else{
-            content += currentStatID + ","+ currentStat.getTitle() + "," + '"' + currentStat.getCollaborators()+ '"' + "," +  '"' + currentStat.getTasks()+  '"'+ "," + currentStat.getEstimatedDate()+ "," + ProjectDB.getProject(currentStatID).getParent_id()+ "\r\n";
-            for(int k = 0; k<ProjectDB.getSubProjects(currentStatID).size(); k++ ) {
-                content = toCSVFormat(ProjectDB.getSubProjects(currentStatID).get(k),root.getChildren().get(k).getValue(), content,root.getChildren().get(k));
+    public static String statsToCSVString(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
+        if (ProjectDB.getSubProjects(currentStatID).size() == 0) {
+            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + ProjectDB.getProject(currentStatID).getParent_id() + "\r\n";
+        } else {
+            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + ProjectDB.getProject(currentStatID).getParent_id() + "\r\n";
+            for (int k = 0; k < ProjectDB.getSubProjects(currentStatID).size(); k++) {
+                content = statsToCSVString(ProjectDB.getSubProjects(currentStatID).get(k), root.getChildren().get(k).getValue(), content, root.getChildren().get(k));
             }
         }
         return content;

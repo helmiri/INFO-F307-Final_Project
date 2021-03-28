@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views;
+package be.ac.ulb.infof307.g06.views.StatisticsViews;
 
 import be.ac.ulb.infof307.g06.controllers.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;
@@ -12,8 +12,8 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import java.io.File;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;

@@ -1,16 +1,18 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SignUpController;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,19 +32,16 @@ public class LoginViewController implements Initializable {
     private PasswordField logInPasswordField;
     private final LoginController controller = new LoginController();
     //--------------- METHODS ----------------
+
     /**
      * Initializes the database for the projects and users.
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            controller.init();
-        } catch (SQLException | ClassNotFoundException throwables) {
-            System.out.println("An error has occurred!");
-        }
+        controller.init();
     }
 
     /**
@@ -50,25 +49,27 @@ public class LoginViewController implements Initializable {
      *
      * @param event ActionEvent
      * @throws SQLException throws database error
-     * @throws IOException throws in and out exception error
+     * @throws IOException  throws in and out exception error
      */
     @FXML
-    private void events(ActionEvent event) throws SQLException, IOException {
-        if (event.getSource() == connectionBtn) { logInConditions(); }
-        else if (event.getSource() == registerBtn) { SignUpController.show(); }
+    private void logInEvents(ActionEvent event) throws IOException {
+        if (event.getSource() == connectionBtn) {
+            logInConditions();
+        } else if (event.getSource() == registerBtn) {
+            SignUpController.show();
+        }
     }
 
     /**
      * Gets the log in informations and see if the user already exists.
      *
-     * @throws SQLException throws database error
      * @throws IOException throws in and out exception error
      */
     @FXML
-    private void logInConditions() throws SQLException, IOException {
+    private void logInConditions() throws IOException {
         String passwd = getTextField(logInPasswordField);
         String user = getTextField(logInUsernameField);
-        Global.userID = controller.validateUserID(passwd,user);
+        Global.userID = controller.validateUserID(passwd, user);
         switch (Global.userID) {
             case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong");
             case -1 -> loginErrMsg.setText("This user is already connected");
@@ -83,7 +84,22 @@ public class LoginViewController implements Initializable {
      * @return String
      */
     @FXML
-    public String getTextField(TextField textField){ return textField.getText(); }
+    public String getTextField(TextField textField) {
+        return textField.getText();
+    }
+
+    /**
+     * Show an error pop up message.
+     *
+     * @param message String
+     */
+    public void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
 
 }
 

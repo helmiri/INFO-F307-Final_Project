@@ -1,9 +1,8 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
 import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SignUpController;
-import be.ac.ulb.infof307.g06.models.UserInformations;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class SignUpViewController {
     //-------------- ATTRIBUTES ----------------
@@ -41,52 +39,42 @@ public class SignUpViewController {
      * Button's events.
      *
      * @param event ActionEvent
-     * @throws SQLException throws database exceptions
-     * @throws IOException throws In and Out exceptions
      */
     @FXML
-    private void events(ActionEvent event) throws IOException, SQLException {
-        if( event.getSource()== signUpBtn)  { signUpConditions() ;}
-        else if( event.getSource()== backBtn){ LoginController.show();}
-    }
-
-    /**
-     * Creates an account with the sign up informations if they are valid, if not, shows up a pop up window.
-     *
-     * @throws SQLException throws database exceptions
-     * @throws IOException throws In and Out exceptions
-     */
-    @FXML
-    private void signUpConditions() throws SQLException, IOException {
-        if (       controller.validateTextField(lastNameField,"^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
-                && controller.validateTextField(firstNameField,"^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
-                && controller.validateTextField(signUpUsernameField,"^[^±!@£$%^&*+§¡€#¢§¶•ª º«\\/<>?:;|=.,]{6,16}$")
-                && controller.validateTextField(signUpPasswordField,"((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})")
-                && controller.validateTextField(emailField, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
-                && passwordConfirmationField.getText().equals(signUpPasswordField.getText())) {
-            controller.setInformations(firstNameField.getText(),lastNameField.getText(),emailField.getText(),signUpUsernameField.getText(),signUpPasswordField.getText());
-            if (!(UserDB.userExists(UserInformations.getUsername()))) { SignUpController.showConditionStage(); }
-            else{signUpTxtPopup.setText("This user already exists!");}
-        } else {
-            alertWindow();
+    private void signUpEvents(ActionEvent event) throws IOException {
+        if (event.getSource() == signUpBtn) {
+            signUpConditions();
+        } else if (event.getSource() == backBtn) {
+            LoginController.show();
         }
     }
 
     /**
-     *  Creates an alert window.
+     * Creates an account with the sign up informations if they are valid, if not, shows up a pop up window.
      */
     @FXML
-    private void alertWindow(){
-        //TODO à mettre dans le main controller
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Wrong enters");
-        alert.setHeaderText(null);
-        alert.getDialogPane().setMinWidth(900);
-        alert.setContentText("One of the sign up options is wrong:\n   " +
-                "- The last name and the first name must not contain any special characters\n   " +
-                "- The email Address must be a valid one: 'an.example@gmail.com'\n   " +
-                "- The username must not contain any special characters or spaces (8 to 16 chars)\n   " +
-                "- The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)\n");
-        alert.showAndWait();
+    private void signUpConditions() {
+        if (controller.validateTextField(lastNameField, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
+                && controller.validateTextField(firstNameField, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
+                && controller.validateTextField(signUpUsernameField, "^[^±!@£$%^&*+§¡€#¢§¶•ª º«\\/<>?:;|=.,]{6,16}$")
+                && controller.validateTextField(signUpPasswordField, "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})")
+                && controller.validateTextField(emailField, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
+                && passwordConfirmationField.getText().equals(signUpPasswordField.getText())) {
+            controller.setInformations(firstNameField.getText(), lastNameField.getText(), emailField.getText(), signUpUsernameField.getText(), signUpPasswordField.getText());
+            if (!(controller.doesUserExist())) {
+                SignUpController.showConditionStage();
+            } else {
+                signUpTxtPopup.setText("This user already exists!");
+            }
+        } else {
+            String contextText = """
+                    One of the sign up options is wrong:
+                       - The last name and the first name must not contain any special characters
+                       - The email Address must be a valid one: 'an.example@gmail.com'
+                       - The username must not contain any special characters or spaces (8 to 16 chars)
+                       - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)
+                    """;
+            MainController.alertWindow(Alert.AlertType.WARNING, "Wrong enters", contextText);
+        }
     }
 }
