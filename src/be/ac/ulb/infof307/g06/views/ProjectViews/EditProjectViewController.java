@@ -2,12 +2,12 @@ package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.ProjectController;
-import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;

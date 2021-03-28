@@ -1,17 +1,14 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
-import com.sun.tools.javac.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
