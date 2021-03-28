@@ -54,6 +54,12 @@ public class ProjectController{
         }
     }
 
+    /**
+     * gets a project information and dislpays it
+     *
+     * @param view ProjectsViewController
+     * @param selectedProject TreeItem<Project>
+     */
     public void getProjectInfo(ProjectsViewController view,  TreeItem<Project> selectedProject){
         try{
             String description = selectedProject.getValue().getDescription();
@@ -149,6 +155,13 @@ public class ProjectController{
         }
     }
 
+    /**
+     * returns if a user is in a task's collaborators
+     *
+     * @param taskId int
+     * @param user String
+     * @return boolean
+     */
     public boolean isUserInTask(int taskId, String user){
         try{
             return ProjectDB.getTaskCollaborator(taskId).contains(Integer.parseInt(UserDB.getUserInfo(user).get("id")));
@@ -201,6 +214,11 @@ public class ProjectController{
         }
     }
 
+    /**
+     * deletes a project from the databse
+     *
+     * @param name String
+     */
     public void deleteProject(String name){
         try{
             int projectID = ProjectDB.getProjectID(name);
@@ -216,7 +234,6 @@ public class ProjectController{
      * @param addView ProjectInputViewController
      */
     public void addProject(ProjectInputViewController addView){
-        //TODO: add conditions to projects creation
         try{
             int parentID=0;
             String nameProject = addView.getNameProject();
@@ -311,6 +328,8 @@ public class ProjectController{
     /**
      * Adds a task to the parent project, adds it to the database.
      *
+     * @param taskDescription String
+     * @param taskParent String
      */
     public void addTask(String taskDescription, String taskParent){
         try{
@@ -346,6 +365,7 @@ public class ProjectController{
     /**
      * Displays it in the table view.
      *
+     * @param selectedProject TreeItem<Project>
      */
     public ObservableList<Task> getTasks(TreeItem<Project> selectedProject){
         try{
@@ -391,7 +411,6 @@ public class ProjectController{
      *
      * @param project TreeItem<Project>
      * @return ObservableList<String>
-     * @throws SQLException
      */
     public ObservableList<String> getCollaborators(TreeItem<Project> project){
         List<String> collaboratorsList = new ArrayList<>();
@@ -426,7 +445,6 @@ public class ProjectController{
      * @param username String
      * @param project int
      * @return Boolean
-     * @throws SQLException
      */
     public Boolean addCollaborator(String username, int project){
         try{
@@ -452,10 +470,9 @@ public class ProjectController{
 
     /**
      *
-     * @param project
-     * @param fw
-     * @return
-     * @throws IOException
+     * @param project Project
+     * @param fw FileWriter
+     * @return boolean
      */
     public boolean exportProject1(Project project, FileWriter fw) throws IOException {
         try {
