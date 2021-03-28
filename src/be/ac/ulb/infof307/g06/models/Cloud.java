@@ -69,29 +69,18 @@ public class Cloud {
         in.close();
     }
 
-    public static int downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
-        String tempPath = localFilePath + ".temp";
+    public static void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
+        String tempPath = localFilePath;
         OutputStream outputStream = new FileOutputStream(tempPath);
         FileMetadata metadata = dboxClient.files()
                 .downloadBuilder(cloudFilePath)
                 .download(outputStream);
 
         outputStream.close();
-        File tempFile = new File(tempPath);
-        File localFile = new File(localFilePath);
-
-        if (metadata.getContentHash().equals(dropBoxHash(localFilePath))) {
-            tempFile.delete();
-            return 0;
-        } else {
-            localFile.delete();
-            tempFile.renameTo(localFile);
-            return 1;
-        }
     }
 
 
-    private static String dropBoxHash(String file) {
+    public static String dropBoxHash(String file) {
         MessageDigest hasher = new DropBoxContentHasher();
         byte[] buf = new byte[1024];
         try (InputStream in = new FileInputStream(file)) {
