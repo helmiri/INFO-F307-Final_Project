@@ -17,10 +17,26 @@ import java.util.Map;
  *
  */
 public class UserDB extends Database {
-    private static int diskLimit = 268435456;
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
+    }
+
+    @Override
+    protected void createTables() throws SQLException {
+        Statement state = connect();
+        state.execute("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
+                "email varchar(40), password varchar(20), status boolean, accToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
+        state.execute("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit integer)");
+        close(state);
+    }
+
+    public static boolean isFirstBoot() throws SQLException {
+        Statement state = connect();
+        ResultSet res = state.executeQuery("SELECT * FROM users;");
+        boolean empty = res.isClosed();
+        close(state, res);
+        return empty;
     }
 
     /**
@@ -32,7 +48,7 @@ public class UserDB extends Database {
      * @param email    email
      * @param password password
      * @return the unique identifier of the newly inserted user
-     * @throws SQLException Error accessing the database
+     * @throws SQLException If a database access error occurs
      */
     public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         connect();
@@ -43,7 +59,6 @@ public class UserDB extends Database {
         state.setString(3, userName);
         state.setString(4, email);
         state.setString(5, password);
-//        state.setInt(6, diskLimit);
         state.execute();
         ResultSet rs = state.getGeneratedKeys();
         int res = rs.getInt(1);
@@ -51,9 +66,6 @@ public class UserDB extends Database {
         return res;
     }
 
-    public int getMaxLimit() {
-        return diskLimit;
-    }
 
     /**
      * Queries the database for the requested userName
@@ -90,6 +102,7 @@ public class UserDB extends Database {
         return key;
     }
 
+
     private static Integer validate(String password, Statement state, ResultSet res) throws SQLException {
         if (res.getBoolean("status")) {
             return null;
@@ -107,8 +120,8 @@ public class UserDB extends Database {
      * Queries the database for the user's information
      *
      * @param userName The user's username
-     * @return Map<String, String> where the key is the field's name containing fName, lName, and email
-     * @throws SQLException On error accessing the database
+     * @return Map<String, String> where the key is the field's name containing fName, lName, email, accToken, clientID
+     * @throws SQLException If a database access error occurs
      */
     public static Map<String, String> getUserInfo(String userName) throws SQLException {
         Map<String, String> res = new HashMap<>();
@@ -136,6 +149,15 @@ public class UserDB extends Database {
         return res;
     }
 
+
+    /**
+     * Queries the database for the user's information
+     *
+     * @param id The user's id
+     * @return Map<String, String> where the key is the field's name containing fName, lName, email, uName
+     * @throws SQLException If a database access error occurs
+     */
+
     public static Map<String, String> getUserInfo(int id) throws SQLException {
         Map<String, String> res = new HashMap<>();
         Statement state = connect();
@@ -149,13 +171,20 @@ public class UserDB extends Database {
         return res;
     }
 
-    public static void disconnectUser(int userID) throws SQLException {
+
+    /**
+     * Disconnects the current user
+     *
+     * @throws SQLException When a database access error occurs
+     */
+    public static void disconnectUser() throws SQLException {
         Statement state = connect();
-        state.executeUpdate("UPDATE users SET status=false WHERE id='" + userID + "'");
+        state.executeUpdate("UPDATE users SET status=false WHERE id='" + Global.userID + "'");
         close(state);
     }
 
-    public static int  sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
+
+    public static int sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
         int id;
@@ -188,7 +217,8 @@ public class UserDB extends Database {
         close(state, rs);
         return invitations;
     }
-    public static Invitation getInvitation(int id) throws SQLException{
+
+    public static Invitation getInvitation(int id) throws SQLException {
         Invitation invitation;
         Statement state = connect();
         ResultSet rs = state.executeQuery("SELECT id, project_id, user1_id, user2_id FROM Invitations WHERE id = '" + id + "';");
@@ -197,7 +227,12 @@ public class UserDB extends Database {
         return invitation;
     }
 
-
+    /**
+     * Queries the access token and clientID of the user's cloud service
+     *
+     * @return A HashMap containing accToken and clientID
+     * @throws SQLException
+     */
     public static HashMap<String, String> getCloudCredentials() throws SQLException {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT accToken, clientID from users where id='" + Global.userID + "'");
@@ -208,28 +243,58 @@ public class UserDB extends Database {
         return credentials;
     }
 
-    public static void addAccToken(String token, String clientID) throws SQLException {
+    /**
+     * Sets the user's cloud credentials
+     *
+     * @param token    The access token
+     * @param clientID The cloud service's client ID
+     * @throws SQLException When a database access error occurs
+     */
+    public static void addCloudCredentials(String token, String clientID) throws SQLException {
         Statement state = connect();
         state.executeUpdate("UPDATE users SET accToken='" + token + "', clientID='" + clientID + "' where id='" + Global.userID + "'");
         close(state);
     }
 
-    public static void setUserInfo(String userName, String fName, String lName, String email, String newPassword) throws SQLException {
+    /**
+     * Sets the user's information
+     *
+     * @param fName       new first name
+     * @param lName       new last name
+     * @param email       new email address
+     * @param newPassword new password
+     * @throws SQLException When a database access error occurs
+     */
+    public static void setUserInfo(String fName, String lName, String email, String newPassword) throws SQLException {
         Statement state = connect();
-        setField(userName, fName, "fName", state);
-        setField(userName, lName, "lName", state);
-        setField(userName, email, "email", state);
-        setField(userName, newPassword, "password", state);
+        setField(fName, "fName", state);
+        setField(lName, "lName", state);
+        setField(email, "email", state);
+        setField(newPassword, "password", state);
         close(state);
     }
 
-    private static void setField(String userName, String info, String field, Statement state) throws SQLException {
+    /**
+     * Edits a user's info field
+     *
+     * @param info  New info
+     * @param field Field type
+     * @param state Statement object used to execute the query
+     * @throws SQLException When a database access error occurs
+     */
+    private static void setField(String info, String field, Statement state) throws SQLException {
         if (info.isBlank()) {
             return;
         }
-        state.executeUpdate("UPDATE users SET " + field + "='" + info + "' WHERE userName='" + userName + "'");
+        state.executeUpdate("UPDATE users SET " + field + "='" + info + "' WHERE id='" + Global.userID + "'");
     }
 
+    /**
+     * Queries a user's storage usage
+     *
+     * @return The memory usage in bytes
+     * @throws SQLException When a database access error occurs
+     */
     public static int getDiskUsage() throws SQLException {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT diskUsage from users where id='" + Global.userID + "'");
@@ -238,16 +303,34 @@ public class UserDB extends Database {
         return disk;
     }
 
+    /**
+     * Queries disk space available
+     *
+     * @return Available disk space in bytes
+     * @throws SQLException
+     */
     public static int availableDisk() throws SQLException {
         return getDiskLimit() - getDiskUsage();
     }
 
+    /**
+     * Sets the new memory usage
+     *
+     * @param diff The new space usage in bytes
+     * @throws SQLException When a database access error occurs
+     */
     public static void updateDiskUsage(int diff) throws SQLException {
         Statement state = connect();
         state.executeUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + Global.userID + "'");
         close(state);
     }
 
+    /**
+     * Returns the max memory usage allowed per user
+     *
+     * @return Limit in bytes
+     * @throws SQLException When a database access error occurs
+     */
     private static int getDiskLimit() throws SQLException {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT diskLimit FROM admin");
@@ -256,6 +339,13 @@ public class UserDB extends Database {
         return limit;
     }
 
+    /**
+     * This method should only be called at the first boot
+     * It should be used to set the first user to sign up as the system's administrator
+     *
+     * @param diskLimit (Only parameter for now) Memory usage limit to be applied to all users in bytes
+     * @throws SQLException
+     */
     public static void setAdmin(int diskLimit) throws SQLException {
         Statement state = connect();
         state.executeUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + Global.userID + "," + diskLimit + ")");
