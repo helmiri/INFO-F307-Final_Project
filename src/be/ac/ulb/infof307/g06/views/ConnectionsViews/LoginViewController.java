@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -83,6 +84,19 @@ public class LoginViewController implements Initializable {
      */
     @FXML
     public String getTextField(TextField textField){ return textField.getText(); }
+
+    /**
+     * Show an error pop up message.
+     *
+     * @param message String
+     */
+    public void showAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
 
 }
 

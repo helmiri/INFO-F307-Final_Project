@@ -12,11 +12,8 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import java.io.File;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StatsViewController implements Initializable {
@@ -63,10 +60,10 @@ public class StatsViewController implements Initializable {
      * The main method for button's events.
      *
      * @param event;
-     * @throws Exception;
+     * @throws IOException
      */
     @FXML
-    private void statsEvents(ActionEvent event) throws IOException, SQLException {
+    private void statsEvents(ActionEvent event) throws IOException{
         if (event.getSource() == backToProjectMenu) { Main.showProjectMenuScene(); }
         else if (event.getSource() == logOutBtn) { Main.showLoginScene(); }
         else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) { exports(event); }
@@ -107,7 +104,7 @@ public class StatsViewController implements Initializable {
      *
      * @param event ActionEvent
      */
-    public void exports(ActionEvent event) throws FileNotFoundException, SQLException {
+    public void exports(ActionEvent event){
         String fileName = fileNameTextField.getText();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("src"));
@@ -130,8 +127,13 @@ public class StatsViewController implements Initializable {
      */
     public void setMsg(String msg){ msgExportText.setText(msg); }
 
+    /**
+     * Show an error pop up message.
+     *
+     * @param message String
+     */
     public void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
         alert.setContentText(message);
