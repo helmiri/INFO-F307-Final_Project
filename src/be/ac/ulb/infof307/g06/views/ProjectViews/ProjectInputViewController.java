@@ -39,11 +39,8 @@ public class ProjectInputViewController implements Initializable {
      */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new ProjectController();
-        try {
-            controller.initComboBox(this);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        controller.initComboBox(this);
+
     }
     /**
      * The main method for button's events.
