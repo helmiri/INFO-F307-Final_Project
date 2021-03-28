@@ -106,8 +106,6 @@ public class StatsViewController implements Initializable {
      * Executes the right export method.
      *
      * @param event ActionEvent
-     * @throws FileNotFoundException
-     * @throws SQLException
      */
     public void exports(ActionEvent event) throws FileNotFoundException, SQLException {
         String fileName = fileNameTextField.getText();
