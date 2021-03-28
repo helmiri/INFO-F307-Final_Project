@@ -1,15 +1,29 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.views.MenuViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import be.ac.ulb.infof307.g06.models.Tag;
+import javafx.fxml.FXMLLoader;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsController {
+    public static void showSettingsMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MenuViewController.class.getResource("SettingsMenu.fxml"));
+        MainController.load(loader, 940,1515);
+    }
+
+    public static void showTagsMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(TagsViewController.class.getResource("Tags.fxml"));
+        MainController.load(loader,940,1515);
+    }
+
     public void addTag(TagsViewController view, String title, String color) throws SQLException {
         List<Tag> tags = ProjectDB.getAllTags();
         List<String> tagNames = new ArrayList<>();

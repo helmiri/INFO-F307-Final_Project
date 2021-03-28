@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
 import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.SignUpController;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +55,7 @@ public class LoginViewController implements Initializable {
     @FXML
     private void events(ActionEvent event) throws SQLException, IOException {
         if (event.getSource() == connectionBtn) { logInConditions(); }
-        else if (event.getSource() == registerBtn) { Main.showSignUpScene(); }
+        else if (event.getSource() == registerBtn) { SignUpController.show(); }
     }
 
     /**

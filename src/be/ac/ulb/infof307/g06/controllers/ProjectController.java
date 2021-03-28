@@ -13,8 +13,9 @@ import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -52,6 +53,30 @@ public class ProjectController{
         } catch (SQLException e) {
             view.showError("Error in window initialization: " + e);
         }
+    }
+
+    public static void show() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
+        MainController.load(loader, 940, 1515);
+    }
+
+    public static void showAddProjectStage() {
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(ProjectsViewController.class.getResource("AddProjectView.fxml"));
+        MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader );
+    }
+
+    public static void showEditProjectStage() {
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(ProjectsViewController.class.getResource("EditProjectView.fxml"));
+        MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader );
+    }
+
+    public static void showEditTaskStage() {
+        FXMLLoader loader =  new FXMLLoader();
+        loader.setLocation(ProjectsViewController.class.getResource("TaskEditView.fxml"));
+        MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, loader );
     }
 
     /**
@@ -263,7 +288,7 @@ public class ProjectController{
                 if (parentID == 0) { Global.projectsView.addChild(Global.root,child); }
                 else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
             }
-            Main.closeStage();
+            MainController.closeStage();
         }catch(SQLException e){
             Global.projectsView.showError("Error in adding project: " + e);
         }
@@ -777,5 +802,22 @@ public class ProjectController{
         }
         catch(Exception ignored) {return false;}
     }
+    @FXML
+    public static void alertExportImport(String choice, boolean succeed){
+        //TODO à mettre dans le main controller
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(choice);
+        alert.setHeaderText(null);
+        alert.getDialogPane().setMinWidth(900);
+        if(succeed){
+            alert.setContentText("Congrat,your project is "+ choice +"ed." );
+            alert.showAndWait();
+        }
+        else {
+            alert.setContentText("Sorry, failed to "+choice +" your project");
+            alert.showAndWait();
+        }
+    }
+
 }
 
