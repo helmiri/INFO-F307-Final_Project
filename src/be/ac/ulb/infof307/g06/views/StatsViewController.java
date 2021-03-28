@@ -12,7 +12,9 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import java.io.File;
+
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -64,10 +66,10 @@ public class StatsViewController implements Initializable {
      * @throws Exception;
      */
     @FXML
-    private void events(ActionEvent event) throws Exception {
-        if(event.getSource() == backToProjectMenu) { Main.showProjectMenuScene(); }
-        else if(event.getSource() == logOutBtn) { Main.showLoginScene(); }
-        else if(event.getSource() == exportJSONBtn || event.getSource() ==exportCSVBtn){exports(event);}
+    private void statsEvents(ActionEvent event) throws IOException, SQLException {
+        if (event.getSource() == backToProjectMenu) { Main.showProjectMenuScene(); }
+        else if (event.getSource() == logOutBtn) { Main.showLoginScene(); }
+        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) { exports(event); }
     }
 
     /**
@@ -104,8 +106,6 @@ public class StatsViewController implements Initializable {
      * Executes the right export method.
      *
      * @param event ActionEvent
-     * @throws FileNotFoundException
-     * @throws SQLException
      */
     public void exports(ActionEvent event) throws FileNotFoundException, SQLException {
         String fileName = fileNameTextField.getText();
@@ -129,4 +129,12 @@ public class StatsViewController implements Initializable {
      * @param msg String
      */
     public void setMsg(String msg){ msgExportText.setText(msg); }
+
+    public void showAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
 }

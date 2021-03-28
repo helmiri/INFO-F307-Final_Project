@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Statistics;
@@ -30,21 +31,30 @@ public class StatsController {
     public void init(StatsViewController view,TreeItem<Statistics> root){
         statsView = view;
         statsView.initTree();
+        List<Integer> projectsArray = null;
         try {
-            List<Integer> projectsArray = getProjects();
+            projectsArray = getProjects();
             setStats(projectsArray,root);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+
+        } catch (DatabaseException e) {
+            view.showAlert("An error has occurred with the database.");
         }
+
     }
 
     /**
      * Returns a projects list of the actual user.
      *
      * @return List<Integer>
-     * @throws SQLException;
+     * @throws DatabaseException e
      */
-    public List<Integer> getProjects() throws SQLException { return ProjectDB.getUserProjects(Global.userID);}
+    public List<Integer> getProjects() throws DatabaseException {
+        try {
+            return ProjectDB.getUserProjects(Global.userID);
+        } catch(SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
 
     /**
      * Changes a list to a string without brackets.
@@ -62,9 +72,9 @@ public class StatsController {
      * @throws SQLException;
      */
     public ObservableList<String> collaboratorsToString(Integer project) throws SQLException {
-        List<Integer> collaborators = ProjectDB.getCollaborators(project);
         ObservableList<String> collaboratorsNames = FXCollections.observableArrayList();
-        for(Integer collaborator : collaborators){
+        List<Integer> collaborators = ProjectDB.getCollaborators(project);
+        for (Integer collaborator : collaborators) {
             collaboratorsNames.add(UserDB.getUserInfo(collaborator).get("uName"));
         }
         return collaboratorsNames;
@@ -78,11 +88,12 @@ public class StatsController {
      * @throws SQLException;
      */
     public ObservableList<String> tasksToString(Integer project) throws SQLException {
-        List<Task> tasks = ProjectDB.getTasks(project);
         ObservableList<String> tasksDescriptions = FXCollections.observableArrayList();
-        for(Task task : tasks){
+        List<Task> tasks = ProjectDB.getTasks(project);
+        for (Task task : tasks) {
             tasksDescriptions.add(task.getDescription());
         }
+
         return tasksDescriptions;
     }
 
@@ -102,22 +113,26 @@ public class StatsController {
      *
      * @param projects List<Integer>
      * @param root TreeItem<Statistics>
-     * @throws SQLException;
+     * @throws DatabaseException e
      */
-    public void setStats(List<Integer> projects,TreeItem<Statistics> root) throws SQLException {
-        Map<Integer, TreeItem<Statistics>> statsTreeMap = new HashMap<>();
-        for(Integer project : projects){
-            Project childProject= ProjectDB.getProject(project);
-            int parentID= childProject.getParent_id();
-            String title= childProject.getTitle();
-            int childID= ProjectDB.getProjectID(title);
-            Statistics stat= createStat(childProject,project,title,childID);
-            TreeItem<Statistics> statsItem = new TreeItem<>(stat);
-            statsTreeMap.put(childID, statsItem);
-            if (parentID== 0){ statsView.addChild(root,statsItem); }
-            else { statsView.addChild(statsTreeMap.get(parentID),statsItem); }
+    public void setStats(List<Integer> projects,TreeItem<Statistics> root) throws DatabaseException {
+        try{
+            Map<Integer, TreeItem<Statistics>> statsTreeMap = new HashMap<>();
+            for(Integer project : projects){
+                Project childProject= ProjectDB.getProject(project);
+                int parentID= childProject.getParent_id();
+                String title= childProject.getTitle();
+                int childID= ProjectDB.getProjectID(title);
+                Statistics stat= createStat(childProject,project,title,childID);
+                TreeItem<Statistics> statsItem = new TreeItem<>(stat);
+                statsTreeMap.put(childID, statsItem);
+                if (parentID== 0){ statsView.addChild(root,statsItem); }
+                else { statsView.addChild(statsTreeMap.get(parentID),statsItem); }
+            }
+            statsView.expandRoot(root);
+        }catch(SQLException e){
+            throw new DatabaseException(e);
         }
-        statsView.expandRoot(root);
     }
 
     /**
@@ -135,8 +150,9 @@ public class StatsController {
         ObservableList<String> tasksDescriptions = tasksToString(project);
         String date = dateToString(childProject.getDate());
         String collaboratorsList = listToString(collaboratorsNames);
-        String tasksList =  listToString(tasksDescriptions);
+        String tasksList = listToString(tasksDescriptions);
         return (new Statistics(childID,title,collaboratorsList,tasksList,date));
+
     }
 
     /**
@@ -146,21 +162,22 @@ public class StatsController {
      * @param root TreeItem<Statistics>
      * @throws SQLException
      */
-    public void exportStatsAsJson(String fileName,String path,TreeItem<Statistics> root) throws SQLException{
+    public void exportStatsAsJson(String fileName,String path,TreeItem<Statistics> root) throws SQLException {
         Gson gson = new Gson();
-        String finalString="{\n";
-        for(int i=0;i<root.getChildren().size();i++) {
+        String finalString = "{\n";
+
+        for (int i = 0; i < root.getChildren().size(); i++) {
             Statistics child = root.getChildren().get(i).getValue();
             String treeBranchString = "";
-            String title=child.getTitle();
-            int id=ProjectDB.getProjectID(title);
-            treeBranchString=statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
+            String title = child.getTitle();
+            int id = ProjectDB.getProjectID(title);
+            treeBranchString = statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
             String infoStat = gson.toJson(child);
             String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
-            treeBranchString=("'" +child.getTitle() + "'" + " :" + gotChild + ","+treeBranchString+"\n");
-            finalString+=treeBranchString;
+            treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
+            finalString += treeBranchString;
         }
-        write(finalString+"}",fileName,path);
+        write(finalString + "}", fileName, path);
     }
 
     /**
@@ -176,7 +193,7 @@ public class StatsController {
     public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Statistics> root) throws SQLException {
         List<Integer> projectsID = ProjectDB.getSubProjects(id);
         for (int k = 0; k < projectsID.size(); k++) {
-            Statistics stat =  root.getChildren().get(k).getValue();
+            Statistics stat = root.getChildren().get(k).getValue();
             if (ProjectDB.getSubProjects(projectsID.get(k)).size() == 0) {
                 //Has no children so we can let the brackets closed --> 'name':{info}.
                 String infoStat = gson.toJson(root.getChildren().get(k).getValue());
