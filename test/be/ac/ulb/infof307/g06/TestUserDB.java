@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06;
 
 
 import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -110,7 +111,8 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Add access token")
     public void testAddAccToken() throws SQLException {
-        UserDB.addAccToken("Random_Token_String", "CLIENTID");
+        Global.userID = 1;
+        UserDB.addCloudCredentials("Random_Token_String", "CLIENTID");
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("SELECT accToken from users where userName='User_1_userName'");
         String token = res.getString("accToken");
@@ -121,9 +123,45 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Get access token")
     public void testGetToken() throws SQLException {
+        Global.userID = 1;
         Statement state = db.createStatement();
-        state.executeUpdate("UPDATE users SET accToken='RANDOM_TOKEN' where userName='User_1_userName'");
+        state.executeUpdate("UPDATE users SET accToken='RANDOM_TOKEN' where id='1'");
+        state.executeUpdate("UPDATE users SET clientID='RANDOM_CLIENTID' where id='1'");
         state.close();
-        assertEquals("RANDOM_TOKEN", UserDB.getCloudCredentials());
+        Map<String, String> res = UserDB.getCloudCredentials();
+        assertEquals("RANDOM_TOKEN", res.get("accToken"));
+        assertEquals("RANDOM_CLIENTID", res.get("clientID"));
+    }
+
+    @Test
+    @DisplayName("Set user info")
+    public void testSetUserInfo() throws SQLException {
+        UserDB.setUserInfo("", "", "", "");
+    }
+
+    @Test
+    @DisplayName("Disk usage getter")
+    public void testGetDiskUsage() throws SQLException {
+        UserDB.getDiskUsage();
+    }
+
+    @Test
+    @DisplayName("Available disk getter")
+    public void testAvailableDisk() throws SQLException {
+        Global.userID = 1;
+        UserDB.availableDisk();
+    }
+
+    @Test
+    @DisplayName("Disk usage update")
+    public void testUpdateDiskUsage() throws SQLException {
+        UserDB.updateDiskUsage(0);
+
+    }
+
+    @Test
+    @DisplayName("Admin setter")
+    public void testSetAdmin() throws SQLException {
+        UserDB.setAdmin(0);
     }
 }

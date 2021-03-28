@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g06;
 
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +30,8 @@ public class TestDatabase {
         dbFields.add("userName");
         dbFields.add("email");
         dbFields.add("password");
+        dbFields.add("accToken");
+        dbFields.add("clientID");
 
         testData = new ArrayList<>(10);
         Map<String, String> userData;
@@ -53,8 +54,8 @@ public class TestDatabase {
         db = DriverManager.getConnection("jdbc:sqlite:test/be/ac/ulb/infof307/g06/testDB.db");
         PreparedStatement state;
         for (int i = 0; i < 10; i++) {
-            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)");
-            for (int j = 0; j < 5; j++) {
+            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, accToken, clientID) VALUES (?,?,?,?,?,?,?)");
+            for (int j = 0; j < 7; j++) {
                 state.setString(j + 1, testData.get(i).get(dbFields.get(j)));
             }
             state.execute();
