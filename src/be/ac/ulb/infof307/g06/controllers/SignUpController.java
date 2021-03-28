@@ -22,8 +22,8 @@ public class SignUpController {
 
     public static void showConditionStage() {
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(ConditionsViewController.class.getResource("ConditionsViewController.fxml"));
-        MainController.showStage("Terms", 900, 768, Modality.APPLICATION_MODAL, loader );
+        loader.setLocation(ConditionsViewController.class.getResource("TermsV2.fxml"));
+        MainController.showStage("Terms", 900, 768, Modality.APPLICATION_MODAL, loader);
     }
 
     /**

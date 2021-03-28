@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.controllers.*;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
@@ -18,6 +17,8 @@ import java.util.ResourceBundle;
 public class MenuViewController implements Initializable {
     //-------------- ATTRIBUTES ----------------
 
+    @FXML
+    public Button storageBtn;
     //* MAIN MENU *
     @FXML
     private Button logOutBtn;
@@ -31,9 +32,6 @@ public class MenuViewController implements Initializable {
     private Button calendarAccessBtn;
     @FXML
     private Button helpBtn;
-    @FXML
-    public Button cloudBtn;
-
     //* PROJECTS MENU *
     @FXML
     private Button projectManagementBtn;
@@ -52,13 +50,14 @@ public class MenuViewController implements Initializable {
     private MainController controller;
 
     //--------------- METHODS ----------------
+
     /**
      * Initializes the controller and checks the invitations.
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
-    public void initialize(URL url, ResourceBundle resourceBundle){
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new MainController();
         controller.init(this);
         try {
@@ -76,18 +75,27 @@ public class MenuViewController implements Initializable {
      */
     @FXML
     private void events(ActionEvent event) throws Exception {
-        if (event.getSource() == projectAccessBtn) { MainController.showProjectMenu(); }
-        else if (event.getSource() == logOutBtn) {
+        if (event.getSource() == projectAccessBtn) {
+            MainController.showProjectMenu();
+        } else if (event.getSource() == logOutBtn) {
             UserDB.disconnectUser();
-            LoginController.show(); }
-        else if (event.getSource() == mainMenuBtn) { MainController.showMainMenu(); }
-        else if (event.getSource() == statsAccessBtn) { StatsController.show(); }
-        else if (event.getSource() == settingsAccessBtn) { SettingsController.showSettingsMenu(); }
-        else if (event.getSource() == projectManagementBtn) { ProjectController.show(); }
-        else if (event.getSource() == tagsBtn) { SettingsController.showTagsMenu(); }
-        else if (event.getSource() == languageBtn) { System.out.println("test language button"); }
-        else if (event.getSource() == backBtn) { MainController.showMainMenu(); }else if (event.getSource() == cloudBtn) {
-            Main.showCloudSetting();
+            LoginController.show();
+        } else if (event.getSource() == mainMenuBtn) {
+            MainController.showMainMenu();
+        } else if (event.getSource() == statsAccessBtn) {
+            StatsController.show();
+        } else if (event.getSource() == settingsAccessBtn) {
+            SettingsController.showSettingsMenu();
+        } else if (event.getSource() == projectManagementBtn) {
+            ProjectController.show();
+        } else if (event.getSource() == tagsBtn) {
+            SettingsController.showTagsMenu();
+        } else if (event.getSource() == languageBtn) {
+            System.out.println("test language button");
+        } else if (event.getSource() == backBtn) {
+            MainController.showMainMenu();
+        } else if (event.getSource() == storageBtn) {
+            SettingsController.showStorageMenu();
         }
     }
 
@@ -95,10 +103,10 @@ public class MenuViewController implements Initializable {
      * Shows invitation popup.
      *
      * @param projectId int
-     * @param senderId int
+     * @param senderId  int
      * @throws java.lang.Exception throws Exception
      */
-    public void showInvitation(int projectId, int senderId)throws Exception{
+    public void showInvitation(int projectId, int senderId) throws Exception {
         Project project = ProjectDB.getProject(projectId);
         Global.popupProjectTitle = project.getTitle();
         Global.popupProjectDescription = project.getDescription();

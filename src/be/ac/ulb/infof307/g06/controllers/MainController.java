@@ -75,8 +75,8 @@ public class MainController extends Application {
 
     public static void showInvitationStage() {
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(MenuViewController.class.getResource("InvitationView.fxml"));
-        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader );
+        loader.setLocation(MenuViewController.class.getResource("views/InvitationView.fxml"));
+        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
     }
 
     /**

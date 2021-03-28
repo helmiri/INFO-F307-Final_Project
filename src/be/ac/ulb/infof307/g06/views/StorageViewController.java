@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.controllers.SettingsController;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.sql.SQLException;
 
-public class CloudSettingsController {
+public class StorageViewController {
     public Button backBtn;
     public TextField accTokenField;
     public TextField clientIDField;
@@ -20,7 +20,7 @@ public class CloudSettingsController {
     public void events(ActionEvent actionEvent) throws Exception {
 
         if (actionEvent.getSource() == backBtn) {
-            Main.showSettingsMenuScene();
+            SettingsController.showSettingsMenu();
         } else if (actionEvent.getSource() == saveBtn) {
             saveSettings();
         } else if (actionEvent.getSource() == helpBtn) {

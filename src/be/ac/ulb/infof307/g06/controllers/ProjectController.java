@@ -248,8 +248,9 @@ public class ProjectController{
         try{
             int projectID = ProjectDB.getProjectID(name);
             ProjectDB.deleteProject(projectID);
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting project: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The project could not be deleted: \n" + e);
         }
     }
 
@@ -288,9 +289,10 @@ public class ProjectController{
                 if (parentID == 0) { Global.projectsView.addChild(Global.root,child); }
                 else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
             }
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
             MainController.closeStage();
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in adding project: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The project could not be added: \n" + e);
         }
     }
 
@@ -322,8 +324,9 @@ public class ProjectController{
                 inputView.setError("");
                 init(Global.projectsView, Global.root);
             }
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in editing project: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Failed to save changes: \n" + e);
         }
     }
 
@@ -345,8 +348,9 @@ public class ProjectController{
             if (newDescription.equals("")){deleteTask(task);}
             else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
             Global.projectsView.displayTask();
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in editing task: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Failed to save changes: \n" + e);
         }
     }
 
@@ -369,8 +373,9 @@ public class ProjectController{
                 int projectID = ProjectDB.getProjectID(taskParent);
                 ProjectDB.createTask(taskDescription, projectID);
             }
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in adding task: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The task could not be added: \n" + e);
         }
     }
 
@@ -381,9 +386,10 @@ public class ProjectController{
      */
     public void deleteTask(Task task){
         try{
-        ProjectDB.deleteTask(task.getDescription(),task.getProjectID());
+            ProjectDB.deleteTask(task.getDescription(), task.getProjectID());
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting task: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The task could not be deleted: \n" + e);
         }
     }
 
@@ -401,7 +407,7 @@ public class ProjectController{
                 return FXCollections.observableArrayList(taskList);
             }
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching tasks: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Could not retrieve tasks: \n" + e);
         }
         return FXCollections.observableArrayList();
     }
@@ -467,9 +473,10 @@ public class ProjectController{
      */
     public void deleteCollaborator(String username,int project){
         try{
-        ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+            ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting collaborator: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The collaborator could not be deleted: \n" + e);
         }
     }
 
@@ -486,9 +493,10 @@ public class ProjectController{
             int receiverID = Integer.parseInt(UserDB.getUserInfo(username).get("id"));
             if (ProjectDB.getCollaborators(project).contains(receiverID)){return true;}
             UserDB.sendInvitation(project, Global.userID, receiverID);
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
             return true;
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in adding collaborator: \n" + e);
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Could not add the collaborator: \n" + e);
         }
         return false;
     }
@@ -650,6 +658,7 @@ public class ProjectController{
                 // read next line
                 //line = reader.readLine();
             }
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
             reader.close();
         } catch (IOException | SQLException e) {
             e.printStackTrace();

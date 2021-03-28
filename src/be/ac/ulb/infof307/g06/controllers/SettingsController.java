@@ -3,6 +3,7 @@ package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
+import be.ac.ulb.infof307.g06.views.StorageViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import javafx.fxml.FXMLLoader;
 
@@ -37,14 +38,23 @@ public class SettingsController {
     public void deleteTag(Tag tag) throws SQLException{
         ProjectDB.deleteTag(tag.getId());
     }
-    public void editTag(TagsViewController view, Tag tag, String newDescription, String newColor) throws SQLException{
+
+    public void editTag(TagsViewController view, Tag tag, String newDescription, String newColor) throws SQLException {
         List<Tag> tags = ProjectDB.getAllTags();
         List<String> tagNames = new ArrayList<>();
         for (Tag tag2 : tags) {
             tagNames.add(tag2.getDescription());
         }
-        if (tagNames.contains(newDescription) && !newDescription.equals(tag.getDescription())){
-            view.showAlert("Tag already exists");return;}
-        ProjectDB.editTag(tag.getId(), newDescription,newColor);
+        if (tagNames.contains(newDescription) && !newDescription.equals(tag.getDescription())) {
+            view.showAlert("Tag already exists");
+            return;
+        }
+        ProjectDB.editTag(tag.getId(), newDescription, newColor);
+    }
+
+    public static void showStorageMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(StorageViewController.class.getResource("StorageView.fxml"));
+        MainController.load(loader, 940, 1515);
     }
 }
