@@ -73,7 +73,7 @@ public class Main extends Application {
 
         Main.primaryStage.setOnCloseRequest(e -> {
             try {
-                if (Global.userID != 0) UserDB.disconnectUser(Global.userID);
+                if (Global.userID != 0) UserDB.disconnectUser();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

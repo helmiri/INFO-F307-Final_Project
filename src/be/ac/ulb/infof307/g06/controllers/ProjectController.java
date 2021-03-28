@@ -18,27 +18,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import org.rauschig.jarchivelib.*;
 
-import java.io.File;
-import java.io.FileWriter;
-
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import be.ac.ulb.infof307.g06.Main;
-import org.rauschig.jarchivelib.*;
 
 
 
@@ -663,11 +651,11 @@ public class ProjectController{
             Scanner reader = new Scanner(file);
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                if (line.substring(0, 7).equals("Project")) {
+                if (line.startsWith("Project")) {
                     System.out.println("c'est un projet: " + line.substring(8));
                     Gson gson = new Gson();
                     Project project = gson.fromJson(line.substring(8), Project.class);
-                    if(ProjectDB.getProjectID(project.getTitle())!=0){
+                    if (ProjectDB.getProjectID(project.getTitle()) != 0) {
                         reader.close();
                         return true;
                     }
@@ -691,19 +679,16 @@ public class ProjectController{
             Gson gson = new Gson();
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                if (line.substring(0, 7).equals("Project")) {
+                if (line.startsWith("Project")) {
                     System.out.println("c'est un projet: " + line.substring(8));
                     Project project = gson.fromJson(line.substring(8), Project.class);
-                }
-                else if(line.substring(0, 4).equals("Task")) {
+                } else if (line.startsWith("Task")) {
                     System.out.println("c'est un projet: " + line.substring(5));
                     Task task = gson.fromJson(line.substring(5), Task.class);
-                }
-                else if(line.substring(0, 3).equals("Tag")) {
+                } else if (line.startsWith("Tag")) {
                     System.out.println("c'est un projet: " + line.substring(4));
                     Tag tag = gson.fromJson(line.substring(4), Tag.class);
-                }
-                else{
+                } else {
                     reader.close();
                     return false;
                 }
@@ -723,8 +708,7 @@ public class ProjectController{
     public static boolean deleteFile(final String fileName) {
         try {
             File myObj = new File(fileName);
-            if (myObj.delete()) {return true;}
-            else {return false;}
+            return myObj.delete();
         }
         catch(Exception ignored) {return false;}
     }

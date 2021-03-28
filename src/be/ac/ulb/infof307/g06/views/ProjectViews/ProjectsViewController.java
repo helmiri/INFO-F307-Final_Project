@@ -5,12 +5,9 @@ import be.ac.ulb.infof307.g06.controllers.ProjectController;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,18 +17,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
-
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.CheckComboBox;
 import javafx.util.Callback;
+import org.controlsfx.control.CheckComboBox;
+
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.*;
 
 public class ProjectsViewController implements Initializable {
     //----------ATTRIBUTES---------
@@ -83,7 +78,7 @@ public class ProjectsViewController implements Initializable {
     private TreeTableView<Project> treeProjects;
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
-    private TreeItem<Project> root = new TreeItem<Project>();
+    private final TreeItem<Project> root = new TreeItem<>();
     private ProjectController controller;
 
     //---------------METHODES----------------
@@ -410,7 +405,7 @@ public class ProjectsViewController implements Initializable {
             ObservableList<String> items = collabComboBox.getItems();
             for (String item : items) {
                 collabComboBox.getItemBooleanProperty(item).set(false);
-                if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item.toString()).get("id")))) {
+                if (ProjectDB.getTaskCollaborator(getSelectedTask().getId()).contains(Integer.parseInt(UserDB.getUserInfo(item).get("id")))) {
                     collabComboBox.getItemBooleanProperty(item).set(true);
                 }
             }

@@ -32,6 +32,6 @@ public class CloudSettingsController {
     }
 
     public void saveSettings() throws SQLException {
-        UserDB.addAccToken(accTokenField.getText(), clientIDField.getText());
+        UserDB.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
     }
 }

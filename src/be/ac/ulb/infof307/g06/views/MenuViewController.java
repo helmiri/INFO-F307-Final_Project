@@ -78,7 +78,7 @@ public class MenuViewController implements Initializable {
     private void events(ActionEvent event) throws Exception {
         if (event.getSource() == projectAccessBtn) { Main.showProjectMenuScene(); }
         else if (event.getSource() == logOutBtn) {
-            UserDB.disconnectUser(Global.userID);
+            UserDB.disconnectUser();
             Main.showLoginScene(); }
         else if (event.getSource() == mainMenuBtn) { Main.showMainMenuScene(); }
         else if (event.getSource() == statsAccessBtn) { Main.showStatisticsScene(); }
