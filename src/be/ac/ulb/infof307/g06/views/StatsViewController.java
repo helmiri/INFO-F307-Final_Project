@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.StatsController;
 import be.ac.ulb.infof307.g06.models.Statistics;
 import javafx.event.ActionEvent;
@@ -67,8 +68,8 @@ public class StatsViewController implements Initializable {
      */
     @FXML
     private void statsEvents(ActionEvent event) throws IOException, SQLException {
-        if (event.getSource() == backToProjectMenu) { Main.showProjectMenuScene(); }
-        else if (event.getSource() == logOutBtn) { Main.showLoginScene(); }
+        if (event.getSource() == backToProjectMenu) { MainController.showProjectMenu();}
+        else if (event.getSource() == logOutBtn) { LoginController.show();}
         else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) { exports(event); }
     }
 
