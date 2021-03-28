@@ -376,6 +376,11 @@ table tr td dl, table tr td dl dt, table tr td dl dd {
 .use-summary caption a:link, .use-summary caption a:visited {
     color:#1f389c;
 }
+.table-row-cell:selected {
+   -fx-background-color: steelblue;
+   -fx-text-background-color: red;
+}
+
 .overview-summary caption a:link, .member-summary caption a:link, .type-summary caption a:link,
 .deprecated-summary caption a:link,
 .requires-summary caption a:link, .packages-summary caption a:link, .provides-summary caption a:link,
