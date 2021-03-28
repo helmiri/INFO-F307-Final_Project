@@ -15,10 +15,9 @@ public class AddProjectViewController extends ProjectInputViewController{
      * The main method for button's events
      *
      * @param event ActionEvent
-     * @throws SQLException throws SQLException
      */
     @Override
-    protected void events(ActionEvent event) throws SQLException {
+    protected void events(ActionEvent event){
         if (event.getSource() == addProjectBtn) {
             controller.addProject(this);
         }
