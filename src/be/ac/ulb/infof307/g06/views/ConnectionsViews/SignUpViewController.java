@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.controllers.LoginController;
 import be.ac.ulb.infof307.g06.controllers.SignUpController;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.UserInformations;
@@ -47,7 +47,7 @@ public class SignUpViewController {
     @FXML
     private void events(ActionEvent event) throws IOException, SQLException {
         if( event.getSource()== signUpBtn)  { signUpConditions() ;}
-        else if( event.getSource()== backBtn){ Main.showLoginScene();}
+        else if( event.getSource()== backBtn){ LoginController.show();}
     }
 
     /**
@@ -65,7 +65,7 @@ public class SignUpViewController {
                 && controller.validateTextField(emailField, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
                 && passwordConfirmationField.getText().equals(signUpPasswordField.getText())) {
             controller.setInformations(firstNameField.getText(),lastNameField.getText(),emailField.getText(),signUpUsernameField.getText(),signUpPasswordField.getText());
-            if (!(UserDB.userExists(UserInformations.getUsername()))) { Main.showConditionsStage(); }
+            if (!(UserDB.userExists(UserInformations.getUsername()))) { SignUpController.showConditionStage(); }
             else{signUpTxtPopup.setText("This user already exists!");}
         } else {
             alertWindow();
