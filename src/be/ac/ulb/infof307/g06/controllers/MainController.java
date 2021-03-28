@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class MainController extends Application {
     //-------------- ATTRIBUTES ----------------
@@ -150,12 +152,18 @@ public class MainController extends Application {
 
     }
 
-    public static void alertWindow(Alert.AlertType type, String title,String message){
+    public static boolean alertWindow(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.getDialogPane().setMinWidth(400);
         alert.setContentText(message);
-        alert.showAndWait();
+        if (type == Alert.AlertType.CONFIRMATION) {
+            Optional<ButtonType> result = alert.showAndWait();
+            return result.get() == ButtonType.OK;
+        } else {
+            alert.showAndWait();
+        }
+        return false;
     }
 }
