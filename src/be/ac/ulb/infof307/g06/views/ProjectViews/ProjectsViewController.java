@@ -336,10 +336,11 @@ public class ProjectsViewController implements Initializable {
     public void importProject() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("src"));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
+        //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
-            boolean succeed =controller.importProject(selectedArchive.getAbsolutePath());
+            System.out.println(selectedArchive.getAbsolutePath());
+            boolean succeed = controller.importProject(selectedArchive.getAbsolutePath());
             Main.alertImport(succeed);
         }
     }
