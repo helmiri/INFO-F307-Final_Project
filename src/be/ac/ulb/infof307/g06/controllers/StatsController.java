@@ -10,6 +10,7 @@ import be.ac.ulb.infof307.g06.views.StatsViewController;
 import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import java.io.*;
 import java.sql.SQLException;
@@ -39,6 +40,12 @@ public class StatsController {
             statsView.showAlert("An error has occurred with the database.");
         }
 
+    }
+
+    public static void show() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
+        MainController.load(loader,940,1515);
     }
 
     /**

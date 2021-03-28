@@ -1,14 +1,11 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.ProjectController;
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
-import be.ac.ulb.infof307.g06.Main;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
-import javafx.collections.FXCollections;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -82,7 +79,7 @@ public class ProjectsViewController implements Initializable {
     private TreeTableView<Project> treeProjects;
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
-    private TreeItem<Project> root = new TreeItem<Project>();
+    private final TreeItem<Project> root = new TreeItem<Project>();
     private ProjectController controller;
 
     //---------------METHODES----------------
@@ -123,14 +120,14 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private void events(ActionEvent event) throws Exception {
         if( event.getSource()== addTaskbtn){ addTask();}
-        else if( event.getSource()== addBtn ) {Main.showAddProjectStage(); }
+        else if( event.getSource()== addBtn ) {ProjectController.showAddProjectStage(); }
         else if( event.getSource() == assignTaskCollaboratorBtn){assignCollaborators();}
         else if( event.getSource()== editBtn ) {
-            if (projectsTitle.getText()!= ""){
+            if (!projectsTitle.getText().equals("")){
                 Global.currentProject = projectsTitle.getText();
-                Main.showEditProjectStage();}
+                ProjectController.showEditProjectStage();}
         }
-        else if( event.getSource()== backBtn){ Main.showMainMenuScene(); }
+        else if( event.getSource()== backBtn){ MainController.showMainMenu(); }
         else if (event.getSource()==exportProjectBtn){exportProject();}
         else if(event.getSource()==importProjectBtn){importProject();}
     }
@@ -278,7 +275,7 @@ public class ProjectsViewController implements Initializable {
      */
     public void showTaskEdition() throws Exception {
         Global.selectedTask = getSelectedTask();
-        Main.showEditTaskStage();
+        ProjectController.showEditTaskStage();
     }
 
     /**
@@ -317,7 +314,7 @@ public class ProjectsViewController implements Initializable {
                 boolean succeed = controller.exportProject2(selectedProject.getValue(),
                         selectedDirectory.getAbsolutePath(),
                         selectedDirectory.getAbsolutePath() + "/file.json");
-                Main.alertExport(succeed);
+                ProjectController.alertExportImport("export", succeed);
             }
         }
     }
@@ -333,7 +330,7 @@ public class ProjectsViewController implements Initializable {
         if (selectedArchive != null) {
             System.out.println(selectedArchive.getAbsolutePath());
             boolean succeed = controller.importProject(selectedArchive.getAbsolutePath());
-            Main.alertImport(succeed);
+            ProjectController.alertExportImport("import", succeed);
         }
     }
 

@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.Main;
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
@@ -63,11 +63,11 @@ public class InvitationViewController implements Initializable {
     public void events(ActionEvent event) throws SQLException{
         if(event.getSource() == acceptBtn){
             acceptInvitation();
-            Main.closeStage();
+            MainController.closeStage();
         }
         if(event.getSource() == declineBtn){
             declineInvitation();
-            Main.closeStage();
+            MainController.closeStage();
         }
     }
 
