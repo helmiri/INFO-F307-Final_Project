@@ -79,7 +79,7 @@ public class ProjectsViewController implements Initializable {
     private TreeTableView<Project> treeProjects;
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
-    private TreeItem<Project> root = new TreeItem<Project>();
+    private final TreeItem<Project> root = new TreeItem<Project>();
     private ProjectController controller;
 
     //---------------METHODES----------------
@@ -123,7 +123,7 @@ public class ProjectsViewController implements Initializable {
         else if( event.getSource()== addBtn ) {ProjectController.showAddProjectStage(); }
         else if( event.getSource() == assignTaskCollaboratorBtn){assignCollaborators();}
         else if( event.getSource()== editBtn ) {
-            if (projectsTitle.getText()!= ""){
+            if (!projectsTitle.getText().equals("")){
                 Global.currentProject = projectsTitle.getText();
                 ProjectController.showEditProjectStage();}
         }
