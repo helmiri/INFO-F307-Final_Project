@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.models;
 
-public class UserInformations {
+public final class UserInformations {
     //-------------- ATTRIBUTES ----------------
     private static String firstName;
     private static String lastName;
@@ -15,10 +15,9 @@ public class UserInformations {
     public static String getUsername() { return username; }
     public static String getPasswd() { return passwd; }
 
-    public static void setFirstName(String firstName) { UserInformations.firstName = firstName; }
-    public static void setLastName(String lastName) { UserInformations.lastName = lastName; }
-    public static void setEmail(String email) { UserInformations.email = email; }
-    public static void setUsername(String username) { UserInformations.username = username; }
-    public static void setPasswd(String passwd) { UserInformations.passwd = passwd; }
-
+    public static void setFirstName(String firstNameSetter) { firstName = firstNameSetter; }
+    public static void setLastName(String lastNameSetter) { lastName = lastNameSetter; }
+    public static void setEmail(String emailSetter) { email = emailSetter; }
+    public static void setUsername(String usernameSetter) { username = usernameSetter; }
+    public static void setPasswd(String passwdSetter) { passwd = passwdSetter; }
 }

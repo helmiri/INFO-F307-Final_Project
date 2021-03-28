@@ -390,9 +390,7 @@ public class ProjectsViewController implements Initializable {
     }
 
     @FXML
-    public void deleteTaskCollaborator() throws SQLException {
-        controller.deleteTaskCollaborator(getSelectedTaskCollaborator(),Global.selectedTask);
-    }
+    public void deleteTaskCollaborator() throws SQLException { controller.deleteTaskCollaborator(getSelectedTaskCollaborator(),Global.selectedTask); }
 
     /**
      *

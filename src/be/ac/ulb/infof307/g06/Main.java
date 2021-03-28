@@ -115,7 +115,7 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showStatisticsScene() throws Exception{
+    public static void showStatisticsScene() throws IOException {
 
         // Set main stage
         primaryStage.setResizable(true);
@@ -139,7 +139,7 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showProjectManagementScene() throws Exception{
+    public static void showProjectManagementScene() throws IOException {
 
         // Set main stage
         primaryStage.setResizable(true);
@@ -207,7 +207,7 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showProjectMenuScene() throws Exception {
+    public static void showProjectMenuScene() throws IOException {
 
         // Set main stage
         primaryStage.setResizable(true);
@@ -230,7 +230,7 @@ public class Main extends Application {
      *
      * @throws Exception;
      */
-    public static void showSettingsMenuScene() throws Exception {
+    public static void showSettingsMenuScene() throws IOException {
         // Set main stage
         primaryStage.setResizable(true);
         primaryStage.setHeight(940);
@@ -247,7 +247,7 @@ public class Main extends Application {
         primaryStage.setResizable(false);
     }
 
-    public static void showAddProjectStage() throws Exception{
+    public static void showAddProjectStage() throws IOException {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
@@ -264,7 +264,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void showEditProjectStage() throws Exception{
+    public static void showEditProjectStage() throws IOException {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
@@ -280,7 +280,7 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.show();
     }
-    public static void showEditTaskStage() throws Exception{
+    public static void showEditTaskStage() throws IOException {
 
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
@@ -297,7 +297,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static  void showInvitationStage() throws Exception{
+    public static  void showInvitationStage() throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/InvitationView.fxml"));
@@ -313,7 +313,7 @@ public class Main extends Application {
 
     }
 
-    public static void showTagsMenu() throws Exception {
+    public static void showTagsMenu() throws IOException {
         // Set main stage
         primaryStage.setResizable(true);
         primaryStage.setHeight(940);
