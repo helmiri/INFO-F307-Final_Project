@@ -5,8 +5,6 @@ import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
-
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -21,6 +19,7 @@ public class LoginController {
             MainController.alertWindow(Alert.AlertType.ERROR,"Error","An error has occurred to load with the database files: " + e);
         }
     }
+
     /**
      * Sets the loader to show the Log In scene.
      */

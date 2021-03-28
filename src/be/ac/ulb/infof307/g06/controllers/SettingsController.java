@@ -10,12 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsController {
+    /**
+     * Sets the loader to show the settings menu scene.
+     */
     public static void showSettingsMenu() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("SettingsMenu.fxml"));
         MainController.load(loader, 940,1515);
     }
 
+    /**
+     * Sets the loader to show the tags menu scene.
+     */
     public static void showTagsMenu() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(TagsViewController.class.getResource("Tags.fxml"));
@@ -32,9 +38,11 @@ public class SettingsController {
             view.showAlert("Tag already exists");return;}
         ProjectDB.createTag(title, color);
     }
+
     public void deleteTag(Tag tag) throws SQLException{
         ProjectDB.deleteTag(tag.getId());
     }
+
     public void editTag(TagsViewController view, Tag tag, String newDescription, String newColor) throws SQLException{
         List<Tag> tags = ProjectDB.getAllTags();
         List<String> tagNames = new ArrayList<>();

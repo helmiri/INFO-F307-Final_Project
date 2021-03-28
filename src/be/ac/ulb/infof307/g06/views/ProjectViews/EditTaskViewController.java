@@ -7,26 +7,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-
 public class EditTaskViewController implements Initializable {
-    @FXML
-    private TextField taskName;
+    //--------------- ATTRIBUTES ----------------
     @FXML
     private Button editTaskBtn;
+    @FXML
+    private TextField taskName;
     private ProjectController controller;
-
+    //--------------- METHODS ----------------
     public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new ProjectController();
         taskName.setText(Global.selectedTask.getDescription());
     }
 
     @FXML
-    private void taskEvents(ActionEvent event) throws SQLException {
+    private void taskEvents(ActionEvent event) {
         if (event.getSource() == editTaskBtn) {
             controller.editTask(Global.selectedTask.getDescription(), taskName.getText(), Global.selectedTask);
             MainController.closeStage();

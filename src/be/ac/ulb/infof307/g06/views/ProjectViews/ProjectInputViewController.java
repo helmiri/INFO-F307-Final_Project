@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import org.controlsfx.control.CheckComboBox;
 import javafx.scene.text.Text;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -42,11 +41,11 @@ public class ProjectInputViewController implements Initializable {
         controller.initComboBox(this);
 
     }
+
     /**
      * The main method for button's events.
      *
      * @param event ActionEvent
-     * @throws SQLException throws SQLException
      */
     @FXML
     protected void events(ActionEvent event){}

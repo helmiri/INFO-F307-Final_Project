@@ -53,24 +53,36 @@ public class ProjectController{
         }
     }
 
+    /**
+     * Sets the loader to show the Project scene.
+     */
     public static void show(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
         MainController.load(loader, 940, 1515);
     }
 
+    /**
+     * Sets the loader to show the stage to add a project.
+     */
     public static void showAddProjectStage() {
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("AddProjectView.fxml"));
         MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader );
     }
 
+    /**
+     * Sets the loader to show the stage to edit a project.
+     */
     public static void showEditProjectStage() {
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("EditProjectView.fxml"));
         MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader );
     }
 
+    /**
+     * Sets the loader to show the stage to edit a task.
+     */
     public static void showEditTaskStage() {
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("TaskEditView.fxml"));
@@ -78,7 +90,7 @@ public class ProjectController{
     }
 
     /**
-     * gets a project information and dislpays it
+     * gets a project information and displays it
      *
      * @param view ProjectsViewController
      * @param selectedProject TreeItem<Project>
@@ -339,7 +351,8 @@ public class ProjectController{
             for (Task task2 : tasks) {
                 taskNames.add(task2.getDescription());
             }
-            if (taskNames.contains(newDescription)){Global.projectsView.showAlert("Task already exists");return;}
+            if (taskNames.contains(newDescription)){
+                MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Task already exists");return;}
             if (newDescription.equals("")){deleteTask(task);}
             else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
             Global.projectsView.displayTask();
@@ -362,7 +375,7 @@ public class ProjectController{
             for (Task task : tasks) {
                 taskNames.add(task.getDescription());
             }
-            if (taskNames.contains(taskDescription)){Global.projectsView.showAlert("Task already exists");return;}
+            if (taskNames.contains(taskDescription)){MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Task already exists");return;}
             if (!taskParent.equals("") || ProjectDB.getProjectID(taskParent) != 0) {
                 int projectID = ProjectDB.getProjectID(taskParent);
                 ProjectDB.createTask(taskDescription, projectID);
@@ -520,10 +533,10 @@ public class ProjectController{
 
     /**
      *
-     * @param project
-     * @param archivePath
-     * @param jsonFile
-     * @return
+     * @param project Project
+     * @param archivePath String
+     * @param jsonFile String
+     * @return boolean
      */
     public boolean exportProject2(Project project, String archivePath, String jsonFile) {
         try {
@@ -541,11 +554,11 @@ public class ProjectController{
 
     /**
      *
-     * @param project
-     * @param tasks
-     * @param tags
-     * @param fw
-     * @return
+     * @param project Project
+     * @param tasks List<Task>
+     * @param tags List<Tag>
+     * @param fw FileWriter
+     * @return boolean
      */
     public static boolean saveProject(Project project, List<Task> tasks, List<Tag> tags, FileWriter fw) {
         try {
@@ -661,8 +674,6 @@ public class ProjectController{
         //verif c'est un zip , si oui on dezipe ta braillette
         //on verif la base de donnée si il y est as déja
     }
-
-
 
     /**
      *

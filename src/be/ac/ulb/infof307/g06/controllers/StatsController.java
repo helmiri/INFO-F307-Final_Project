@@ -1,4 +1,5 @@
 package be.ac.ulb.infof307.g06.controllers;
+
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
@@ -11,6 +12,7 @@ import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import java.io.*;
 import java.sql.SQLException;
@@ -37,7 +39,7 @@ public class StatsController {
             projectsArray = getProjects();
             setStats(projectsArray,root);
         } catch (DatabaseException e) {
-            statsView.showAlert("An error has occurred with the database.");
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred with the database: "+e);
         }
 
     }
@@ -102,7 +104,6 @@ public class StatsController {
         for (Task task : tasks) {
             tasksDescriptions.add(task.getDescription());
         }
-
         return tasksDescriptions;
     }
 
@@ -188,7 +189,7 @@ public class StatsController {
             }
             write(finalString + "}", fileName, path);
         }catch(SQLException e ){
-            statsView.showAlert("An error has occurred during the exportation. Couldn't find some informations in the database");
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error","An error has occurred during the exportation. Couldn't find some informations in the database: "+e);
         }
     }
 
@@ -261,7 +262,7 @@ public class StatsController {
             csv.close();
             statsView.setMsg("The exportation succeeded.");
         }catch(FileNotFoundException e){
-            statsView.showAlert("Couldn't find or access to this file.");
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error","Couldn't find or access to this file.");
         }catch (SQLException e) {
             statsView.setMsg("The exportation failed.");
         }

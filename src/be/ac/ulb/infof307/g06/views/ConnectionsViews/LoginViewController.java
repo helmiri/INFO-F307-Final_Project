@@ -7,14 +7,11 @@ import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginViewController implements Initializable {
@@ -44,22 +41,18 @@ public class LoginViewController implements Initializable {
      * The main method for button's events
      *
      * @param event ActionEvent
-     * @throws SQLException throws database error
-     * @throws IOException throws in and out exception error
      */
     @FXML
-    private void logInEvents(ActionEvent event) throws IOException {
+    private void logInEvents(ActionEvent event) {
         if (event.getSource() == connectionBtn) { logInConditions(); }
         else if (event.getSource() == registerBtn) { SignUpController.show(); }
     }
 
     /**
      * Gets the log in informations and see if the user already exists.
-     *
-     * @throws IOException throws in and out exception error
      */
     @FXML
-    private void logInConditions() throws IOException {
+    private void logInConditions() {
         String passwd = getTextField(logInPasswordField);
         String user = getTextField(logInUsernameField);
         Global.userID = controller.validateUserID(passwd,user);
@@ -78,19 +71,6 @@ public class LoginViewController implements Initializable {
      */
     @FXML
     public String getTextField(TextField textField){ return textField.getText(); }
-
-    /**
-     * Show an error pop up message.
-     *
-     * @param message String
-     */
-    public void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
-    }
 
 }
 

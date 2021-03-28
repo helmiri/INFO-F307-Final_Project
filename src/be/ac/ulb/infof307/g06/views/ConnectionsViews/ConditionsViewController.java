@@ -25,10 +25,9 @@ public class ConditionsViewController {
      * When the 'accept' button is pressed, checks set the user in the database and close the stage.
      *
      * @param event ActionEvent
-     * @throws IOException throws In and Out exceptions
      */
     @FXML
-    private void conditionsEvents(ActionEvent event)throws IOException {
+    private void conditionsEvents(ActionEvent event) {
         if( event.getSource()== acceptConditionsBtn) {
             if (acceptConditionsBox.isSelected()) {
                 Global.userID = controller.setUserID();

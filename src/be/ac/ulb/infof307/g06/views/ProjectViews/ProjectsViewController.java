@@ -95,6 +95,7 @@ public class ProjectsViewController implements Initializable {
         controller = new ProjectController();
         controller.init(this, root);
     }
+
     /**
      * Hides the tree table root.
      */
@@ -115,10 +116,9 @@ public class ProjectsViewController implements Initializable {
      * The main method for button's events.
      *
      * @param event ActionEvent
-     * @throws Exception
      */
     @FXML
-    private void events(ActionEvent event) throws Exception {
+    private void events(ActionEvent event) {
         if( event.getSource()== addTaskbtn){ addTask();}
         else if( event.getSource()== addBtn ) {ProjectController.showAddProjectStage(); }
         else if( event.getSource() == assignTaskCollaboratorBtn){assignCollaborators();}
@@ -258,8 +258,6 @@ public class ProjectsViewController implements Initializable {
 
     /**
      * Displays tasks on the table.
-     *
-     * @throws SQLException
      */
     @FXML
     public void displayTask(){
@@ -270,18 +268,14 @@ public class ProjectsViewController implements Initializable {
 
     /**
      * Shows the edit task stage for the selected task.
-     *
-     * @throws SQLException
      */
-    public void showTaskEdition() throws Exception {
+    public void showTaskEdition() {
         Global.selectedTask = getSelectedTask();
         ProjectController.showEditTaskStage();
     }
 
     /**
      * Adds a task to the table and displays the table to refresh it.
-     *
-     * @throws Exception
      */
     public void addTask(){
         controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
@@ -290,8 +284,6 @@ public class ProjectsViewController implements Initializable {
 
     /**
      * Deletes the selected task in the table and in the database.
-     *
-     * @throws SQLException
      */
     public void deleteTask(){
         Task task = getSelectedTask();
@@ -358,9 +350,9 @@ public class ProjectsViewController implements Initializable {
     public void addCollaborator(){
         if(!collaboratorsName.getText().equals("")){
             if(!controller.addCollaborator(collaboratorsName.getText(), getSelectedProject().getValue().getId())){
-                showAlert("User " + collaboratorsName.getText() + " doesn't exist.");
+                MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","User " + collaboratorsName.getText() + " doesn't exist.");
             } else {
-                showAlert("Invitation sent to " + collaboratorsName.getText() + ".");
+                MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Invitation sent to " + collaboratorsName.getText() + ".");
             }
         }
     }
@@ -427,8 +419,6 @@ public class ProjectsViewController implements Initializable {
 
     /**
      * Displays informations of the selected project.
-     *
-     * @throws SQLException
      */
     @FXML
     public void displayProject(String title, String description, Long date, ObservableList<String> tagsName){
@@ -447,18 +437,4 @@ public class ProjectsViewController implements Initializable {
         controller.getProjectInfo(this, selectedProject);
     }
 
-    public void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Alert");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
-    }
-    public void showError(String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
-    }
 }

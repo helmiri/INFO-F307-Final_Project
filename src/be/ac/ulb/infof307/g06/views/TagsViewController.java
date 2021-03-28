@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -119,6 +118,7 @@ public class TagsViewController implements Initializable{
     public Tag getSelectedTag(){
         return defaultTagsTableView.getSelectionModel().getSelectedItem();
     }
+
     @FXML
     public void onTagSelected(){
         Global.selectedTag = getSelectedTag();
