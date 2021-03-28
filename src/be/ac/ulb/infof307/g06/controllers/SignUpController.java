@@ -16,7 +16,6 @@ public class SignUpController {
      * Sets an ID for the user added in the database.
      *
      * @return int UserID
-     * @throws SQLException
      */
     public int setUserID() {
         try {

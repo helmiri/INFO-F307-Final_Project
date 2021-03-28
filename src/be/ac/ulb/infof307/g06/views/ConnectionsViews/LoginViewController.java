@@ -37,13 +37,7 @@ public class LoginViewController implements Initializable {
      * @param resourceBundle ResourceBundle
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            controller.init();
-        } catch (SQLException | ClassNotFoundException throwables) {
-            System.out.println("An error has occurred!");
-        }
-    }
+    public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(); }
 
     /**
      * The main method for button's events
@@ -53,7 +47,7 @@ public class LoginViewController implements Initializable {
      * @throws IOException throws in and out exception error
      */
     @FXML
-    private void events(ActionEvent event) throws SQLException, IOException {
+    private void logInEvents(ActionEvent event) throws IOException {
         if (event.getSource() == connectionBtn) { logInConditions(); }
         else if (event.getSource() == registerBtn) { Main.showSignUpScene(); }
     }
@@ -61,11 +55,10 @@ public class LoginViewController implements Initializable {
     /**
      * Gets the log in informations and see if the user already exists.
      *
-     * @throws SQLException throws database error
      * @throws IOException throws in and out exception error
      */
     @FXML
-    private void logInConditions() throws SQLException, IOException {
+    private void logInConditions() throws IOException {
         String passwd = getTextField(logInPasswordField);
         String user = getTextField(logInUsernameField);
         Global.userID = controller.validateUserID(passwd,user);

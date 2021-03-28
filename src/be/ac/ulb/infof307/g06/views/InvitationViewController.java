@@ -35,8 +35,7 @@ public class InvitationViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        try{ initFields(); }
-        catch (SQLException throwables) { throwables.printStackTrace();}
+        initFields();
     }
 
     /**
@@ -45,7 +44,7 @@ public class InvitationViewController implements Initializable {
      * @throws SQLException throws SQLException
      */
     @FXML
-    public void initFields() throws SQLException {
+    public void initFields() {
         String projectName = Global.popupProjectTitle;
         String projectDescription = Global.popupProjectDescription;
         String senderName = Global.popupSenderUsername;
@@ -61,7 +60,7 @@ public class InvitationViewController implements Initializable {
      * @throws SQLException throws SQLException
      */
     @FXML
-    public void events(ActionEvent event) throws SQLException {
+    public void events(ActionEvent event) throws SQLException{
         if(event.getSource() == acceptBtn){
             acceptInvitation();
             Main.closeStage();
@@ -87,7 +86,7 @@ public class InvitationViewController implements Initializable {
      *
      * @throws SQLException throws SQLException
      */
-    public void declineInvitation()throws SQLException{
+    public void declineInvitation() throws SQLException{
         UserDB.removeInvitation(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
     }
 

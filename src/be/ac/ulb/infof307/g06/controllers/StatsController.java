@@ -159,7 +159,6 @@ public class StatsController {
      *
      * @param fileName String
      * @param root TreeItem<Statistics>
-     * @throws SQLException
      */
     public void exportStatsAsJson(String fileName,String path,TreeItem<Statistics> root)  {
         try {
@@ -191,7 +190,6 @@ public class StatsController {
      * @param treeBranchString String
      * @param root TreeItem<Statistics>
      * @return String
-     * @throws SQLException
      */
     public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Statistics> root) throws SQLException {
         List<Integer> projectsID = ProjectDB.getSubProjects(id);
@@ -219,7 +217,6 @@ public class StatsController {
      * @param chosenString String
      * @param fileName String
      * @param path String
-     * @throws IOException
      */
     public void write(String chosenString, final String fileName,String path) {
         try {
@@ -270,14 +267,14 @@ public class StatsController {
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
-    public static String toCSVFormat(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
+    public static String statsToCSVString(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
         if(ProjectDB.getSubProjects(currentStatID).size()==0){
             content += currentStatID+ ","+ currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," +  '"' + currentStat.getTasks() +  '"' + "," + currentStat.getEstimatedDate()+ "," + ProjectDB.getProject(currentStatID).getParent_id()+ "\r\n";
         }
         else{
             content += currentStatID + ","+ currentStat.getTitle() + "," + '"' + currentStat.getCollaborators()+ '"' + "," +  '"' + currentStat.getTasks()+  '"'+ "," + currentStat.getEstimatedDate()+ "," + ProjectDB.getProject(currentStatID).getParent_id()+ "\r\n";
             for(int k = 0; k<ProjectDB.getSubProjects(currentStatID).size(); k++ ) {
-                content = toCSVFormat(ProjectDB.getSubProjects(currentStatID).get(k),root.getChildren().get(k).getValue(), content,root.getChildren().get(k));
+                content = statsToCSVString(ProjectDB.getSubProjects(currentStatID).get(k),root.getChildren().get(k).getValue(), content,root.getChildren().get(k));
             }
         }
         return content;

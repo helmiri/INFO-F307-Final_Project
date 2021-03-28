@@ -2,20 +2,25 @@ package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
-
+import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import java.sql.SQLException;
 
 public class LoginController {
+    private LoginViewController logInView;
 
     /**
      * Initializes databases and the view.
      *
-     * @throws SQLException throws database error
-     * @throws ClassNotFoundException throws class not found error
      */
-    public void init() throws SQLException, ClassNotFoundException {
-        new ProjectDB("Database.db");
-        new UserDB("Database.db");
+    public void init() {
+        try{
+            new ProjectDB("Database.db");
+            new UserDB("Database.db");
+        }
+        catch(SQLException | ClassNotFoundException e){
+            logInView.showAlert("An error has occurred with the database.");
+        }
+
     }
 
     /**
@@ -24,7 +29,14 @@ public class LoginController {
      * @param passwd String
      * @param user String
      * @return int
-     * @throws SQLException throws database error
      */
-    public int validateUserID(String passwd, String user) throws SQLException { return UserDB.validateData(user, passwd); }
+    public int validateUserID(String passwd, String user) {
+        try{
+            return UserDB.validateData(user, passwd);
+        } catch(SQLException e){
+            logInView.showAlert("An error has occurred with the database.");
+            return 0;
+        }
+    }
+
 }

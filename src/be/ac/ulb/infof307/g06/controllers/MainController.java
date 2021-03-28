@@ -27,7 +27,7 @@ public class MainController {
      * @throws SQLException throws SQLException
      * @throws java.lang.Exception throws Exception
      */
-    public void checkInvites()throws SQLException, java.lang.Exception{
+    public void checkInvites() throws SQLException, java.lang.Exception{
         List<Invitation> invitations = UserDB.getInvitations(Global.userID);
         for (Invitation invitation : invitations) {
             view.showInvitation(invitation.getProject_id(), invitation.getSender_id());
