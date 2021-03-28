@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.views.ProjectViews.CloudTableController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import com.google.gson.Gson;
@@ -62,19 +63,29 @@ public class ProjectController{
     }
 
     public static void showAddProjectStage() {
-        FXMLLoader loader =  new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("AddProjectView.fxml"));
-        MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader );
+        MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader);
+    }
+
+    public static void showCloudDownloadStage() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(CloudTableController.class.getResource("CloudTable.fxml"));
+        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
+    }
+
+    public static void showCloudUploadStage() {
+
     }
 
     public static void showEditProjectStage() {
-        FXMLLoader loader =  new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("EditProjectView.fxml"));
-        MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader );
+        MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader);
     }
 
     public static void showEditTaskStage() {
-        FXMLLoader loader =  new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("TaskEditView.fxml"));
         MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, loader );
     }
@@ -574,20 +585,18 @@ public class ProjectController{
     }
 
     /**
-     *
-     *
      * @param archivePath String
      * @return boolean
      */
-    public boolean importProject(String archivePath) {
+    public static boolean importProject(String archivePath) {
         File file = new File(archivePath);
         String parent = file.getAbsoluteFile().getParent();
 
-        unzip(archivePath,parent);
+        unzip(archivePath, parent);
         BufferedReader reader;
-        Gson gson=new Gson();
+        Gson gson = new Gson();
         try {
-            reader = new BufferedReader(new FileReader(parent+"/file.json"));
+            reader = new BufferedReader(new FileReader(parent + "/file.json"));
             String line = null;
             int count = 0;
             reader.readLine();
