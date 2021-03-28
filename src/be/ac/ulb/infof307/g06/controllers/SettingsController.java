@@ -1,9 +1,9 @@
 package be.ac.ulb.infof307.g06.controllers;
 
-import be.ac.ulb.infof307.g06.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.Tag;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
-import be.ac.ulb.infof307.g06.models.Tag;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;

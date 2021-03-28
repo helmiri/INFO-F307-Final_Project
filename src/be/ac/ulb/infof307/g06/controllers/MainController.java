@@ -1,18 +1,19 @@
 package be.ac.ulb.infof307.g06.controllers;
 
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javafx.stage.Modality;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MainController extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             try {
-                if (Global.userID != 0) UserDB.disconnectUser(Global.userID);
+                if (Global.userID != 0) UserDB.disconnectUser();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

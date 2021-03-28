@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06;
 
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
 import javafx.application.Application;
 import javafx.application.Platform;

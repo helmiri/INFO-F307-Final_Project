@@ -1,22 +1,21 @@
 package be.ac.ulb.infof307.g06.views;
+
 import be.ac.ulb.infof307.g06.controllers.SettingsController;
-import be.ac.ulb.infof307.g06.models.Tag;
-import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.Tag;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ResourceBundle;
 
 public class TagsViewController implements Initializable{
     //-------------- ATTRIBUTES ----------------

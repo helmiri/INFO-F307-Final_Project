@@ -1,5 +1,5 @@
 
-package be.ac.ulb.infof307.g06.database;
+package be.ac.ulb.infof307.g06.models.database;
 
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;

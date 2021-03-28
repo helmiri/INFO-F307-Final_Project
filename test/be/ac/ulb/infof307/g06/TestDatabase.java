@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06;
 
-import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

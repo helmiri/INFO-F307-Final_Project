@@ -1,18 +1,23 @@
 package be.ac.ulb.infof307.g06.controllers;
-import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.database.UserDB;
+
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Statistics;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.StatsViewController;
 import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
-import java.io.*;
+
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

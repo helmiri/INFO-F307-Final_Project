@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Cloud;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.files.Metadata;
 import javafx.beans.property.SimpleStringProperty;

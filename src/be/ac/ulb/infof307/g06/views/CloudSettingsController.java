@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.Main;
-import be.ac.ulb.infof307.g06.database.UserDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;

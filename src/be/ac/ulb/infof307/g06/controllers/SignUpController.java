@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers;
 
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.UserInformations;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.ConditionsViewController;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.SignUpViewController;
 import javafx.fxml.FXMLLoader;

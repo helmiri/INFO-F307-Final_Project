@@ -1,10 +1,11 @@
 package be.ac.ulb.infof307.g06.controllers;
-import be.ac.ulb.infof307.g06.database.ProjectDB;
-import be.ac.ulb.infof307.g06.database.UserDB;
+
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import com.google.gson.Gson;
@@ -16,18 +17,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
+import javafx.stage.Modality;
+import org.rauschig.jarchivelib.*;
+
 import java.io.*;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import javafx.stage.Modality;
-import org.rauschig.jarchivelib.*;
 
 
 public class ProjectController{

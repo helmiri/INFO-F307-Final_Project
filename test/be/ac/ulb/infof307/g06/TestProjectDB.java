@@ -1,13 +1,12 @@
 package be.ac.ulb.infof307.g06;
 
-import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Tag;
-import be.ac.ulb.infof307.g06.models.Task;
-import org.junit.jupiter.api.*;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;

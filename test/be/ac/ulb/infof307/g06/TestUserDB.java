@@ -1,9 +1,9 @@
 package be.ac.ulb.infof307.g06;
 
 
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.database;
+package be.ac.ulb.infof307.g06.models.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

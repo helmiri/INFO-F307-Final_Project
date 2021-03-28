@@ -2,8 +2,8 @@ package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
 import be.ac.ulb.infof307.g06.controllers.LoginController;
 import be.ac.ulb.infof307.g06.controllers.SignUpController;
-import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.UserInformations;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
