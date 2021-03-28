@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,16 +12,19 @@ import java.sql.SQLException;
 public class LoginController {
     /**
      * Initializes databases and the view.
-     *
-     * @throws SQLException throws database error
-     * @throws ClassNotFoundException throws class not found error
      */
-    public void init() throws SQLException, ClassNotFoundException {
-        new ProjectDB("Database.db");
-        new UserDB("Database.db");
+    public void init(){
+        try {
+            new ProjectDB("Database.db");
+            new UserDB("Database.db");
+        } catch (SQLException | ClassNotFoundException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error","An error has occurred to load with the database files: " + e);
+        }
     }
-
-    public static void show() throws IOException {
+    /**
+     * Sets the loader to show the Log In scene.
+     */
+    public static void show(){
         // Load the fxml
         FXMLLoader loader =  new FXMLLoader();
         loader.setLocation(LoginViewController.class.getResource("LoginView.fxml"));
@@ -33,7 +37,13 @@ public class LoginController {
      * @param passwd String
      * @param user String
      * @return int
-     * @throws SQLException throws database error
      */
-    public int validateUserID(String passwd, String user) throws SQLException { return UserDB.validateData(user, passwd); }
+    public int validateUserID(String passwd, String user) {
+        try {
+            return UserDB.validateData(user, passwd);
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error","An error has occurred with the database: "+ e);
+            return 0;
+        }
+    }
 }

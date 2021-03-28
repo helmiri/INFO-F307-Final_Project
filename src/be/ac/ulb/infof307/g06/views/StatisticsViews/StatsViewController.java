@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views;
+package be.ac.ulb.infof307.g06.views.StatisticsViews;
 
 import be.ac.ulb.infof307.g06.controllers.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;

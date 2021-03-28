@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
+import be.ac.ulb.infof307.g06.controllers.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SignUpController;
 import be.ac.ulb.infof307.g06.models.Global;
@@ -24,16 +25,18 @@ public class ConditionsViewController {
      * When the 'accept' button is pressed, checks set the user in the database and close the stage.
      *
      * @param event ActionEvent
-     * @throws SQLException throws database exceptions
      * @throws IOException throws In and Out exceptions
      */
     @FXML
-    private void events(ActionEvent event) throws SQLException, IOException {
+    private void conditionsEvents(ActionEvent event)throws IOException {
         if( event.getSource()== acceptConditionsBtn) {
             if (acceptConditionsBox.isSelected()) {
                 Global.userID = controller.setUserID();
-                MainController.closeStage();
-                MainController.showMainMenu();
+                if(Global.userID!=0) {
+                    MainController.closeStage();
+                    MainController.showMainMenu();
+                }
+                else{ LoginController.show(); }
             }
         }
     }

@@ -6,7 +6,7 @@ import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Statistics;
 import be.ac.ulb.infof307.g06.models.Task;
-import be.ac.ulb.infof307.g06.views.StatsViewController;
+import be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController;
 import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,7 +42,10 @@ public class StatsController {
 
     }
 
-    public static void show() throws IOException {
+    /**
+     * Sets the loader to show the statistics scene.
+     */
+    public static void show() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
         MainController.load(loader,940,1515);

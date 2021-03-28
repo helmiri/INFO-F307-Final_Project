@@ -25,7 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import javafx.stage.Modality;
 import org.rauschig.jarchivelib.*;
 
@@ -54,7 +53,7 @@ public class ProjectController{
         }
     }
 
-    public static void show() throws IOException {
+    public static void show(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
         MainController.load(loader, 940, 1515);
