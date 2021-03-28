@@ -49,7 +49,7 @@ public class ProjectInputViewController implements Initializable {
      * @throws SQLException throws SQLException
      */
     @FXML
-    protected void events(ActionEvent event)throws SQLException{}
+    protected void events(ActionEvent event){}
 
     /**
      * Adds tags in the check combo box.

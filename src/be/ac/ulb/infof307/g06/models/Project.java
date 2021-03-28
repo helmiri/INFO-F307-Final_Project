@@ -25,6 +25,14 @@ public class Project {
         this.projectId = projectId;
     }
 
+    public Project(){
+        this.id = 0;
+        this.title = "";
+        this.description = "";
+        this.date = 0L;
+        this.projectId = 0;
+    }
+
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }

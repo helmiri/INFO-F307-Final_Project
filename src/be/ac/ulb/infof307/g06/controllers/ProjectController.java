@@ -50,7 +50,7 @@ public class ProjectController{
             List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
             getProjects(projectsArray);
         } catch (SQLException e) {
-            view.showError("Error in window initialization: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in window initialization: \n" + e);
         }
     }
 
@@ -95,7 +95,7 @@ public class ProjectController{
             for (Tag tag : tags) { tagsName.add(tag.getDescription()); System.out.println("Add tag " + tag.getDescription()); }
             view.displayProject(title, description, date, tagsName);
         }catch(NullPointerException | SQLException e){
-            view.showError("Error in fetching project data: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching project data: \n" + e);
         }
     }
 
@@ -112,7 +112,7 @@ public class ProjectController{
             for (Integer collaborator : collaborators) {names.add((UserDB.getUserInfo(collaborator).get("uName")));}
             view.insertCollaborator(names);
         } catch (SQLException e){
-            view.showError("Error initializing collaborators: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error initializing collaborators: \n" + e);
         }
     }
 
@@ -132,7 +132,7 @@ public class ProjectController{
                 view.insertTaskCollaborators(names);
             }
         }catch (SQLException e){
-            view.showError("Error initializing task collaborators: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error initializing task collaborators: \n" + e);
         }
     }
 
@@ -149,7 +149,7 @@ public class ProjectController{
                 ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
             }
         }catch(SQLException e){
-            Global.projectsView.showError("Error in assigning collaborator to task: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in assigning collaborator to task: \n" + e);
         }
     }
 
@@ -157,7 +157,7 @@ public class ProjectController{
         try{
             ProjectDB.deleteTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
         }catch(SQLException e){
-            Global.projectsView.showError("Error in deleting task collaborator: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting task collaborator: \n" + e);
         }
     }
 
@@ -175,7 +175,7 @@ public class ProjectController{
             }
             inputView.addTags(tags);
         }catch(SQLException e){
-            Global.projectsView.showError("Error in initializing input window: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in initializing input window: \n" + e);
         }
     }
 
@@ -190,7 +190,7 @@ public class ProjectController{
         try{
             return ProjectDB.getTaskCollaborator(taskId).contains(Integer.parseInt(UserDB.getUserInfo(user).get("id")));
         }catch(SQLException e){
-            Global.projectsView.showError("Error in fetching database: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching database: \n" + e);
         }
         return false;
     }
@@ -209,7 +209,7 @@ public class ProjectController{
             }
             //inputView.addProjectTitle(projectsTitleList);//i
         }catch(SQLException e){
-            Global.projectsView.showError("Error in exporting project: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in exporting project: \n" + e);
         }
     }
 
@@ -234,7 +234,7 @@ public class ProjectController{
             }
             Global.projectsView.refresh();
         }catch(SQLException e){
-            Global.projectsView.showError("Error in fetching projects: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching projects: \n" + e);
         }
     }
 
@@ -248,7 +248,7 @@ public class ProjectController{
             int projectID = ProjectDB.getProjectID(name);
             ProjectDB.deleteProject(projectID);
         }catch(SQLException e){
-            Global.projectsView.showError("Error in deleting project: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting project: \n" + e);
         }
     }
 
@@ -289,7 +289,7 @@ public class ProjectController{
             }
             MainController.closeStage();
         }catch(SQLException e){
-            Global.projectsView.showError("Error in adding project: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in adding project: \n" + e);
         }
     }
 
@@ -322,7 +322,7 @@ public class ProjectController{
                 init(Global.projectsView, Global.root);
             }
         }catch(SQLException e){
-            Global.projectsView.showError("Error in editing project: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in editing project: \n" + e);
         }
     }
 
@@ -345,7 +345,7 @@ public class ProjectController{
             else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
             Global.projectsView.displayTask();
         }catch(SQLException e){
-            Global.projectsView.showError("Error in editing task: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in editing task: \n" + e);
         }
     }
 
@@ -369,7 +369,7 @@ public class ProjectController{
                 ProjectDB.createTask(taskDescription, projectID);
             }
         }catch(SQLException e){
-            Global.projectsView.showError("Error in adding task: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in adding task: \n" + e);
         }
     }
 
@@ -382,7 +382,7 @@ public class ProjectController{
         try{
         ProjectDB.deleteTask(task.getDescription(),task.getProjectID());
         }catch(SQLException e){
-            Global.projectsView.showError("Error in deleting task: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting task: \n" + e);
         }
     }
 
@@ -400,7 +400,7 @@ public class ProjectController{
                 return FXCollections.observableArrayList(taskList);
             }
         }catch(SQLException e){
-            Global.projectsView.showError("Error in fetching tasks: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching tasks: \n" + e);
         }
         return FXCollections.observableArrayList();
     }
@@ -424,10 +424,19 @@ public class ProjectController{
      * @return
      */
     public String dateToString(Long date){
-        System.out.println("long date dateToString " + date);
-
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(date * 86400000L);
+    }
+
+    public static Project getProject(String currentProject){
+        Project project = new Project();
+        try{
+            project = ProjectDB.getProject( ProjectDB.getProjectID(currentProject));
+        }catch(SQLException e){
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error fetching project: \n" + e);
+        }
+        return project;
+
     }
 
     /**
@@ -444,7 +453,7 @@ public class ProjectController{
                 collaboratorsList.add(UserDB.getUserInfo(integer).get("uName"));
             }
         }catch(SQLException e){
-            Global.projectsView.showError("Error in fetching collaborators: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching collaborators: \n" + e);
         }
         return FXCollections.observableArrayList(collaboratorsList);
     }
@@ -459,7 +468,7 @@ public class ProjectController{
         try{
         ProjectDB.deleteCollaborator(project, Integer.parseInt(UserDB.getUserInfo(username).get("id")));
         }catch(SQLException e){
-            Global.projectsView.showError("Error in deleting collaborator: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting collaborator: \n" + e);
         }
     }
 
@@ -478,7 +487,7 @@ public class ProjectController{
             UserDB.sendInvitation(project, Global.userID, receiverID);
             return true;
         }catch(SQLException e){
-            Global.projectsView.showError("Error in adding collaborator: " + e);
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in adding collaborator: \n" + e);
         }
         return false;
     }
@@ -496,9 +505,8 @@ public class ProjectController{
      *
      * @param project Project
      * @param fw FileWriter
-     * @return boolean
      */
-    public boolean exportProject1(Project project, FileWriter fw) throws IOException {
+    public void exportProject1(Project project, FileWriter fw) throws IOException {
         try {
             final int ID = project.getId();
             saveProject(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), fw);
@@ -506,10 +514,9 @@ public class ProjectController{
                 fw.write(",\n");
                 exportProject1(ProjectDB.getProject(subProject), fw);
             }
-            return true;
         } catch (Exception ignored) {
             fw.close();
-            return false;}
+        }
     }
 
     /**

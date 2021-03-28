@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.database.ProjectDB;
 import be.ac.ulb.infof307.g06.database.UserDB;
 import be.ac.ulb.infof307.g06.models.Global;
+import com.sun.tools.javac.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,10 +42,9 @@ public class InvitationViewController implements Initializable {
     /**
      * Initializes the fields related to the edition of a project.
      *
-     * @throws SQLException throws SQLException
      */
     @FXML
-    public void initFields() {
+    public void initFields(){
         String projectName = Global.popupProjectTitle;
         String projectDescription = Global.popupProjectDescription;
         String senderName = Global.popupSenderUsername;
@@ -57,37 +57,18 @@ public class InvitationViewController implements Initializable {
      * The main method for button's events.
      *
      * @param event ActionEvent
-     * @throws SQLException throws SQLException
      */
     @FXML
-    public void events(ActionEvent event) throws SQLException{
+    public void events(ActionEvent event){
         if(event.getSource() == acceptBtn){
-            acceptInvitation();
+            MainController.invitation(true, Global.popupProjectTitle, Global.userID);
             MainController.closeStage();
         }
         if(event.getSource() == declineBtn){
-            declineInvitation();
+            MainController.invitation(false, Global.popupProjectTitle, Global.userID);
             MainController.closeStage();
         }
     }
 
-    /**
-     * Accepts an invitation.
-     *
-     * @throws SQLException throws SQLException
-     */
-    public void acceptInvitation() throws SQLException{
-        ProjectDB.addCollaborator(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
-        UserDB.removeInvitation(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
-    }
-
-    /**
-     * Declines an invitation.
-     *
-     * @throws SQLException throws SQLException
-     */
-    public void declineInvitation() throws SQLException{
-        UserDB.removeInvitation(ProjectDB.getProjectID(Global.popupProjectTitle), Global.userID);
-    }
 
 }
