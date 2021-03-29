@@ -50,8 +50,8 @@ public class StatsViewController implements Initializable {
     /**
      * Launchs init method from the controller.
      *
-     * @param url;
-     * @param resourceBundle;
+     * @param url URL
+     * @param resourceBundle ResourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(this, root); }
@@ -59,7 +59,7 @@ public class StatsViewController implements Initializable {
     /**
      * The main method for button's events.
      *
-     * @param event;
+     * @param event ActionEvent
      */
     @FXML
     private void statsEvents(ActionEvent event) {
