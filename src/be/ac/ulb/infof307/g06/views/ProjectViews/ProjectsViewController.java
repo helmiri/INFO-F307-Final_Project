@@ -332,7 +332,7 @@ public class ProjectsViewController implements Initializable {
             File selectedDirectory = directoryChooser.showDialog(new Stage());
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory.getAbsolutePath());
-                boolean succeed = controller.exportProject2(selectedProject.getValue(),
+                boolean succeed = controller.exportProject(selectedProject.getValue(),
                         selectedDirectory.getAbsolutePath(),
                         selectedDirectory.getAbsolutePath() + "/file.json");
                 ProjectController.alertExportImport("export", succeed);
@@ -374,7 +374,7 @@ public class ProjectsViewController implements Initializable {
     public void importProject() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("src"));
-        //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
             System.out.println(selectedArchive.getAbsolutePath());
