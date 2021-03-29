@@ -340,6 +340,9 @@ public class ProjectsViewController implements Initializable {
         }
     }
 
+    /**
+     * Choose the file we want to upload to the cloud via a filechooser.
+     */
     public void uploadFiles() {
         TreeItem<Project> selectedProject = getSelectedProject();
         if (selectedProject == null) {

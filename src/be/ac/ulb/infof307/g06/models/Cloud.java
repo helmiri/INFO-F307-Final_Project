@@ -21,8 +21,6 @@ public class Cloud {
         DbxRequestConfig config = new DbxRequestConfig(clientidentifier, "en_US");
         dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
 
-//        FullAccount account = Global.dboxClient.users().getCurrentAccount();
-//        System.out.println(account.getName().getDisplayName());
     }
 
     public static List<Metadata> getFiles() throws DbxException {

@@ -31,21 +31,14 @@ public class ProjectDB extends Database {
         close(state);
     }
 
-    protected static void updateSize(int size) throws SQLException {
-        Statement state = connect();
-        ResultSet rs = null;
-        int diskusage = 0;
-        try {
-            rs = state.executeQuery("SELECT diskUsage FROM users WHERE id='" + Global.userID + "'");
-            diskusage = rs.getInt("diskUsage");
-            diskusage += size;
-            state.executeUpdate("UPDATE users SET diskUsage='" + diskusage + "'");
-        } catch (Exception e) {
-        }
-
-        close(state, rs);
-    }
-
+    /**
+     * @param title       Title
+     * @param description Description
+     * @param date        Date
+     * @param parent_id   Parent project ID if it's a sub porject
+     * @return The newly created project's ID
+     * @throws SQLException
+     */
     public static int createProject(String title, String description, Long date, int parent_id) throws SQLException {
         Statement state = connect();
         ResultSet rs = null;
