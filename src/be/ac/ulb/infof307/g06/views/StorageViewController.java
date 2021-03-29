@@ -33,6 +33,12 @@ public class StorageViewController implements Initializable {
     public Text limitText;
     public Text adminText;
 
+    /**
+     * Button handling
+     *
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void events(ActionEvent actionEvent) throws SQLException {
 
         if (actionEvent.getSource() == backBtn) {
@@ -50,7 +56,12 @@ public class StorageViewController implements Initializable {
         }
     }
 
-
+    /**
+     * Save the user's cloud settings (token, username, diskspace,..)
+     *
+     * @return
+     * @throws SQLException
+     */
     public boolean saveSettings() throws SQLException {
         String clientID = clientIDField.getText();
         String accToken = accTokenField.getText();
@@ -76,12 +87,21 @@ public class StorageViewController implements Initializable {
         return res;
     }
 
+    /**
+     * Link to the tutorial on how to use dropbox.
+     *
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void opnenLink() throws IOException, URISyntaxException {
         MainController.alertWindow(Alert.AlertType.INFORMATION, "Cloud service set up", "Follow the instructions to set up your credentials");
         Desktop.getDesktop().browse(new URL("https://github.com/ULB-INFOF307/2021-groupe-6/blob/cloud-integration/src/Dropbox_On-Boarding.md").toURI());
     }
 
     @Override
+    /**
+     * Initializing the cloud parameters.
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());

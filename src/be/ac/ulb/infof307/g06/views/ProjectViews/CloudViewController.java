@@ -80,7 +80,6 @@ public class CloudViewController implements Initializable {
 
     /**
      * Returns the valid files contained in the dropbox.
-     *
      * @param entries List of all the files contained in the cloud.
      * @return
      */
@@ -149,7 +148,6 @@ public class CloudViewController implements Initializable {
 
     /**
      * button handling
-     *
      * @param event
      */
     public void events(javafx.event.ActionEvent event) {
