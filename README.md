@@ -1,12 +1,20 @@
-
 # I(Should)PlanAll : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
-Ce projet est le développement d'une application pour la gestion de projets sous Java. 
+Ce projet est le développement d'une application pour la gestion de projets sous Java.
 
 # Utilisation
 
-Ce projet a été réalisé sous Java 15.0.2 avec comme librairies exterieures utilisées: controlsfx, jarchivelib, gson,
-sqlite, javafx.
+Ce projet a été réalisé sous Java 15.0.2
+
+Dépendances:
+
+- JavaFX 16
+- DropBox API v2
+- GSon 2.8.6
+- Jarchive 0.7.1
+- JUnit 5.4.2
+- SQLite JDBC 3.34.0
+- ControlsFX 11.1.0
 
 ## Compilation
 
