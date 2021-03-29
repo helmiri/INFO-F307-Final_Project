@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.views;
 
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SettingsController;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Tag;
@@ -114,7 +115,7 @@ public class TagsViewController implements Initializable{
             tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
             defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","An Error has occured in the database." + throwables);
         }
     }
 
@@ -137,7 +138,7 @@ public class TagsViewController implements Initializable{
         try {
             defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","An Error has occured in the database." + throwables);
         }
     }
 
@@ -153,7 +154,7 @@ public class TagsViewController implements Initializable{
     }
 
     /**
-     *
+     * Updates the selected tag when clicked
      */
     @FXML
     public void onTagSelected(){
@@ -165,26 +166,13 @@ public class TagsViewController implements Initializable{
     }
 
     /**
-     *
-     * @throws SQLException
+     * Delete selected tag
+     * throws SQLException throwable
      */
+
    @FXML
     public void deleteTag() throws SQLException{
-        controller.deleteTag(Global.selectedTag);
-        refresh();
+       controller.deleteTag(Global.selectedTag);
+       refresh();
     }
-
-    /**
-     *
-     * @param message
-     */
-    public void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
-    }
-
-
 }

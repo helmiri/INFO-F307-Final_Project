@@ -1,7 +1,7 @@
 
 # I(Should)PlanAll : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
-Ce projet est le dévellopement d'une application pour la gestion de projets sous Java. 
+Ce projet est le développement d'une application pour la gestion de projets sous Java. 
 
 # Utilisation
 
@@ -28,16 +28,19 @@ b\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar 
 
 # Configuration :
 
-Pour ce projet nous avons du implémenter un système de création d'utilisateur avec la connection qui va avec où chaque utilisateurs auraient accès à un menu pour créer et éditer des projets et des sous projets qui contiendraient un système de tâches,étiquettes,date de fin,... L'utilisateur aura le droit aussi de collaborer avec d'autres personnes sur un projet et pourra aussi export/import des projets.Un système de cloud a aussi dû être intégré. Et pour finir sur les choses à implémenter, il a aussi accès à des statistiques sur ses projets qu'il peut export. 
+Pour ce projet nous avons du implémenter un système de création d'utilisateur avec la connexion qui va avec où chaque utilisateurs auraient accès à un menu pour créer et éditer des projets et des sous projets qui contiendraient un système de tâches,étiquettes,date de fin,... L'utilisateur aura le droit aussi de collaborer avec d'autres personnes sur un projet et pourra aussi export/import des projets.Un système de cloud a aussi dû être intégré. Et pour finir sur les choses à implémenter, il a aussi accès à des statistiques sur ses projets qu'il peut export. 
 Pour ce faire nous avons dû diviser notre projet en packages tout en respectant le MVC(model view controller).
 
 # Tests
 
-TO DO: Informations sur la façon d'executer les tests
+Pour le moment vu que nous utilisons intellIJ les tests s'effectuent simplement avec un run. 
 
 # Misc
 
 ## Développement
+Durant l'itération 1 on a implémenté la connexion et l'enregistrement d'un utilisateur pour notre application, ce qui rassemble la database pour les utilisateurs et le premier jet de l'interface graphique. On a travaillé parallèlement sur tout ce qui comptait pour la gestion de projets, c'est-à-dire la première version de l'interface graphique pour les projets et les statistiques ainsi que la database pour les projets. On a ensuite tout lié, on a donc fait en sorte que l'interface soit fonctionnel avec la database.Juste après ça on a fait une refonte total de nos interfaces. Cependant durant cette itération on a à peine pu faire les statistiques suite à une mauvaise estimation du temps.
+
+Pour l'itération 2 on a commencé par faire un gros "refactor" de notre code. On a changé la mise en forme de notre projet afin qu'il respecte le Model-View-Controller, on a par conséquent séparé notre code en plusieurs package et "divisé" le code pour séparer les vus des controllers. Par la suite, étant donné que nous devions rajouter de nouvelles fonctionnalités(gestion de collaborateurs pour un projet, tags colorés, service de cloud), on a commencé par mettre à jour le code des databases afin qu'elles contiennent les nouvelles informations à gérer. Puis nous avons travaillé en parallèle sur la mise à jour des interfaces des projets et des statistiques ainsi que sur la création du cloud. Pour l'interface des projets, un nouveau menu à part a été créé afin de gérer/créer les tags colorés pour ensuite les intégrer dans le menu des projets et de nouvelles fonctionnalités afin de gérer les collaborateurs ont été rajoutées dans l'interface. L'interface des statistiques a été modifiée en parallèle en rajoutant l'export, cependant l'apparence n'est surement pas défénitive. L'import et export des projets dans le menu des projets a été rajouté plus tard ce qui a pu débloquer l'équipe du cloud et leur a permi de faire l'interface pour le cloud.
 
 ## Screenshot
 ![signup](https://user-images.githubusercontent.com/33431271/112816753-03460200-9082-11eb-92de-fd46c727796f.PNG)
