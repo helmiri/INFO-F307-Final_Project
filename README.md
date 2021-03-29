@@ -1,6 +1,6 @@
 # I(Should)PlanAll : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
-TO DO: Description du projet
+Ce projet est le dévellopement d'une application pour la gestion de projets sous Java. 
 
 # Utilisation
 
