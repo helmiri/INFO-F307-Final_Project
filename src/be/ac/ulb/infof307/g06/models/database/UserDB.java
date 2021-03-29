@@ -22,6 +22,24 @@ public class UserDB extends Database {
         super(dbName);
     }
 
+    public static boolean isAdmin() throws SQLException {
+        Statement state = connect();
+        ResultSet res = state.executeQuery("SELECT id FROM main.admin");
+        boolean check = false;
+        if (res.getInt("id") == Global.userID) {
+            check = true;
+        }
+
+        close(state, res);
+        return check;
+    }
+
+    public static void setLimit(int value) throws SQLException {
+        Statement state = connect();
+        state.executeUpdate("UPDATE admin SET diskLimit='" + Integer.toString(value) + "'");
+        close(state);
+    }
+
     @Override
     protected void createTables() throws SQLException {
         Statement state = connect();
@@ -332,7 +350,7 @@ public class UserDB extends Database {
      * @return Limit in bytes
      * @throws SQLException When a database access error occurs
      */
-    private static int getDiskLimit() throws SQLException {
+    public static int getDiskLimit() throws SQLException {
         Statement state = connect();
         ResultSet res = state.executeQuery("SELECT diskLimit FROM admin");
         int limit = res.getInt("diskLimit");
@@ -352,5 +370,6 @@ public class UserDB extends Database {
         state.executeUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + Global.userID + "," + diskLimit + ")");
         close(state);
     }
+
 
 }
