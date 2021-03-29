@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SignUpController;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,9 +45,12 @@ public class LoginViewController implements Initializable {
      * @param event ActionEvent
      */
     @FXML
-    private void logInEvents(ActionEvent event) {
-        if (event.getSource() == connectionBtn) { logInConditions(); }
-        else if (event.getSource() == registerBtn) { SignUpController.show(); }
+    private void logInEvents(ActionEvent event) throws IOException {
+        if (event.getSource() == connectionBtn) {
+            logInConditions();
+        } else if (event.getSource() == registerBtn) {
+            SignUpController.show();
+        }
     }
 
     /**

@@ -39,14 +39,14 @@ public class ProjectController{
      * @param view ProjectsViewController
      * @param root TreeItem<Project>
      */
-    public void init(ProjectsViewController view, TreeItem<Project> root) {
+    public static void init(ProjectsViewController view, TreeItem<Project> root) {
         Global.projectsView = view;
         Global.root = root;
         view.initTree();
         try {
-            ProjectDB.createTag("tag1","#4287f5");
-            ProjectDB.createTag("tag2","#ffffff");
-            ProjectDB.createTag("tag3","#000000");
+            ProjectDB.createTag("tag1", "#4287f5");
+            ProjectDB.createTag("tag2", "#ffffff");
+            ProjectDB.createTag("tag3", "#000000");
             view.clearProjects();
             Global.TreeMap.clear();
             List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
@@ -241,19 +241,20 @@ public class ProjectController{
      * Initializes the map and displays projects on the tree table view.
      *
      * @param projects List<Integer>;
-
      */
-    public void getProjects(List<Integer> projects){
+    public static void getProjects(List<Integer> projects) {
         try {
             Global.projectsView.hideRoot();
-            for(Integer project : projects){
-                Project childProject= ProjectDB.getProject(project);
-                int parentID= childProject.getParent_id();
-                String title= childProject.getTitle();
-                int childID= ProjectDB.getProjectID(title);
+            for (Integer project : projects) {
+                Project childProject = ProjectDB.getProject(project);
+                int parentID = childProject.getParent_id();
+                String title = childProject.getTitle();
+                int childID = ProjectDB.getProjectID(title);
                 TreeItem<Project> child = new TreeItem<Project>(childProject);
                 Global.TreeMap.put(childID, child);
-                if (parentID== 0){ Global.projectsView.addChild(Global.root, child); }
+                if (parentID == 0) {
+                    Global.projectsView.addChild(Global.root, child);
+                }
                 else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
             }
             Global.projectsView.refresh();
