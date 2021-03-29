@@ -12,8 +12,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | Priorité/3 | N° | Description | Difficulté/3 | Risque/3 | Heures/? | Points |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
 | 1 | [1](#Histoire-1) | Histoire 1 |  | 2 | 30 | / |
-| 2 | 2 | Histoire 2 |  | 2 | 33 | / |
-|   | 3 | Histoire 3 |  | 3 | 18 |  |
+| 2 | 2 | Histoire 2 |  | 2 | 38 | / |
+|   | 3 | Histoire 3 |  | 3 | 19 |  |
 |   | 4 | Histoire 4 |  | 1 | 35 |  |
 |   | 5 | Histoire 5 |  | 1 | 35 |  |
 |   | 6 | Histoire 6 |  | 1 | 24 |  |
