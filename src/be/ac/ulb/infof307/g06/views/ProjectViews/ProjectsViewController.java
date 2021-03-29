@@ -120,7 +120,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private void events(ActionEvent event) {
         if( event.getSource()== addTaskbtn){ addTask();}
-        else if( event.getSource()== addBtn ) {ProjectController.showAddProjectStage(); }
+        else if( event.getSource()== addBtn ) {ProjectController.showAddProjectStage();}
         else if( event.getSource() == assignTaskCollaboratorBtn){assignCollaborators();}
         else if( event.getSource()== editBtn ) {
             if (!projectsTitle.getText().equals("")){
@@ -436,7 +436,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     public void onProjectSelected(){
         TreeItem<Project> selectedProject = getSelectedProject();
-        if (selectedProject.getValue() == null){return;}
+        if (selectedProject == null || selectedProject.getValue() == null){return;}
         controller.getProjectInfo(this, selectedProject);
     }
 

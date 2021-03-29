@@ -258,6 +258,7 @@ public class ProjectController{
         try{
             int projectID = ProjectDB.getProjectID(name);
             ProjectDB.deleteProject(projectID);
+            init(Global.projectsView, Global.root);
         }catch(SQLException e){
             MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting project: \n" + e);
         }
@@ -662,6 +663,7 @@ public class ProjectController{
                 //line = reader.readLine();
             }
             reader.close();
+            init(Global.projectsView, Global.root);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
