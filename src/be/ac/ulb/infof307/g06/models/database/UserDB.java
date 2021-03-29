@@ -53,12 +53,13 @@ public class UserDB extends Database {
     public static int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         connect();
         String[] key = {"id"};
-        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)", key);
+        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, diskUsage) VALUES (?,?,?,?,?,?)", key);
         state.setString(1, fName);
         state.setString(2, lName);
         state.setString(3, userName);
         state.setString(4, email);
         state.setString(5, password);
+        state.setInt(6, 0);
         state.execute();
         ResultSet rs = state.getGeneratedKeys();
         int res = rs.getInt(1);

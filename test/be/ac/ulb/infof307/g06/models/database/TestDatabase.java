@@ -1,11 +1,12 @@
-package be.ac.ulb.infof307.g06;
+package be.ac.ulb.infof307.g06.models.database;
 
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +75,14 @@ public class TestDatabase {
         state.executeUpdate("DELETE FROM Project");
         state.executeUpdate("DELETE FROM Collaborator");
         state.executeUpdate("DELETE FROM Task");
+        state.executeUpdate("DELETE FROM admin");
         state.close();
         db.close();
+    }
+
+    @AfterAll
+    public static void deleteDB() {
+        File dbFile = new File("testDB");
+        dbFile.delete();
     }
 }

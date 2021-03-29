@@ -1,9 +1,8 @@
-package be.ac.ulb.infof307.g06;
+package be.ac.ulb.infof307.g06.models.database;
 
 
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -136,7 +135,14 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Set user info")
     public void testSetUserInfo() throws SQLException {
-        UserDB.setUserInfo("", "", "", "");
+        Global.userID = 1;
+        UserDB.setUserInfo("NewFName", "NewLName", "NewEmail", "newPassword");
+        Map<String, String> res = UserDB.getUserInfo(1);
+
+        assertEquals("NewFName", res.get("fName"));
+        assertEquals("NewLName", res.get("lName"));
+        assertEquals("NewEmail", res.get("email"));
+        assertEquals(1, UserDB.validateData("User_1_userName", "newPassword"));
     }
 
     @Test
@@ -149,19 +155,28 @@ public class TestUserDB extends TestDatabase {
     @DisplayName("Available disk getter")
     public void testAvailableDisk() throws SQLException {
         Global.userID = 1;
-        UserDB.availableDisk();
+        UserDB.setAdmin(256);
+        assertEquals(256, UserDB.availableDisk());
     }
 
     @Test
     @DisplayName("Disk usage update")
     public void testUpdateDiskUsage() throws SQLException {
         UserDB.updateDiskUsage(0);
-
+        assertEquals(0, UserDB.getDiskUsage());
+        UserDB.updateDiskUsage(123456);
+        assertEquals(123456, UserDB.getDiskUsage());
     }
 
     @Test
     @DisplayName("Admin setter")
     public void testSetAdmin() throws SQLException {
-        UserDB.setAdmin(0);
+        Global.userID = 1;
+        UserDB.setAdmin(256);
+        Statement state = db.createStatement();
+        ResultSet res = state.executeQuery("select diskLimit from admin");
+        assertEquals(256, res.getInt("diskLimit"));
+        state.close();
+        res.close();
     }
 }

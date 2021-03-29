@@ -1,7 +1,6 @@
-package be.ac.ulb.infof307.g06;
+package be.ac.ulb.infof307.g06.models.database;
 
 import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestProjectDB {
-    static String dbPath = "test/be/ac/ulb/infof307/g06/testDB.db";
+    static String dbPath = "test/be/ac/ulb/infof307/g06/models/database/testDB.db";
     String projectName = "test1";
     String projectDescription = "desc1";
     Long projectDate = 1000L;
