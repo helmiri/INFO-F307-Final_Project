@@ -95,7 +95,7 @@ public class StorageViewController implements Initializable {
      */
     public void opnenLink() throws IOException, URISyntaxException {
         MainController.alertWindow(Alert.AlertType.INFORMATION, "Cloud service set up", "Follow the instructions to set up your credentials");
-        Desktop.getDesktop().browse(new URL("https://github.com/ULB-INFOF307/2021-groupe-6/blob/cloud-integration/src/Dropbox_On-Boarding.md").toURI());
+        Desktop.getDesktop().browse(new URL("https://github.com/ULB-INFOF307/2021-groupe-6/blob/master/Dropbox_On-Boarding.md").toURI());
     }
 
     @Override
