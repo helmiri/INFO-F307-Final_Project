@@ -33,16 +33,15 @@ public class MainController extends Application {
      * Starts the main window
      *
      * @param primaryStage2 Main Stage
-     * @throws Exception;
+     * @throws IOException e
      */
     @Override
-    public void start(Stage primaryStage2) throws Exception {
+    public void start(Stage primaryStage2) throws IOException {
         // Set main stage
         Global.userID = 0;
         primaryStage = primaryStage2;
         primaryStage.setTitle("Projet génie logiciel");
         // Disconnect user before closing
-
         primaryStage.setOnCloseRequest(e -> {
             try {
                 if (Global.userID != 0) UserDB.disconnectUser();
@@ -63,33 +62,41 @@ public class MainController extends Application {
         primaryStage.show();
     }
 
-    public static void showMainMenu() throws IOException {
+    public static void main(String[] args) { launch(args); }
+
+    /**
+     * Sets the loader to show the Main menu scene.
+     */
+    public static void showMainMenu() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("MenuView.fxml"));
         load(loader, 940, 1515);
     }
 
-    public static void showProjectMenu() throws IOException {
+    /**
+     * Sets the loader to show the project menu scene.
+     */
+    public static void showProjectMenu()  {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("ProjectMenu.fxml"));
         load(loader, 940, 1515);
     }
 
+    /**
+     * Sets the loader to show the stage with an invitation to join a project.
+     */
     public static void showInvitationStage() {
         FXMLLoader loader =  new FXMLLoader();
-        loader.setLocation(MenuViewController.class.getResource("views/InvitationView.fxml"));
+        loader.setLocation(MenuViewController.class.getResource("InvitationView.fxml"));
         MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
     }
 
-    //--------------- METHODS ----------------
     /**
      * Initializes the main view.
      *
      * @param view MenuViewController
      */
-    public void init(MenuViewController view){
-        this.view = view;
-    }
+    public void init(MenuViewController view){ this.view = view; }
 
     /**
      * Checks the invitation requests.
@@ -104,7 +111,14 @@ public class MainController extends Application {
         }
     }
 
-    public static void load(FXMLLoader loader, Integer height, Integer width) {
+    /**
+     * Sets the primary stage with the new scene.
+     *
+     * @param loader FXMLLoader
+     * @param height Integer
+     * @param width Integer
+     */
+    public static void load(FXMLLoader loader,Integer height,Integer width) {
         try {
             // Set main stage
             primaryStage.setResizable(true);
@@ -121,7 +135,16 @@ public class MainController extends Application {
         }
     }
 
-    public static void showStage(String title, Integer width, Integer height, Modality modality, FXMLLoader loader) {
+    /**
+     * Sets a new stage.
+     *
+     * @param title String
+     * @param width Integer
+     * @param height Integer
+     * @param modality Modality
+     * @param loader FXMLLoader
+     */
+    public static void showStage(String title, Integer width, Integer height, Modality modality, FXMLLoader loader ){
         try {
             AnchorPane conditionsAnchor = loader.load();
             stage = new Stage();
@@ -137,22 +160,35 @@ public class MainController extends Application {
 
     }
 
+    /**
+     * Closes a stage.
+     */
     public static void closeStage(){ stage.close(); }
-    public static void main(String[] args) { launch(args); }
 
+    /**
+     * Handles the request to join a project.
+     *
+     * @param accept Boolean
+     * @param project String
+     * @param user int
+     */
     public static void invitation(Boolean accept,String project, int user){
         try {
-            if (accept) {
-                ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user);
-            }
+            if (accept) { ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user); }
             UserDB.removeInvitation(ProjectDB.getProjectID(project), user);
         }catch(SQLException e){
             MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in processing invitation: \n" + e);
         }
-
     }
 
-    public static boolean alertWindow(Alert.AlertType type, String title, String message) {
+    /**
+     * Sets a pop window.
+     *
+     * @param type Alert.AlertType
+     * @param title String
+     * @param message String
+     */
+    public static boolean alertWindow(Alert.AlertType type, String title,String message){
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);

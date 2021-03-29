@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 
 import java.io.FileNotFoundException;
@@ -42,7 +43,7 @@ public class StatsController {
             projectsArray = getProjects();
             setStats(projectsArray, root);
         } catch (DatabaseException e) {
-            statsView.showAlert("An error has occurred with the database.");
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred with the database: "+e);
         }
 
     }
@@ -50,10 +51,10 @@ public class StatsController {
     /**
      * Sets the loader to show the statistics scene.
      */
-    public static void show() throws IOException {
+    public static void show() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
-        MainController.load(loader, 940, 1515);
+        MainController.load(loader,940,1515);
     }
 
     /**
@@ -107,7 +108,6 @@ public class StatsController {
         for (Task task : tasks) {
             tasksDescriptions.add(task.getDescription());
         }
-
         return tasksDescriptions;
     }
 
@@ -192,8 +192,8 @@ public class StatsController {
                 finalString += treeBranchString;
             }
             write(finalString + "}", fileName, path);
-        } catch (SQLException e) {
-            statsView.showAlert("An error has occurred during the exportation. Couldn't find some informations in the database");
+        }catch(SQLException e ){
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error","An error has occurred during the exportation. Couldn't find some informations in the database: "+e);
         }
     }
 
@@ -264,9 +264,9 @@ public class StatsController {
             csv.write(content);
             csv.close();
             statsView.setMsg("The exportation succeeded.");
-        } catch (FileNotFoundException e) {
-            statsView.showAlert("Couldn't find or access to this file.");
-        } catch (SQLException e) {
+        }catch(FileNotFoundException e){
+            MainController.alertWindow(Alert.AlertType.ERROR,"Error","Couldn't find or access to this file.");
+        }catch (SQLException e) {
             statsView.setMsg("The exportation failed.");
         }
     }

@@ -13,13 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsController {
-    public static void showSettingsMenu() throws IOException {
+    /**
+     * Sets the loader to show the settings menu scene.
+     */
+    public static void showSettingsMenu() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("SettingsMenu.fxml"));
         MainController.load(loader, 940,1515);
     }
 
-    public static void showTagsMenu() throws IOException {
+    /**
+     * Sets the loader to show the tags menu scene.
+     */
+    public static void showTagsMenu() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(TagsViewController.class.getResource("Tags.fxml"));
         MainController.load(loader,940,1515);
@@ -35,21 +41,20 @@ public class SettingsController {
             view.showAlert("Tag already exists");return;}
         ProjectDB.createTag(title, color);
     }
+
     public void deleteTag(Tag tag) throws SQLException{
         ProjectDB.deleteTag(tag.getId());
     }
 
-    public void editTag(TagsViewController view, Tag tag, String newDescription, String newColor) throws SQLException {
+    public void editTag(TagsViewController view, Tag tag, String newDescription, String newColor) throws SQLException{
         List<Tag> tags = ProjectDB.getAllTags();
         List<String> tagNames = new ArrayList<>();
         for (Tag tag2 : tags) {
             tagNames.add(tag2.getDescription());
         }
-        if (tagNames.contains(newDescription) && !newDescription.equals(tag.getDescription())) {
-            view.showAlert("Tag already exists");
-            return;
-        }
-        ProjectDB.editTag(tag.getId(), newDescription, newColor);
+        if (tagNames.contains(newDescription) && !newDescription.equals(tag.getDescription())){
+            view.showAlert("Tag already exists");return;}
+        ProjectDB.editTag(tag.getId(), newDescription,newColor);
     }
 
     public static void showStorageMenu() throws IOException {

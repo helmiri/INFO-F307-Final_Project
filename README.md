@@ -1,10 +1,11 @@
+
 # I(Should)PlanAll : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
-TO DO: Description du projet
+Ce projet est le dévellopement d'une application pour la gestion de projets sous Java. 
 
 # Utilisation
 
-TO DO: Informations sur le système de build et la version du Java/Librairies utilisés dans l'implementation.
+Ce projet a été réalisé sous Java 15.0.2 avec comme librairies exterieures utilisées: controlsfx, jarchivelib, gson, sqlite, javafx.
 
 ## Compilation
 
@@ -22,11 +23,13 @@ Windows:
 
 Fichier .jar:
 
-``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\lib\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar .\dist\g06-iteration-1.jar``
+``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\li![login](https://user-images.githubusercontent.com/33431271/112816355-992d5d00-9081-11eb-8d0d-b99bbde11276.PNG)
+b\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar .\dist\g06-iteration-1.jar``
 
 # Configuration :
 
-TO DO: Informations sur la configuration du programme
+Pour ce projet nous avons du implémenter un système de création d'utilisateur avec la connection qui va avec où chaque utilisateurs auraient accès à un menu pour créer et éditer des projets et des sous projets qui contiendraient un système de tâches,étiquettes,date de fin,... L'utilisateur aura le droit aussi de collaborer avec d'autres personnes sur un projet et pourra aussi export/import des projets.Un système de cloud a aussi dû être intégré. Et pour finir sur les choses à implémenter, il a aussi accès à des statistiques sur ses projets qu'il peut export. 
+Pour ce faire nous avons dû diviser notre projet en packages tout en respectant le MVC(model view controller).
 
 # Tests
 
@@ -37,5 +40,10 @@ TO DO: Informations sur la façon d'executer les tests
 ## Développement
 
 ## Screenshot
+![signup](https://user-images.githubusercontent.com/33431271/112816753-03460200-9082-11eb-92de-fd46c727796f.PNG)
+![login](https://user-images.githubusercontent.com/33431271/112816761-050fc580-9082-11eb-88ad-2a758668ddbd.PNG)
+![PojectMenu](https://user-images.githubusercontent.com/33431271/112816747-00e3a800-9082-11eb-8c7d-c42aa456f146.PNG)
+![ColorTags](https://user-images.githubusercontent.com/33431271/112816742-ff19e480-9081-11eb-8459-6f5111df2183.PNG)
+![statistics](https://user-images.githubusercontent.com/33431271/112816728-fb865d80-9081-11eb-90f7-d6db66110d52.PNG)
 
 ## License

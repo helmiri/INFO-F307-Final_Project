@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StatsViewController implements Initializable {
@@ -52,10 +51,10 @@ public class StatsViewController implements Initializable {
     private final StatsController controller= new StatsController();
     //--------------- METHODS ----------------
     /**
-     * Lauchs init method from the controller.
+     * Launchs init method from the controller.
      *
-     * @param url;
-     * @param resourceBundle;
+     * @param url URL
+     * @param resourceBundle ResourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(this, root); }
@@ -63,11 +62,10 @@ public class StatsViewController implements Initializable {
     /**
      * The main method for button's events.
      *
-     * @param event;
-     * @throws Exception;
+     * @param event ActionEvent
      */
     @FXML
-    private void statsEvents(ActionEvent event) throws IOException, SQLException {
+    private void statsEvents(ActionEvent event) {
         if (event.getSource() == backToProjectMenu) { MainController.showProjectMenu();}
         else if (event.getSource() == logOutBtn) { LoginController.show();}
         else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) { exports(event); }
@@ -108,7 +106,7 @@ public class StatsViewController implements Initializable {
      *
      * @param event ActionEvent
      */
-    public void exports(ActionEvent event) throws FileNotFoundException, SQLException {
+    public void exports(ActionEvent event) {
         String fileName = fileNameTextField.getText();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("src"));
@@ -131,11 +129,4 @@ public class StatsViewController implements Initializable {
      */
     public void setMsg(String msg){ msgExportText.setText(msg); }
 
-    public void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
-    }
 }

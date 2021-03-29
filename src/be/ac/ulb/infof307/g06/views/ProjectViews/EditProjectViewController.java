@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -37,7 +36,6 @@ public class EditProjectViewController extends ProjectInputViewController{
      * The main method for button's events.
      *
      * @param event ActionEvent
-     * @throws SQLException throws SQLException
      */
     @Override
     protected void events(ActionEvent event){
@@ -49,8 +47,6 @@ public class EditProjectViewController extends ProjectInputViewController{
 
     /**
      * Initializes the fields related to the edition of a project.
-     *
-     * @throws SQLException throws SQLException
      */
     @FXML
     public void initFields(){
@@ -61,5 +57,4 @@ public class EditProjectViewController extends ProjectInputViewController{
         String date = controller.dateToString(project.getDate());
         dateProject.setValue(LocalDate.parse(date, formatter));
     }
-
 }
