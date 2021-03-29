@@ -350,7 +350,7 @@ public class ProjectsViewController implements Initializable {
         }
         File selectedDirectory = new File("");
 
-        boolean succeed = controller.exportProject2(selectedProject.getValue(),
+        boolean succeed = controller.exportProject(selectedProject.getValue(),
                 selectedDirectory.getAbsolutePath(),
                 selectedDirectory.getAbsolutePath() + "/file.json");
         try {
@@ -378,7 +378,7 @@ public class ProjectsViewController implements Initializable {
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
             System.out.println(selectedArchive.getAbsolutePath());
-            boolean succeed = controller.importProject(selectedArchive.getAbsolutePath());
+            boolean succeed = ProjectController.importProject(selectedArchive.getAbsolutePath());
             ProjectController.alertExportImport("import", succeed);
         }
     }
