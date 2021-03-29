@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController">
+   <children>
+      <Polygon fill="#4fc3f70d" layoutX="720.0" layoutY="-284.0" points="467.5, 1184.0, 780.0, 285.0, 780.0, 1184.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="1249.0" layoutY="-476.0" points="-374.0, 1376.0, 251.0, 476.0, 251.0, 1376.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="1173.0" layoutY="-456.0" points="-192.0, 1356.0, 327.0, 457.0, 327.0, 1356.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="1135.0" layoutY="-481.0" points="-56.0, 1381.0, 365.0, 481.0, 365.0, 1381.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Pane prefHeight="436.0" prefWidth="461.0" style="-fx-background-color: #4fc3f7;">
+         <children>
+            <VBox layoutX="119.0" layoutY="72.0" prefHeight="293.0" prefWidth="226.0" spacing="40.0">
+               <children>
+                  <TextField fx:id="nameProject" prefHeight="35.0" promptText="Project's name" />
+                  <TextField fx:id="descriptionProject" prefHeight="35.0" promptText="Description" />
+                  <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Date" />
+                  <CheckComboBox fx:id="tagsProject" prefHeight="35.0" prefWidth="226.0" />
+                  <TextField fx:id="parentProject" prefHeight="35.0" prefWidth="283.0" promptText="Parent( optionnal )" />
+               </children>
+            </VBox>
+            <Button fx:id="addProjectBtn" layoutX="163.0" layoutY="388.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="144.0" style="-fx-background-color: #bcbcbc;" text="ADD" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="12.0" />
+               </font>
+            </Button>
+            <Text fill="WHITE" layoutX="154.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ADD A PROJECT">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <TreeTableView fx:id="treeProjects" layoutX="519.0" layoutY="192.0" onMouseClicked="#displayTask" prefHeight="511.0" prefWidth="322.0">
+        <columns>
+          <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
+        </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                  <MenuItem mnemonicParsing="false" text="Show details" />
+                <MenuItem mnemonicParsing="false" text="delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </TreeTableView>
+      <TableView fx:id="taskTable" layoutX="980.0" layoutY="192.0" prefHeight="511.0" prefWidth="413.0">
+        <columns>
+          <TableColumn fx:id="taskColumn" onEditCommit="#editTask" prefWidth="412.0" text="Tasks" />
+        </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </TableView>
+      <Accordion layoutX="467.0" layoutY="755.0" />
+      <TextArea fx:id="descriptionTask" layoutX="980.0" layoutY="727.0" prefHeight="62.0" prefWidth="219.0" promptText="Description" />
+      <TextField fx:id="taskParent" layoutX="1212.0" layoutY="743.0" prefHeight="25.0" prefWidth="127.0" promptText="Project's name" />
+      <Button fx:id="addTaskBtn" layoutX="1348.0" layoutY="743.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #4fc3f7;" text="add" textFill="WHITE" />
+      <Button fx:id="backBtn" layoutX="1385.0" layoutY="822.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back" textFill="WHITE" />
+      <Label layoutX="477.0" layoutY="14.0" text="Manage Project" textFill="#556668" underline="true">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Pane layoutY="436.0" prefHeight="464.0" prefWidth="461.0" style="-fx-background-color: #4fc3f7;">
+         <children>
+            <VBox layoutX="122.0" layoutY="95.0" prefHeight="293.0" prefWidth="226.0" spacing="40.0">
+               <children>
+                  <TextField fx:id="newNameProject" prefHeight="35.0" promptText="Project's new name" />
+                  <TextField fx:id="newdescription" prefHeight="35.0" promptText="New description" />
+                  <DatePicker fx:id="newDateProject" prefHeight="35.0" prefWidth="295.0" promptText="New date" />
+                  <TextField fx:id="newTagsProject" prefHeight="35.0" prefWidth="283.0" promptText="New tags" />
+               </children>
+            </VBox>
+            <Text fill="WHITE" layoutX="154.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EDIT A PROJECT">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+            </Text>
+            <Button fx:id="EditProjectBtn" layoutX="168.0" layoutY="416.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="134.0" style="-fx-background-color: #bcbcbc;" text="EDIT" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+      <Text fx:id="errorText" fill="RED" layoutX="524.0" layoutY="728.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="322.0">
+         <font>
+            <Font name="Calibri" size="12.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

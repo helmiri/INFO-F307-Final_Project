@@ -1,0 +1,4 @@
+.table-row-cell:selected {
+   -fx-text-background-color: black;
+   -fx-opacity: 0.5;
+}

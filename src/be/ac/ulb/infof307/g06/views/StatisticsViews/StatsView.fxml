@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController">
+   <children>
+      <VBox layoutX="145.0" layoutY="70.0" prefHeight="73.0" prefWidth="596.0">
+         <children>
+            <Label prefHeight="48.0" prefWidth="231.0" text="Statistics">
+               <font>
+                  <Font size="39.0"/>
+               </font>
+            </Label>
+            <Label prefHeight="59.0" prefWidth="436.0" text="Select the project you want to visualise."/>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER_RIGHT" layoutX="489.0" layoutY="396.0" prefHeight="62.0" prefWidth="74.0" spacing="10.0" />
+      <Button fx:id="backToProjectMenu" layoutX="1386.0" layoutY="835.0" minWidth="53.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Polygon fill="#4ec8f50d" layoutX="-167.0" layoutY="374.0" points="169.00001525878906, 541.0, 169.00001525878906, -368.0, 744.5999755859375, 540.7999877929688" stroke="TRANSPARENT" strokeType="INSIDE">
+         <effect>
+            <Bloom />
+         </effect>
+      </Polygon>
+      <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="374.0" points="208.00001525878906, 539.2000122070312, 208.0, -368.0, 686.5999755859375, 539.2000122070312" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4ec8f50d" layoutX="-214.0" layoutY="374.0" points="216.00001525878906, 539.2000122070312, 213.59999084472656, -369.1999816894531, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="-162.0" layoutY="374.0" points="161.59999084472656, 540.0, 162.60000610351562, -370.79998779296875, 451.5999755859375, 541.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <HBox alignment="BOTTOM_RIGHT" layoutX="1342.0" layoutY="33.0" prefHeight="51.0" prefWidth="122.0" spacing="12.0">
+         <children>
+            <Button id="connectionBtn" fx:id="logOutBtn" mnemonicParsing="false" onAction="#statsEvents" prefHeight="56.0" prefWidth="110.0" style="-fx-background-color: #4fc3f7;" text="LOGOUT" textAlignment="CENTER" textFill="WHITE" underline="true">
+               <font>
+                  <Font name="Calibri" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <Button fx:id="exportJSONBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="1205.0" layoutY="772.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="39.0" prefWidth="74.0" style="-fx-background-color: #4fc3f7;" text=".json" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Button>
+      <TreeTableView fx:id="projectsTreeView" layoutX="300.0" layoutY="194.0" prefHeight="534.0" prefWidth="1028.0" style="-fx-background-color: #00000056;">
+         <columns>
+            <TreeTableColumn fx:id="projectsColumn" prefWidth="220.0" text="Projects" />
+            <TreeTableColumn fx:id="collaboratorsColumn" prefWidth="387.0" text="Collaborators" />
+            <TreeTableColumn fx:id="tasksColumn" prefWidth="328.0" text="Tasks" />
+            <TreeTableColumn fx:id="estimatedColumn" prefWidth="92.0" text="Estimated" />
+         </columns>
+      </TreeTableView>
+      <Button fx:id="exportCSVBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="1101.0" layoutY="772.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="39.0" prefWidth="74.0" style="-fx-background-color: #4fc3f7;" text=".csv" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Button>
+      <TextField fx:id="fileNameTextField" alignment="CENTER" layoutX="1038.0" layoutY="740.0" prefHeight="26.0" prefWidth="290.0" promptText="Statistics (Filename by default) " />
+      <Text fx:id="msgExportText" fill="#407a4b" layoutX="1038.0" layoutY="832.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="289.99999999999994" />
+   </children>
+</AnchorPane>
