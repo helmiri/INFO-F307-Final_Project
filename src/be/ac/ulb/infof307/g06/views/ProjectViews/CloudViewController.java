@@ -61,6 +61,7 @@ public class CloudViewController implements Initializable {
         }
     }
 
+    /*
     public List<Metadata> filterFolders(List<Metadata> entries) {
         List<Metadata> folders = new ArrayList<>();
 
@@ -75,8 +76,14 @@ public class CloudViewController implements Initializable {
             }
         }
         return folders;
-    }
+    }*/
 
+    /**
+     * Returns the valid files contained in the dropbox.
+     *
+     * @param entries List of all the files contained in the cloud.
+     * @return
+     */
     public List<Metadata> filterValidFiles(List<Metadata> entries) {
         List<Metadata> lst = new ArrayList<>();
         for (int i = 0; i < entries.size(); i++) {
@@ -88,6 +95,13 @@ public class CloudViewController implements Initializable {
         return lst;
     }
 
+    /**
+     * Download a file from the cloud
+     *
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws DbxException
+     */
     private void downloadFiles() throws NoSuchAlgorithmException, IOException, DbxException {
         String localPath = saveFile();
         if (localPath.isBlank()) {
@@ -119,7 +133,11 @@ public class CloudViewController implements Initializable {
     }
 
 
-
+    /**
+     * Save a file by choosing it's path with a filechooser.
+     *
+     * @return
+     */
     public String saveFile() {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showSaveDialog(new Stage());
@@ -129,6 +147,11 @@ public class CloudViewController implements Initializable {
         return file.getAbsolutePath();
     }
 
+    /**
+     * button handling
+     *
+     * @param event
+     */
     public void events(javafx.event.ActionEvent event) {
         if (event.getSource() == downloadBtn) {
             try {
