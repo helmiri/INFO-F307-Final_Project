@@ -49,17 +49,23 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Interface de connexion. 10h, G2
 - Validitée des données des l'utilisateurs. 2h, G4
 
+**Tâches en plus:** 
+- /
+
 :question: **Question:**       
 - est-ce qu'un seul utilisateur peut être connecté à tout moment? Réponse : Un utilisateur/client.
 
 
 ### Histoire 2
 **Instructions originales:**
-- Pouvoir créer un projet (étiquettes, nom, description, date). 12h, G1
-- Création de sous projets. 2h, G1
-- Ajout de tâches à un projet. 7h, G1
-- L'utilisateur doit pouvoir passer en mode édition pour un projet. 10h, G2
-- Possibilité de supprimer un projet. 2h, G1
+- Pouvoir créer un projet (étiquettes, nom, description, date). 12h
+- Création de sous projets. 2h
+- Ajout de tâches à un projet. 7h
+- L'utilisateur doit pouvoir passer en mode édition pour un projet. 10h
+- Possibilité de supprimer un projet. 2h
+
+**Tâches en plus:** 
+- Tags colorés. 5h
 
 :question: **Question:**  
 - Qu'est-ce qu'une tâche concrètement? Réponse : Une simple chose à faire, sans date ni heure, ni échéance.
@@ -72,6 +78,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 -  Choisir une date via une interface calendrier. 10h
 -  Spécifier la date de début et le temps attribué pour le projet. 2h 
 -  Priorité des tâches en fonction du temps. 6h
+
+**Tâches en plus:** 
+- /
 
 :question: **Question:**  
 - Peut-on avoir plusieurs tâches en même temps, si oui comment l'afficher?
@@ -109,6 +118,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
         - Un commit sera lié à l"utilisateur l'ayant fait.
 - Création d'un menu pour gérer ces fonctionnalités. 15h 
 
+**Tâches en plus:** 
+- /
+
 :question: **Question:** 
 - /
  
@@ -133,15 +145,20 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Exporter un fichier compressé(.tar.gz). 4h
 - Peut importer un projet ayant été exporté pour apparaitre comme projet dans l'application (pas forcément utilisable en dehors de l'application). 4h
 
-:question: **Question:** 
+**Tâches en plus:** 
 - /
 
+:question: **Question:** 
+- /
 
 ### Histoire 8
 **Instructions originales:**
 - Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet). 5h, G3
 - Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets. 3h, G3
 - Possibilité d'exporter les statistiques en ".csv", ".json". 2h, G3
+
+**Tâches en plus:** 
+- /
 
 :question: **Question:** 
 - /
@@ -155,6 +172,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - L'exportation/importation peut s'effectuée jusqu'à plusieurs fichiers à la fois. 7h
 - Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur. 1h
 
+**Tâches en plus:** 
+- /
+
 :question: **Question:** 
 - Qui est l'administrateur ?
 
@@ -164,6 +184,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Intégration d'un système de rappels pour les projets et les tâches avec une date d'échéance.(via l'application ou par l'intégration d'une application calendrier externe). 20h
 - Si les rappels se font via l'application, ceux ci doivent être présentés à l'utilisateur lors du démarrage du logiciel, avec la possibilité de soit validé les rappels, soit de les reporter à une date ultérieure. 5h
 
+**Tâches en plus:** 
+- /
+
 :question: **Question:** 
 - Sous quelle forme doit apparaître le rappel lors du démarrage de l'application?
 
@@ -172,6 +195,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 **Instructions originales:**
 - Accès à une section d'aide 'informations et explications sur les fonctionnalités du programme). 7h
 - Possiblement l'intégration d'un tutoriel qui pourrait être démarré à partir de cette section. 5h
+
+**Tâches en plus:** 
+- /
 
 :question: **Question:** 
 - /
@@ -183,6 +209,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Protection par mot de passe pour les fichiers ou les exportation de projet. 10h
 - Ne peut ouvrir ou importer un fichier/un projet protégé que si le mod de passe entré est correcte. 5h
 
+**Tâches en plus:** 
+- /
+
 :question: **Question:** 
 - /
 
@@ -191,6 +220,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 **Instructions originales:**
 - Garantit que les données stockées dans l'application ne puissent pas être alétérées de façon fortuite,illicite ou malveillante. 15h
 - Garantit l'absence de modifications non autorisées. 10h
+
+**Tâches en plus:** 
+- /
 
 :question: **Question:** 
 - Pouvons-nous utiliser une database basée sur du cloud (MongoDB Atlas).
