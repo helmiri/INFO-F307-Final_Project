@@ -2,10 +2,13 @@ package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.ProjectController;
+import be.ac.ulb.infof307.g06.models.Cloud;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
+import com.dropbox.core.DbxException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,11 +26,14 @@ import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProjectsViewController implements Initializable {
+    public Button cloudDownloadBtn;
+    public Button cloudUploadBtn;
     //----------ATTRIBUTES---------
     @FXML
     private Button exportProjectBtn;
@@ -117,17 +123,40 @@ public class ProjectsViewController implements Initializable {
      */
     @FXML
     private void events(ActionEvent event) {
-        if( event.getSource()== addTaskbtn){ addTask();}
-        else if( event.getSource()== addBtn ) {ProjectController.showAddProjectStage();}
-        else if( event.getSource() == assignTaskCollaboratorBtn){assignCollaborators();}
-        else if( event.getSource()== editBtn ) {
-            if (!projectsTitle.getText().equals("")){
-                Global.currentProject = projectsTitle.getText();
-                ProjectController.showEditProjectStage();}
+
+        if (event.getSource() == backBtn) {
+            MainController.showMainMenu();
+        } else if (event.getSource() == cloudUploadBtn) {
+            uploadFiles();
+        } else {
+            try {
+                if (UserDB.availableDisk() <= 0) {
+                    MainController.alertWindow(Alert.AlertType.INFORMATION, "Insufficient storage", "You've reached your storage quota.");
+                    return;
+                }
+            } catch (SQLException throwables) {
+                MainController.alertWindow(Alert.AlertType.ERROR, "Database error", "Error accessing the database");
+                return;
+            }
+            if (event.getSource() == addTaskbtn) {
+                addTask();
+            } else if (event.getSource() == addBtn) {
+                ProjectController.showAddProjectStage();
+            } else if (event.getSource() == assignTaskCollaboratorBtn) {
+                assignCollaborators();
+            } else if (event.getSource() == editBtn) {
+                if (!projectsTitle.getText().equals("")) {
+                    Global.currentProject = projectsTitle.getText();
+                    ProjectController.showEditProjectStage();
+                }
+            } else if (event.getSource() == exportProjectBtn) {
+                exportProject();
+            } else if (event.getSource() == importProjectBtn) {
+                importProject();
+            } else if (event.getSource() == cloudDownloadBtn) {
+                ProjectController.showCloudDownloadStage();
+            }
         }
-        else if( event.getSource()== backBtn){ MainController.showMainMenu(); }
-        else if (event.getSource()==exportProjectBtn){exportProject();}
-        else if(event.getSource()==importProjectBtn){importProject();}
     }
 
     /**
@@ -308,6 +337,31 @@ public class ProjectsViewController implements Initializable {
                         selectedDirectory.getAbsolutePath() + "/file.json");
                 ProjectController.alertExportImport("export", succeed);
             }
+        }
+    }
+
+    public void uploadFiles() {
+        TreeItem<Project> selectedProject = getSelectedProject();
+        if (selectedProject == null) {
+            return;
+        }
+        File selectedDirectory = new File("");
+
+        boolean succeed = controller.exportProject2(selectedProject.getValue(),
+                selectedDirectory.getAbsolutePath(),
+                selectedDirectory.getAbsolutePath() + "/file.json");
+        try {
+            Cloud.init(UserDB.getCloudCredentials().get("accToken"), UserDB.getCloudCredentials().get("clientID"));
+            String fileName = "/" + selectedProject.getValue().getTitle() + ".tar.gz";
+            String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
+
+            Cloud.uploadFile(localFilePath, fileName);
+        } catch (DbxException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to dropbox: " + e.getMessage());
+        } catch (IOException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "File access", "Error reading the file" + e.getMessage());
+        } catch (SQLException throwables) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Database", "Error accessing the database" + throwables.getMessage());
         }
     }
 
