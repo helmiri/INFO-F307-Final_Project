@@ -305,7 +305,7 @@ public class ProjectsViewController implements Initializable {
             File selectedDirectory = directoryChooser.showDialog(new Stage());
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory.getAbsolutePath());
-                boolean succeed = controller.exportProject2(selectedProject.getValue(),
+                boolean succeed = controller.exportProject(selectedProject.getValue(),
                         selectedDirectory.getAbsolutePath(),
                         selectedDirectory.getAbsolutePath() + "/file.json");
                 ProjectController.alertExportImport("export", succeed);

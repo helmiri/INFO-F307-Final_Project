@@ -515,17 +515,17 @@ public class ProjectController{
 
 
     /**
-     *
+     * Write a project and his children in a json file.
      * @param project Project
      * @param fw FileWriter
      */
-    public void exportProject1(Project project, FileWriter fw) throws IOException {
+    private void saveProjectAndChildsJson(Project project, FileWriter fw) throws IOException {
         try {
             final int ID = project.getId();
-            saveProject(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), fw);
+            saveProjectJson(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), fw);
             for (Integer subProject : ProjectDB.getSubProjects(ID)) {
                 fw.write(",\n");
-                exportProject1(ProjectDB.getProject(subProject), fw);
+                saveProjectAndChildsJson(ProjectDB.getProject(subProject), fw);
             }
         } catch (Exception ignored) {
             fw.close();
@@ -533,18 +533,19 @@ public class ProjectController{
     }
 
     /**
+     * Export a complete project (root and all his children) in a "tar.gz" archive.
      *
      * @param project Project
      * @param archivePath String
      * @param jsonFile String
      * @return boolean
      */
-    public boolean exportProject2(Project project, String archivePath, String jsonFile) {
+    public boolean exportProject(Project project, String archivePath, String jsonFile) {
         try {
             final int ID = project.getId();
             FileWriter fw = new FileWriter(jsonFile, true);
             fw.write("[\n");
-            exportProject1(project, fw);
+            saveProjectAndChildsJson(project, fw);
             fw.write("\n]");
             fw.close();
             zip(project.getTitle(), jsonFile, archivePath);
@@ -554,6 +555,7 @@ public class ProjectController{
     }
 
     /**
+     * Write a project, his tasks and his tags in a json file.
      *
      * @param project Project
      * @param tasks List<Task>
@@ -561,9 +563,8 @@ public class ProjectController{
      * @param fw FileWriter
      * @return boolean
      */
-    public static boolean saveProject(Project project, List<Task> tasks, List<Tag> tags, FileWriter fw) {
+    private static boolean saveProjectJson(Project project, List<Task> tasks, List<Tag> tags, FileWriter fw) {
         try {
-            //Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Gson gson = new GsonBuilder().create();
             fw.write("[\n");
             gson.toJson(project, fw);
@@ -578,7 +579,7 @@ public class ProjectController{
     }
 
     /**
-     *
+     * Import a complete project (root and all his children) from a archive "tar.gz".
      *
      * @param archivePath String
      * @return boolean
@@ -660,7 +661,7 @@ public class ProjectController{
     }
 
     /**
-     *
+     * Check if an archive is valide ("tar.gz" contains a json file).
      *
      * @param archivePath String
      * @return boolean
@@ -687,7 +688,7 @@ public class ProjectController{
     }
 
     /**
-     *
+     * Zip a file in a "tar.gz" archive.
      *
      * @param archiveName String
      * @param source String
@@ -701,19 +702,19 @@ public class ProjectController{
             Archiver archiver =
                     ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
             archiver.create(archiveName, dest, src);
-            System.out.println("test");
+            System.out.println("zip");
             return true;
         }catch (Exception ignored) {return false;}
     }
 
     /**
-     *
+     * Unzip a tar.gz archive in a directory.
      *
      * @param source String
      * @param destination String
      * @return boolean
      */
-    public static boolean unzip(final String source, final String destination){
+    public static boolean unzip(final String source, final String destination) {
         try {
             Archiver archiver =
                     ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
@@ -721,12 +722,14 @@ public class ProjectController{
             File dest = new File(destination);
             System.out.println("WARNINGS are normal");
             archiver.extract(archive, dest); // WARNING OK
+            System.out.println("unzip");
             return true;
         }catch (Exception ignored) {return false;}
     }
 
     /**
-     *
+     * Check if one of the sub-project of a complete project
+     * (root and his children) is in the Database.
      *
      * @param fileTxt String
      * @return boolean
@@ -763,7 +766,7 @@ public class ProjectController{
     }
 
     /**
-     *
+     * Delete a file.
      *
      * @param fileName String
      * @return boolean
@@ -777,19 +780,25 @@ public class ProjectController{
         catch(Exception ignored) {return false;}
     }
 
+    /**
+     * Raise an alert after an import of export.
+     *
+     * @param choice String
+     * @param succeed boolean
+     */
     @FXML
-    public static void alertExportImport(String choice, boolean succeed){
+    public static void alertExportImport(String choice, boolean succeed) {
         //TODO à mettre dans le main controller
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(choice);
         alert.setHeaderText(null);
         alert.getDialogPane().setMinWidth(900);
-        if(succeed){
-            alert.setContentText("Congrat,your project is "+ choice +"ed." );
+        if (succeed) {
+            alert.setContentText("Congrat, your project is " + choice + "ed." );
             alert.showAndWait();
         }
         else {
-            alert.setContentText("Sorry, failed to "+choice +" your project");
+            alert.setContentText("Sorry, failed to " + choice + " your project");
             alert.showAndWait();
         }
     }
