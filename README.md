@@ -4,7 +4,7 @@ Ce projet est le dévellopement d'une application pour la gestion de projets sou
 
 # Utilisation
 
-Les librairies utilisées pour ce projet sont: controlsfx, jarchivelib, gson, sqlite, javafx.
+Ce projet a été réalisé sous Java 15.0.2 avec comme librairies exterieures utilisées: controlsfx, jarchivelib, gson, sqlite, javafx.
 
 ## Compilation
 
