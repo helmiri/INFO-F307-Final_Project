@@ -4,7 +4,7 @@ TO DO: Description du projet
 
 # Utilisation
 
-TO DO: Informations sur le système de build et la version du Java/Librairies utilisés dans l'implementation.
+Les librairies utilisées pour ce projet sont: controlsfx, jarchivelib, gson, sqlite, javafx.
 
 ## Compilation
 
