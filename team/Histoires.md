@@ -44,10 +44,10 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 1
 **Instructions originales:**
-- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h, G3
-- BDD utilisateurs (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 15h, G4
-- Interface de connexion. 10h, G2
-- Validitée des données des l'utilisateurs. 2h, G4
+- Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h
+- BDD utilisateurs (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 15h
+- Interface de connexion. 10h
+- Validitée des données des l'utilisateurs. 2h
 
 **Tâches en plus:** 
 - /
@@ -153,9 +153,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 8
 **Instructions originales:**
-- Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet). 5h, G3
-- Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets. 3h, G3
-- Possibilité d'exporter les statistiques en ".csv", ".json". 2h, G3
+- Visualisation de statistiques importantes pour l"utilisateur(nombre de personnes concernées, tâches restantes, durée estimée du projet et durée réelle du projet). 5h
+- Il peut aussi visualiser ces métriques pour un projet choisi ou bien pour l'ensemble de ses projets. 3h
+- Possibilité d'exporter les statistiques en ".csv", ".json". 2h
 
 **Tâches en plus:** 
 - /
