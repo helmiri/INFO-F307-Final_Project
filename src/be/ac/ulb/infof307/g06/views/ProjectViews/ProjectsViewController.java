@@ -278,8 +278,10 @@ public class ProjectsViewController implements Initializable {
      * Adds a task to the table and displays the table to refresh it.
      */
     public void addTask(){
-        controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
-        displayTask();
+        if (getSelectedProject().getValue() != null) {
+            controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
+            displayTask();
+        }
     }
 
     /**
@@ -434,6 +436,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     public void onProjectSelected(){
         TreeItem<Project> selectedProject = getSelectedProject();
+        if (selectedProject.getValue() == null){return;}
         controller.getProjectInfo(this, selectedProject);
     }
 

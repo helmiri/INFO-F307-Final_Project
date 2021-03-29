@@ -368,8 +368,8 @@ public class ProjectController{
      * @param taskParent String
      */
     public void addTask(String taskDescription, String taskParent){
+        if (taskDescription.isBlank()){return;}
         try{
-            //taskColumn.setCellValueFactory(new PropertyValueFactory<ProjectDB.Task, String>("description"));
             List<Task> tasks = ProjectDB.getTasks(ProjectDB.getProjectID(taskParent));
             List<String> taskNames = new ArrayList<>();
             for (Task task : tasks) {
