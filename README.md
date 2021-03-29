@@ -33,7 +33,7 @@ Pour ce faire nous avons dû diviser notre projet en packages tout en respectant
 
 # Tests
 
-TO DO: Informations sur la façon d'executer les tests
+Pour le moment vu que nous utilisons intellIJ les tests s'effectuent simplement avec un run. 
 
 # Misc
 
