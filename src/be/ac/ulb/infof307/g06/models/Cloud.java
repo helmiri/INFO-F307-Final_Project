@@ -47,20 +47,6 @@ public class Cloud {
         return res;
     }
 
-    public static List<Metadata> filterFolders(List<Metadata> entries) {
-        List<Metadata> folders = new ArrayList<>();
-
-        for (int i = 0; i < entries.size(); i++) {
-            for (int j = 0; j < entries.size(); j++) {
-                if (entries.get(j).getPathDisplay().contains(entries.get(i).getPathDisplay())
-                        && !entries.get(j).getPathDisplay().equals(entries.get(i).getPathDisplay())) {
-                    folders.add(entries.get(i));
-                    entries.remove(i);
-                }
-            }
-        }
-        return folders;
-    }
 
     public static void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
         InputStream in = new FileInputStream(localFilePath);

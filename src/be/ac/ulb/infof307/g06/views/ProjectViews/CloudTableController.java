@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -55,12 +56,37 @@ public class CloudTableController implements Initializable {
             throwables.printStackTrace();
         }
 
-        Cloud.filterFolders(files);
-        for (Metadata metadata : files) {
+        for (Metadata metadata : filterValidFiles(files)) {
             cloudTable.getItems().add(metadata.getPathDisplay());
         }
     }
 
+    public List<Metadata> filterFolders(List<Metadata> entries) {
+        List<Metadata> folders = new ArrayList<>();
+
+        for (int i = 0; i < entries.size(); i++) {
+            for (int j = 0; j < entries.size(); j++) {
+                if (entries.get(j).getPathDisplay().contains(entries.get(i).getPathDisplay())
+                        && !entries.get(j).getPathDisplay().equals(entries.get(i).getPathDisplay())) {
+                    folders.add(entries.get(i));
+                    entries.remove(j);
+                }
+
+            }
+        }
+        return folders;
+    }
+
+    public List<Metadata> filterValidFiles(List<Metadata> entries) {
+        List<Metadata> lst = new ArrayList<>();
+        for (int i = 0; i < entries.size(); i++) {
+            String pathDisplay = entries.get(i).getPathDisplay();
+            if (pathDisplay.contains(".tar.gz")) {
+                lst.add(entries.get(i));
+            }
+        }
+        return lst;
+    }
 
     private void downloadFiles() throws NoSuchAlgorithmException, IOException, DbxException {
         String localPath = saveFile();
@@ -80,6 +106,7 @@ public class CloudTableController implements Initializable {
 
         if (!localFile.exists()) {
             Cloud.downloadFile(localPath, cloudPath);
+            return;
         }
 
 
