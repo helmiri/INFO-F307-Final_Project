@@ -4,7 +4,7 @@ TO DO: Description du projet
 
 # Utilisation
 
-Les libraireis utilisées pour ce projet sont: controlsfx, jarchivelib, gson, sqlite, javafx, 
+Les librairies utilisées pour ce projet sont: controlsfx, jarchivelib, gson, sqlite, javafx, 
 
 ## Compilation
 
