@@ -319,7 +319,7 @@ public class ProjectsViewController implements Initializable {
     public void importProject() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("src"));
-        //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
             System.out.println(selectedArchive.getAbsolutePath());

@@ -278,7 +278,7 @@ public class ProjectController{
             String parentProject = addView.getParentProjectName();
 
             if(nameProject.equals("")) { addView.setError("Cannot add a project with an empty title.");}
-            //else if (ProjectDB.getProjectID(nameProject) != 0){ addView.setError("A project with the same title already exists.");}
+            else if (ProjectDB.getProjectID(nameProject) != 0){ addView.setError("A project with the same title already exists.");}
             else if(dateProject == null){ addView.setError("Cannot create a project without a date.");}
             else if (parentProject.equals("") || ProjectDB.getProjectID(parentProject)!=0){
 
@@ -586,7 +586,6 @@ public class ProjectController{
     public boolean importProject(String archivePath) {
         File file = new File(archivePath);
         String parent = file.getAbsoluteFile().getParent();
-
         unzip(archivePath,parent);
         BufferedReader reader;
         Gson gson=new Gson();
@@ -599,82 +598,65 @@ public class ProjectController{
             int id = 0;
             int idTag = 0;
             Map<Integer, Integer> hm = new HashMap();
-            while ((line = reader.readLine()) !=null) {
-
-            ++count;
-            count %= 6;
-            switch (count) {
-                case 1:
-                    System.out.println("ouvrante "+line);
-                    break;
-                case 2:
-                    System.out.println("projet "+line);
-                    Project project= gson.fromJson(line.substring(0,line.length()-1),Project.class);
-                    if(hm.size()==0){
-                        id = ProjectDB.createProject(project.getTitle(),project.getDescription(),project.getDate(),0);
-                        hm.put(project.getParent_id(),0);
-                    }
-                    else{
-                        id = ProjectDB.createProject(project.getTitle(),project.getDescription(),project.getDate(),hm.get(project.getParent_id()));
-                    }
-                    hm.put(project.getId(),id);
-                    ProjectDB.addCollaborator(id,Global.userID);
-
-
-                    break;
-                case 3:
-                    System.out.println("tasks "+line);
-                    Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
-                    List<Task> tasks= new Gson().fromJson(line.substring(0,line.length()-1), listType);
-                    for(Task t : tasks){
-                        ProjectDB.createTask(t.getDescription(),id);
-                    }
-
-
-                    break;
-                case 4:
-                    System.out.println("tag "+line);
-                    Type listkind = new TypeToken<ArrayList<Tag>>(){}.getType();
-                    List<Tag> tag= new Gson().fromJson(line, listkind);
-                    for(Tag t : tag){
-                        //verifier dans la bdd
-                        idTag= ProjectDB.getTagID(t.getDescription());
-                        if(idTag==0){
-                           idTag= ProjectDB.createTag(t.getDescription(),t.getColor());
-
+            while ((line = reader.readLine()) != null) {
+                ++count;
+                count %= 6;
+                switch (count) {
+                    case 1:
+                        System.out.println("ouvrante "+line);
+                        break;
+                    case 2:
+                        System.out.println("projet "+line);
+                        Project project= gson.fromJson(line.substring(0, line.length()-1), Project.class);
+                        if (hm.size()==0) {
+                            id = ProjectDB.createProject(project.getTitle(), project.getDescription(), project.getDate(),0);
+                            hm.put(project.getParent_id(), 0);
                         }
-                        ProjectDB.addTag(idTag,id);
-                    }
-                    break;
-                case 5:
-                    System.out.println("fermante "+line);
-                    break;
-                default:
-                    if(line.equals("[")){
-                        count=1;
-                    }
-                    else{
-                        System.out.println("fin "+line);
-                    }
-
-            }
-                //System.out.println(line);
-                // read next line
-                //line = reader.readLine();
+                        else{
+                            id = ProjectDB.createProject(project.getTitle(), project.getDescription(), project.getDate(), hm.get(project.getParent_id()));
+                            idParent = hm.get(project.getParent_id());
+                        }
+                        hm.put(project.getId(), id);
+                        ProjectDB.addCollaborator(id, Global.userID);
+                        break;
+                    case 3:
+                        System.out.println("tasks " + line);
+                        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+                        List<Task> tasks = new Gson().fromJson(line.substring(0, line.length()-1), listType);
+                        for (Task t : tasks) {
+                            ProjectDB.createTask(t.getDescription(), id);
+                        }
+                        break;
+                    case 4:
+                        System.out.println("tag " + line);
+                        Type listkind = new TypeToken<ArrayList<Tag>>(){}.getType();
+                        List<Tag> tag= new Gson().fromJson(line, listkind);
+                        for(Tag t : tag){
+                            //verifier dans la bdd
+                            idTag = ProjectDB.getTagID(t.getDescription());
+                            if (idTag == 0) {
+                                idTag = ProjectDB.createTag(t.getDescription(), t.getColor());
+                            }
+                            ProjectDB.addTag(idTag, id);
+                        }
+                        // update la view
+                        TreeItem<Project> child = new TreeItem<>(ProjectDB.getProject(id));
+                        Global.TreeMap.put(id, child);
+                        if (idParent == 0) { Global.projectsView.addChild(Global.root, child); }
+                        else { Global.projectsView.addChild(Global.TreeMap.get(idParent), child); }
+                        break;
+                    case 5:
+                        System.out.println("fermante " + line);
+                        break;
+                    default:
+                        if (line.equals("[")) {count = 1;}
+                        else {System.out.println("fin " + line);}
+                }
             }
             reader.close();
-            init(Global.projectsView, Global.root);
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-
+        } catch (IOException | SQLException e) {e.printStackTrace();}
+        deleteFile(parent+"/file.json");
         return true;
-
-        //boolean c = isProjectInDb("C:\\Users\\hodai\\Download\\file.txt");
-        //boolean d = isValidFile("C:\\Users\\hodai\\Download\\file.txt");
-        // ajouter dans la db
-        //verif c'est un zip , si oui on dezipe ta braillette
-        //on verif la base de donnée si il y est as déja
     }
 
     /**
@@ -777,33 +759,7 @@ public class ProjectController{
      * @return boolean : true if the file is valid or false if is not.
      */
     public static boolean isValidFile( String fileTxt){
-        try {
-            File file = new File(fileTxt);
-            Scanner reader = new Scanner(file);
-            Gson gson = new Gson();
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                if (line.substring(0, 7).equals("Project")) {
-                    System.out.println("c'est un projet: " + line.substring(8));
-                    Project project = gson.fromJson(line.substring(8), Project.class);
-                }
-                else if(line.substring(0, 4).equals("Task")) {
-                    System.out.println("c'est un projet: " + line.substring(5));
-                    Task task = gson.fromJson(line.substring(5), Task.class);
-                }
-                else if(line.substring(0, 3).equals("Tag")) {
-                    System.out.println("c'est un projet: " + line.substring(4));
-                    Tag tag = gson.fromJson(line.substring(4), Tag.class);
-                }
-                else{
-                    reader.close();
-                    return false;
-                }
-            }
-            reader.close();
-            return true;
-        } catch (Exception e) {return false;}
-
+        return true;
     }
 
     /**
@@ -820,6 +776,7 @@ public class ProjectController{
         }
         catch(Exception ignored) {return false;}
     }
+
     @FXML
     public static void alertExportImport(String choice, boolean succeed){
         //TODO à mettre dans le main controller
@@ -836,6 +793,5 @@ public class ProjectController{
             alert.showAndWait();
         }
     }
-
 }
 
