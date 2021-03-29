@@ -38,7 +38,9 @@ public class StorageViewController implements Initializable {
         if (actionEvent.getSource() == backBtn) {
             SettingsController.showSettingsMenu();
         } else if (actionEvent.getSource() == saveBtn) {
-            saveSettings();
+            if (saveSettings()) {
+                MainController.alertWindow(Alert.AlertType.INFORMATION, "Save", "Changes saved");
+            }
         } else if (actionEvent.getSource() == helpBtn) {
             try {
                 opnenLink();
@@ -49,11 +51,29 @@ public class StorageViewController implements Initializable {
     }
 
 
-    public void saveSettings() throws SQLException {
-        UserDB.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
-        if (UserDB.isAdmin()) {
-            UserDB.setLimit(Integer.parseInt(limitField.getText()));
+    public boolean saveSettings() throws SQLException {
+        String clientID = clientIDField.getText();
+        String accToken = accTokenField.getText();
+        boolean res = false;
+        if (!clientID.isBlank() && !accToken.isBlank()) {
+            UserDB.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
+            res = true;
+        } else if (clientID.isBlank() && accToken.isBlank()) {
+            res = false;
+        } else if (clientID.isBlank() || accToken.isBlank()) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Missing credentials");
+            res = false;
         }
+
+        if (UserDB.isAdmin()) {
+            String value = limitField.getText();
+            if (!value.isBlank()) {
+                UserDB.setLimit(Integer.parseInt(limitField.getText()));
+                res = true;
+            }
+
+        }
+        return res;
     }
 
     public void opnenLink() throws IOException, URISyntaxException {
