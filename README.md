@@ -26,7 +26,8 @@ Fichier .jar:
 
 # Configuration :
 
-TO DO: Informations sur la configuration du programme
+Pour ce projet nous avons du implémenter un système de création d'utilisateur avec la connection qui va avec où chaque utilisateurs auraient accès à un menu pour créer et éditer des projets et des sous projets qui contiendraient un système de tâches,étiquettes,date de fin,... L'utilisateur aura le droit aussi de collaborer avec d'autres personnes sur un projet et pourra aussi export/import des projets.Un système de cloud a aussi dû être intégré. Et pour finir sur les choses à implémenter, il a aussi accès à des statistiques sur ses projets qu'il peut export. 
+Pour ce faire nous avons dû diviser notre projet en packages tout en respectant le MVC(model view controller).
 
 # Tests
 
