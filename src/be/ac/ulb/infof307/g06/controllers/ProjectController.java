@@ -79,7 +79,7 @@ public class ProjectController{
      */
     public static void showCloudDownloadStage() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(CloudViewController.class.getResource("ClloudView.fxml"));
+        loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
         MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
 
