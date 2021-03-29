@@ -3,10 +3,7 @@ package be.ac.ulb.infof307.g06.models;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.ListFolderBuilder;
-import com.dropbox.core.v2.files.ListFolderResult;
-import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.*;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -50,8 +47,9 @@ public class Cloud {
 
     public static void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
         InputStream in = new FileInputStream(localFilePath);
-        FileMetadata metadata = dboxClient.files().uploadBuilder(cloudFilePath)
-                .uploadAndFinish(in);
+        UploadBuilder uploadBuilder = dboxClient.files().uploadBuilder(cloudFilePath);
+        uploadBuilder.withMode(WriteMode.OVERWRITE);
+        FileMetadata metadata = uploadBuilder.uploadAndFinish(in);
         in.close();
     }
 
@@ -64,7 +62,6 @@ public class Cloud {
 
         outputStream.close();
     }
-
 
     public static String dropBoxHash(String file) {
         MessageDigest hasher = new DropBoxContentHasher();
