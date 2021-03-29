@@ -1,35 +1,184 @@
 memberSearchIndex = [{
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "accTokenField"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "addChild(TreeItem<Project>, TreeItem<Project>)",
+    "u": "addChild(javafx.scene.control.TreeItem,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "addChild(TreeItem<Statistics>, TreeItem<Statistics>)",
+    "u": "addChild(javafx.scene.control.TreeItem,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "addCloudCredentials(String, String)",
+    "u": "addCloudCredentials(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "addCollaborator()"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "addCollaborator(int, int)",
     "u": "addCollaborator(int,int)"
 }, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "addCollaborator(String, int)",
+    "u": "addCollaborator(java.lang.String,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "addProject(ProjectInputViewController)",
+    "u": "addProject(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "AddProjectViewController",
+    "l": "AddProjectViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "addTag(int, int)",
+    "u": "addTag(int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "addTag(TagsViewController, String, String)",
+    "u": "addTag(be.ac.ulb.infof307.g06.views.TagsViewController,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "addTags(ObservableList<String>)",
+    "u": "addTags(javafx.collections.ObservableList)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "addTask()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "addTask(String, String)",
+    "u": "addTask(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "addTaskCollaborator(int, int)",
+    "u": "addTaskCollaborator(int,int)"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "UserDB",
     "l": "addUser(String, String, String, String, String)",
     "u": "addUser(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestDatabase", "l": "clear()"}, {
-    "p": "be.ac.ulb.infof307.g06",
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "adminText"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "alertExportImport(String, boolean)",
+    "u": "alertExportImport(java.lang.String,boolean)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "alertWindow(Alert.AlertType, String, String)",
+    "u": "alertWindow(javafx.scene.control.Alert.AlertType,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "anchorPane"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "assignCollaborators()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "assignCollaborators(ObservableList<String>, Task, int)",
+    "u": "assignCollaborators(javafx.collections.ObservableList,be.ac.ulb.infof307.g06.models.Task,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "availableDisk()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "backBtn"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "BLOCK_SIZE"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "checkInvites()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "TestDatabase",
-    "l": "close()"
+    "l": "clear()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "clearProjects()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "clientIDField"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "clone()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "Database",
     "l": "close(AutoCloseable...)",
     "u": "close(java.lang.AutoCloseable...)"
 }, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
-    "l": "closeConditionsStage()"
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "closeStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Cloud",
+    "l": "Cloud()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "cloudDownloadBtn"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "cloudUploadBtn"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "CloudViewController",
+    "l": "CloudViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "collaboratorsToString(Integer)",
+    "u": "collaboratorsToString(java.lang.Integer)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ConnectionsViews",
+    "c": "ConditionsViewController",
+    "l": "ConditionsViewController()",
+    "u": "%3Cinit%3E()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "Database",
     "l": "connect()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "Controller",
-    "l": "Controller()",
-    "u": "%3Cinit%3E()"
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "controller"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
@@ -41,8 +190,13 @@ memberSearchIndex = [{
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
-    "l": "createProject(String, String, String, Long, int)",
-    "u": "createProject(java.lang.String,java.lang.String,java.lang.String,java.lang.Long,int)"
+    "l": "createProject(String, String, Long, int)",
+    "u": "createProject(java.lang.String,java.lang.String,java.lang.Long,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "createStat(Project, Integer, String, int)",
+    "u": "createStat(be.ac.ulb.infof307.g06.models.Project,java.lang.Integer,java.lang.String,int)"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "Database",
@@ -50,19 +204,59 @@ memberSearchIndex = [{
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
+    "l": "createTables()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "createTables()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "createTag(String, String)",
+    "u": "createTag(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
     "l": "createTask(String, int)",
     "u": "createTask(java.lang.String,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "currentProject"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "Database",
     "l": "Database(String)",
     "u": "%3Cinit%3E(java.lang.String)"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestDatabase", "l": "db"}, {
+}, {
+    "p": "be.ac.ulb.infof307.g06.exceptions",
+    "c": "DatabaseException",
+    "l": "DatabaseException(Throwable)",
+    "u": "%3Cinit%3E(java.lang.Throwable)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "dateProject"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "dateToString(Long)",
+    "u": "dateToString(java.lang.Long)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "dateToString(Long)",
+    "u": "dateToString(java.lang.Long)"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "Database",
     "l": "db"
 }, {
-    "p": "be.ac.ulb.infof307.g06",
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestDatabase",
+    "l": "db"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "TestDatabase",
     "l": "dbFields"
 }, {
@@ -70,68 +264,383 @@ memberSearchIndex = [{
     "c": "Database",
     "l": "dbURL"
 }, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "deleteCollaborator()"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "deleteCollaborator(int, int)",
     "u": "deleteCollaborator(int,int)"
 }, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "deleteCollaborator(String, int)",
+    "u": "deleteCollaborator(java.lang.String,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestDatabase",
+    "l": "deleteDB()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "deleteFile(String)",
+    "u": "deleteFile(java.lang.String)"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "deleteProject(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "deleteProject(String)",
+    "u": "deleteProject(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "deleteTag()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "deleteTag(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "deleteTag(Tag)",
+    "u": "deleteTag(be.ac.ulb.infof307.g06.models.Tag)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "deleteTask()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "deleteTask(String, int)",
     "u": "deleteTask(java.lang.String,int)"
 }, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "deleteTask(Task)",
+    "u": "deleteTask(be.ac.ulb.infof307.g06.models.Task)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "deleteTaskCollaborator()"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
-    "l": "editProject(int, String, String, String, Long)",
-    "u": "editProject(int,java.lang.String,java.lang.String,java.lang.String,java.lang.Long)"
+    "l": "deleteTaskCollaborator(int, int)",
+    "u": "deleteTaskCollaborator(int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "deleteTaskCollaborator(String, Task)",
+    "u": "deleteTaskCollaborator(java.lang.String,be.ac.ulb.infof307.g06.models.Task)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "descriptionProject"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "disconnectUser()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "diskBar"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "displayCollaborators()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "displayProject(String, String, Long, ObservableList<String>)",
+    "u": "displayProject(java.lang.String,java.lang.String,java.lang.Long,javafx.collections.ObservableList)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "displayTask()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "doesUserExist()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Cloud",
+    "l": "downloadFile(String, String)",
+    "u": "downloadFile(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "DropBoxContentHasher()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Cloud",
+    "l": "dropBoxHash(String)",
+    "u": "dropBoxHash(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "editProject(int, String, String, Long)",
+    "u": "editProject(int,java.lang.String,java.lang.String,java.lang.Long)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "editProject(ProjectInputViewController)",
+    "u": "editProject(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "EditProjectViewController",
+    "l": "EditProjectViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "editTag(int, String, String)",
+    "u": "editTag(int,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "editTag(TagsViewController, Tag, String, String)",
+    "u": "editTag(be.ac.ulb.infof307.g06.views.TagsViewController,be.ac.ulb.infof307.g06.models.Tag,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "editTags(int, List<Integer>)",
+    "u": "editTags(int,java.util.List)"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "editTask(String, String, int)",
     "u": "editTask(java.lang.String,java.lang.String,int)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "Global",
-    "l": "email"
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "editTask(String, String, Task)",
+    "u": "editTask(java.lang.String,java.lang.String,be.ac.ulb.infof307.g06.models.Task)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "EditTaskViewController",
+    "l": "EditTaskViewController()",
+    "u": "%3Cinit%3E()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "email"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineDigest()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineDigest(byte[], int, int)",
+    "u": "engineDigest(byte[],int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineGetDigestLength()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineReset()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineUpdate(byte)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineUpdate(byte[], int, int)",
+    "u": "engineUpdate(byte[],int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "engineUpdate(ByteBuffer)",
+    "u": "engineUpdate(java.nio.ByteBuffer)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "errorText"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "InvitationViewController",
+    "l": "events(ActionEvent)",
+    "u": "events(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "events(ActionEvent)",
+    "u": "events(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "AddProjectViewController",
+    "l": "events(ActionEvent)",
+    "u": "events(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "CloudViewController",
+    "l": "events(ActionEvent)",
+    "u": "events(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "EditProjectViewController",
+    "l": "events(ActionEvent)",
+    "u": "events(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "events(ActionEvent)",
+    "u": "events(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "expandRoot(TreeItem<Statistics>)",
+    "u": "expandRoot(javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "exportProject()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "exportProject(Project, String, String)",
+    "u": "exportProject(be.ac.ulb.infof307.g06.models.Project,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "exports(ActionEvent)",
+    "u": "exports(javafx.event.ActionEvent)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "exportStatsAsCSV(String, String, TreeItem<Statistics>)",
+    "u": "exportStatsAsCSV(java.lang.String,java.lang.String,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "exportStatsAsJson(String, String, TreeItem<Statistics>)",
+    "u": "exportStatsAsJson(java.lang.String,java.lang.String,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "CloudViewController",
+    "l": "filterValidFiles(List<Metadata>)",
+    "u": "filterValidFiles(java.util.List)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
     "c": "Global",
     "l": "firstName"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
+    "l": "getAllTags()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "getCloudCredentials()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Statistics",
+    "l": "getCollaborators()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
     "l": "getCollaborators(int)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "getCollaborators(TreeItem<Project>)",
+    "u": "getCollaborators(javafx.scene.control.TreeItem)"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Tag", "l": "getColor()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Project",
     "l": "getDate()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "getDateProject()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Project",
+    "l": "getDescription()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Tag", "l": "getDescription()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Task",
     "l": "getDescription()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Task",
-    "l": "getDescription()"
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "getDescriptionProject()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
+    "c": "UserDB",
+    "l": "getDiskLimit()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "getDiskUsage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "getEmail()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Statistics",
+    "l": "getEstimatedDate()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Cloud", "l": "getFiles()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "getFirstName()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Invitation", "l": "getId()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Project",
+    "l": "getId()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Tag", "l": "getId()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Task",
     "l": "getId()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
+    "c": "UserDB",
+    "l": "getInvitation(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "getInvitations(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "getLastName()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "getNameProject()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Project",
     "l": "getParent_id()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "getParentProjectName()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "getPasswd()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Invitation",
+    "l": "getProject_id()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "getProject(int)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Task",
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "getProject(String)",
+    "u": "getProject(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Task",
     "l": "getProjectID()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
@@ -139,142 +648,796 @@ memberSearchIndex = [{
     "l": "getProjectID(String)",
     "u": "getProjectID(java.lang.String)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "ProjectsController",
-    "l": "getProjects(List<Integer>, TreeItem<ProjectDB.Project>)",
-    "u": "getProjects(java.util.List,javafx.scene.control.TreeItem)"
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "getProjectInfo(ProjectsViewController, TreeItem<Project>)",
+    "u": "getProjectInfo(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController,javafx.scene.control.TreeItem)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
+    "p": "be.ac.ulb.infof307.g06.controllers",
     "c": "StatsController",
-    "l": "getProjects(List<Integer>, TreeItem<ProjectDB.Project>)",
-    "u": "getProjects(java.util.List,javafx.scene.control.TreeItem)"
+    "l": "getProjects()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "getProjects(List<Integer>)",
+    "u": "getProjects(java.util.List)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Invitation",
+    "l": "getReceiver_id()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "getSelectedProject()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "getSelectedTag()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "getSelectedTags()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "getSelectedTask()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "getSelectedTaskCollaborator()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "getSelectedUser()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Invitation",
+    "l": "getSender_id()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Project", "l": "getSize()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Tag",
+    "l": "getSize()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Task",
+    "l": "getSize()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "getSizeOnDisk()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "getSubProjects(int)"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
-    "l": "getTags()"
+    "c": "ProjectDB",
+    "l": "getTag(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "getTagID(String)",
+    "u": "getTagID(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "getTags(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "getTask(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "getTaskCollaborator(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Statistics",
+    "l": "getTasks()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "getTasks(int)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "getTasks(TreeItem<Project>)",
+    "u": "getTasks(javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ConnectionsViews",
+    "c": "LoginViewController",
+    "l": "getTextField(TextField)",
+    "u": "getTextField(javafx.scene.control.TextField)"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Project", "l": "getTitle()"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Statistics",
     "l": "getTitle()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "getUserInfo(int)"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "UserDB",
     "l": "getUserInfo(String)",
     "u": "getUserInfo(java.lang.String)"
 }, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "getUsername()"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "getUserProjects(int)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "getUserTasks(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
     "c": "Global",
     "l": "Global()",
     "u": "%3Cinit%3E()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "ProjectsController",
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "helpBtn"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "DropBoxContentHasher",
+    "l": "hex(byte[])"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "hideRoot()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "importProject()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "importProject(String)",
+    "u": "importProject(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "LoginController",
+    "l": "init()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "init(MenuViewController)",
+    "u": "init(be.ac.ulb.infof307.g06.views.MenuViewController)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "init(ProjectsViewController, TreeItem<Project>)",
+    "u": "init(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "init(StatsViewController, TreeItem<Statistics>)",
+    "u": "init(be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Cloud",
+    "l": "init(String, String)",
+    "u": "init(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "initCollaborators(ProjectsViewController)",
+    "u": "initCollaborators(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "initComboBox(ProjectInputViewController)",
+    "u": "initComboBox(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "InvitationViewController",
+    "l": "initFields()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "EditProjectViewController",
+    "l": "initFields()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "InvitationViewController",
     "l": "initialize(URL, ResourceBundle)",
     "u": "initialize(java.net.URL,java.util.ResourceBundle)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "StatsController",
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "MenuViewController",
     "l": "initialize(URL, ResourceBundle)",
     "u": "initialize(java.net.URL,java.util.ResourceBundle)"
-}, {"p": "be.ac.ulb.infof307.g06.JavaUI.sample", "c": "Global", "l": "lastName"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
-    "l": "Main()",
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ConnectionsViews",
+    "c": "LoginViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "CloudViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "EditProjectViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "EditTaskViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "initProjectExport(ProjectInputViewController)",
+    "u": "initProjectExport(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "initTaskCollaborators(ProjectsViewController, Task)",
+    "u": "initTaskCollaborators(be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController,be.ac.ulb.infof307.g06.models.Task)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "initTree()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "initTree()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "insertCollaborator(ObservableList<String>)",
+    "u": "insertCollaborator(javafx.collections.ObservableList)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "insertTaskCollaborators(ObservableList<String>)",
+    "u": "insertTaskCollaborators(javafx.collections.ObservableList)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "invitation(Boolean, String, int)",
+    "u": "invitation(java.lang.Boolean,java.lang.String,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Invitation",
+    "l": "Invitation(int, int, int, int)",
+    "u": "%3Cinit%3E(int,int,int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "InvitationViewController",
+    "l": "InvitationViewController()",
     "u": "%3Cinit%3E()"
 }, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "isAdmin()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "isFirstBoot()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "isProjectInDb(String)",
+    "u": "isProjectInDb(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "isUserInTask(int, String)",
+    "u": "isUserInTask(int,java.lang.String)"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "lastName"}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "limitField"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "limitText"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "listToString(ObservableList<String>)",
+    "u": "listToString(javafx.collections.ObservableList)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "listToString(ObservableList<String>)",
+    "u": "listToString(javafx.collections.ObservableList)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "load(FXMLLoader, Integer, Integer)",
+    "u": "load(javafx.fxml.FXMLLoader,java.lang.Integer,java.lang.Integer)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "LoginController",
+    "l": "LoginController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ConnectionsViews",
+    "c": "LoginViewController",
+    "l": "LoginViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
     "l": "main(String[])",
     "u": "main(java.lang.String[])"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "Global",
-    "l": "passwd"
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "MainController()",
+    "u": "%3Cinit%3E()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Project",
-    "l": "Project(int, String, String, String, Long, int)",
-    "u": "%3Cinit%3E(int,java.lang.String,java.lang.String,java.lang.String,java.lang.Long,int)"
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "MenuViewController",
+    "l": "MenuViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "nameProject"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "onProjectSelected()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "onTagSelected()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "onTaskSelected()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "opnenLink()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "parentProject"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "passwd"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "popupProjectDescription"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "popupProjectTitle"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "popupSenderUsername"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "popupTaskNewName"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "popupTaskTitle"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Project",
+    "l": "Project()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Project",
+    "l": "Project(int, String, String, Long, int)",
+    "u": "%3Cinit%3E(int,java.lang.String,java.lang.String,java.lang.Long,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "ProjectController()",
+    "u": "%3Cinit%3E()"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "ProjectDB",
     "l": "ProjectDB(String)",
     "u": "%3Cinit%3E(java.lang.String)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "ProjectsController",
-    "l": "ProjectsController()",
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "ProjectInputViewController()",
     "u": "%3Cinit%3E()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestDatabase", "l": "setup()"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
-    "l": "showConditionsStage()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "Main", "l": "showLoginScene()"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
-    "l": "showMainMenuScene()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "Main", "l": "showProjectManagementScene()"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
-    "l": "showProjectMenuScene()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "Main", "l": "showSignUpScene()"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
-    "l": "showStatisticsScene()"
 }, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "Main",
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "projectsView"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "ProjectsViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "refresh()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "refresh()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "removeInvitation(int, int)",
+    "u": "removeInvitation(int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "ProjectDB",
+    "l": "removeTag(int, int)",
+    "u": "removeTag(int,int)"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "root"}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "saveBtn"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "CloudViewController",
+    "l": "saveFile()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "saveSettings()"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "selectedTag"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Global",
+    "l": "selectedTask"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "sendInvitation(int, int, int)",
+    "u": "sendInvitation(int,int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "setAdmin(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "setEmail(String)",
+    "u": "setEmail(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "setError(String)",
+    "u": "setError(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "setFirstName(String)",
+    "u": "setFirstName(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "setInformations(String, String, String, String, String)",
+    "u": "setInformations(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "setLastName(String)",
+    "u": "setLastName(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "setLimit(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "setMsg(String)",
+    "u": "setMsg(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "setPasswd(String)",
+    "u": "setPasswd(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "setStats(List<Integer>, TreeItem<Statistics>)",
+    "u": "setStats(java.util.List,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "SettingsController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestDatabase",
+    "l": "setup()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "setUserID()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "setUserInfo(String, String, String, String)",
+    "u": "setUserInfo(java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "setUsername(String)",
+    "u": "setUsername(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "LoginController",
+    "l": "show()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "show()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "show()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "show()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "showAddProjectStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "showCloudDownloadStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "showConditionStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "showEditProjectStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "showEditTaskStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "MenuViewController",
+    "l": "showInvitation(int, int)",
+    "u": "showInvitation(int,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "showInvitationStage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "showMainMenu()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "showProjectMenu()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "showSettingsMenu()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
+    "l": "showStage(String, Integer, Integer, Modality, FXMLLoader)",
+    "u": "showStage(java.lang.String,java.lang.Integer,java.lang.Integer,javafx.stage.Modality,javafx.fxml.FXMLLoader)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "showStorageMenu()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SettingsController",
+    "l": "showTagsMenu()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "showTaskEdition()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "SignUpController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ConnectionsViews",
+    "c": "SignUpViewController",
+    "l": "SignUpViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "MainController",
     "l": "start(Stage)",
     "u": "start(javafx.stage.Stage)"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Statistics",
+    "l": "Statistics(Integer, String, String, String, String)",
+    "u": "%3Cinit%3E(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
     "c": "StatsController",
     "l": "StatsController()",
     "u": "%3Cinit%3E()"
 }, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "statsToCSVString(int, Statistics, String, TreeItem<Statistics>)",
+    "u": "statsToCSVString(int,be.ac.ulb.infof307.g06.models.Statistics,java.lang.String,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.StatisticsViews",
+    "c": "StatsViewController",
+    "l": "StatsViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "statToJsonString(Integer, Gson, String, TreeItem<Statistics>)",
+    "u": "statToJsonString(java.lang.Integer,com.google.gson.Gson,java.lang.String,javafx.scene.control.TreeItem)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "MenuViewController",
+    "l": "storageBtn"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "StorageViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Tag",
+    "l": "Tag(int, String, String)",
+    "u": "%3Cinit%3E(int,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectInputViewController",
+    "l": "tagsProject"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "TagsViewController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Task",
+    "l": "Task(int, String, int)",
+    "u": "%3Cinit%3E(int,java.lang.String,int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "tasksToString(Integer)",
+    "u": "tasksToString(java.lang.Integer)"
+}, {
     "p": "be.ac.ulb.infof307.g06.models.database",
-    "c": "ProjectDB.Task",
-    "l": "Task(String, int)",
-    "u": "%3Cinit%3E(java.lang.String,int)"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestUserDB", "l": "testAddUser()"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "TestProjectDB",
-    "l": "TestCreateProject()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestDatabase", "l": "testData"}, {
-    "p": "be.ac.ulb.infof307.g06",
+    "c": "TestUserDB",
+    "l": "testAddAccToken()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testAddUser()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testAvailableDisk()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestDatabase",
+    "l": "testData"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "TestDatabase",
     "l": "TestDatabase()",
     "u": "%3Cinit%3E()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestUserDB", "l": "testGetUserInfo()"}, {
-    "p": "be.ac.ulb.infof307.g06",
-    "c": "TestProjectDB",
-    "l": "TestProjectDB()",
-    "u": "%3Cinit%3E()"
 }, {
-    "p": "be.ac.ulb.infof307.g06",
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testGetDiskUsage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testGetInvitations()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testGetToken()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testGetUserInfo()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testRemoveInvitation()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testSendInvitation()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testSetAdmin()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testSetUserInfo()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testUpdateDiskUsage()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "TestUserDB",
     "l": "TestUserDB()",
     "u": "%3Cinit%3E()"
-}, {"p": "be.ac.ulb.infof307.g06", "c": "TestUserDB", "l": "testUserExists()"}, {
-    "p": "be.ac.ulb.infof307.g06",
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "TestUserDB",
+    "l": "testUserExists()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "TestUserDB",
     "l": "testValidateData()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "Global",
-    "l": "TreeMap"
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "toColor(String)",
+    "u": "toColor(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "TagsViewController",
+    "l": "toRGBCode(Color)",
+    "u": "toRGBCode(javafx.scene.paint.Color)"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "TreeMap"}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "unzip(String, String)",
+    "u": "unzip(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models.database",
+    "c": "UserDB",
+    "l": "updateDiskUsage(int)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "Cloud",
+    "l": "uploadFile(String, String)",
+    "u": "uploadFile(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views.ProjectViews",
+    "c": "ProjectsViewController",
+    "l": "uploadFiles()"
+}, {
+    "p": "be.ac.ulb.infof307.g06.views",
+    "c": "StorageViewController",
+    "l": "usageText"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "UserDB",
@@ -285,18 +1448,44 @@ memberSearchIndex = [{
     "c": "UserDB",
     "l": "userExists(String)",
     "u": "userExists(java.lang.String)"
+}, {"p": "be.ac.ulb.infof307.g06.models", "c": "Global", "l": "userID"}, {
+    "p": "be.ac.ulb.infof307.g06.models",
+    "c": "UserInformations",
+    "l": "UserInformations()",
+    "u": "%3Cinit%3E()"
 }, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
+    "p": "be.ac.ulb.infof307.g06.models",
     "c": "Global",
-    "l": "userID"
-}, {
-    "p": "be.ac.ulb.infof307.g06.JavaUI.sample",
-    "c": "Global",
-    "l": "username"
+    "l": "userName"
 }, {
     "p": "be.ac.ulb.infof307.g06.models.database",
     "c": "UserDB",
     "l": "validateData(String, String)",
     "u": "validateData(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "SignUpController",
+    "l": "validateTextField(TextField, String)",
+    "u": "validateTextField(javafx.scene.control.TextField,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "LoginController",
+    "l": "validateUserID(String, String)",
+    "u": "validateUserID(java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "valideArchive(String)",
+    "u": "valideArchive(java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "StatsController",
+    "l": "write(String, String, String)",
+    "u": "write(java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "be.ac.ulb.infof307.g06.controllers",
+    "c": "ProjectController",
+    "l": "zip(String, String, String)",
+    "u": "zip(java.lang.String,java.lang.String,java.lang.String)"
 }];
 updateSearchResults();
