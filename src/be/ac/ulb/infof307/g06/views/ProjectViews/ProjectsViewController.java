@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ProjectsViewController implements Initializable {
@@ -354,11 +355,17 @@ public class ProjectsViewController implements Initializable {
                 selectedDirectory.getAbsolutePath(),
                 selectedDirectory.getAbsolutePath() + "/file.json");
         try {
-            Cloud.init(UserDB.getCloudCredentials().get("accToken"), UserDB.getCloudCredentials().get("clientID"));
+            Map<String, String> creds = UserDB.getCloudCredentials();
+            if (creds.get("accToken") == null || creds.get("clientID") == null) {
+                MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Could not connect to DropBox. Check your credentials.: ");
+                return;
+            }
+            Cloud.init(creds.get("accToken"), creds.get("clientID"));
             String fileName = "/" + selectedProject.getValue().getTitle() + ".tar.gz";
             String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
 
             Cloud.uploadFile(localFilePath, fileName);
+            MainController.alertWindow(Alert.AlertType.INFORMATION, "Cloud service", "Uploaded successfully");
         } catch (DbxException e) {
             MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to dropbox: " + e.getMessage());
         } catch (IOException e) {
