@@ -1,3 +1,4 @@
+
 # I(Should)PlanAll : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
 Ce projet est le dévellopement d'une application pour la gestion de projets sous Java. 
@@ -39,5 +40,10 @@ TO DO: Informations sur la façon d'executer les tests
 ## Développement
 
 ## Screenshot
+![signup](https://user-images.githubusercontent.com/33431271/112816753-03460200-9082-11eb-92de-fd46c727796f.PNG)
+![login](https://user-images.githubusercontent.com/33431271/112816761-050fc580-9082-11eb-88ad-2a758668ddbd.PNG)
+![PojectMenu](https://user-images.githubusercontent.com/33431271/112816747-00e3a800-9082-11eb-8c7d-c42aa456f146.PNG)
+![ColorTags](https://user-images.githubusercontent.com/33431271/112816742-ff19e480-9081-11eb-8459-6f5111df2183.PNG)
+![statistics](https://user-images.githubusercontent.com/33431271/112816728-fb865d80-9081-11eb-90f7-d6db66110d52.PNG)
 
 ## License
