@@ -27,7 +27,10 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -562,6 +565,7 @@ public class ProjectController{
     public boolean exportProject(Project project, String archivePath, String jsonFile) {
         try {
             final int ID = project.getId();
+            deleteFile(jsonFile);
             FileWriter fw = new FileWriter(jsonFile, true);
             fw.write("[\n");
             saveProjectAndChildsJson(project, fw);
@@ -604,14 +608,14 @@ public class ProjectController{
      * @return boolean
      */
     public static boolean importProject(String archivePath) {
-        File file = new File(archivePath);
-        String parent = file.getAbsoluteFile().getParent();
-
-        unzip(archivePath,parent);
-        BufferedReader reader;
-        Gson gson = new Gson();
         try {
-            reader = new BufferedReader(new FileReader(parent + "/file.json"));
+            File file = new File(archivePath);
+            String directory = file.getAbsoluteFile().getParent();
+            String jsonFile = directory + "/file.json";
+            unzip(archivePath, directory);
+            if (isProjectInDb(jsonFile)) return false;
+            Gson gson = new Gson();
+            BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
             String line = null;
             int count = 0;
             reader.readLine();
@@ -670,15 +674,21 @@ public class ProjectController{
                         System.out.println("fermante " + line);
                         break;
                     default:
-                        if (line.equals("[")) {count = 1;}
-                        else {System.out.println("fin " + line);}
+                        if (line.equals("[")) {
+                            count = 1;
+                        } else {
+                            System.out.println("fin " + line);
+                        }
                 }
             }
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
             reader.close();
-        } catch (IOException | SQLException e) {e.printStackTrace();}
-        deleteFile(parent+"/file.json");
-        return true;
+            deleteFile(jsonFile);
+            return true;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -745,45 +755,64 @@ public class ProjectController{
             archiver.extract(archive, dest); // WARNING OK
             System.out.println("unzip");
             return true;
-        }catch (Exception ignored) {return false;}
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     /**
      * Check if one of the sub-project of a complete project
      * (root and his children) is in the Database.
      *
-     * @param fileTxt String
+     * @param jsonFile String
      * @return boolean
      */
-    public static boolean isProjectInDb(String fileTxt){
+    public static boolean isProjectInDb(String jsonFile) {
         try {
-            File file = new File(fileTxt);
-            Scanner reader = new Scanner(file);
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                if (line.substring(0, 7).equals("Project")) {
-                    System.out.println("c'est un projet: " + line.substring(8));
-                    Gson gson = new Gson();
-                    Project project = gson.fromJson(line.substring(8), Project.class);
-                    if(ProjectDB.getProjectID(project.getTitle())!=0){
-                        reader.close();
-                        return true;
-                    }
+            Gson gson = new Gson();
+            BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
+            String line = null;
+            int count = 0;
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                ++count;
+                count %= 6;
+                switch (count) {
+                    case 1:
+                        System.out.println("ouvrante " + line);
+                        break;
+                    case 2:
+                        System.out.println("projet " + line);
+                        Project project = gson.fromJson(line.substring(0, line.length() - 1), Project.class);
+                        int id = ProjectDB.getProjectID(project.getTitle());
+                        if (id != 0) return true;
+                        break;
+                    case 3:
+                        System.out.println("tasks " + line);
+                        Type listType = new TypeToken<ArrayList<Task>>() {
+                        }.getType();
+                        List<Task> tasks = new Gson().fromJson(line.substring(0, line.length() - 1), listType);
+                        break;
+                    case 4:
+                        System.out.println("tag " + line);
+                        Type listkind = new TypeToken<ArrayList<Tag>>() {
+                        }.getType();
+                        List<Tag> tag = new Gson().fromJson(line, listkind);
+                        break;
+                    case 5:
+                        System.out.println("fermante " + line);
+                        break;
+                    default:
+                        if (line.equals("[")) {
+                            count = 1;
+                        } else {
+                            System.out.println("fin " + line);
+                        }
                 }
             }
             reader.close();
             return false;
         } catch (Exception e) {return false;}
-    }
-
-    /**
-     * Checks if the file is valid.
-     *
-     * @param fileTxt String
-     * @return boolean : true if the file is valid or false if is not.
-     */
-    public static boolean isValidFile( String fileTxt){
-        return true;
     }
 
     /**
@@ -795,10 +824,14 @@ public class ProjectController{
     public static boolean deleteFile(final String fileName) {
         try {
             File myObj = new File(fileName);
-            if (myObj.delete()) {return true;}
-            else {return false;}
+            if (myObj.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ignored) {
+            return false;
         }
-        catch(Exception ignored) {return false;}
     }
 
     /**
