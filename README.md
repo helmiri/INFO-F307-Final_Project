@@ -5,35 +5,47 @@ Ce projet est le développement d'une application pour la gestion de projets sou
 
 # Utilisation
 
-Ce projet a été réalisé sous Java 15.0.2 avec comme librairies exterieures utilisées: controlsfx, jarchivelib, gson, sqlite, javafx.
+Ce projet a été réalisé sous Java 15.0.2 avec comme librairies exterieures utilisées: controlsfx, jarchivelib, gson,
+sqlite, javafx.
 
 ## Compilation
 
 Windows:
 
-`$PATH_TO_JDK$\javac.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml .\src\be\ac\ulb\infof307\g06\Main.java .\src\be\ac\ulb\infof307\g06\database\*.java .\src\be\ac\ulb\infof307\g06\JavaUI\sample\*.java -d .\out\production\2021-groupe-6\`
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
 
-`copy .\src\be\ac\ulb\infof307\g06\JavaUI\sample\*.fxml .\out\production\2021-groupe-6\be\ac\ulb\infof307\g06\JavaUI\sample\ && Xcopy /E /I .\src\be\ac\ulb\infof307\g06\JavaUI\sample\icons\ .\out\production\2021-groupe-6\be\ac\ulb\infof307\g06\JavaUI\sample\`
+`.\compile.bat PATH_TO_JDK_JAVAC.EXE`
+
+où PATH_TO_JDK_JAVAC.EXE est le chemin vers javac.exe
 
 ## Démarrage
 
 Windows:
 
-``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\lib\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" be.ac.ulb.infof307.g06.Main``
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
+
+`.\exec.bat PATH_TO_JDK_JAVAC.EXE`
+
+où PATH_TO_JDK_JAVA.EXE vers java.exe
 
 Fichier .jar:
 
-``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\li![login](https://user-images.githubusercontent.com/33431271/112816355-992d5d00-9081-11eb-8d0d-b99bbde11276.PNG)
-b\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar .\dist\g06-iteration-1.jar``
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec_jar.bat réside et exécutez la commande suivante
+
+`.\compile.bat PATH_TO_JDK_JAVA.EXE`
 
 # Configuration :
 
-Pour ce projet nous avons dû implémenter une application de gestion de projets. Après s'être connecté, l'utilisateur a accès à un menu pour créer et éditer des projets et des sous projets qui contiennent un système de tâches, étiquettes, date de fin, etc. L'utilisateur peut décider de collaborer avec d'autres personnes sur un projet, ainsi qu'en exporter ou importer. Un système de "cloud" a aussi dû être intégré. En plus des fonctionnalités déjà présentes, l'utilisateur peut aussi avoir accès à des statistiques sur ses projets qu'il a la possibilité d'exporter. 
-Pour ce faire, nous avons dû diviser notre projet en packages tout en respectant le MVC (model view controller).
+Pour ce projet nous avons dû implémenter une application de gestion de projets. Après s'être connecté, l'utilisateur a
+accès à un menu pour créer et éditer des projets et des sous projets qui contiennent un système de tâches, étiquettes,
+date de fin, etc. L'utilisateur peut décider de collaborer avec d'autres personnes sur un projet, ainsi qu'en exporter
+ou importer. Un système de "cloud" a aussi dû être intégré. En plus des fonctionnalités déjà présentes, l'utilisateur
+peut aussi avoir accès à des statistiques sur ses projets qu'il a la possibilité d'exporter. Pour ce faire, nous avons
+dû diviser notre projet en packages tout en respectant le MVC (model view controller).
 
 # Tests
 
-Pour le moment vu que nous utilisons intellIJ les tests s'effectuent simplement avec un run. 
+Pour le moment vu que nous utilisons intellIJ les tests s'effectuent simplement avec un run.
 
 # Misc
 

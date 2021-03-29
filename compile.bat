@@ -18,4 +18,5 @@ copy .\src\be\ac\ulb\infof307\g06\views\ProjectViews\*.fxml .\compile\build\be\a
 copy .\src\be\ac\ulb\infof307\g06\views\StatisticsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\StatisticsViews\
 copy .\src\be\ac\ulb\infof307\g06\icons\* .\compile\build\be\ac\ulb\infof307\g06\icons\
 
-%2 --module-path .\lib\javafx\windows\lib --add-modules javafx.controls,javafx.fxml -cp .\compile\build\;.\lib\dropbox\dropbox-core-sdk-3.1.5.jar;.\lib\dropbox\jackson-core-2.7.4.jar;.\lib\gson\gson-2.8.6.jar;.\lib\jarchivelib\jarchivelib-0.7.1-jar-with-dependencies.jar;.\lib\controlsfx\controlsfx-11.1.0.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar be.ac.ulb.infof307.g06.controllers.MainController
+
+
