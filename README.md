@@ -22,7 +22,8 @@ Windows:
 
 Fichier .jar:
 
-``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\lib\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar .\dist\g06-iteration-1.jar``
+``$PATH_TO_JDK$\java.exe --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -classpath ".\out\production\2021-groupe-6;.\lib\junit\*.jar;.\li![login](https://user-images.githubusercontent.com/33431271/112816355-992d5d00-9081-11eb-8d0d-b99bbde11276.PNG)
+b\controlsfx\*.jar;.\lib\javafx\*.jar;.\lib\sqlite\sqlite-jdbc-3.34.0.jar" -jar .\dist\g06-iteration-1.jar``
 
 # Configuration :
 
