@@ -6,7 +6,7 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.ProjectViews.CloudTableController;
+import be.ac.ulb.infof307.g06.views.ProjectViews.CloudViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import com.google.gson.Gson;
@@ -79,13 +79,10 @@ public class ProjectController{
      */
     public static void showCloudDownloadStage() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(CloudTableController.class.getResource("CloudTable.fxml"));
+        loader.setLocation(CloudViewController.class.getResource("ClloudView.fxml"));
         MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
 
-    public static void showCloudUploadStage() {
-
-    }
 
     public static void showEditProjectStage() {
         FXMLLoader loader = new FXMLLoader();
@@ -537,11 +534,10 @@ public class ProjectController{
 
 
     /**
-     *
      * @param project Project
-     * @param fw FileWriter
+     * @param fw      FileWriter
      */
-    public void exportProject1(Project project, FileWriter fw) throws IOException {
+    public static void exportProject1(Project project, FileWriter fw) throws IOException {
         try {
             final int ID = project.getId();
             saveProject(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), fw);
@@ -849,11 +845,11 @@ public class ProjectController{
         alert.setHeaderText(null);
         alert.getDialogPane().setMinWidth(900);
         if(succeed){
-            alert.setContentText("Congrat,your project is "+ choice +"ed." );
+            alert.setContentText(choice + "ed successfully.");
             alert.showAndWait();
         }
         else {
-            alert.setContentText("Sorry, failed to "+choice +" your project");
+            alert.setContentText("Failed to " + choice + " your project");
             alert.showAndWait();
         }
     }
