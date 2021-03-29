@@ -27,6 +27,7 @@ public class MainController extends Application {
     private static Stage primaryStage;
     private static AnchorPane mainLayout;
     private static Stage stage;
+    private static boolean isFirstBoot;
     //--------------- METHODS ----------------
 
     /**
@@ -39,6 +40,15 @@ public class MainController extends Application {
     public void start(Stage primaryStage2) throws IOException {
         // Set main stage
         Global.userID = 0;
+        try {
+            new UserDB("Database.db");
+            isFirstBoot = UserDB.isFirstBoot();
+        } catch (SQLException throwables) {
+            alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the database");
+            return;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         primaryStage = primaryStage2;
         primaryStage.setTitle("Projet génie logiciel");
         // Disconnect user before closing
@@ -68,6 +78,13 @@ public class MainController extends Application {
      * Sets the loader to show the Main menu scene.
      */
     public static void showMainMenu() {
+        if (isFirstBoot) {
+            try {
+                UserDB.setAdmin(256 * 1000000);
+            } catch (SQLException throwables) {
+                alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the ");
+            }
+        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("MenuView.fxml"));
         load(loader, 940, 1515);
