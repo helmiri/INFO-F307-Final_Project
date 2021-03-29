@@ -10,10 +10,7 @@ import com.dropbox.core.v2.files.Metadata;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -29,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CloudTableController implements Initializable {
+public class CloudViewController implements Initializable {
     @FXML
     private AnchorPane downloadAnchor;
     @FXML
@@ -52,12 +49,15 @@ public class CloudTableController implements Initializable {
             usrCreds = UserDB.getCloudCredentials();
             Cloud.init(usrCreds.get("accToken"), usrCreds.get("clientID"));
             files = Cloud.getFiles();
-        } catch (SQLException | DbxException | IOException throwables) {
-            throwables.printStackTrace();
-        }
-
-        for (Metadata metadata : filterValidFiles(files)) {
-            cloudTable.getItems().add(metadata.getPathDisplay());
+            for (Metadata metadata : filterValidFiles(files)) {
+                cloudTable.getItems().add(metadata.getPathDisplay());
+            }
+        } catch (SQLException | IOException throwables) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error occurred");
+        } catch (DbxException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to the service. Check your cloud service configuration.");
+        } finally {
+            cloudTable.setPlaceholder(new Label("Could not retrieve the content"));
         }
     }
 
@@ -116,13 +116,9 @@ public class CloudTableController implements Initializable {
             Cloud.downloadFile(localPath, cloudPath);
             ProjectController.importProject(localPath);
         }
-
     }
 
-    public void uploadFiles() {
 
-
-    }
 
     public String saveFile() {
         FileChooser fileChooser = new FileChooser();
@@ -133,9 +129,15 @@ public class CloudTableController implements Initializable {
         return file.getAbsolutePath();
     }
 
-    public void events(javafx.event.ActionEvent event) throws NoSuchAlgorithmException, IOException, DbxException {
+    public void events(javafx.event.ActionEvent event) {
         if (event.getSource() == downloadBtn) {
-            downloadFiles();
+            try {
+                downloadFiles();
+            } catch (NoSuchAlgorithmException | IOException e) {
+                MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error occurred");
+            } catch (DbxException e) {
+                MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to the service. Check your cloud service configuration.");
+            }
         }
     }
 
