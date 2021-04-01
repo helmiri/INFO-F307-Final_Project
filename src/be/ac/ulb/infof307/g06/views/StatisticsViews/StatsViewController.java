@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.views.StatisticsViews;
 
-import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.StatsController;
 import be.ac.ulb.infof307.g06.models.Statistics;
@@ -14,8 +14,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

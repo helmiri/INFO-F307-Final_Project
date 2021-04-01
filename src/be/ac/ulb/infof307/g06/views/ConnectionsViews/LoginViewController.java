@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.SignUpController;
+import be.ac.ulb.infof307.g06.controllers.connection.SignUpController;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+import javax.swing.text.View;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,16 +29,19 @@ public class LoginViewController implements Initializable {
     private TextField logInUsernameField;
     @FXML
     private PasswordField logInPasswordField;
-    private final LoginController controller = new LoginController();
+
+    protected ViewListener listener;
     //--------------- METHODS ----------------
+
     /**
      * Initializes the database for the projects and users.
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(); }
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
 
     /**
      * The main method for button's events
@@ -47,15 +51,17 @@ public class LoginViewController implements Initializable {
     @FXML
     private void logInEvents(ActionEvent event) throws IOException {
         if (event.getSource() == connectionBtn) {
-            logInConditions();
+            listener.login(getTextField(logInUsernameField), getTextField(logInPasswordField));
         } else if (event.getSource() == registerBtn) {
-            SignUpController.show();
+            listener.signup();
         }
     }
+
 
     /**
      * Gets the log in informations and see if the user already exists.
      */
+    /*
     @FXML
     private void logInConditions() {
         String passwd = getTextField(logInPasswordField);
@@ -67,6 +73,7 @@ public class LoginViewController implements Initializable {
             default -> MainController.showMainMenu();
         }
     }
+    */
 
     /**
      * Returns the text inside a text field.
@@ -75,7 +82,19 @@ public class LoginViewController implements Initializable {
      * @return String
      */
     @FXML
-    public String getTextField(TextField textField){ return textField.getText(); }
+    public String getTextField(TextField textField) {
+        return textField.getText();
+    }
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ViewListener {
+        void login(String username, String password);
+
+        void signup();
+    }
 
 }
 

@@ -1,6 +1,8 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.controllers.*;
+import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
+import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -8,7 +10,6 @@ import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
@@ -49,7 +50,7 @@ public class MenuViewController implements Initializable {
     private Button languageBtn;
     @FXML
     private Button backBtn;
-    private MainController controller;
+    public ViewListener listener;
 
     //--------------- METHODS ----------------
     /**
@@ -76,30 +77,25 @@ public class MenuViewController implements Initializable {
     @FXML
     private void events(ActionEvent event) throws Exception {
         if (event.getSource() == projectAccessBtn) {
-            MainController.showProjectMenu();
+            listener.showProjectsMenu();
         } else if (event.getSource() == logOutBtn) {
-            try {
-                UserDB.disconnectUser();
-            } catch (SQLException e) {
-                MainController.alertWindow(Alert.AlertType.ERROR,"Error","Couldn't disconnect the user: "+e);
-            }
-            LoginController.show();
+            listener.logout();
         } else if (event.getSource() == mainMenuBtn) {
-            MainController.showMainMenu();
+            listener.showMainMenu();
         } else if (event.getSource() == statsAccessBtn) {
-            StatsController.show();
+            listener.showStats();
         } else if (event.getSource() == settingsAccessBtn) {
-            SettingsController.showSettingsMenu();
+            listener.showSettings();
         } else if (event.getSource() == projectManagementBtn) {
-            ProjectController.show();
+            listener.showProjects();
         } else if (event.getSource() == tagsBtn) {
-            SettingsController.showTagsMenu();
+            listener.showTags();
         } else if (event.getSource() == languageBtn) {
             System.out.println("test language button");
         } else if (event.getSource() == backBtn) {
-            MainController.showMainMenu();
+            listener.showMainMenu();
         } else if (event.getSource() == storageBtn) {
-            SettingsController.showStorageMenu();
+            listener.showStorage();
         }
     }
 
@@ -116,8 +112,30 @@ public class MenuViewController implements Initializable {
             Global.popupProjectDescription = project.getDescription();
             Global.popupSenderUsername = UserDB.getUserInfo(senderId).get("uName");
             MainController.showInvitationStage();
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred with the database: "+e);
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred with the database: " + e);
         }
+    }
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ViewListener {
+        void showMainMenu();
+
+        void showProjectsMenu();
+
+        void showProjects();
+
+        void showStats();
+
+        void showStorage();
+
+        void showSettings();
+
+        void showTags();
+
+        void logout();
     }
 }

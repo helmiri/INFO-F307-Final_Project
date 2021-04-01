@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class MainController extends Application {
+public class MainController {
     //-------------- ATTRIBUTES ----------------
     private MenuViewController view;
     private static Stage primaryStage;
@@ -36,6 +36,7 @@ public class MainController extends Application {
      * @param primaryStage2 Main Stage
      * @throws IOException e
      */
+    /*
     @Override
     public void start(Stage primaryStage2) throws IOException {
         // Set main stage
@@ -72,8 +73,8 @@ public class MainController extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) { launch(args); }
-
+    //public static void main(String[] args) { launch(args); }
+    */
     /**
      * Sets the loader to show the Main menu scene.
      */

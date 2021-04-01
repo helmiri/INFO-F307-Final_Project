@@ -1,5 +1,6 @@
-package be.ac.ulb.infof307.g06.controllers;
+package be.ac.ulb.infof307.g06.controllers.project;
 
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;

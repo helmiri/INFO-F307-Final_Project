@@ -1,16 +1,13 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.controllers.LoginController;
+import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.SignUpController;
+import be.ac.ulb.infof307.g06.controllers.connection.SignUpController;
 import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 public class ConditionsViewController {
     //-------------- ATTRIBUTES -------------
@@ -18,7 +15,8 @@ public class ConditionsViewController {
     private Button acceptConditionsBtn;
     @FXML
     private CheckBox acceptConditionsBox;
-    private final SignUpController controller=new SignUpController();
+
+    public ViewListener listener;
     //-------------- METHODS -------------
 
     /**
@@ -28,15 +26,24 @@ public class ConditionsViewController {
      */
     @FXML
     private void conditionsEvents(ActionEvent event) {
-        if( event.getSource()== acceptConditionsBtn) {
+        if (event.getSource() == acceptConditionsBtn) {
             if (acceptConditionsBox.isSelected()) {
-                Global.userID = controller.setUserID();
-                if(Global.userID!=0) {
-                    MainController.closeStage();
-                    MainController.showMainMenu();
+                if (Global.userID != 0) {
+                    listener.onConditionsAccepted();
+                } else {
+                    listener.onConditionsDeclined();
                 }
-                else{ LoginController.show(); }
             }
         }
+    }
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ViewListener {
+        void onConditionsAccepted();
+
+        void onConditionsDeclined();
     }
 }

@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.ProjectController;
+import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.Cloud;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
