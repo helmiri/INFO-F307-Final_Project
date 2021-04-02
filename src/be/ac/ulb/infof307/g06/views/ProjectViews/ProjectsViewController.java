@@ -9,6 +9,7 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
+import com.sun.source.tree.Tree;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -49,8 +51,6 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private Button backBtn;
     @FXML
-    private Button addCollaboratorsBtn;
-    @FXML
     private Button assignTaskCollaboratorBtn;
     @FXML
     private Label projectsDate;
@@ -60,10 +60,6 @@ public class ProjectsViewController implements Initializable {
     private TextArea projectsDescription;
     @FXML
     private TextArea descriptionTask;
-    @FXML
-    private TextArea collaboratorsName;
-    @FXML
-    private TextField taskParent;
     @FXML
     private CheckComboBox<String> collabComboBox;
     @FXML
@@ -77,7 +73,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private TableColumn<String, String> taskCollaboratorColumn;
     @FXML
-    private TableColumn<Task,String> taskColumn;
+    private TableColumn<Task, String> taskColumn;
     @FXML
     private TableColumn<String, String> collaboratorsColumn;
     @FXML
@@ -85,20 +81,21 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
     private final TreeItem<Project> root = new TreeItem<Project>();
-    private ProjectController controller;
-
+    public ViewListener listener;
+    private Task selectedTask;
+    private Project selectedProject;
+    private Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
     //---------------METHODES----------------
 
     /**
      * Initializes the controller and launchs the init method.
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
-        controller = new ProjectController();
-        controller.init(this, root);
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initTree();
     }
 
     /**
@@ -126,8 +123,9 @@ public class ProjectsViewController implements Initializable {
     private void events(ActionEvent event) {
 
         if (event.getSource() == backBtn) {
-            MainController.showMainMenu();
+            listener.back();
         } else if (event.getSource() == cloudUploadBtn) {
+            listener.uploadProject();
             uploadFiles();
         } else {
             try {
@@ -140,33 +138,119 @@ public class ProjectsViewController implements Initializable {
                 return;
             }
             if (event.getSource() == addTaskbtn) {
-                addTask();
+                listener.addTask(descriptionTask.getText(), getSelectedProject().getId());
+                displayTask();
             } else if (event.getSource() == addBtn) {
-                ProjectController.showAddProjectStage();
+                listener.addProject();
             } else if (event.getSource() == assignTaskCollaboratorBtn) {
-                assignCollaborators();
+                listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
             } else if (event.getSource() == editBtn) {
+                listener.editProject();
                 if (!projectsTitle.getText().equals("")) {
                     Global.currentProject = projectsTitle.getText();
                     ProjectController.showEditProjectStage();
                 }
             } else if (event.getSource() == exportProjectBtn) {
+                listener.exportProject();
                 exportProject();
             } else if (event.getSource() == importProjectBtn) {
+                listener.importProject();
                 importProject();
             } else if (event.getSource() == cloudDownloadBtn) {
+                listener.downloadProject();
                 ProjectController.showCloudDownloadStage();
             }
         }
     }
+
+    // --------------------------------------- EVENTS -----------------------------------
+
+    /**
+     * Deletes a project in the Database and in the tree table view.
+     */
+    @SuppressWarnings("unchecked")
+    @FXML
+    private void deleteProject(ActionEvent event) {
+        if (treeProjects.getSelectionModel().getSelectedItem() != null && treeProjects.getSelectionModel().getSelectedItem().getValue() != null) {
+            Project child = treeProjects.getSelectionModel().getSelectedItem().getValue();
+            listener.deleteProject(child.getTitle());
+            int parentID = child.getParent_id();
+            if (parentID == 0) {
+                root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+            } else {
+                TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+            }
+        }
+    }
+
+
+    /**
+     * Deletes the selected task in the table and in the database.
+     */
+    public void deleteTask() {
+        Task task = getSelectedTask();
+        listener.deleteTask(task);
+        taskTable.getItems().removeAll(task);
+    }
+
+
+    /**
+     * Shows the edit task stage for the selected task.
+     */
+    public void showTaskEdition() {
+        Task task = getSelectedTask();
+        listener.editTask(task);
+        displayTask();
+    }
+
+    /**
+     * Deletes a collaborator from the database and the table.
+     */
+    public void deleteCollaborator() {
+        String collaborator = getSelectedUser();
+        listener.deleteCollaborator(collaborator, getSelectedProject().getId());
+        collaboratorsTable.getItems().removeAll(collaborator);
+    }
+
+    public void deleteTaskCollaborator() {
+        listener.deleteTaskCollaborator(getSelectedTaskCollaborator(), selectedTask);
+    }
+
+    @FXML
+    public void onTaskSelected() {
+        if (getSelectedTask() != null) {
+            selectedTask = getSelectedTask();
+            ObservableList<String> names = listener.getTaskCollaborators(selectedTask);
+            taskCollaboratorTable.setItems(names);
+
+            ObservableList<String> items = collabComboBox.getItems();
+            for (String item : items) {
+                collabComboBox.getItemBooleanProperty(item).set(false);
+                if (listener.isUserInTask(item, selectedTask)) {
+                    collabComboBox.getItemBooleanProperty(item).set(true);
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void onProjectSelected() {
+        selectedProject = getSelectedProject();
+        if (selectedProject == null) {
+            return;
+        }
+        displayProject(selectedProject, listener.getProjectTags(selectedProject));
+    }
+    // --------------------------------- CODE ------------------------------------
 
     /**
      * Returns the selected item in the tree table.
      *
      * @return TreeItem<Project>
      */
-    //public String getProjectExport(){return String.valueOf(projectExportList.getValue()); }
-    public TreeItem<Project> getSelectedProject(){return treeProjects.getSelectionModel().getSelectedItem();}
+    public Project getSelectedProject() {
+        return treeProjects.getSelectionModel().getSelectedItem().getValue();
+    }
 
     /**
      * Initializes all the columns and some tables.
@@ -193,9 +277,8 @@ public class ProjectsViewController implements Initializable {
                         super.updateItem(t, bln);
                         try {
                             if (t != null){
-                                System.out.println("load tags " + t);
                                 setText(t);
-                                setStyle("-fx-background-color: "+ ProjectDB.getTag(ProjectDB.getTagID(t)).getColor()+";");
+                                setStyle("-fx-background-color: " + ProjectDB.getTag(ProjectDB.getTagID(t)).getColor() + ";"); // TODO
                             } else {
                                 setText(null);
                                 setGraphic(null);
@@ -219,7 +302,7 @@ public class ProjectsViewController implements Initializable {
                 try {
                     if (task == null)
                         setStyle("");
-                    else if (ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID))
+                    else if (ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID)) // TODO
                         setStyle("-fx-background-color: #8fbc8f;");
                 } catch (SQLException e) {
                     // TODO Error
@@ -228,16 +311,6 @@ public class ProjectsViewController implements Initializable {
         });
     }
 
-    /**
-     * Clears the project's table.
-     *
-     */
-    public void clearProjects(){
-        treeProjects.getRoot().getChildren().clear();
-        /*
-        projectSelection.getItems().clear();
-        projectSelection.setPromptText("Select project")*/
-    }
 
     /**
      * Adds a child to a parent in the tree.
@@ -251,89 +324,18 @@ public class ProjectsViewController implements Initializable {
     }
 
     /**
-     * Adds collaborators to the combobox with the collaborators in it.
-     *
-     * @param names ObservableList<String>
-     */
-    public void insertCollaborator(ObservableList<String> names){
-        collabComboBox.getItems().setAll(names);
-    }
-
-    public void insertTaskCollaborators(ObservableList<String> names){
-        taskCollaboratorTable.setItems(names);
-    }
-
-    /**
-     * Deletes a project in the Database and in the tree table view.
-     *
-     */
-    @SuppressWarnings("unchecked")
-    @FXML
-    private void deleteProject(ActionEvent event){
-        if(treeProjects.getSelectionModel().getSelectedItem()!= null && treeProjects.getSelectionModel().getSelectedItem().getValue()!=null) {
-            Project child= treeProjects.getSelectionModel().getSelectedItem().getValue();
-            String projectName = child.getTitle();
-            controller.deleteProject(projectName);
-            int parentID = child.getParent_id();
-
-            if (parentID == 0) {
-                root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
-            } else {
-                Global.TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
-            }
-        }
-    }
-
-    /**
-     * Displays tasks on the table.
-     */
-    @FXML
-    public void displayTask(){
-        TreeItem<Project> selectedProject = getSelectedProject();
-        ObservableList<Task> oTaskList = controller.getTasks(selectedProject);
-        taskTable.setItems(oTaskList);
-    }
-
-    /**
-     * Shows the edit task stage for the selected task.
-     */
-    public void showTaskEdition() {
-        Global.selectedTask = getSelectedTask();
-        ProjectController.showEditTaskStage();
-    }
-
-    /**
-     * Adds a task to the table and displays the table to refresh it.
-     */
-    public void addTask(){
-        if (getSelectedProject().getValue() != null) {
-            controller.addTask(descriptionTask.getText(),getSelectedProject().getValue().getTitle());
-            displayTask();
-        }
-    }
-
-    /**
-     * Deletes the selected task in the table and in the database.
-     */
-    public void deleteTask(){
-        Task task = getSelectedTask();
-        controller.deleteTask(task);
-        taskTable.getItems().removeAll(task);
-    }
-
-    /**
      * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
      */
     public void exportProject(){
-        TreeItem<Project> selectedProject = getSelectedProject();
-        if(selectedProject != null && selectedProject.getValue() != null) {
-            System.out.println(selectedProject.getValue().getTitle());
+        Project selectedProject = getSelectedProject();
+        if (selectedProject != null) {
+            System.out.println(selectedProject.getTitle());
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File("src"));
             File selectedDirectory = directoryChooser.showDialog(new Stage());
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory.getAbsolutePath());
-                boolean succeed = controller.exportProject(selectedProject.getValue(),
+                boolean succeed = controller.exportProject(selectedProject,
                         selectedDirectory.getAbsolutePath(),
                         selectedDirectory.getAbsolutePath() + "/file.json");
                 ProjectController.alertExportImport("export", succeed);
@@ -345,13 +347,13 @@ public class ProjectsViewController implements Initializable {
      * Choose the file we want to upload to the cloud via a filechooser.
      */
     public void uploadFiles() {
-        TreeItem<Project> selectedProject = getSelectedProject();
+        Project selectedProject = getSelectedProject();
         if (selectedProject == null) {
             return;
         }
         File selectedDirectory = new File("");
 
-        boolean succeed = controller.exportProject(selectedProject.getValue(),
+        boolean succeed = controller.exportProject(selectedProject,
                 selectedDirectory.getAbsolutePath(),
                 selectedDirectory.getAbsolutePath() + "/file.json");
         try {
@@ -361,7 +363,7 @@ public class ProjectsViewController implements Initializable {
                 return;
             }
             Cloud.init(creds.get("accToken"), creds.get("clientID"));
-            String fileName = "/" + selectedProject.getValue().getTitle() + ".tar.gz";
+            String fileName = "/" + selectedProject.getTitle() + ".tar.gz";
             String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
 
             Cloud.uploadFile(localFilePath, fileName);
@@ -391,115 +393,102 @@ public class ProjectsViewController implements Initializable {
     }
 
     /**
-     * Deletes a collaborator from the database and the table.
-     *
-     */
-    public void deleteCollaborator(){
-        String collaborator = getSelectedUser();
-        controller.deleteCollaborator(collaborator, getSelectedProject().getValue().getId());
-        collaboratorsTable.getItems().removeAll(collaborator);
-    }
-
-    /**
      * Displays collaborators on the table.
      *
      */
     @FXML
     public void displayCollaborators(){
-        TreeItem<Project> selectedProject = getSelectedProject();
-        ObservableList<String> oCollaboratorsList = controller.getCollaborators(selectedProject);
+        Project selectedProject = getSelectedProject();
+        ObservableList<String> oCollaboratorsList = listener.getCollaborators(selectedProject);
         collaboratorsTable.setItems(oCollaboratorsList);
     }
 
-    public void addCollaborator(){
-        if(!collaboratorsName.getText().equals("")){
-            if(!controller.addCollaborator(collaboratorsName.getText(), getSelectedProject().getValue().getId())){
-                MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","User " + collaboratorsName.getText() + " doesn't exist.");
-            } else {
-                MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Invitation sent to " + collaboratorsName.getText() + ".");
-            }
-        }
-    }
 
     /**
-     *
-     *
+     * Displays informations of the selected project.
      */
     @FXML
-    public void assignCollaborators(){
-        ObservableList<String> selectedCollaborators = collabComboBox.getCheckModel().getCheckedItems();
-        Task selectedTask = Global.selectedTask;
-        controller.assignCollaborators(selectedCollaborators, selectedTask, getSelectedProject().getValue().getId());
+    public void displayProject(Project project, ObservableList<String> tagsName) {
+        projectsDescription.setText(project.getDescription());
+        projectsDate.setText(controller.dateToString(project.getDate()));
+        projectsTitle.setText(project.getTitle());
         displayTask();
+        displayCollaborators();
+        collabComboBox.getItems().setAll(listener.getCollaborators(selectedProject));
+        projectTags.setItems(tagsName);
     }
 
-    @FXML
-    public void deleteTaskCollaborator(){
-        controller.deleteTaskCollaborator(getSelectedTaskCollaborator(),Global.selectedTask);
-    }
-
-    /**
-     *
-     *
-     */
-    @FXML
-    public void onTaskSelected(){
-        if (getSelectedTask() != null) {
-            Global.selectedTask = getSelectedTask();
-            controller.initTaskCollaborators(this, Global.selectedTask);
-            controller.initTaskCollaborators(this, getSelectedTask());
-            ObservableList<String> items = collabComboBox.getItems();
-            for (String item : items) {
-                collabComboBox.getItemBooleanProperty(item).set(false);
-                if (controller.isUserInTask(getSelectedTask().getId(), item)) {
-                    collabComboBox.getItemBooleanProperty(item).set(true);
-                }
-            }
-        }
-    }
 
     /**
-     * Returns the selected task.
-     *
-     * @return Task
+     * Displays tasks on the table.
      */
+    @FXML
+    public void displayTask() {
+        selectedProject = getSelectedProject();
+        ObservableList<Task> oTaskList = listener.getTasks(selectedProject);
+        taskTable.setItems(oTaskList);
+    }
+
+
     @FXML
     public Task getSelectedTask(){
         return taskTable.getSelectionModel().getSelectedItem();
     }
 
     @FXML
-    public String getSelectedTaskCollaborator(){
+    public String getSelectedTaskCollaborator() {
         return taskCollaboratorTable.getSelectionModel().getSelectedItem();
     }
 
-    /**
-     * Returns the selected user in the collaborators table.
-     *
-     * @return String
-     */
     @FXML
-    public String getSelectedUser(){ return collaboratorsTable.getSelectionModel().getSelectedItem(); }
-
-    /**
-     * Displays informations of the selected project.
-     */
-    @FXML
-    public void displayProject(String title, String description, Long date, ObservableList<String> tagsName){
-        projectsDescription.setText(description);
-        projectsDate.setText(controller.dateToString(date));
-        projectsTitle.setText(title);
-        displayTask();
-        displayCollaborators();
-        controller.initCollaborators(this);
-        projectTags.setItems(tagsName);
+    public String getSelectedUser() {
+        return collaboratorsTable.getSelectionModel().getSelectedItem();
     }
 
-    @FXML
-    public void onProjectSelected(){
-        TreeItem<Project> selectedProject = getSelectedProject();
-        if (selectedProject == null || selectedProject.getValue() == null){return;}
-        controller.getProjectInfo(this, selectedProject);
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ViewListener {
+        void back();
+
+        void addProject();
+
+        void deleteProject(String name);
+
+        void editProject();
+
+        ObservableList<String> getProjectTags(Project project);
+
+        void addTask(String description, int project_id);
+
+        void editTask(Task task;);
+
+        void deleteTask(Task task);
+
+        ObservableList<Task> getTasks(Project project);
+
+        void assignTaskCollaborator(ObservableList<String> collaborators, Task task);
+
+        ObservableList<String> getTaskCollaborators(Task task);
+
+        void deleteTaskCollaborator(String collaborator, Task task);
+
+        void importProject();
+
+        void exportProject();
+
+        void uploadProject();
+
+        void downloadProject();
+
+        void addCollaborator(String collaboratorName, int project_id);
+
+        void deleteCollaborator(String collaboratorName, int project_id);
+
+        ObservableList<String> getCollaborators(Project project);
+
+        boolean isUserInTask(String user, Task task);
     }
 
 }

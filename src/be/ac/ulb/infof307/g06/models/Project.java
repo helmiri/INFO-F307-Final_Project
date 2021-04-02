@@ -1,5 +1,7 @@
 package be.ac.ulb.infof307.g06.models;
 
+import javafx.collections.ObservableList;
+
 public class Project {
     //-------------- ATTRIBUTES ----------------
     int id;
@@ -7,6 +9,7 @@ public class Project {
     String description;
     Long date;
     int projectId;
+    ObservableList<String> tagsName;
     //-------------- METHODS ----------------
     /**
      * Constructor.
@@ -25,7 +28,15 @@ public class Project {
         this.projectId = projectId;
     }
 
-    public Project(){
+    public Project(int id, String title, String description, Long date, ObservableList<String> tags) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.tagsName = tags;
+    }
+
+    public Project() {
         this.id = 0;
         this.title = "";
         this.description = "";
@@ -33,7 +44,9 @@ public class Project {
         this.projectId = 0;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public Long getDate() { return date; }

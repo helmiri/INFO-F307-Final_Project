@@ -92,7 +92,6 @@ public class LoginViewController implements Initializable {
 
     public interface ViewListener {
         void login(String username, String password);
-
         void signup();
     }
 
