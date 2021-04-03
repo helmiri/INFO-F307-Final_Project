@@ -70,9 +70,9 @@ public class SignUpController {
                 stage.setScene(previousScene);
             }
         });
-        stage.setResizable(true);
-        stage.setHeight(465);
-        stage.setWidth(715);
+//        stage.setResizable(true);
+//        stage.setHeight(465);
+//        stage.setWidth(715);
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();
