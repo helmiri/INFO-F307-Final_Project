@@ -101,7 +101,7 @@ public class StorageViewController implements Initializable {
      * Initializing the cloud parameters.
      */
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // TODO:
+        // TODO: pass UserDB as parameter
         try {
             user_db = new UserDB("Database.db");
         } catch (ClassNotFoundException | SQLException e) {

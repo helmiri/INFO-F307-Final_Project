@@ -114,7 +114,7 @@ public class MainController {
      * @param user    int
      */
     public static void invitation(Boolean accept, String project, int user) {
-        // TODO
+        // TODO Needs ProjectDB as parameter
 //        try {
 //            if (accept) { ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user); }
 //            UserDB.removeInvitation(ProjectDB.getProjectID(project), user);
@@ -184,7 +184,7 @@ public class MainController {
      * @throws java.lang.Exception throws Exception
      */
     public void checkInvites() throws SQLException, java.lang.Exception {
-        // TODO
+        // TODO Needs UserDB as parameter
 //        List<Invitation> invitations = UserDB.getInvitations(1);
 //        for (Invitation invitation : invitations) {
 //            view.showInvitation(invitation.getProject_id(), invitation.getSender_id());

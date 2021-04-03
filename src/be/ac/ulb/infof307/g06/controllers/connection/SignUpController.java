@@ -90,7 +90,7 @@ public class SignUpController {
         controller.setListener(new ConditionsViewController.ViewListener() {
             @Override
             public void onConditionsAccepted() {
-                termsStage.hide();
+                termsStage.close();
                 listener.createUser(firstName, lastName, userName, email, password);
                 listener.showMainMenu();
             }

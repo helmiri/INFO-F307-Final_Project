@@ -113,7 +113,7 @@ public class ProjectDB extends Database {
     }
 
     public int getSizeOnDisk() throws SQLException {
-        // TODO
+        // TODO Needs UserID
         Project current;
         int total = 0;
         for (Integer projectID : getUserProjects(/*Global.userID*/ 1)) {

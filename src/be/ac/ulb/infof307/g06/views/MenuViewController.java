@@ -108,7 +108,7 @@ public class MenuViewController implements Initializable {
      * @param senderId int
      */
     public void showInvitation(int projectId, int senderId) {
-        // TODO
+        // TODO Needs user_db as parameter
         try {
             Project project = project_db.getProject(projectId);
             Global.popupProjectTitle = project.getTitle();

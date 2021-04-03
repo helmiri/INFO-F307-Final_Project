@@ -149,7 +149,7 @@ public class TagsViewController implements Initializable{
      */
     @FXML
     public void onTagSelected() {
-        // TODO
+        // TODO Make this not use global
 //        Global.selectedTag = getSelectedTag();
 //        if (Global.selectedTag!= null ){
 //            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
@@ -164,7 +164,7 @@ public class TagsViewController implements Initializable{
 
    @FXML
     public void deleteTag() throws SQLException {
-       // TODO
+       // TODO selected tag getter. Get rid of global.
 //       controller.deleteTag(Global.selectedTag);
        refresh();
    }

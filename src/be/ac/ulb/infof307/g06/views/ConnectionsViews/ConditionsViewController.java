@@ -1,9 +1,5 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
-import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.connection.SignUpController;
-import be.ac.ulb.infof307.g06.models.Global;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,11 +24,9 @@ public class ConditionsViewController {
     private void conditionsEvents(ActionEvent event) {
         if (event.getSource() == acceptConditionsBtn) {
             if (acceptConditionsBox.isSelected()) {
-                if (Global.userID != 0) {
-                    listener.onConditionsAccepted();
-                } else {
-                    listener.onConditionsDeclined();
-                }
+                listener.onConditionsAccepted();
+            } else {
+                listener.onConditionsDeclined();
             }
         }
     }

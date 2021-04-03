@@ -85,11 +85,10 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
-        // TODO
         try {
             userID = user_db.addUser(firstName, lastName, userName, email, password);
         } catch (SQLException e) {
-            //alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred when adding the user to the database: " + e);
+            new AlertWindow("Error", "An error has occurred when adding the user to the database: " + e).errorWindow();
         }
     }
 
