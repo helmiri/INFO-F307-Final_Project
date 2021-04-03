@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -22,8 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatsController {
+public class StatsController extends Controller {
     private StatsViewController statsView;
+
+    public StatsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
+        super(userID, user_db, project_db, stage);
+    }
 
     /**
      * Initializes the main view and the tree. Sets values.
@@ -47,10 +52,10 @@ public class StatsController {
     /**
      * Sets the loader to show the statistics scene.
      */
-    public static void show() {
+    public void show() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
-        MainController.load(loader,940,1515);
+        MainController.load(loader, 940, 1515);
     }
 
     /**
@@ -61,7 +66,7 @@ public class StatsController {
      */
     public List<Integer> getProjects() throws DatabaseException {
         try {
-            return ProjectDB.getUserProjects(Global.userID);
+            return project_db.getUserProjects(userID);
         } catch(SQLException e) {
             throw new DatabaseException(e);
         }
@@ -84,7 +89,7 @@ public class StatsController {
      */
     public ObservableList<String> collaboratorsToString(Integer project) throws SQLException {
         ObservableList<String> collaboratorsNames = FXCollections.observableArrayList();
-        List<Integer> collaborators = ProjectDB.getCollaborators(project);
+        List<Integer> collaborators = project_db.getCollaborators(project);
         for (Integer collaborator : collaborators) {
             collaboratorsNames.add(UserDB.getUserInfo(collaborator).get("uName"));
         }
@@ -100,7 +105,7 @@ public class StatsController {
      */
     public ObservableList<String> tasksToString(Integer project) throws SQLException {
         ObservableList<String> tasksDescriptions = FXCollections.observableArrayList();
-        List<Task> tasks = ProjectDB.getTasks(project);
+        List<Task> tasks = project_db.getTasks(project);
         for (Task task : tasks) {
             tasksDescriptions.add(task.getDescription());
         }
@@ -129,11 +134,11 @@ public class StatsController {
         try{
             Map<Integer, TreeItem<Statistics>> statsTreeMap = new HashMap<>();
             for(Integer project : projects){
-                Project childProject= ProjectDB.getProject(project);
-                int parentID= childProject.getParent_id();
-                String title= childProject.getTitle();
-                int childID= ProjectDB.getProjectID(title);
-                Statistics stat= createStat(childProject,project,title,childID);
+                Project childProject = project_db.getProject(project);
+                int parentID = childProject.getParent_id();
+                String title = childProject.getTitle();
+                int childID = project_db.getProjectID(title);
+                Statistics stat = createStat(childProject, project, title, childID);
                 TreeItem<Statistics> statsItem = new TreeItem<>(stat);
                 statsTreeMap.put(childID, statsItem);
                 if (parentID== 0){ statsView.addChild(root,statsItem); }
@@ -180,7 +185,7 @@ public class StatsController {
                 Statistics child = root.getChildren().get(i).getValue();
                 String treeBranchString = "";
                 String title = child.getTitle();
-                int id = ProjectDB.getProjectID(title);
+                int id = project_db.getProjectID(title);
                 treeBranchString = statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
                 String infoStat = gson.toJson(child);
                 String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
@@ -203,10 +208,10 @@ public class StatsController {
      * @return String
      */
     public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Statistics> root) throws SQLException {
-        List<Integer> projectsID = ProjectDB.getSubProjects(id);
+        List<Integer> projectsID = project_db.getSubProjects(id);
         for (int k = 0; k < projectsID.size(); k++) {
             Statistics stat = root.getChildren().get(k).getValue();
-            if (ProjectDB.getSubProjects(projectsID.get(k)).size() == 0) {
+            if (project_db.getSubProjects(projectsID.get(k)).size() == 0) {
                 //Has no children so we can let the brackets closed --> 'name':{info}.
                 String infoStat = gson.toJson(root.getChildren().get(k).getValue());
                 treeBranchString = (treeBranchString + "'" + stat.getTitle() + "'" + " :" + infoStat + ",");
@@ -215,7 +220,7 @@ public class StatsController {
                 String infoStat = gson.toJson(stat);
                 String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
                 treeBranchString += "'" + stat.getTitle() + "'" + " :" + gotChild + ",";
-                treeBranchString = statToJsonString(ProjectDB.getSubProjects(id).get(k), gson, treeBranchString, root.getChildren().get(k));
+                treeBranchString = statToJsonString(project_db.getSubProjects(id).get(k), gson, treeBranchString, root.getChildren().get(k));
             }
         }
         treeBranchString += "},";
@@ -254,7 +259,7 @@ public class StatsController {
             String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "EstimatedDate" + "," + "Parent ID" + "\r\n";
             for (int i = 0; i < root.getChildren().size(); i++) {
                 String mainProjectTitle = root.getChildren().get(i).getValue().getTitle();
-                int mainProjectID = ProjectDB.getProjectID(mainProjectTitle);
+                int mainProjectID = project_db.getProjectID(mainProjectTitle);
                 content = statsToCSVString(mainProjectID, root.getChildren().get(i).getValue(), content, root.getChildren().get(i));
             }
             csv.write(content);
@@ -277,13 +282,13 @@ public class StatsController {
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
-    public static String statsToCSVString(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
-        if (ProjectDB.getSubProjects(currentStatID).size() == 0) {
-            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + ProjectDB.getProject(currentStatID).getParent_id() + "\r\n";
+    public String statsToCSVString(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
+        if (project_db.getSubProjects(currentStatID).size() == 0) {
+            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + project_db.getProject(currentStatID).getParent_id() + "\r\n";
         } else {
-            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + ProjectDB.getProject(currentStatID).getParent_id() + "\r\n";
-            for (int k = 0; k < ProjectDB.getSubProjects(currentStatID).size(); k++) {
-                content = statsToCSVString(ProjectDB.getSubProjects(currentStatID).get(k), root.getChildren().get(k).getValue(), content, root.getChildren().get(k));
+            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + project_db.getProject(currentStatID).getParent_id() + "\r\n";
+            for (int k = 0; k < project_db.getSubProjects(currentStatID).size(); k++) {
+                content = statsToCSVString(project_db.getSubProjects(currentStatID).get(k), root.getChildren().get(k).getValue(), content, root.getChildren().get(k));
             }
         }
         return content;

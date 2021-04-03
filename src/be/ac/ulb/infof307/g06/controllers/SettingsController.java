@@ -3,44 +3,67 @@ package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import be.ac.ulb.infof307.g06.views.StorageViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsController {
-    /**
-     * Sets the loader to show the settings menu scene.
-     */
-    public static void showSettingsMenu() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MenuViewController.class.getResource("SettingsMenu.fxml"));
-        MainController.load(loader, 940,1515);
+public class SettingsController extends Controller {
+
+    public SettingsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
+        super(userID, user_db, project_db, stage);
     }
 
     /**
      * Sets the loader to show the tags menu scene.
      */
-    public static void showTagsMenu() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(TagsViewController.class.getResource("Tags.fxml"));
-        MainController.load(loader,940,1515);
+    public static void showTags() {
+        FXMLLoader loader = new FXMLLoader(TagsViewController.class.getResource("Tags.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void showStorageMenu() {
+        FXMLLoader loader = new FXMLLoader(StorageViewController.class.getResource("StorageView.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     *
-     * @param view TagsViewController
+     * Sets the loader to show the settings menu scene.
+     */
+    @Override
+    public void show() {
+        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("SettingsMenu.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param view  TagsViewController
      * @param title String
      * @param color String
      */
 
     public void addTag(TagsViewController view, String title, String color) throws SQLException {
-        List<Tag> tags = ProjectDB.getAllTags();
+        List<Tag> tags = project_db.getAllTags();
         List<String> tagNames = new ArrayList<>();
         for (Tag tag2 : tags) {
             tagNames.add(tag2.getDescription());
@@ -49,11 +72,11 @@ public class SettingsController {
             new AlertWindow("Alert", "Tag already exists.").informationWindow();
             return;
         }
-        ProjectDB.createTag(title, color);
+        project_db.createTag(title, color);
     }
 
     public void deleteTag(Tag tag) throws SQLException{
-        ProjectDB.deleteTag(tag.getId());
+        project_db.deleteTag(tag.getId());
     }
 
     /**
@@ -65,7 +88,7 @@ public class SettingsController {
      */
 
     public void editTag(TagsViewController view, Tag tag, String newDescription, String newColor) throws SQLException {
-        List<Tag> tags = ProjectDB.getAllTags();
+        List<Tag> tags = project_db.getAllTags();
         List<String> tagNames = new ArrayList<>();
         for (Tag tag2 : tags) {
             tagNames.add(tag2.getDescription());
@@ -74,21 +97,11 @@ public class SettingsController {
             new AlertWindow("Alert", "Tag already exists.").informationWindow();
             return;
         }
-        ProjectDB.editTag(tag.getId(), newDescription, newColor);
+        project_db.editTag(tag.getId(), newDescription, newColor);
     }
 
-    public static void showStorageMenu() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(StorageViewController.class.getResource("StorageView.fxml"));
-        MainController.load(loader, 940, 1515);
-    }
 
-    public void showTags() {
-    }
 
-    public void showSettings() {
-    }
 
-    public void showStorageSettings() {
-    }
+
 }

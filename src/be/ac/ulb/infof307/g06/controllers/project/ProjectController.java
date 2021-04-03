@@ -1,6 +1,8 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
+import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -13,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 import java.io.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,28 +26,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class ProjectController implements ProjectsViewController.ViewListener {
-
-    private final int userID;
-    private final ProjectDB project_db;
-    private final UserDB user_db;
+public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
     private ProjectsViewController viewController;
     private IOController ioController;
 
-    public ProjectController(UserDB user_db, ProjectDB project_db, int userID) {
-        this.userID = userID;
-        this.project_db = project_db;
-        this.user_db = user_db;
-        ioController = new IOController(user_db, project_db, userID);
+    public ProjectController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
+        super(userID, user_db, project_db, stage);
+        ioController = new IOController(userID, user_db, project_db, stage);
+        ioController.setViewController(viewController);
     }
 
 
     /**
      * Sets the loader to show the Project scene.
      */
-    public void showProjects() throws IOException {
+    @Override
+    public void show() {
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
-        loader.load();
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         viewController = loader.getController();
         viewController.setListener(this);
         MainController.load(loader, 940, 1515);
