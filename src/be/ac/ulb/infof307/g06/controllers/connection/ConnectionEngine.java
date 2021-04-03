@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g06.controllers.connection;
 
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.application.Application;
@@ -26,7 +25,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     public void start(Stage stage) throws IOException {
         // Set main stage
         this.stage = stage;
-        Global.userID = 0;
+        userID = 0;
         try {
             user_db = new UserDB(DB_PATH);
             project_db = new ProjectDB(DB_PATH);
@@ -53,15 +52,15 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
         int res = 0;
         try {
-            res = UserDB.validateData(user, passwd);
+            res = user_db.validateData(user, passwd);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         userID = res;
         switch (res) {
-            //case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong")
-
-            //case -1 -> loginErrMsg.setText("This user is already connected");
+//            case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong")
+//
+//            case -1 -> loginErrMsg.setText("This user is already connected");
 
             default -> showMainMenu();
         }
@@ -79,7 +78,6 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void showMainMenu() {
-        Stage stage = new Stage();
         MainMenuController controller = new MainMenuController(userID, user_db, project_db, stage);
         controller.setListener(this);
         controller.show();
@@ -87,9 +85,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
-
+        // TODO
         try {
-            Global.userID = UserDB.addUser(firstName, lastName, userName, email, password);
+            userID = user_db.addUser(firstName, lastName, userName, email, password);
         } catch (SQLException e) {
             //alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred when adding the user to the database: " + e);
         }
@@ -114,7 +112,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     @Override
     public void logout() {
         try {
-            UserDB.disconnectUser();
+            user_db.disconnectUser();
         } catch (SQLException e) {
             new AlertWindow("Error", "Couldn't disconnect the user: " + e).errorWindow();
         }

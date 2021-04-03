@@ -1,9 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
-import be.ac.ulb.infof307.g06.controllers.project.IOController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Cloud;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
@@ -23,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,13 +46,13 @@ public class CloudViewController implements Initializable {
         HashMap<String, String> usrCreds = null;
         files = null;
         try {
-            usrCreds = UserDB.getCloudCredentials();
+//            usrCreds = UserDB.getCloudCredentials();
             Cloud.init(usrCreds.get("accToken"), usrCreds.get("clientID"));
             files = Cloud.getFiles();
             for (Metadata metadata : filterValidFiles(files)) {
                 cloudTable.getItems().add(metadata.getPathDisplay());
             }
-        } catch (SQLException | IOException throwables) {
+        } catch (IOException throwables) {
             new AlertWindow("Error", "An error occurred").errorWindow();
         } catch (DbxException e) {
 
@@ -131,7 +128,7 @@ public class CloudViewController implements Initializable {
             new AlertWindow("Identical files", "The file already exists").informationWindow();
         } else {
             Cloud.downloadFile(localPath, cloudPath);
-            IOController.importProject(localPath);
+//            IOController.importProject(localPath);
         }
     }
 

@@ -1,8 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
-import be.ac.ulb.infof307.g06.controllers.MainMenuController;
-import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -51,7 +49,7 @@ public class IOController extends Controller {
     public void initProjectExport(ProjectInputViewController inputView) {
         try {
             final ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
-            List<Integer> ProjectIDList = project_db.getUserProjects(Global.userID);
+            List<Integer> ProjectIDList = project_db.getUserProjects(userID);
             for (Integer projectID : ProjectIDList) {
                 projectsTitleList.add(project_db.getProject(projectID).getTitle());
             }

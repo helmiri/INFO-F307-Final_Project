@@ -1,3 +1,4 @@
+/*
 package be.ac.ulb.infof307.g06.models.database;
 
 
@@ -180,3 +181,4 @@ public class TestUserDB extends TestDatabase {
         res.close();
     }
 }
+*/

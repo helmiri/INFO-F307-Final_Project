@@ -1,10 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.Invitation;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 public class MainController {
     //-------------- ATTRIBUTES ----------------
@@ -74,13 +69,13 @@ public class MainController {
      * Sets the loader to show the Main menu scene.
      */
     public static void showMainMenu() {
-        if (isFirstBoot) {
-            try {
-                UserDB.setAdmin(256 * 1000000);
-            } catch (SQLException throwables) {
-                new AlertWindow("Database error", "Could not access the database").errorWindow();
-            }
-        }
+//        if (isFirstBoot) {
+//            try {
+//                UserDB.setAdmin(256 * 1000000);
+//            } catch (SQLException throwables) {
+//                new AlertWindow("Database error", "Could not access the database").errorWindow();
+//            }
+//        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("MenuView.fxml"));
         load(loader, 940, 1515);
@@ -112,16 +107,20 @@ public class MainController {
     public void init(MenuViewController view){ this.view = view; }
 
     /**
-     * Checks the invitation requests.
+     * Handles the request to join a project.
      *
-     * @throws SQLException        throws SQLException
-     * @throws java.lang.Exception throws Exception
+     * @param accept  Boolean
+     * @param project String
+     * @param user    int
      */
-    public void checkInvites() throws SQLException, java.lang.Exception {
-        List<Invitation> invitations = UserDB.getInvitations(Global.userID);
-        for (Invitation invitation : invitations) {
-            view.showInvitation(invitation.getProject_id(), invitation.getSender_id());
-        }
+    public static void invitation(Boolean accept, String project, int user) {
+        // TODO
+//        try {
+//            if (accept) { ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user); }
+//            UserDB.removeInvitation(ProjectDB.getProjectID(project), user);
+//        }catch(SQLException e){
+//            new AlertWindow("Database error", "Could not access the database").errorWindow();
+//        }
     }
 
     /**
@@ -179,19 +178,17 @@ public class MainController {
     public static void closeStage(){ stage.close(); }
 
     /**
-     * Handles the request to join a project.
+     * Checks the invitation requests.
      *
-     * @param accept Boolean
-     * @param project String
-     * @param user int
+     * @throws SQLException        throws SQLException
+     * @throws java.lang.Exception throws Exception
      */
-    public static void invitation(Boolean accept,String project, int user){
-        try {
-            if (accept) { ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user); }
-            UserDB.removeInvitation(ProjectDB.getProjectID(project), user);
-        }catch(SQLException e){
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-        }
+    public void checkInvites() throws SQLException, java.lang.Exception {
+        // TODO
+//        List<Invitation> invitations = UserDB.getInvitations(1);
+//        for (Invitation invitation : invitations) {
+//            view.showInvitation(invitation.getProject_id(), invitation.getSender_id());
+//        }
     }
 
 }

@@ -42,7 +42,6 @@ public class UserDB extends Database {
      */
     public void setAdmin(int diskLimit) throws SQLException {
         sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + Global.userID + "," + diskLimit + ")");
-        ;
     }
 
     public void setLimit(int value) throws SQLException {
@@ -127,7 +126,6 @@ public class UserDB extends Database {
     /**
      * Queries the database for the user's information
      *
-     * @param userName The user's username
      * @return Map<String, String> where the key is the field's name containing fName, lName, email, accToken, clientID
      * @throws SQLException If a database access error occurs
      */

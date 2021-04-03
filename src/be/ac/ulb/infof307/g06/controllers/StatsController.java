@@ -1,7 +1,10 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
-import be.ac.ulb.infof307.g06.models.*;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Statistics;
+import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController;
@@ -91,7 +94,7 @@ public class StatsController extends Controller {
         ObservableList<String> collaboratorsNames = FXCollections.observableArrayList();
         List<Integer> collaborators = project_db.getCollaborators(project);
         for (Integer collaborator : collaborators) {
-            collaboratorsNames.add(UserDB.getUserInfo(collaborator).get("uName"));
+            collaboratorsNames.add(user_db.getUserInfo(collaborator).getUserName());
         }
         return collaboratorsNames;
     }

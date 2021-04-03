@@ -3,6 +3,8 @@ package be.ac.ulb.infof307.g06.views.StatisticsViews;
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.StatsController;
 import be.ac.ulb.infof307.g06.models.Statistics;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StatsViewController implements Initializable {
@@ -45,16 +48,22 @@ public class StatsViewController implements Initializable {
     @FXML
     private TreeTableColumn<Statistics, String> estimatedColumn;
     private final TreeItem<Statistics> root = new TreeItem<>();
-    private final StatsController controller= new StatsController();
+    private final StatsController controller = new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
+
+    public StatsViewController() throws SQLException, ClassNotFoundException {
+    }
     //--------------- METHODS ----------------
+
     /**
      * Launchs init method from the controller.
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { controller.init(this, root); }
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        controller.init(this, root);
+    }
 
     /**
      * The main method for button's events.

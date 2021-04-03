@@ -50,15 +50,18 @@ public class MenuViewController implements Initializable {
     private Button backBtn;
     public ViewListener listener;
     private MainController controller;
+    private ProjectDB project_db;
+    private UserDB user_db;
 
     //--------------- METHODS ----------------
+
     /**
      * Initializes the controller and checks the invitations.
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
-    public void initialize(URL url, ResourceBundle resourceBundle){
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new MainController();
         controller.init(this);
         try {
@@ -104,12 +107,13 @@ public class MenuViewController implements Initializable {
      * @param projectId int
      * @param senderId int
      */
-    public void showInvitation(int projectId, int senderId){
+    public void showInvitation(int projectId, int senderId) {
+        // TODO
         try {
-            Project project = ProjectDB.getProject(projectId);
+            Project project = project_db.getProject(projectId);
             Global.popupProjectTitle = project.getTitle();
             Global.popupProjectDescription = project.getDescription();
-            Global.popupSenderUsername = UserDB.getUserInfo(senderId).get("uName");
+            Global.popupSenderUsername = user_db.getUserInfo(senderId).getUserName();
             MainController.showInvitationStage();
         } catch (SQLException e) {
             new AlertWindow("Database error", "Could not access the database").errorWindow();

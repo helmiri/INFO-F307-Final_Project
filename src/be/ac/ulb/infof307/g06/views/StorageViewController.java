@@ -1,8 +1,6 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.SettingsController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -31,6 +29,7 @@ public class StorageViewController implements Initializable {
     public TextField limitField;
     public Text limitText;
     public Text adminText;
+    private UserDB user_db;
 
     /**
      * Button handling
@@ -41,7 +40,7 @@ public class StorageViewController implements Initializable {
     public void events(ActionEvent actionEvent) throws SQLException {
 
         if (actionEvent.getSource() == backBtn) {
-            SettingsController.showSettingsMenu();
+//            SettingsController.showSettingsMenu();
         } else if (actionEvent.getSource() == saveBtn) {
             if (saveSettings()) {
                 new AlertWindow("Save", "Changes saved").informationWindow();
@@ -66,7 +65,7 @@ public class StorageViewController implements Initializable {
         String accToken = accTokenField.getText();
         boolean res = false;
         if (!clientID.isBlank() && !accToken.isBlank()) {
-            UserDB.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
+            user_db.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
             res = true;
         } else if (clientID.isBlank() && accToken.isBlank()) {
             res = false;
@@ -75,10 +74,10 @@ public class StorageViewController implements Initializable {
             res = false;
         }
 
-        if (UserDB.isAdmin()) {
+        if (user_db.isAdmin()) {
             String value = limitField.getText();
             if (!value.isBlank()) {
-                UserDB.setLimit(Integer.parseInt(limitField.getText()));
+                user_db.setLimit(Integer.parseInt(limitField.getText()));
                 res = true;
             }
 
@@ -102,19 +101,25 @@ public class StorageViewController implements Initializable {
      * Initializing the cloud parameters.
      */
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // TODO:
         try {
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
+            user_db = new UserDB("Database.db");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            user_db.updateDiskUsage(/*ProjectDB.getSizeOnDisk()*/ 2);
 
             UnitValue usage = new UnitValue();
             UnitValue limit = new UnitValue();
-            limit.value = UserDB.getDiskLimit();
-            usage.value = UserDB.getDiskUsage();
+            limit.value = user_db.getDiskLimit();
+            usage.value = user_db.getDiskUsage();
             diskBar.setProgress(usage.value / limit.value);
 
             limit.getUnit();
             usage.getUnit();
             usageText.setText(Double.toString(usage.value) + usage.unit + " / " + Double.toString(limit.value) + limit.unit);
-            if (UserDB.isAdmin()) {
+            if (user_db.isAdmin()) {
                 adminText.setVisible(true);
                 limitText.setVisible(true);
                 limitField.setVisible(true);

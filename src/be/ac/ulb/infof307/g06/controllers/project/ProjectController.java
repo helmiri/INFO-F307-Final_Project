@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g06.controllers.project;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -17,7 +16,7 @@ import javafx.scene.control.TreeItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -274,38 +273,41 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
-        try {
-            for (String collaborator : collaborators) {
-                project_db.addTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).get("id")));
-            }
-        } catch (SQLException e) {
-            // TODO Exception
-        }
+        // TODO USERNAME INFO GETTER
+//        try {
+//            for (String collaborator : collaborators) {
+//                project_db.addTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).getId()));
+//            }
+//        } catch (SQLException e) {
+//            // TODO Exception
+//        }
     }
 
     @Override
     public ObservableList<String> getTaskCollaborators(Task task) {
+        // TODO USERNAME INFO GETTER
         ObservableList<String> names = FXCollections.observableArrayList();
-        try {
-            if (task != null) {
-                List<Integer> collaborators = project_db.getTaskCollaborator(task.getId());
-                for (Integer collaborator : collaborators) {
-                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
-                }
-            }
-        } catch (SQLException e) {
-            // TODO Exception
-        }
+//        try {
+//            if (task != null) {
+//                List<Integer> collaborators = project_db.getTaskCollaborator(task.getId());
+//                for (Integer collaborator : collaborators) {
+//                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
+//                }
+//            }
+//        } catch (SQLException e) {
+//            // TODO Exception
+//        }
         return names;
     }
 
     @Override
     public void deleteTaskCollaborator(String collaborator, Task task) {
-        try {
-            project_db.deleteTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).get("id")));
-        } catch (SQLException e) {
-            // TODO Exeption
-        }
+        // TODO USERNAME INFO GETTER
+//        try {
+//            project_db.deleteTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).get("id")));
+//        } catch (SQLException e) {
+//            // TODO Exeption
+//        }
     }
 
     @Override
@@ -315,53 +317,57 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void addCollaborator(String username, int project_id) {
-        try {
-            if (!user_db.userExists(username)) {
-                // TODO message user doesnt exist
-            }
-            int receiverID = Integer.parseInt(user_db.getUserInfo(username).get("id"));
-            if (project_db.getCollaborators(project_id).contains(receiverID)) {
-                // TODO message colalborator already in project
-            }
-            user_db.sendInvitation(project_id, userID, receiverID);
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            // TODO exception
-        }
+        // TODO USERNAME INFO GETTER
+//        try {
+//            if (!user_db.userExists(username)) {
+//                // TODO message user doesnt exist
+//            }
+//            int receiverID = Integer.parseInt(user_db.getUserInfo(username).get("id"));
+//            if (project_db.getCollaborators(project_id).contains(receiverID)) {
+//                // TODO message colalborator already in project
+//            }
+//            user_db.sendInvitation(project_id, userID, receiverID);
+//            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+//        } catch (SQLException e) {
+//            // TODO exception
+//        }
     }
 
     @Override
     public void deleteCollaborator(String collaboratorName, int project_id) {
-        try {
-            project_db.deleteCollaborator(project_id, Integer.parseInt(user_db.getUserInfo(collaboratorName).get("id")));
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            // TODO Exception
-        }
+        // TODO USERNAME INFO GETTER
+//        try {
+//            project_db.deleteCollaborator(project_id, Integer.parseInt(user_db.getUserInfo(collaboratorName).get("id")));
+//            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+//        } catch (SQLException e) {
+//            // TODO Exception
+//        }
     }
 
     @Override
     public ObservableList<String> getCollaborators(Project project) {
+        // TODO USERNAME INFO GETTER
         ObservableList<String> names = FXCollections.observableArrayList();
-        try {
-            List<Integer> collaborators;
-            collaborators = project_db.getCollaborators(project.getId());
-            for (Integer collaborator : collaborators) {
-                names.add((user_db.getUserInfo(collaborator).get("uName")));
-            }
-        } catch (SQLException e) {
-            // TODO Exception
-        }
+//        try {
+//            List<Integer> collaborators;
+//            collaborators = project_db.getCollaborators(project.getId());
+//            for (Integer collaborator : collaborators) {
+//                names.add((user_db.getUserInfo(collaborator).get("uName")));
+//            }
+//        } catch (SQLException e) {
+//            // TODO Exception
+//        }
         return names;
     }
 
     @Override
     public boolean isUserInTask(String user, Task task) {
-        try {
-            return project_db.getTaskCollaborator(task.getId()).contains(Integer.parseInt(user_db.getUserInfo(user).get("id")));
-        } catch (SQLException e) {
-            // TODO Exception
-        }
+        // TODO USERNAME INFO GETTER
+//        try {
+//            return project_db.getTaskCollaborator(task.getId()).contains(Integer.parseInt(user_db.getUserInfo(user).get("id")));
+//        } catch (SQLException e) {
+//            // TODO Exception
+//        }
         return false;
     }
 

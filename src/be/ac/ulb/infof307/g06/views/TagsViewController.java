@@ -1,10 +1,8 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.controllers.SettingsController;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Tag;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,7 +44,7 @@ public class TagsViewController implements Initializable{
     @FXML
     private void events(ActionEvent event) throws Exception{
         if(event.getSource() == backBtn) {
-            SettingsController.showSettingsMenu();
+//            SettingsController.showSettingsMenu();
         }
         if(event.getSource() == addBtn ) {
             controller.addTag(this, defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
@@ -96,7 +94,7 @@ public class TagsViewController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        controller = new SettingsController();
+//        controller = new SettingsController();
         defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         defaultTagsTableView.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
@@ -110,14 +108,10 @@ public class TagsViewController implements Initializable{
                 }
             }
         });
-        try {
-            Global.selectedTag = ProjectDB.getAllTags().get(0);
-            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
-            tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
-            defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
-        } catch (SQLException throwables) {
-            new AlertWindow("Alert", "An Error has occured in the database." + throwables).errorWindow();
-        }
+        //            Global.selectedTag = ProjectDB.getAllTags().get(0);
+        defaultTagNameTextField.setText(Global.selectedTag.getDescription());
+        tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
+        defaultTagsTableView.setItems(FXCollections.observableArrayList(/*ProjectDB.getAllTags()*/ (Tag) null));
     }
 
     /**
@@ -136,11 +130,7 @@ public class TagsViewController implements Initializable{
                 }
             }
         });
-        try {
-            defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
-        } catch (SQLException throwables) {
-            new AlertWindow("Alert", "An Error has occured in the database.").errorWindow();
-        }
+        defaultTagsTableView.setItems(FXCollections.observableArrayList(/*ProjectDB.getAllTags()*/ (Tag) null));
     }
 
     /**
@@ -158,12 +148,13 @@ public class TagsViewController implements Initializable{
      * Updates the selected tag when clicked
      */
     @FXML
-    public void onTagSelected(){
-        Global.selectedTag = getSelectedTag();
-        if (Global.selectedTag!= null ){
-            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
-            tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
-        }
+    public void onTagSelected() {
+        // TODO
+//        Global.selectedTag = getSelectedTag();
+//        if (Global.selectedTag!= null ){
+//            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
+//            tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
+//        }
     }
 
     /**
@@ -172,8 +163,9 @@ public class TagsViewController implements Initializable{
      */
 
    @FXML
-    public void deleteTag() throws SQLException{
-       controller.deleteTag(Global.selectedTag);
+    public void deleteTag() throws SQLException {
+       // TODO
+//       controller.deleteTag(Global.selectedTag);
        refresh();
-    }
+   }
 }

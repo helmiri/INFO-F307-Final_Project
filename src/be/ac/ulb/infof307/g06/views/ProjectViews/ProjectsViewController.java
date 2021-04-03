@@ -1,8 +1,5 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
-import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Task;
-import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.*;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
@@ -85,6 +82,8 @@ public class ProjectsViewController implements Initializable {
     private Task selectedTask;
     private Project selectedProject;
     private Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
+    private UserDB user_db;
+
     //---------------METHODES----------------
 
     /**
@@ -142,13 +141,8 @@ public class ProjectsViewController implements Initializable {
             listener.uploadProject();
             uploadFiles();
         } else {
-            try {
-                if (UserDB.availableDisk() <= 0) {
-                    new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").informationWindow();
-                    return;
-                }
-            } catch (SQLException throwables) {
-                new AlertWindow("Database error", "Could not access the database").errorWindow();
+            if (/*UserDB.availableDisk() <= 0*/ true) {
+                new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").informationWindow();
                 return;
             }
             if (event.getSource() == addTaskbtn) {
@@ -362,7 +356,7 @@ public class ProjectsViewController implements Initializable {
         listener.exportProject(selectedProject,
                 selectedDirectory.getAbsolutePath());
         try {
-            Map<String, String> creds = UserDB.getCloudCredentials();
+            Map<String, String> creds = user_db.getCloudCredentials();
             if (creds.get("accToken") == null || creds.get("clientID") == null) {
                 new AlertWindow("Cloud service", "Could not connect to DropBox. Check that your credentials are valid").errorWindow();
                 return;

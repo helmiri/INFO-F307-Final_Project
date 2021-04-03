@@ -1,11 +1,11 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
-import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 public class MainMenuController extends Controller implements MenuViewController.ViewListener {
     public Listener listener;
+    private Scene scene;
 
     public MainMenuController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
         super(userID, user_db, project_db, stage);
@@ -26,11 +27,11 @@ public class MainMenuController extends Controller implements MenuViewController
     public void show() {
         try {
             if (user_db.isFirstBoot()) {
-                UserDB.setAdmin(256 * 1000000);
+                user_db.setAdmin(256 * 1000000);
             }
             FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("MenuView.fxml"));
-            loader.load();
-
+            scene = new Scene(loader.load());
+            stage.setScene(scene);
             MenuViewController controller = loader.getController();
             controller.setListener(this);
             load(940, 1515);

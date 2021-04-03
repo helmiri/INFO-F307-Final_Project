@@ -1,12 +1,10 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.ConditionsViewController;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.SignUpViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -33,6 +31,7 @@ public class SignUpController {
     public void show() throws IOException {
         scene = new Scene(loader.load());
         stage.setScene(scene);
+        stage.sizeToScene();
         SignUpViewController controller = loader.getController();
         controller.setListener(new SignUpViewController.ViewListener() {
 
@@ -83,22 +82,26 @@ public class SignUpController {
      */
     public void showConditionStage(String firstName, String lastName, String userName, String email, String password) throws IOException {
         FXMLLoader loader = new FXMLLoader(ConditionsViewController.class.getResource("TermsV2.fxml"));
-        loader.load();
+        Stage termsStage = new Stage();
+        Scene termsScene = new Scene(loader.load());
+        termsStage.setScene(termsScene);
+        termsStage.show();
         ConditionsViewController controller = loader.getController();
         controller.setListener(new ConditionsViewController.ViewListener() {
             @Override
             public void onConditionsAccepted() {
+                termsStage.hide();
                 listener.createUser(firstName, lastName, userName, email, password);
                 listener.showMainMenu();
             }
 
             @Override
             public void onConditionsDeclined() {
+                termsStage.hide();
                 listener.onSignup();
             }
 
         });
-        MainController.showStage("Terms", 900, 768, Modality.APPLICATION_MODAL, loader);
     }
 
 
