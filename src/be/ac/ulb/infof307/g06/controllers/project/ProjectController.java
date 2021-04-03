@@ -1,23 +1,20 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.models.*;
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Tag;
+import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.ProjectViews.CloudViewController;
-import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
-import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
+import be.ac.ulb.infof307.g06.views.ProjectViews.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Modality;
-
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,30 +23,20 @@ import java.util.regex.Pattern;
 
 
 public class ProjectController implements ProjectsViewController.ViewListener {
-    private final TasksController tasksController = new TasksController(this);
-    private final CollaboratorsController collaboratorsController = new CollaboratorsController();
 
-    /**
-     * Initializes the view, the root, trees and clears the projects table+ the map to "reload" them.
-     *
-     * @param view ProjectsViewController
-     * @param root TreeItem<Project>
-     */
-    public static void init(ProjectsViewController view, TreeItem<Project> root) {
-        Global.projectsView = view;
-        Global.root = root;
-        view.initTree();
-        try {
-            ProjectDB.createTag("tag1", "#4287f5");
-            ProjectDB.createTag("tag2", "#ffffff");
-            ProjectDB.createTag("tag3", "#000000");
-            Global.TreeMap.clear();
-            List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
-            getProjects(projectsArray);
-        } catch (SQLException e) {
-            new AlertWindow("Error", "Could not initialize the window").errorWindow();
-        }
+    private final int userID;
+    private final ProjectDB project_db;
+    private final UserDB user_db;
+    private ProjectsViewController viewController;
+    private IOController ioController;
+
+    public ProjectController(UserDB user_db, ProjectDB project_db, int userID) {
+        this.userID = userID;
+        this.project_db = project_db;
+        this.user_db = user_db;
+        ioController = new IOController(user_db, project_db, userID);
     }
+
 
     /**
      * Sets the loader to show the Project scene.
@@ -57,195 +44,376 @@ public class ProjectController implements ProjectsViewController.ViewListener {
     public void showProjects() throws IOException {
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
         loader.load();
-        ProjectsViewController controller = loader.getController();
-        controller.setListener(this);
+        viewController = loader.getController();
+        viewController.setListener(this);
         MainController.load(loader, 940, 1515);
     }
+
+    // ----------------------------- STAGES -----------------------------------
 
     /**
      * Sets the loader to show the stage to add a project.
      */
-    public static void showAddProjectStage() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(ProjectsViewController.class.getResource("AddProjectView.fxml"));
-        MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader);
+    public void showAddProjectStage(ProjectsViewController.ViewListener listener) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("AddProjectView.fxml"));
+            loader.load();
+            AddProjectViewController controller = loader.getController();
+            controller.init(listener);
+            MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader);
+        } catch (IOException e) {
+            // TODO Exception
+        }
     }
 
     /**
      * Sets the loader to show the stage to edit a project.
      */
-    public static void showCloudDownloadStage() {
+    public void showCloudDownloadStage() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
         MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
 
 
-    public static void showEditProjectStage() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(ProjectsViewController.class.getResource("EditProjectView.fxml"));
-        MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader);
+    public void showEditProjectStage(Project project, ProjectsViewController.ViewListener listener) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("EditProjectView.fxml"));
+            loader.load();
+            EditProjectViewController controller = loader.getController();
+            controller.init(project, listener);
+            MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader);
+        } catch (IOException e) {
+            // TODO Exception
+        }
     }
 
     /**
-     * Initializes the map and displays projects on the tree table view.
-     *
-     * @param projects List<Integer>;
+     * Sets the loader to show the stage to edit a task.
      */
-    public static void getProjects(List<Integer> projects) {
+    public void showEditTaskStage(Task task, ProjectsViewController.ViewListener listener) {
         try {
-            Global.projectsView.hideRoot();
-            for (Integer project : projects) {
-                Project childProject = ProjectDB.getProject(project);
-                int parentID = childProject.getParent_id();
-                String title = childProject.getTitle();
-                int childID = ProjectDB.getProjectID(title);
-                TreeItem<Project> child = new TreeItem<Project>(childProject);
-                Global.TreeMap.put(childID, child);
-                if (parentID == 0) {
-                    Global.projectsView.addChild(Global.root, child);
-                } else {
-                    Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
+            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("TaskEditView.fxml"));
+            loader.load();
+            EditTaskViewController controller = loader.getController();
+            controller.init(task, listener);
+            MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, loader);
+        } catch (IOException e) {
+            // TODO Exception
+        }
+    }
+
+
+    // ------------------------------------- CODE --------------------------------------
+
+    @Override
+    public void back() {
+    }
+
+    @Override
+    public void addProject() {
+        showAddProjectStage(this);
+    }
+
+    @Override
+    public void deleteProject(String name) {
+        try {
+            int projectID = project_db.getProjectID(name);
+            project_db.deleteProject(projectID);
+            // TODO refresh
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+    }
+
+    @Override
+    public void onEditProject(Project project, String title, String description, LocalDate date, ObservableList<String> newTags) {
+        try {
+            int projectID = project.getId();
+            if (title == "") {
+                // TODO Cannot edit a project with an empty name.
+            } else {
+                project_db.editProject(
+                        projectID,
+                        title,
+                        description,
+                        date.toEpochDay()
+                );
+                List<Integer> tags = new ArrayList<>();
+                for (String newTag : newTags) {
+                    tags.add(project_db.getTagID(newTag));
                 }
+                project_db.editTags(projectID, tags);
+                // TODO refresh
             }
-            Global.projectsView.refresh();
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
+            // TODO Exception
         }
     }
 
-    /**
-     * @param collaborators ObservableList<String>
-     * @param selectedTask  Task
-     */
-    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) {
-        collaboratorsController.assignCollaborators(collaborators, selectedTask);
+    @Override
+    public void editProject(Project project) {
+        showEditProjectStage(project, this);
     }
 
-    public static Project getProject(String currentProject) {
-        Project project = new Project();
+    @Override
+    public List<Project> getProjects() {
+        List<Project> res = new ArrayList<>();
         try {
-            project = ProjectDB.getProject(ProjectDB.getProjectID(currentProject));
+            List<Integer> projectsID = project_db.getUserProjects(userID);
+            for (Integer project : projectsID) {
+                res.add(project_db.getProject(project));
+            }
         } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
+            // TODO Exception
         }
-        return project;
-
+        return res;
     }
 
-    /**
-     * gets a project information and displays it
-     *
-     * @param view            ProjectsViewController
-     * @param selectedProject TreeItem<Project>
-     */
-    public Project getProjectInfo(ProjectsViewController view, TreeItem<Project> selectedProject) {
+    @Override
+    public ObservableList<String> getProjectTags(Project project) {
+        ObservableList<String> tagsName = FXCollections.observableArrayList();
         try {
-            String description = selectedProject.getValue().getDescription();
-            String title = selectedProject.getValue().getTitle();
-            Long date = selectedProject.getValue().getDate();
-            int id = selectedProject.getValue().getId();
-            List<Tag> tags = ProjectDB.getTags(id);
-            ObservableList<String> tagsName = FXCollections.observableArrayList();
+            List<Tag> tags = project_db.getTags(project.getId());
             for (Tag tag : tags) {
                 tagsName.add(tag.getDescription());
-                System.out.println("Add tag " + tag.getDescription());
             }
-            return new Project(id, title, description, date, tagsName);
-        } catch (NullPointerException | SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
+        } catch (SQLException e) {
+            // TODO Exception
         }
-        return null;
+        return tagsName;
     }
 
-    /**
-     * Initializes the tags combobox.
-     *
-     * @param inputView ProjectInputViewController
-     */
-    public void initComboBox(ProjectInputViewController inputView){
-        try{
-            final ObservableList<String> tags = FXCollections.observableArrayList();
-            List<Tag> tagsList = ProjectDB.getAllTags();
-            for (Tag tag : tagsList) {
-                tags.add(tag.getDescription());
+    @Override
+    public ObservableList<String> getAllTags() {
+        ObservableList<String> tagsName = FXCollections.observableArrayList();
+        try {
+            List<Tag> tags = project_db.getAllTags();
+            for (Tag tag : tags) {
+                tagsName.add(tag.getDescription());
             }
-            inputView.addTags(tags);
-        }catch(SQLException e){
-            new AlertWindow("Database error", "Could not initialize the input window").errorWindow();
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+        return tagsName;
+    }
+
+    @Override
+    public Tag getTag(String name) {
+        Tag res = null;
+        try {
+            res = project_db.getTag(project_db.getTagID(name));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return res;
+    }
+
+    @Override
+    public void addTask(String description, int project_id) {
+        onAddTask(description, project_id);
+    }
+
+    @Override
+    public void editTask(Task task) {
+        showEditTaskStage(task, this);
+    }
+
+    @Override
+    public void onEditTask(String prev_description, String new_description, Task task) {
+        try {
+            List<Task> tasks = project_db.getTasks(task.getProjectID());
+            List<String> taskNames = new ArrayList<>();
+            for (Task task2 : tasks) {
+                taskNames.add(task2.getDescription());
+            }
+            if (taskNames.contains(new_description)) {
+                // TODO Exception task already exists
+            }
+            if (new_description.equals("")) {
+                deleteTask(task);
+            } else if (validateDescription(new_description)) {
+                project_db.editTask(prev_description, new_description, task.getProjectID());
+            }
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
         }
     }
 
-    /**
-     *
-     *
-     * @param inputView ProjectInputViewController
-     */
-    public void initProjectExport(ProjectInputViewController inputView){
-        try{
-            final ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
-            List<Integer> ProjectIDList = ProjectDB.getUserProjects(Global.userID);
-            for (Integer projectID : ProjectIDList) {
-                projectsTitleList.add(ProjectDB.getProject(projectID).getTitle());
-            }
-            //inputView.addProjectTitle(projectsTitleList);//i
-        }catch(SQLException e){
-            new AlertWindow("Database error", "Could not export the project").errorWindow();
+    @Override
+    public void deleteTask(Task task) {
+        try {
+            project_db.deleteTask(task.getDescription(), task.getProjectID());
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
         }
     }
+
+    @Override
+    public ObservableList<Task> getTasks(Project project) {
+        try {
+            if (project != null) {
+                String projectTitle = project.getTitle();
+                int projectID = project_db.getProjectID(projectTitle);
+                List<Task> taskList = project_db.getTasks(projectID);
+                return FXCollections.observableArrayList(taskList);
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+        return FXCollections.observableArrayList();
+    }
+
+    @Override
+    public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
+        try {
+            for (String collaborator : collaborators) {
+                project_db.addTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).get("id")));
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+    }
+
+    @Override
+    public ObservableList<String> getTaskCollaborators(Task task) {
+        ObservableList<String> names = FXCollections.observableArrayList();
+        try {
+            if (task != null) {
+                List<Integer> collaborators = project_db.getTaskCollaborator(task.getId());
+                for (Integer collaborator : collaborators) {
+                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
+                }
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+        return names;
+    }
+
+    @Override
+    public void deleteTaskCollaborator(String collaborator, Task task) {
+        try {
+            project_db.deleteTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).get("id")));
+        } catch (SQLException e) {
+            // TODO Exeption
+        }
+    }
+
+    @Override
+    public boolean isCollaboratorInTask(Task task) {
+        return getTaskCollaborators(task).contains(userID);
+    }
+
+    @Override
+    public void addCollaborator(String username, int project_id) {
+        try {
+            if (!user_db.userExists(username)) {
+                // TODO message user doesnt exist
+            }
+            int receiverID = Integer.parseInt(user_db.getUserInfo(username).get("id"));
+            if (project_db.getCollaborators(project_id).contains(receiverID)) {
+                // TODO message colalborator already in project
+            }
+            user_db.sendInvitation(project_id, userID, receiverID);
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO exception
+        }
+    }
+
+    @Override
+    public void deleteCollaborator(String collaboratorName, int project_id) {
+        try {
+            project_db.deleteCollaborator(project_id, Integer.parseInt(user_db.getUserInfo(collaboratorName).get("id")));
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+    }
+
+    @Override
+    public ObservableList<String> getCollaborators(Project project) {
+        ObservableList<String> names = FXCollections.observableArrayList();
+        try {
+            List<Integer> collaborators;
+            collaborators = project_db.getCollaborators(project.getId());
+            for (Integer collaborator : collaborators) {
+                names.add((user_db.getUserInfo(collaborator).get("uName")));
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+        return names;
+    }
+
+    @Override
+    public boolean isUserInTask(String user, Task task) {
+        try {
+            return project_db.getTaskCollaborator(task.getId()).contains(Integer.parseInt(user_db.getUserInfo(user).get("id")));
+        } catch (SQLException e) {
+            // TODO Exception
+        }
+        return false;
+    }
+
+    @Override
+    public void importProject(String path) {
+        ioController.onImportProject(path);
+    }
+
+    @Override
+    public void exportProject(Project project, String path) {
+        ioController.onExportProject(project, path);
+    }
+
+    @Override
+    public void uploadProject() {
+    }
+
+    @Override
+    public void downloadProject() {
+        showCloudDownloadStage();
+    }
+
 
     /**
      * Adds a project to the tree, the map and the database.
-     *
-     * @param addView ProjectInputViewController
      */
-    public void addProject(ProjectInputViewController addView){
-        try{
-            int parentID=0;
-            String nameProject = addView.getNameProject();
-            String descriptionProject = addView.getDescriptionProject();
-            LocalDate dateProject = addView.getDateProject();
-            String parentProject = addView.getParentProjectName();
+    public void onAddProject(String title, String description, LocalDate date, ObservableList<String> tags, String parent) {
+        try {
+            int parentID = 0;
 
-            if(nameProject.equals("")) { addView.setError("Cannot add a project with an empty title.");}
-            else if (ProjectDB.getProjectID(nameProject) != 0){ addView.setError("A project with the same title already exists.");}
-            else if(dateProject == null){ addView.setError("Cannot create a project without a date.");}
-            else if (parentProject.equals("") || ProjectDB.getProjectID(parentProject)!=0){
+            if (title.equals("")) {
+                // TODO Cannot add a project with an empty title
+            } else if (project_db.getProjectID(title) != 0) {
+                // TODO A project with the same title already exists.
+            } else if (date == null) {
+                // TODO Cannot create a project without a date.
+            } else if (parent.equals("") || project_db.getProjectID(parent) != 0) {
 
-                if(!parentProject.equals("")){ parentID= ProjectDB.getProjectID(parentProject);}
-                System.out.println("addProject " + dateProject.toEpochDay());
-                int newProjectID = ProjectDB.createProject(nameProject,descriptionProject,dateProject.toEpochDay(),parentID);
-
-                ObservableList<String> tags = addView.getSelectedTags();//
+                if (!parent.equals("")) {
+                    parentID = project_db.getProjectID(parent);
+                }
+                int newProjectID = project_db.createProject(title, description, date.toEpochDay(), parentID);
                 for (String tag : tags) {
-                    ProjectDB.addTag(ProjectDB.getTagID(tag), newProjectID);
+                    project_db.addTag(project_db.getTagID(tag), newProjectID);
                 }
 
-                ProjectDB.addCollaborator(newProjectID, Global.userID);
-                TreeItem<Project> child = new TreeItem<Project>(ProjectDB.getProject(newProjectID));
-                Global.TreeMap.put(newProjectID, child);
-                addView.setError("");
-
-                if (parentID == 0) { Global.projectsView.addChild(Global.root,child); }
-                else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
+                project_db.addCollaborator(newProjectID, userID);
+                TreeItem<Project> child = new TreeItem<Project>(project_db.getProject(newProjectID));
+                viewController.insertProject(newProjectID, child, parentID);
             }
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-            MainController.closeStage();
-        }catch(SQLException e){
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
         }
     }
 
-    /**
-     * Changes the description of a task and displays it
-     *
-     * @param description String
-     * @param newDescription String
-     * @param task Task
-     */
-    public void editTask(String description, String newDescription, Task task){
-        tasksController.editTask(description, newDescription, task);
-    }
 
     /**
      * Adds a task to the parent project, adds it to the database.
@@ -253,18 +421,27 @@ public class ProjectController implements ProjectsViewController.ViewListener {
      * @param taskDescription String
      */
     public void onAddTask(String taskDescription, int project_id) {
-        tasksController.onAddTask(taskDescription, project_id);
+        if (taskDescription.isBlank()) {
+            return;
+        }
+        try {
+            List<Task> tasks = project_db.getTasks(project_id);
+            List<String> taskNames = new ArrayList<>();
+            for (Task task : tasks) {
+                taskNames.add(task.getDescription());
+            }
+            if (taskNames.contains(taskDescription)) {
+                // TODO Task already exists
+                return;
+            }
+            if (project_id != 0) {
+                project_db.createTask(taskDescription, project_id);
+            }
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
+        }
     }
-
-    /**
-     * Deletes a task from the database and the table.
-     *
-     * @param task Task
-     */
-    public void deleteTask(Task task){
-        tasksController.deleteTask(task);
-    }
-
 
     /**
      * Checks if the string has at least one alphabet character and as 1 to 126 characters
@@ -273,242 +450,10 @@ public class ProjectController implements ProjectsViewController.ViewListener {
      * @return boolean;
      */
     @FXML
-    protected boolean validateDescription(String text) {
+    private boolean validateDescription(String text) {
         Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,126}$");
         Matcher m = p.matcher(text);
         return m.matches();
     }
 
-    /**
-     * Changes a Long format date to a string date.
-     *
-     * @param date Long
-     * @return
-     */
-    public String dateToString(Long date) {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(date * 86400000L);
-    }
-
-    /**
-     * Changes a project's informations with the new ones.
-     *
-     * @param inputView ProjectInputViewController
-     */
-    public void editProject(ProjectInputViewController inputView) {
-        try {
-            int projectID = ProjectDB.getProjectID(inputView.getNameProject());
-            if (projectID != 0 && projectID != ProjectDB.getProjectID(Global.currentProject)) {
-                inputView.setError("Cannot edit the project with such a title.");
-            } else if (inputView.getNameProject().equals("")) {
-                inputView.setError("Cannot edit a project with an empty name.");
-            } else {
-                ProjectDB.editProject(
-                        ProjectDB.getProjectID(Global.currentProject),
-                        inputView.getNameProject(),
-                        inputView.getDescriptionProject(),
-                        inputView.getDateProject().toEpochDay()
-                );
-                List<Integer> tags = new ArrayList<>();
-                ObservableList<String> newTags = inputView.getSelectedTags();
-                for (String newTag : newTags) {
-                    tags.add(ProjectDB.getTagID(newTag));
-                }
-                ProjectDB.editTags(projectID, tags);
-                inputView.setError("");
-                init(Global.projectsView, Global.root);
-            }
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        }catch(SQLException e){
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-        }
-    }
-
-    /**
-     * Returns collaborators' id of a project.
-     *
-     * @param project TreeItem<Project>
-     * @return ObservableList<String>
-     */
-    public ObservableList<String> getCollaborators(TreeItem<Project> project){
-        return collaboratorsController.getCollaborators(project);
-    }
-
-    /**
-     * Adds a collaborator to a project and in the database.
-     *
-     * @param username String
-     * @param project  int
-     * @return Boolean
-     */
-
-    @Override
-    public void addCollaborator(String username, int project) {
-        //MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","User " + collaboratorsName.getText() + " doesn't exist.");
-        collaboratorsController.addCollaborator(username, project);
-    }
-
-    /**
-     * Returns the string of a list without brackets.
-     *
-     * @param list ObservableList<String>
-     * @return String
-     */
-    public String listToString(ObservableList<String> list) {
-        return list.toString().replaceAll("(^\\[|\\]$)", "");
-    }
-
-    @Override
-    public void back() {
-
-    }
-
-    @Override
-    public void addProject() {
-        showAddProjectStage();
-    }
-
-    @Override
-    public void deleteProject(String name) {
-        try {
-            int projectID = ProjectDB.getProjectID(name);
-            ProjectDB.deleteProject(projectID);
-            init(Global.projectsView, Global.root);
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-        }
-    }
-
-    @Override
-    public void editProject() {
-        showEditProjectStage();
-    }
-
-    @Override
-    public ObservableList<String> getProjectTags(Project project) {
-        List<Tag> tags = null;
-        try {
-            tags = ProjectDB.getTags(project.getId());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        ObservableList<String> tagsName = FXCollections.observableArrayList();
-        assert tags != null;
-        for (Tag tag : tags) {
-            tagsName.add(tag.getDescription());
-        }
-        return tagsName;
-    }
-
-    @Override
-    public void addTask(String description, int project_id) {
-        tasksController.onAddTask(description, project_id);
-    }
-
-    @Override
-    public void editTask(Task task) {
-        TasksController.showEditTaskStage();
-    }
-
-    @Override
-    public ObservableList<Task> getTasks(Project project) {
-        try {
-            if (project != null) {
-                String projectTitle = project.getTitle();
-                int projectID = ProjectDB.getProjectID(projectTitle);
-                List<Task> taskList = ProjectDB.getTasks(projectID);
-                return FXCollections.observableArrayList(taskList);
-            }
-        } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-        }
-        return FXCollections.observableArrayList();
-    }
-
-    @Override
-    public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
-        collaboratorsController.assignCollaborators(collaborators, task);
-    }
-
-    @Override
-    public ObservableList<String> getTaskCollaborators(Task task) {
-        try {
-            if (task != null) {
-                ObservableList<String> names = FXCollections.observableArrayList();
-                List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
-                for (Integer collaborator : collaborators) {
-                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
-                }
-                return names;
-            }
-        } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-        }
-        return null;
-    }
-
-    @Override
-    public void deleteTaskCollaborator(String collaborator, Task task) {
-
-    }
-
-    @Override
-    public void importProject() {
-
-    }
-
-    @Override
-    public boolean exportProject(Project selectedProject, String absolutePath, String s) {
-        return false;
-    }
-
-    @Override
-    public void uploadProject() {
-
-    }
-
-    @Override
-    public void downloadProject() {
-
-    }
-
-
-    @Override
-    public void deleteCollaborator(String collaboratorName, int project_id) {
-        try {
-            ProjectDB.deleteCollaborator(project_id, Integer.parseInt(UserDB.getUserInfo(collaboratorName).get("id")));
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        } catch (SQLException e) {
-            new AlertWindow("Error", "The collaborator could not be deleted: \n").errorWindow();
-        }
-    }
-
-    @Override
-    public ObservableList<String> getCollaborators(Project project) {
-        try {
-            ObservableList<String> names = FXCollections.observableArrayList();
-            List<Integer> collaborators;
-            collaborators = ProjectDB.getCollaborators(project.getId());
-            for (Integer collaborator : collaborators) {
-                names.add((UserDB.getUserInfo(collaborator).get("uName")));
-            }
-            return names;
-        } catch (SQLException e) {
-            new AlertWindow("Error", "Error initializing collaborators").errorWindow();
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isUserInTask(String user, Task task) {
-        try {
-            return ProjectDB.getTaskCollaborator(task.getId()).contains(Integer.parseInt(UserDB.getUserInfo(user).get("id")));
-        } catch (SQLException e) {
-            new AlertWindow("Database access error", "Could not access the database").errorWindow();
-        }
-        return false;
-    }
-
 }
-

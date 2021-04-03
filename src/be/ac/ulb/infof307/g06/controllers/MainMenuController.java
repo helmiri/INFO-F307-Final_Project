@@ -1,6 +1,8 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +15,15 @@ import java.sql.SQLException;
 public class MainMenuController implements MenuViewController.ViewListener {
     public Listener listener;
     private Stage stage;
+    private UserDB user_db;
+    private ProjectDB project_db;
+    private int userID;
     private boolean isFirstBoot;
 
-    public MainMenuController(Stage stage, Listener listener) {
+    public MainMenuController(Stage stage, Listener listener, UserDB user_db, ProjectDB project_db, int userID) {
+        this.userID = userID;
+        this.user_db = user_db;
+        this.project_db = project_db;
         this.stage = stage;
         this.listener = listener;
     }
@@ -81,39 +89,39 @@ public class MainMenuController implements MenuViewController.ViewListener {
         showProjectsMenu();
     }
 
-    @Override
-    public void showProjects() {
-        ProjectController controller = new ProjectController();
-        try {
-            controller.showProjects();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            @Override
+            public void showProjects() {
+                ProjectController controller = new ProjectController(user_db, project_db, userID);
+                try {
+                    controller.showProjects();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-    @Override
-    public void showStats() {
-        StatsController controller = new StatsController();
-        controller.show();
-    }
+            @Override
+            public void showStats() {
+                StatsController controller = new StatsController();
+                controller.show();
+            }
 
-    @Override
-    public void showStorage() {
-        SettingsController controller = new SettingsController();
-        controller.showStorageSettings();
-    }
+            @Override
+            public void showStorage() {
+                ProjectController controller = new ProjectController(user_db, project_db, userID);
+                //controller.showStorage();
+            }
 
-    @Override
-    public void showSettings() {
-        SettingsController controller = new SettingsController();
-        controller.showSettings();
-    }
+            @Override
+            public void showSettings() {
+                SettingsController controller = new SettingsController();
+                //controller.showSettings();
+            }
 
-    @Override
-    public void showTags() {
-        SettingsController controller = new SettingsController();
-        controller.showTags();
-    }
+            @Override
+            public void showTags() {
+                SettingsController controller = new SettingsController();
+                //controller.showTags();
+            }
 
     @Override
     public void logout() {
