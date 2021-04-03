@@ -23,22 +23,6 @@ public abstract class Database {
 
 
     /**
-     * Closes the connections
-     *
-     * @param objects An arbitrary number of AutoClosable objects
-     * @throws SQLException If a database access error occurs
-     */
-    protected static void close(AutoCloseable... objects) throws SQLException {
-        for (AutoCloseable obj : objects) {
-            try {
-                obj.close();
-            } catch (Exception e) {
-                return;
-            }
-        }
-    }
-
-    /**
      * Implement this method to create the tables needed
      *
      * @throws SQLException If a database access error occurs or this method is called on a closed connection
