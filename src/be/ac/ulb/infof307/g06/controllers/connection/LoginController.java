@@ -1,13 +1,12 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,6 +15,7 @@ import java.sql.SQLException;
 public class LoginController {
     private final Stage stage;
     private final Listener listener;
+    private AnchorPane mainLayout;
 
     public LoginController(Stage stage, Listener listener) {
         this.stage = stage;
@@ -28,7 +28,9 @@ public class LoginController {
     public void show() throws IOException {
         // Load the fxml
         FXMLLoader loader = new FXMLLoader(LoginViewController.class.getResource("LoginView.fxml"));
-        loader.load();
+        mainLayout = loader.load();
+        Scene scene = new Scene(mainLayout);
+        stage.setScene(scene);
         LoginViewController controller = loader.getController();
         controller.setListener(new LoginViewController.ViewListener() {
             @Override
@@ -52,6 +54,8 @@ public class LoginController {
             Platform.exit();
             System.exit(0);
         });
+
+
         stage.setResizable(true);
         stage.setHeight(465);
         stage.setWidth(715);
