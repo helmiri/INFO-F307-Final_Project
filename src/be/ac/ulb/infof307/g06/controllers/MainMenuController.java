@@ -12,52 +12,33 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class MainMenuController implements MenuViewController.ViewListener {
+public class MainMenuController extends Controller implements MenuViewController.ViewListener {
     public Listener listener;
-    private Stage stage;
-    private UserDB user_db;
-    private ProjectDB project_db;
-    private int userID;
-    private boolean isFirstBoot;
 
-    public MainMenuController(Stage stage, Listener listener, UserDB user_db, ProjectDB project_db, int userID) {
-        this.userID = userID;
-        this.user_db = user_db;
-        this.project_db = project_db;
-        this.stage = stage;
-        this.listener = listener;
+    public MainMenuController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
+        super(userID, user_db, project_db, stage);
     }
 
     /**
      * Sets the loader to show the Main menu scene.
      */
-    public void show(boolean isFirstBoot) {
-        if (isFirstBoot) {
-            try {
-                UserDB.setAdmin(256 * 1000000);
-            } catch (SQLException throwables) {
-                //alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the ");
-            }
-        }
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("MenuView.fxml"));
+    @Override
+    public void show() {
         try {
+            if (user_db.isFirstBoot()) {
+                UserDB.setAdmin(256 * 1000000);
+            }
+            FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("MenuView.fxml"));
             loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            MenuViewController controller = loader.getController();
+            controller.setListener(this);
+            load(940, 1515);
+        } catch (SQLException | IOException e) {
+            // TODO Exception
         }
-        MenuViewController controller = loader.getController();
-        controller.setListener(this);
-        load(940, 1515);
     }
 
-    /**
-     * Sets the loader to show the project menu scene.
-     */
-    public void showProjectMenu() throws IOException {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("ProjectMenu.fxml"));
-        loader.load();
-        load(940, 1515);
-    }
 
     /**
      * Sets the loader to show the stage with an invitation to join a project.
@@ -81,52 +62,58 @@ public class MainMenuController implements MenuViewController.ViewListener {
 
     @Override
     public void showMainMenu() {
-        show(isFirstBoot);
+        show();
     }
 
     @Override
     public void showProjectsMenu() {
-        showProjectsMenu();
+        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("ProjectMenu.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-            @Override
-            public void showProjects() {
-                ProjectController controller = new ProjectController(user_db, project_db, userID);
-                try {
-                    controller.showProjects();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    @Override
+    public void showProjects() {
+        ProjectController controller = new ProjectController(userID, user_db, project_db, stage);
+        controller.show();
+    }
 
-            @Override
-            public void showStats() {
-                StatsController controller = new StatsController();
-                controller.show();
-            }
+    @Override
+    public void showStats() {
+        StatsController controller = new StatsController(userID, user_db, project_db, stage);
+        controller.show();
+    }
 
-            @Override
-            public void showStorage() {
-                ProjectController controller = new ProjectController(user_db, project_db, userID);
-                //controller.showStorage();
-            }
+    @Override
+    public void showStorage() {
+        SettingsController controller = new SettingsController(userID, user_db, project_db, stage);
+        controller.showStorageMenu();
+    }
 
-            @Override
-            public void showSettings() {
-                SettingsController controller = new SettingsController();
-                //controller.showSettings();
-            }
+    @Override
+    public void showSettings() {
+        SettingsController controller = new SettingsController(userID, user_db, project_db, stage);
+        controller.show();
+    }
 
-            @Override
-            public void showTags() {
-                SettingsController controller = new SettingsController();
-                //controller.showTags();
-            }
+    @Override
+    public void showTags() {
+        SettingsController controller = new SettingsController(userID, user_db, project_db, stage);
+        controller.showTags();
+    }
+
 
     @Override
     public void logout() {
         listener.logout();
         listener.showLogin();
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     public interface Listener {

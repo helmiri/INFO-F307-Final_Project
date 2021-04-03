@@ -30,7 +30,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         try {
             user_db = new UserDB(DB_PATH);
             project_db = new ProjectDB(DB_PATH);
-            isFirstBoot = UserDB.isFirstBoot();
+            isFirstBoot = user_db.isFirstBoot();
         } catch (SQLException | ClassNotFoundException throwables) {
             //alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the database");
             return;
@@ -81,8 +81,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     @Override
     public void showMainMenu() {
         Stage stage = new Stage();
-        MainMenuController controller = new MainMenuController(stage, this, user_db, project_db, userID);
-        controller.show(this.isFirstBoot);
+        MainMenuController controller = new MainMenuController(userID, user_db, project_db, stage);
+        controller.setListener(this);
+        controller.show();
     }
 
     @Override

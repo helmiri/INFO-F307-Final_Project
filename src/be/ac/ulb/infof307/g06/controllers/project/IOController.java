@@ -1,5 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
+import be.ac.ulb.infof307.g06.controllers.Controller;
+import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
@@ -16,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
+import javafx.stage.Stage;
 import org.rauschig.jarchivelib.*;
 
 import java.io.*;
@@ -26,17 +29,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IOController {
-
-    private final int userID;
-    private final ProjectDB project_db;
-    private final UserDB user_db;
+public class IOController extends Controller {
     private ProjectsViewController viewController;
 
-    public IOController(UserDB user_db, ProjectDB project_db, int userID) {
-        this.userID = userID;
-        this.project_db = project_db;
-        this.user_db = user_db;
+    public IOController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
+        super(userID, user_db, project_db, stage);
+    }
+
+    public void setViewController(ProjectsViewController viewController) {
+        this.viewController = viewController;
+    }
+
+    @Override
+    public void show() {
+
     }
 
     /**
