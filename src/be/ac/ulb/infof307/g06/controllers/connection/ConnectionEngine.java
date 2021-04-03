@@ -1,13 +1,11 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +17,6 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     public ProjectDB project_db;
     public Stage stage;
     public boolean isFirstBoot;
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -27,6 +24,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     @Override
     public void start(Stage stage) throws IOException {
         // Set main stage
+        this.stage = stage;
         Global.userID = 0;
         try {
             user_db = new UserDB(DB_PATH);
@@ -41,6 +39,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void showLogin() {
+
         LoginController controller = new LoginController(stage, this);
         try {
             controller.show();
@@ -106,7 +105,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         try {
             return user_db.userExists(username);
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred with the database when checking if the user already exists: " + e);
+            new AlertWindow("Error", "An error has occurred with the database when checking if the user already exists: " + e).errorWindow();
             return true;
         }
     }
@@ -116,7 +115,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         try {
             UserDB.disconnectUser();
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Couldn't disconnect the user: " + e);
+            new AlertWindow("Error", "Couldn't disconnect the user: " + e).errorWindow();
         }
     }
 }

@@ -1,10 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Tag;
-import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.*;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ProjectViews.CloudViewController;
@@ -14,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Modality;
 
@@ -51,7 +47,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             List<Integer> projectsArray = ProjectDB.getUserProjects(Global.userID);
             getProjects(projectsArray);
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in window initialization: \n" + e);
+            new AlertWindow("Error", "Could not initialize the window").errorWindow();
         }
     }
 
@@ -92,6 +88,52 @@ public class ProjectController implements ProjectsViewController.ViewListener {
     }
 
     /**
+     * Initializes the map and displays projects on the tree table view.
+     *
+     * @param projects List<Integer>;
+     */
+    public static void getProjects(List<Integer> projects) {
+        try {
+            Global.projectsView.hideRoot();
+            for (Integer project : projects) {
+                Project childProject = ProjectDB.getProject(project);
+                int parentID = childProject.getParent_id();
+                String title = childProject.getTitle();
+                int childID = ProjectDB.getProjectID(title);
+                TreeItem<Project> child = new TreeItem<Project>(childProject);
+                Global.TreeMap.put(childID, child);
+                if (parentID == 0) {
+                    Global.projectsView.addChild(Global.root, child);
+                } else {
+                    Global.projectsView.addChild(Global.TreeMap.get(parentID), child);
+                }
+            }
+            Global.projectsView.refresh();
+        } catch (SQLException e) {
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
+        }
+    }
+
+    /**
+     * @param collaborators ObservableList<String>
+     * @param selectedTask  Task
+     */
+    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) {
+        collaboratorsController.assignCollaborators(collaborators, selectedTask);
+    }
+
+    public static Project getProject(String currentProject) {
+        Project project = new Project();
+        try {
+            project = ProjectDB.getProject(ProjectDB.getProjectID(currentProject));
+        } catch (SQLException e) {
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
+        }
+        return project;
+
+    }
+
+    /**
      * gets a project information and displays it
      *
      * @param view            ProjectsViewController
@@ -111,17 +153,9 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             }
             return new Project(id, title, description, date, tagsName);
         } catch (NullPointerException | SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching project data: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
         return null;
-    }
-
-    /**
-     * @param collaborators ObservableList<String>
-     * @param selectedTask  Task
-     */
-    public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) {
-        collaboratorsController.assignCollaborators(collaborators, selectedTask);
     }
 
     /**
@@ -138,7 +172,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             }
             inputView.addTags(tags);
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in initializing input window: \n" + e);
+            new AlertWindow("Database error", "Could not initialize the input window").errorWindow();
         }
     }
 
@@ -156,33 +190,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             }
             //inputView.addProjectTitle(projectsTitleList);//i
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in exporting project: \n" + e);
-        }
-    }
-
-    /**
-     * Initializes the map and displays projects on the tree table view.
-     *
-     * @param projects List<Integer>;
-     */
-    public static void getProjects(List<Integer> projects) {
-        try {
-            Global.projectsView.hideRoot();
-            for (Integer project : projects) {
-                Project childProject = ProjectDB.getProject(project);
-                int parentID = childProject.getParent_id();
-                String title = childProject.getTitle();
-                int childID = ProjectDB.getProjectID(title);
-                TreeItem<Project> child = new TreeItem<Project>(childProject);
-                Global.TreeMap.put(childID, child);
-                if (parentID == 0) {
-                    Global.projectsView.addChild(Global.root, child);
-                }
-                else { Global.projectsView.addChild(Global.TreeMap.get(parentID), child); }
-            }
-            Global.projectsView.refresh();
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching projects: \n" + e);
+            new AlertWindow("Database error", "Could not export the project").errorWindow();
         }
     }
 
@@ -224,41 +232,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
             MainController.closeStage();
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The project could not be added: \n" + e);
-        }
-    }
-
-    /**
-     * Changes a project's informations with the new ones.
-     *
-     * @param inputView ProjectInputViewController
-     */
-    public void editProject(ProjectInputViewController inputView){
-        try{
-            int projectID = ProjectDB.getProjectID(inputView.getNameProject());
-            if (projectID != 0 && projectID != ProjectDB.getProjectID(Global.currentProject)){
-                inputView.setError("Cannot edit the project with such a title.");}
-            else if (inputView.getNameProject().equals("")){
-                inputView.setError("Cannot edit a project with an empty name.");}
-            else {
-                ProjectDB.editProject(
-                        ProjectDB.getProjectID(Global.currentProject),
-                        inputView.getNameProject(),
-                        inputView.getDescriptionProject(),
-                        inputView.getDateProject().toEpochDay()
-                );
-                List<Integer> tags = new ArrayList<>();
-                ObservableList<String> newTags = inputView.getSelectedTags();
-                for (String newTag : newTags) {
-                    tags.add(ProjectDB.getTagID(newTag));
-                }
-                ProjectDB.editTags(projectID, tags);
-                inputView.setError("");
-                init(Global.projectsView, Global.root);
-            }
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Failed to save changes: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
     }
 
@@ -311,20 +285,43 @@ public class ProjectController implements ProjectsViewController.ViewListener {
      * @param date Long
      * @return
      */
-    public String dateToString(Long date){
+    public String dateToString(Long date) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(date * 86400000L);
     }
 
-    public static Project getProject(String currentProject){
-        Project project = new Project();
-        try{
-            project = ProjectDB.getProject( ProjectDB.getProjectID(currentProject));
+    /**
+     * Changes a project's informations with the new ones.
+     *
+     * @param inputView ProjectInputViewController
+     */
+    public void editProject(ProjectInputViewController inputView) {
+        try {
+            int projectID = ProjectDB.getProjectID(inputView.getNameProject());
+            if (projectID != 0 && projectID != ProjectDB.getProjectID(Global.currentProject)) {
+                inputView.setError("Cannot edit the project with such a title.");
+            } else if (inputView.getNameProject().equals("")) {
+                inputView.setError("Cannot edit a project with an empty name.");
+            } else {
+                ProjectDB.editProject(
+                        ProjectDB.getProjectID(Global.currentProject),
+                        inputView.getNameProject(),
+                        inputView.getDescriptionProject(),
+                        inputView.getDateProject().toEpochDay()
+                );
+                List<Integer> tags = new ArrayList<>();
+                ObservableList<String> newTags = inputView.getSelectedTags();
+                for (String newTag : newTags) {
+                    tags.add(ProjectDB.getTagID(newTag));
+                }
+                ProjectDB.editTags(projectID, tags);
+                inputView.setError("");
+                init(Global.projectsView, Global.root);
+            }
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error fetching project: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
-        return project;
-
     }
 
     /**
@@ -379,7 +376,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             init(Global.projectsView, Global.root);
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The project could not be deleted: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
     }
 
@@ -424,7 +421,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
                 return FXCollections.observableArrayList(taskList);
             }
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Could not retrieve tasks: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
         return FXCollections.observableArrayList();
     }
@@ -446,7 +443,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
                 return names;
             }
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing task collaborators: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
         return null;
     }
@@ -463,7 +460,6 @@ public class ProjectController implements ProjectsViewController.ViewListener {
 
     @Override
     public boolean exportProject(Project selectedProject, String absolutePath, String s) {
-
         return false;
     }
 
@@ -484,7 +480,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             ProjectDB.deleteCollaborator(project_id, Integer.parseInt(UserDB.getUserInfo(collaboratorName).get("id")));
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The collaborator could not be deleted: \n" + e);
+            new AlertWindow("Error", "The collaborator could not be deleted: \n").errorWindow();
         }
     }
 
@@ -499,7 +495,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
             }
             return names;
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing collaborators: \n" + e);
+            new AlertWindow("Error", "Error initializing collaborators").errorWindow();
         }
         return null;
     }
@@ -509,7 +505,7 @@ public class ProjectController implements ProjectsViewController.ViewListener {
         try {
             return ProjectDB.getTaskCollaborator(task.getId()).contains(Integer.parseInt(UserDB.getUserInfo(user).get("id")));
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in fetching database: \n" + e);
+            new AlertWindow("Database access error", "Could not access the database").errorWindow();
         }
         return false;
     }

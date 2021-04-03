@@ -1,12 +1,8 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.project.IOController;
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
-import be.ac.ulb.infof307.g06.models.Cloud;
-import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.*;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
@@ -130,11 +126,11 @@ public class ProjectsViewController implements Initializable {
         } else {
             try {
                 if (UserDB.availableDisk() <= 0) {
-                    MainController.alertWindow(Alert.AlertType.INFORMATION, "Insufficient storage", "You've reached your storage quota.");
+                    new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").informationWindow();
                     return;
                 }
             } catch (SQLException throwables) {
-                MainController.alertWindow(Alert.AlertType.ERROR, "Database error", "Error accessing the database");
+                new AlertWindow("Database error", "Could not access the database").errorWindow();
                 return;
             }
             if (event.getSource() == addTaskbtn) {
@@ -151,7 +147,7 @@ public class ProjectsViewController implements Initializable {
                     ProjectController.showEditProjectStage();
                 }
             } else if (event.getSource() == exportProjectBtn) {
-                listener.exportProject(selectedProject, selectedDirectory.getAbsolutePath(), selectedDirectory.getAbsolutePath() + "/file.json");
+//                listener.exportProject(selectedProject, selectedDirectory.getAbsolutePath(), selectedDirectory.getAbsolutePath() + "/file.json");
                 exportProject();
             } else if (event.getSource() == importProjectBtn) {
                 listener.importProject();
@@ -360,7 +356,7 @@ public class ProjectsViewController implements Initializable {
         try {
             Map<String, String> creds = UserDB.getCloudCredentials();
             if (creds.get("accToken") == null || creds.get("clientID") == null) {
-                MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Could not connect to DropBox. Check your credentials.: ");
+                new AlertWindow("Cloud service", "Could not connect to DropBox. Check that your credentials are valid").errorWindow();
                 return;
             }
             Cloud.init(creds.get("accToken"), creds.get("clientID"));
@@ -368,13 +364,13 @@ public class ProjectsViewController implements Initializable {
             String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
 
             Cloud.uploadFile(localFilePath, fileName);
-            MainController.alertWindow(Alert.AlertType.INFORMATION, "Cloud service", "Uploaded successfully");
+            new AlertWindow("Upload", "Uploaded successfully").informationWindow();
         } catch (DbxException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to dropbox: " + e.getMessage());
+            new AlertWindow("Cloud service error", "Error connecting to DropBox").errorWindow();
         } catch (IOException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "File access", "Error reading the file" + e.getMessage());
+            new AlertWindow("IO Error", "Error reading the file").errorWindow();
         } catch (SQLException throwables) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Database", "Error accessing the database" + throwables.getMessage());
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
     }
 

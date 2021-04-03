@@ -1,10 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
-import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Statistics;
-import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.*;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController;
@@ -12,7 +9,6 @@ import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 
 import java.io.FileNotFoundException;
@@ -43,7 +39,7 @@ public class StatsController {
             projectsArray = getProjects();
             setStats(projectsArray, root);
         } catch (DatabaseException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred with the database: "+e);
+            new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
         }
 
     }
@@ -193,7 +189,7 @@ public class StatsController {
             }
             write(finalString + "}", fileName, path);
         }catch(SQLException e ){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error","An error has occurred during the exportation. Couldn't find some informations in the database: "+e);
+            new AlertWindow("Error", "An error has occurred during the exportation. Couldn't find some informations in the database: " + e).errorWindow();
         }
     }
 
@@ -265,7 +261,7 @@ public class StatsController {
             csv.close();
             statsView.setMsg("The exportation succeeded.");
         }catch(FileNotFoundException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error","Couldn't find or access to this file.");
+            new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
         }catch (SQLException e) {
             statsView.setMsg("The exportation failed.");
         }

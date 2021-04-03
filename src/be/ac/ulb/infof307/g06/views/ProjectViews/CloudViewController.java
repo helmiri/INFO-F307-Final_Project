@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.project.IOController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Cloud;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
@@ -10,7 +10,10 @@ import com.dropbox.core.v2.files.Metadata;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -53,9 +56,10 @@ public class CloudViewController implements Initializable {
                 cloudTable.getItems().add(metadata.getPathDisplay());
             }
         } catch (SQLException | IOException throwables) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error occurred");
+            new AlertWindow("Error", "An error occurred").errorWindow();
         } catch (DbxException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to the service. Check your cloud service configuration.");
+
+            new AlertWindow("Cloud service", "Error connecting to the service. Check your cloud service configuration.").errorWindow();
         } finally {
             cloudTable.setPlaceholder(new Label("Could not retrieve the content"));
         }
@@ -124,7 +128,7 @@ public class CloudViewController implements Initializable {
 
 
         if (((FileMetadata) fileMeta).getContentHash().equals(Cloud.dropBoxHash(localPath))) {
-            MainController.alertWindow(Alert.AlertType.INFORMATION, "Identical files", "The file already exists");
+            new AlertWindow("Identical files", "The file already exists").informationWindow();
         } else {
             Cloud.downloadFile(localPath, cloudPath);
             IOController.importProject(localPath);
@@ -155,9 +159,9 @@ public class CloudViewController implements Initializable {
             try {
                 downloadFiles();
             } catch (NoSuchAlgorithmException | IOException e) {
-                MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error occurred");
+                new AlertWindow("Error", "An error occurred").errorWindow();
             } catch (DbxException e) {
-                MainController.alertWindow(Alert.AlertType.ERROR, "Cloud service", "Error connecting to the service. Check your cloud service configuration.");
+                new AlertWindow("Cloud service", "Error connecting to the service. Check your cloud service configuration.").errorWindow();
             }
         }
     }

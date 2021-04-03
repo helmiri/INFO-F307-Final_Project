@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
@@ -8,7 +9,6 @@ import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 
 import java.sql.SQLException;
@@ -46,7 +46,7 @@ public class TasksController {
                 view.insertTaskCollaborators(names);
             }
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing task collaborators: \n" + e);
+            new AlertWindow("Database error", "Could not access the databse").errorWindow();
         }
     }
 
@@ -54,7 +54,7 @@ public class TasksController {
         try {
             ProjectDB.deleteTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in deleting task collaborator: \n" + e);
+            new AlertWindow("Database error", "Could not access the databse").errorWindow();
         }
     }
 
@@ -87,7 +87,7 @@ public class TasksController {
             }
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Failed to save changes: \n" + e);
+            new AlertWindow("Error", "Failed to save changes").errorWindow();
         }
     }
 
@@ -97,7 +97,7 @@ public class TasksController {
             taskNames.add(task2.getDescription());
         }
         if (taskNames.contains(newDescription)) {
-            MainController.alertWindow(Alert.AlertType.INFORMATION, "Alert", "Task already exists");
+            new AlertWindow("Error", "The task already exists").errorWindow();
             return true;
         }
         return false;
@@ -120,7 +120,7 @@ public class TasksController {
             }
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The task could not be added: \n" + e);
+            new AlertWindow("Database error", "Could not access the ").errorWindow();
         }
     }
 
@@ -134,7 +134,7 @@ public class TasksController {
             ProjectDB.deleteTask(task.getDescription(), task.getProjectID());
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The task could not be deleted: \n" + e);
+            new AlertWindow("Database error", "Could not access the databse").errorWindow();
         }
     }
 }

@@ -1,12 +1,12 @@
 package be.ac.ulb.infof307.g06.controllers;
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import be.ac.ulb.infof307.g06.views.StorageViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,8 +45,10 @@ public class SettingsController {
         for (Tag tag2 : tags) {
             tagNames.add(tag2.getDescription());
         }
-        if (tagNames.contains(title)){
-            MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Tag already exists.");return;}
+        if (tagNames.contains(title)) {
+            new AlertWindow("Alert", "Tag already exists.").informationWindow();
+            return;
+        }
         ProjectDB.createTag(title, color);
     }
 
@@ -69,7 +71,7 @@ public class SettingsController {
             tagNames.add(tag2.getDescription());
         }
         if (tagNames.contains(newDescription) && !newDescription.equals(tag.getDescription())) {
-            MainController.alertWindow(Alert.AlertType.INFORMATION, "Alert", "Tag already exists.");
+            new AlertWindow("Alert", "Tag already exists.").informationWindow();
             return;
         }
         ProjectDB.editTag(tag.getId(), newDescription, newColor);

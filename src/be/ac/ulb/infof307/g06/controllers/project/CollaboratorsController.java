@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -8,7 +8,6 @@ import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 
 import java.sql.SQLException;
@@ -29,7 +28,7 @@ public class CollaboratorsController {
                 ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
             }
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in assigning collaborator to task: \n" + e);
+            new AlertWindow("Error", "Could not assign the task to the collaborator").errorWindow();
         }
     }
 
@@ -47,7 +46,7 @@ public class CollaboratorsController {
                 collaboratorsList.add(UserDB.getUserInfo(integer).get("uName"));
             }
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in fetching collaborators: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
         return FXCollections.observableArrayList(collaboratorsList);
     }

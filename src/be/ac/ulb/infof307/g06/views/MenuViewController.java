@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -8,7 +9,6 @@ import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 import java.net.URL;
@@ -112,7 +112,7 @@ public class MenuViewController implements Initializable {
             Global.popupSenderUsername = UserDB.getUserInfo(senderId).get("uName");
             MainController.showInvitationStage();
         } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred with the database: " + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
     }
 
