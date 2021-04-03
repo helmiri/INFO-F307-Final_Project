@@ -4,22 +4,28 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class AddProjectViewController extends ProjectInputViewController{
+import javax.swing.text.View;
+
+public class AddProjectViewController extends ProjectInputViewController {
     //-------------- ATTRIBUTE ----------------
     @FXML
     private Button addProjectBtn;
-
     //--------------- METHOD ----------------
+
     /**
      * The main method for button's events
      *
      * @param event ActionEvent
      */
     @Override
-    protected void events(ActionEvent event){
+    protected void events(ActionEvent event) {
         if (event.getSource() == addProjectBtn) {
-            controller.addProject(this);
+            listener.onAddProject(getNameProject(), getDescriptionProject(), getDateProject(), getSelectedTags(), getParentProjectName());
         }
+    }
+
+    public void init(ProjectsViewController.ViewListener listener) {
+        super.init(listener);
     }
 
 }

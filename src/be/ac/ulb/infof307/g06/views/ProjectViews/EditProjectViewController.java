@@ -8,7 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+import javax.swing.text.View;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -17,20 +20,8 @@ public class EditProjectViewController extends ProjectInputViewController{
     //---------- ATTRIBUTE ----------------
     @FXML
     private Button editProjectBtn;
-
+    private Project project;
     //--------------- METHODS ----------------
-    /**
-     * Initializes the information.
-     *
-     * @param url URL
-     * @param resourceBundle ResourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
-        super.initialize(url, resourceBundle);
-        initFields();
-
-    }
 
     /**
      * The main method for button's events.
@@ -40,7 +31,7 @@ public class EditProjectViewController extends ProjectInputViewController{
     @Override
     protected void events(ActionEvent event){
         if (event.getSource() == editProjectBtn) {
-            controller.editProject(this);
+            listener.onEditProject(project, nameProject.getText(), descriptionProject.getText(), dateProject.getValue(), tagsProject.getCheckModel().getCheckedItems());
             MainController.closeStage();
         }
     }
@@ -49,12 +40,17 @@ public class EditProjectViewController extends ProjectInputViewController{
      * Initializes the fields related to the edition of a project.
      */
     @FXML
-    public void initFields(){
-        Project project= ProjectController.getProject(Global.currentProject);
+    public void initFields() {
         nameProject.setText(project.getTitle());
         descriptionProject.setText(project.getDescription());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = controller.dateToString(project.getDate());
-        dateProject.setValue(LocalDate.parse(date, formatter));
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateProject.setValue(LocalDate.parse(dateFormat.format(project.getDate() * 86400000L), formatter));
+    }
+
+    public void init(Project project, ProjectsViewController.ViewListener listener) {
+        super.init(listener);
+        this.project = project;
+        initFields();
     }
 }

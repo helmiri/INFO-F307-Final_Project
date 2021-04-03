@@ -1,15 +1,11 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
-import be.ac.ulb.infof307.g06.models.Cloud;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.models.Tag;
 import com.dropbox.core.DbxException;
-import com.sun.source.tree.Tree;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +26,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -96,6 +96,18 @@ public class ProjectsViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTree();
+        List<Project> projectsArray = listener.getProjects();
+        hideRoot();
+        for (Project project : projectsArray) {
+            TreeItem<Project> child = new TreeItem<Project>(project);
+            TreeMap.put(project.getId(), child);
+            if (project.getParent_id() == 0) {
+                root.getChildren().add(child);
+            } else {
+                TreeMap.get(project.getParent_id()).getChildren().add(child);
+            }
+        }
+        refresh();
     }
 
     /**
@@ -110,9 +122,11 @@ public class ProjectsViewController implements Initializable {
      * Shows the tree table root.
      */
     @FXML
-    public void refresh(){
+    public void refresh() {
         treeProjects.setShowRoot(true);
     }
+
+    // --------------------------------------- EVENTS -----------------------------------
 
     /**
      * The main method for button's events.
@@ -145,25 +159,19 @@ public class ProjectsViewController implements Initializable {
             } else if (event.getSource() == assignTaskCollaboratorBtn) {
                 listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
             } else if (event.getSource() == editBtn) {
-                listener.editProject();
                 if (!projectsTitle.getText().equals("")) {
-                    Global.currentProject = projectsTitle.getText();
-                    ProjectController.showEditProjectStage();
+                    listener.editProject(getSelectedProject());
                 }
             } else if (event.getSource() == exportProjectBtn) {
-                listener.exportProject();
                 exportProject();
             } else if (event.getSource() == importProjectBtn) {
-                listener.importProject();
                 importProject();
             } else if (event.getSource() == cloudDownloadBtn) {
                 listener.downloadProject();
-                ProjectController.showCloudDownloadStage();
             }
         }
     }
 
-    // --------------------------------------- EVENTS -----------------------------------
 
     /**
      * Deletes a project in the Database and in the tree table view.
@@ -243,6 +251,15 @@ public class ProjectsViewController implements Initializable {
     }
     // --------------------------------- CODE ------------------------------------
 
+    public void insertProject(int newProjectID, TreeItem<Project> project, int parentID) {
+        TreeMap.put(newProjectID, project);
+        if (parentID == 0) {
+            root.getChildren().add(project);
+        } else {
+            TreeMap.get(parentID).getChildren().add(project);
+        }
+    }
+
     /**
      * Returns the selected item in the tree table.
      *
@@ -275,17 +292,13 @@ public class ProjectsViewController implements Initializable {
                     @Override
                     protected void updateItem(String t, boolean bln) {
                         super.updateItem(t, bln);
-                        try {
-                            if (t != null){
-                                setText(t);
-                                setStyle("-fx-background-color: " + ProjectDB.getTag(ProjectDB.getTagID(t)).getColor() + ";"); // TODO
-                            } else {
-                                setText(null);
-                                setGraphic(null);
-                                setStyle(null);
-                            }
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
+                        if (t != null) {
+                            setText(t);
+                            setStyle("-fx-background-color: " + listener.getTag(t).getColor() + ";"); // TODO
+                        } else {
+                            setText(null);
+                            setGraphic(null);
+                            setStyle(null);
                         }
                     }
                 };
@@ -299,14 +312,10 @@ public class ProjectsViewController implements Initializable {
             @Override
             protected void updateItem(Task task, boolean empty) {
                 super.updateItem(task, empty);
-                try {
-                    if (task == null)
-                        setStyle("");
-                    else if (ProjectDB.getTaskCollaborator(task.getId()).contains(Global.userID)) // TODO
-                        setStyle("-fx-background-color: #8fbc8f;");
-                } catch (SQLException e) {
-                    // TODO Error
-                }
+                if (task == null)
+                    setStyle("");
+                else if (listener.getTaskCollaborators(task).contains(userID)) // TODO
+                    setStyle("-fx-background-color: #8fbc8f;");
             }
         });
     }
@@ -326,19 +335,16 @@ public class ProjectsViewController implements Initializable {
     /**
      * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
      */
+    // TODO Yassine déplace le code dans controller stp
     public void exportProject(){
         Project selectedProject = getSelectedProject();
         if (selectedProject != null) {
-            System.out.println(selectedProject.getTitle());
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File("src"));
             File selectedDirectory = directoryChooser.showDialog(new Stage());
             if (selectedDirectory != null) {
-                System.out.println(selectedDirectory.getAbsolutePath());
-                boolean succeed = controller.exportProject(selectedProject,
-                        selectedDirectory.getAbsolutePath(),
-                        selectedDirectory.getAbsolutePath() + "/file.json");
-                ProjectController.alertExportImport("export", succeed);
+                listener.exportProject(selectedProject,
+                        selectedDirectory.getAbsolutePath());
             }
         }
     }
@@ -353,9 +359,8 @@ public class ProjectsViewController implements Initializable {
         }
         File selectedDirectory = new File("");
 
-        boolean succeed = controller.exportProject(selectedProject,
-                selectedDirectory.getAbsolutePath(),
-                selectedDirectory.getAbsolutePath() + "/file.json");
+        listener.exportProject(selectedProject,
+                selectedDirectory.getAbsolutePath());
         try {
             Map<String, String> creds = UserDB.getCloudCredentials();
             if (creds.get("accToken") == null || creds.get("clientID") == null) {
@@ -387,8 +392,7 @@ public class ProjectsViewController implements Initializable {
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
             System.out.println(selectedArchive.getAbsolutePath());
-            boolean succeed = ProjectController.importProject(selectedArchive.getAbsolutePath());
-            ProjectController.alertExportImport("import", succeed);
+            listener.importProject(selectedArchive.getAbsolutePath());
         }
     }
 
@@ -410,7 +414,8 @@ public class ProjectsViewController implements Initializable {
     @FXML
     public void displayProject(Project project, ObservableList<String> tagsName) {
         projectsDescription.setText(project.getDescription());
-        projectsDate.setText(controller.dateToString(project.getDate()));
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        projectsDate.setText(dateFormat.format(project.getDate() * 86400000L));
         projectsTitle.setText(project.getTitle());
         displayTask();
         displayCollaborators();
@@ -454,15 +459,27 @@ public class ProjectsViewController implements Initializable {
 
         void addProject();
 
+        void onAddProject(String title, String description, LocalDate date, ObservableList<String> tags, String parent);
+
         void deleteProject(String name);
 
-        void editProject();
+        void editProject(Project project);
+
+        void onEditProject(Project project, String title, String description, LocalDate date, ObservableList<String> tags);
+
+        List<Project> getProjects();
 
         ObservableList<String> getProjectTags(Project project);
 
+        ObservableList<String> getAllTags();
+
+        Tag getTag(String name);
+
         void addTask(String description, int project_id);
 
-        void editTask(Task task;);
+        void editTask(Task task);
+
+        void onEditTask(String prev_description, String new_description, Task task);
 
         void deleteTask(Task task);
 
@@ -474,9 +491,9 @@ public class ProjectsViewController implements Initializable {
 
         void deleteTaskCollaborator(String collaborator, Task task);
 
-        void importProject();
+        void importProject(String path);
 
-        void exportProject();
+        void exportProject(Project project, String path);
 
         void uploadProject();
 

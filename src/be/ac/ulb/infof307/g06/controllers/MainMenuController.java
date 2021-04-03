@@ -2,6 +2,8 @@ package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +18,14 @@ import java.sql.SQLException;
 public class MainMenuController {
     public Listener listener;
     private Stage stage;
+    private UserDB user_db;
+    private ProjectDB project_db;
+    private int userID;
 
-    public MainMenuController(Stage stage, Listener listener) {
+    public MainMenuController(Stage stage, Listener listener, UserDB user_db, ProjectDB project_db, int userID) {
+        this.userID = userID;
+        this.user_db = user_db;
+        this.project_db = project_db;
         this.stage = stage;
         this.listener = listener;
     }
@@ -53,8 +61,12 @@ public class MainMenuController {
 
             @Override
             public void showProjects() {
-                ProjectController controller = new ProjectController();
-                controller.showProjects();
+                ProjectController controller = new ProjectController(user_db, project_db, userID);
+                try {
+                    controller.showProjects();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -65,20 +77,20 @@ public class MainMenuController {
 
             @Override
             public void showStorage() {
-                ProjectController controller = new ProjectController();
-                controller.showStorage();
+                ProjectController controller = new ProjectController(user_db, project_db, userID);
+                //controller.showStorage();
             }
 
             @Override
             public void showSettings() {
                 SettingsController controller = new SettingsController();
-                controller.showSettings();
+                //controller.showSettings();
             }
 
             @Override
             public void showTags() {
                 SettingsController controller = new SettingsController();
-                controller.showTags();
+                //controller.showTags();
             }
 
             @Override

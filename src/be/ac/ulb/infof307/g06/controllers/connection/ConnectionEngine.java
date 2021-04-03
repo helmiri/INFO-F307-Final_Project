@@ -19,7 +19,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     public ProjectDB project_db;
     public Stage stage;
     public boolean isFirstBoot;
-
+    private int userID;
     public static void main(String[] args) {
         launch(args);
     }
@@ -58,6 +58,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        userID = res;
         switch (res) {
             //case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong")
 
@@ -81,7 +82,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     @Override
     public void showMainMenu() {
         Stage stage = new Stage();
-        MainMenuController controller = new MainMenuController(stage, this);
+        MainMenuController controller = new MainMenuController(stage, this, user_db, project_db, userID);
         controller.show(this.isFirstBoot);
     }
 

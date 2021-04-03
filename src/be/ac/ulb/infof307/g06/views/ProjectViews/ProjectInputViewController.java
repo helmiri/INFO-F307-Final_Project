@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class ProjectInputViewController implements Initializable {
+public class ProjectInputViewController {
     //---------- ATTRIBUTES ----------------
     @FXML
     protected CheckComboBox tagsProject;
@@ -27,19 +28,13 @@ public class ProjectInputViewController implements Initializable {
     protected TextField parentProject;
     @FXML
     protected Text errorText;
-    protected ProjectController controller;
+    protected ProjectsViewController.ViewListener listener;
 
     //--------------- METHODS ----------------
-    /**
-     * Initializes the controller and launchs the initComboBox method.
-     *
-     * @param url URL
-     * @param resourceBundle ResourceBundle
-     */
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        controller = new ProjectController();
-        controller.initComboBox(this);
-
+    public void init(ProjectsViewController.ViewListener listener) {
+        this.listener = listener;
+        ObservableList<String> tags = listener.getAllTags();
+        tagsProject.getItems().addAll(tags);
     }
 
     /**
@@ -49,14 +44,6 @@ public class ProjectInputViewController implements Initializable {
      */
     @FXML
     protected void events(ActionEvent event){}
-
-    /**
-     * Adds tags in the check combo box.
-     *
-     * @param tags ObservableList<String>
-     */
-    @FXML
-    public void addTags(ObservableList<String> tags){ tagsProject.getItems().addAll(tags); }
     @FXML
     public void setError(String txt){ errorText.setText(txt); }
     @FXML

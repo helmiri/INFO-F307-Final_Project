@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.views.ProjectViews;
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,18 +17,25 @@ public class EditTaskViewController implements Initializable {
     private Button editTaskBtn;
     @FXML
     private TextField taskName;
-    private ProjectController controller;
+    private Task task;
+    private ProjectsViewController.ViewListener listener;
+
     //--------------- METHODS ----------------
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        controller = new ProjectController();
         taskName.setText(Global.selectedTask.getDescription());
+
     }
 
     @FXML
     private void taskEvents(ActionEvent event) {
         if (event.getSource() == editTaskBtn) {
-            controller.editTask(Global.selectedTask.getDescription(), taskName.getText(), Global.selectedTask);
+            listener.onEditTask(Global.selectedTask.getDescription(), taskName.getText(), task);
             MainController.closeStage();
         }
+    }
+
+    public void init(Task task, ProjectsViewController.ViewListener listener) {
+        this.task = task;
+        this.listener = listener;
     }
 }
