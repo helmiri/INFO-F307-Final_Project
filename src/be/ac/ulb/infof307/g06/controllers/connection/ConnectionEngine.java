@@ -68,8 +68,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void onSignup() {
-        Stage stage = new Stage();
-        SignUpController controller = new SignUpController(stage, this);
+        SignUpController controller = new SignUpController(stage, this, stage.getScene());
         try {
             controller.show();
         } catch (IOException e) {

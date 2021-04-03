@@ -1,16 +1,11 @@
 package be.ac.ulb.infof307.g06.views.ConnectionsViews;
 
-import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
-import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.connection.SignUpController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import javax.swing.text.View;
 import java.io.IOException;
 
 public class SignUpViewController {
@@ -47,7 +42,7 @@ public class SignUpViewController {
         if (event.getSource() == signUpBtn) {
             listener.signup(firstNameField.getText(), lastNameField.getText(), signUpUsernameField.getText(), emailField.getText(), signUpPasswordField.getText(), passwordConfirmationField.getText());
         } else if (event.getSource() == backBtn) {
-            //LoginController.show();
+            listener.back();
         }
     }
 
@@ -57,5 +52,7 @@ public class SignUpViewController {
 
     public interface ViewListener {
         void signup(String firstName, String lastName, String userName, String email, String password, String passwordConfirmation);
+
+        void back();
     }
 }

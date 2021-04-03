@@ -1,39 +1,38 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.models.UserInformations;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.ConditionsViewController;
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.SignUpViewController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUpController {
-    Listener listener;
-    Stage stage;
+    public Listener listener;
+    public Stage stage;
+    public Scene scene;
+    public FXMLLoader loader;
+    public Scene previousScene;
 
-    public SignUpController(Stage stage, Listener listener) {
+    public SignUpController(Stage stage, Listener listener, Scene loginScene) {
         this.stage = stage;
         this.listener = listener;
+        loader = new FXMLLoader(SignUpViewController.class.getResource("SignUpView.fxml"));
+        previousScene = loginScene;
     }
 
     /**
      * Sets the loader to show the Sign Up scene.
      */
     public void show() throws IOException {
-        FXMLLoader loader = new FXMLLoader(SignUpViewController.class.getResource("SignUpView.fxml"));
-        loader.load();
+        scene = new Scene(loader.load());
+        stage.setScene(scene);
         SignUpViewController controller = loader.getController();
         controller.setListener(new SignUpViewController.ViewListener() {
 
@@ -52,7 +51,7 @@ public class SignUpController {
                             e.printStackTrace();
                         }
                     } else {
-                        //signUpTxtPopup.setText("This user already exists!");
+                        new AlertWindow("Error", "This user already exists").informationWindow();
                     }
                 } else {
                     String contextText = """
@@ -62,20 +61,21 @@ public class SignUpController {
                                - The username must not contain any special characters or spaces (8 to 16 chars)
                                - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)
                             """;
-                    //MainController.alertWindow(Alert.AlertType.WARNING, "Wrong enters", contextText);
+                    new AlertWindow("Wrong enters", contextText).warningWindow();
                 }
             }
+
+            @Override
+            public void back() {
+                stage.setScene(previousScene);
+            }
         });
-        // Set main stage
         stage.setResizable(true);
         stage.setHeight(465);
         stage.setWidth(715);
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();
-        // Setup the new page.
-        //AnchorPane connectionAnchor = loader.load();
-        //mainLayout.getChildren().setAll(connectionAnchor);
     }
 
     /**
