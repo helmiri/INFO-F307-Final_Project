@@ -1,21 +1,19 @@
 package be.ac.ulb.infof307.g06.controllers;
 
-import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class MainMenuController {
+public class MainMenuController implements MenuViewController.ViewListener {
     public Listener listener;
     private Stage stage;
+    private boolean isFirstBoot;
 
     public MainMenuController(Stage stage, Listener listener) {
         this.stage = stage;
@@ -40,53 +38,7 @@ public class MainMenuController {
             e.printStackTrace();
         }
         MenuViewController controller = loader.getController();
-        controller.setListener(new MenuViewController.ViewListener() {
-            @Override
-            public void showMainMenu() {
-                show(isFirstBoot);
-            }
-
-            @Override
-            public void showProjectsMenu() {
-                showProjectsMenu();
-            }
-
-            @Override
-            public void showProjects() {
-                ProjectController controller = new ProjectController();
-                controller.showProjects();
-            }
-
-            @Override
-            public void showStats() {
-                StatsController controller = new StatsController();
-                controller.show();
-            }
-
-            @Override
-            public void showStorage() {
-                ProjectController controller = new ProjectController();
-                controller.showStorage();
-            }
-
-            @Override
-            public void showSettings() {
-                SettingsController controller = new SettingsController();
-                controller.showSettings();
-            }
-
-            @Override
-            public void showTags() {
-                SettingsController controller = new SettingsController();
-                controller.showTags();
-            }
-
-            @Override
-            public void logout() {
-                listener.logout();
-                listener.showLogin();
-            }
-        });
+        controller.setListener(this);
         load(940, 1515);
     }
 
@@ -117,6 +69,56 @@ public class MainMenuController {
         stage.centerOnScreen();
         stage.setResizable(false);
 
+    }
+
+    @Override
+    public void showMainMenu() {
+        show(isFirstBoot);
+    }
+
+    @Override
+    public void showProjectsMenu() {
+        showProjectsMenu();
+    }
+
+    @Override
+    public void showProjects() {
+        ProjectController controller = new ProjectController();
+        try {
+            controller.showProjects();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void showStats() {
+        StatsController controller = new StatsController();
+        controller.show();
+    }
+
+    @Override
+    public void showStorage() {
+        SettingsController controller = new SettingsController();
+        controller.showStorageSettings();
+    }
+
+    @Override
+    public void showSettings() {
+        SettingsController controller = new SettingsController();
+        controller.showSettings();
+    }
+
+    @Override
+    public void showTags() {
+        SettingsController controller = new SettingsController();
+        controller.showTags();
+    }
+
+    @Override
+    public void logout() {
+        listener.logout();
+        listener.showLogin();
     }
 
     public interface Listener {

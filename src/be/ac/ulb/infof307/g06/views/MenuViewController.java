@@ -1,8 +1,6 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.*;
-import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
+import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -51,6 +49,7 @@ public class MenuViewController implements Initializable {
     @FXML
     private Button backBtn;
     public ViewListener listener;
+    private MainController controller;
 
     //--------------- METHODS ----------------
     /**

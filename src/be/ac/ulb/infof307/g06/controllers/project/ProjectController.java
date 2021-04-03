@@ -10,9 +10,6 @@ import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.ProjectViews.CloudViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,23 +17,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Modality;
-import org.rauschig.jarchivelib.*;
 
-import java.io.*;
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class ProjectController{
+public class ProjectController implements ProjectsViewController.ViewListener {
+    private final TasksController tasksController = new TasksController(this);
+    private final CollaboratorsController collaboratorsController = new CollaboratorsController();
+
     /**
      * Initializes the view, the root, trees and clears the projects table+ the map to "reload" them.
      *
@@ -66,160 +62,7 @@ public class ProjectController{
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
         loader.load();
         ProjectsViewController controller = loader.getController();
-        controller.setListener(new ProjectsViewController.ViewListener() {
-            @Override
-            public void back() {
-
-            }
-
-            @Override
-            public void addProject() {
-                showAddProjectStage();
-            }
-
-            @Override
-            public void deleteProject(String name) {
-                try {
-                    int projectID = ProjectDB.getProjectID(name);
-                    ProjectDB.deleteProject(projectID);
-                    init(Global.projectsView, Global.root);
-                    UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-                } catch (SQLException e) {
-                    MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The project could not be deleted: \n" + e);
-                }
-            }
-
-            @Override
-            public void editProject() {
-                showEditProjectStage();
-            }
-
-            @Override
-            public ObservableList<String> getProjectTags(Project project) {
-                List<Tag> tags = ProjectDB.getTags(project.getId());
-                ObservableList<String> tagsName = FXCollections.observableArrayList();
-                for (Tag tag : tags) {
-                    tagsName.add(tag.getDescription());
-                }
-                return tagsName;
-            }
-
-            @Override
-            public void addTask(String description, int project_id) {
-                onAddTask(description, project_id);
-            }
-
-            @Override
-            public void editTask(Task task;) {
-                showEditTaskStage();
-            }
-
-            @Override
-            public void deleteTask(Task task) {
-
-            }
-
-            @Override
-            public ObservableList<Task> getTasks(Project project) {
-                try {
-                    if (project != null) {
-                        String projectTitle = project.getTitle();
-                        int projectID = ProjectDB.getProjectID(projectTitle);
-                        List<Task> taskList = ProjectDB.getTasks(projectID);
-                        return FXCollections.observableArrayList(taskList);
-                    }
-                } catch (SQLException e) {
-                    MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Could not retrieve tasks: \n" + e);
-                }
-                return FXCollections.observableArrayList();
-            }
-
-            @Override
-            public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
-                assignCollaborators(collaborators, task);
-            }
-
-            @Override
-            public ObservableList<String> getTaskCollaborators(Task task) {
-                try {
-                    if (task != null) {
-                        ObservableList<String> names = FXCollections.observableArrayList();
-                        List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
-                        for (Integer collaborator : collaborators) {
-                            names.add((UserDB.getUserInfo(collaborator).get("uName")));
-                        }
-                        return names;
-                    }
-                } catch (SQLException e) {
-                    MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing task collaborators: \n" + e);
-                }
-            }
-
-            @Override
-            public void deleteTaskCollaborator(String collaborator, Task task) {
-
-            }
-
-            @Override
-            public void importProject() {
-
-            }
-
-            @Override
-            public void exportProject() {
-
-            }
-
-            @Override
-            public void uploadProject() {
-
-            }
-
-            @Override
-            public void downloadProject() {
-
-            }
-
-            @Override
-            public void addCollaborator(String collaboratorName, int project_id) {
-                addCollaborator(collaboratorName, project_id);
-            }
-
-            @Override
-            public void deleteCollaborator(String collaboratorName, int project_id) {
-                try {
-                    ProjectDB.deleteCollaborator(project_id, Integer.parseInt(UserDB.getUserInfo(collaboratorName).get("id")));
-                    UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-                } catch (SQLException e) {
-                    MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The collaborator could not be deleted: \n" + e);
-                }
-            }
-
-            @Override
-            public ObservableList<String> getCollaborators(Project project) {
-                try {
-                    ObservableList<String> names = FXCollections.observableArrayList();
-                    List<Integer> collaborators;
-                    collaborators = ProjectDB.getCollaborators(project.getId());
-                    for (Integer collaborator : collaborators) {
-                        names.add((UserDB.getUserInfo(collaborator).get("uName")));
-                    }
-                    return names;
-                } catch (SQLException e) {
-                    MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing collaborators: \n" + e);
-                }
-            }
-
-            @Override
-            public boolean isUserInTask(String user, Task task) {
-                try {
-                    return ProjectDB.getTaskCollaborator(task.getId()).contains(Integer.parseInt(UserDB.getUserInfo(user).get("id")));
-                } catch (SQLException e) {
-                    MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in fetching database: \n" + e);
-                }
-                return false;
-            }
-        });
+        controller.setListener(this);
         MainController.load(loader, 940, 1515);
     }
 
@@ -249,15 +92,6 @@ public class ProjectController{
     }
 
     /**
-     * Sets the loader to show the stage to edit a task.
-     */
-    public static void showEditTaskStage() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(ProjectsViewController.class.getResource("TaskEditView.fxml"));
-        MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, loader );
-    }
-
-    /**
      * gets a project information and displays it
      *
      * @param view            ProjectsViewController
@@ -279,48 +113,15 @@ public class ProjectController{
         } catch (NullPointerException | SQLException e) {
             MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching project data: \n" + e);
         }
-    }
-    /**
-     *
-     * @param task Task
-     * @param view ProjectsViewController
-     */
-    public void initTaskCollaborators (ProjectsViewController view, Task task){
-        try {
-            if (task != null) {
-                ObservableList<String> names = FXCollections.observableArrayList();
-                List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
-                for (Integer collaborator : collaborators) {
-                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
-                }
-                view.insertTaskCollaborators(names);
-            }
-        }catch (SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error initializing task collaborators: \n" + e);
-        }
+        return null;
     }
 
     /**
      * @param collaborators ObservableList<String>
      * @param selectedTask  Task
-     * @param projectId     int
      */
     public void assignCollaborators(ObservableList<String> collaborators, Task selectedTask) {
-        try {
-            for (String collaborator : collaborators) {
-                ProjectDB.addTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
-            }
-        } catch (SQLException e) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in assigning collaborator to task: \n" + e);
-        }
-    }
-
-    public void deleteTaskCollaborator(String collaborator, Task selectedTask){
-        try{
-            ProjectDB.deleteTaskCollaborator(selectedTask.getId(), Integer.parseInt(UserDB.getUserInfo(collaborator).get("id")));
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in deleting task collaborator: \n" + e);
-        }
+        collaboratorsController.assignCollaborators(collaborators, selectedTask);
     }
 
     /**
@@ -339,17 +140,6 @@ public class ProjectController{
         }catch(SQLException e){
             MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in initializing input window: \n" + e);
         }
-    }
-
-    /**
-     * returns if a user is in a task's collaborators
-     *
-     * @param taskId int
-     * @param user String
-     * @return boolean
-     */
-    public boolean isUserInTask(int taskId, String user){
-
     }
 
     /**
@@ -480,20 +270,7 @@ public class ProjectController{
      * @param task Task
      */
     public void editTask(String description, String newDescription, Task task){
-        try{
-            List<Task> tasks = ProjectDB.getTasks(task.getProjectID());
-            List<String> taskNames = new ArrayList<>();
-            for (Task task2 : tasks) {
-                taskNames.add(task2.getDescription());
-            }
-            if (taskNames.contains(newDescription)){
-                MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Task already exists");return;}
-            if (newDescription.equals("")){deleteTask(task);}
-            else if (validateDescription(newDescription)) { ProjectDB.editTask(description,newDescription,task.getProjectID());}
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Failed to save changes: \n" + e);
-        }
+        tasksController.editTask(description, newDescription, task);
     }
 
     /**
@@ -502,27 +279,7 @@ public class ProjectController{
      * @param taskDescription String
      */
     public void onAddTask(String taskDescription, int project_id) {
-        if (taskDescription.isBlank()) {
-            return;
-        }
-        try {
-            List<Task> tasks = ProjectDB.getTasks(project_id);
-            List<String> taskNames = new ArrayList<>();
-            for (Task task : tasks) {
-                taskNames.add(task.getDescription());
-            }
-            if (taskNames.contains(taskDescription)) {
-                MainController.alertWindow(Alert.AlertType.INFORMATION, "Alert", "Task already exists");
-                return;
-            }
-            if (project_id != 0) {
-                int projectID = project_id;
-                ProjectDB.createTask(taskDescription, projectID);
-            }
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The task could not be added: \n" + e);
-        }
+        tasksController.onAddTask(taskDescription, project_id);
     }
 
     /**
@@ -531,22 +288,18 @@ public class ProjectController{
      * @param task Task
      */
     public void deleteTask(Task task){
-        try{
-            ProjectDB.deleteTask(task.getDescription(), task.getProjectID());
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The task could not be deleted: \n" + e);
-        }
+        tasksController.deleteTask(task);
     }
 
 
     /**
-     *  Checks if the string has at least one alphabet character and as 1 to 126 characters
+     * Checks if the string has at least one alphabet character and as 1 to 126 characters
+     *
      * @param text;
      * @return boolean;
      */
     @FXML
-    private boolean validateDescription(String text){
+    protected boolean validateDescription(String text) {
         Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,126}$");
         Matcher m = p.matcher(text);
         return m.matches();
@@ -581,16 +334,7 @@ public class ProjectController{
      * @return ObservableList<String>
      */
     public ObservableList<String> getCollaborators(TreeItem<Project> project){
-        List<String> collaboratorsList = new ArrayList<>();
-        try{
-            List<Integer> collaborators_id = ProjectDB.getCollaborators(project.getValue().getId());
-            for(Integer integer : collaborators_id) {
-                collaboratorsList.add(UserDB.getUserInfo(integer).get("uName"));
-            }
-        }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in fetching collaborators: \n" + e);
-        }
-        return FXCollections.observableArrayList(collaboratorsList);
+        return collaboratorsController.getCollaborators(project);
     }
 
     /**
@@ -601,23 +345,10 @@ public class ProjectController{
      * @return Boolean
      */
 
-
+    @Override
     public void addCollaborator(String username, int project) {
-        try {
-            if (!UserDB.userExists(username)) {
-                return false;
-            }
-            int receiverID = Integer.parseInt(UserDB.getUserInfo(username).get("id"));
-            if (ProjectDB.getCollaborators(project).contains(receiverID)) {
-                return true;
-            }
-            UserDB.sendInvitation(project, Global.userID, receiverID);
-            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-            //MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","Invitation sent to " + collaboratorsName.getText() + ".");
-        } catch (SQLException e) {
-            //MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Could not add the collaborator: \n" + e);
-        }
         //MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","User " + collaboratorsName.getText() + " doesn't exist.");
+        collaboratorsController.addCollaborator(username, project);
     }
 
     /**
@@ -626,328 +357,162 @@ public class ProjectController{
      * @param list ObservableList<String>
      * @return String
      */
-    public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|\\]$)",""); }
-
-
-    /**
-     * Write a project and his children in a json file.
-     * @param project Project
-     * @param fw      FileWriter
-     */
-    private void saveProjectAndChildsJson(Project project, FileWriter fw) throws IOException {
-        try {
-            final int ID = project.getId();
-            saveProjectJson(project, ProjectDB.getTasks(ID), ProjectDB.getTags(ID), fw);
-            for (Integer subProject : ProjectDB.getSubProjects(ID)) {
-                fw.write(",\n");
-                saveProjectAndChildsJson(ProjectDB.getProject(subProject), fw);
-            }
-        } catch (Exception ignored) {
-            fw.close();
-        }
+    public String listToString(ObservableList<String> list) {
+        return list.toString().replaceAll("(^\\[|\\]$)", "");
     }
 
-    /**
-     * Export a complete project (root and all his children) in a "tar.gz" archive.
-     *
-     * @param project Project
-     * @param archivePath String
-     * @param jsonFile String
-     * @return boolean
-     */
-    public boolean exportProject(Project project, String archivePath, String jsonFile) {
-        try {
-            final int ID = project.getId();
-            deleteFile(jsonFile);
-            FileWriter fw = new FileWriter(jsonFile, true);
-            fw.write("[\n");
-            saveProjectAndChildsJson(project, fw);
-            fw.write("\n]");
-            fw.close();
-            zip(project.getTitle(), jsonFile, archivePath);
-            deleteFile(jsonFile);
-            return true;
-        } catch (Exception ignored) {return false;}
+    @Override
+    public void back() {
+
     }
 
-    /**
-     * Write a project, his tasks and his tags in a json file.
-     *
-     * @param project Project
-     * @param tasks List<Task>
-     * @param tags List<Tag>
-     * @param fw FileWriter
-     * @return boolean
-     */
-    private static boolean saveProjectJson(Project project, List<Task> tasks, List<Tag> tags, FileWriter fw) {
-        try {
-            Gson gson = new GsonBuilder().create();
-            fw.write("[\n");
-            gson.toJson(project, fw);
-            fw.write(",\n");
-            gson.toJson(tasks, fw);
-            fw.write(",\n");
-            gson.toJson(tags, fw);
-            fw.write("\n]");
-            return true;
-        }
-        catch(Exception ignored) {return false;}
+    @Override
+    public void addProject() {
+        showAddProjectStage();
     }
 
-    /**
-     * Import a complete project (root and all his children) from a archive "tar.gz".
-     *
-     * @param archivePath String
-     * @return boolean
-     */
-    public static boolean importProject(String archivePath) {
+    @Override
+    public void deleteProject(String name) {
         try {
-            File file = new File(archivePath);
-            String directory = file.getAbsoluteFile().getParent();
-            String jsonFile = directory + "/file.json";
-            unzip(archivePath, directory);
-            if (isProjectInDb(jsonFile)) return false;
-            Gson gson = new Gson();
-            BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
-            String line = null;
-            int count = 0;
-            reader.readLine();
-            int idParent = 0;
-            int id = 0;
-            int idTag = 0;
-            Map<Integer, Integer> hm = new HashMap();
-            while ((line = reader.readLine()) != null) {
-                ++count;
-                count %= 6;
-                switch (count) {
-                    case 1:
-                        System.out.println("ouvrante "+line);
-                        break;
-                    case 2:
-                        System.out.println("projet "+line);
-                        Project project= gson.fromJson(line.substring(0, line.length()-1), Project.class);
-                        if (hm.size()==0) {
-                            id = ProjectDB.createProject(project.getTitle(), project.getDescription(), project.getDate(),0);
-                            hm.put(project.getParent_id(), 0);
-                        }
-                        else{
-                            id = ProjectDB.createProject(project.getTitle(), project.getDescription(), project.getDate(), hm.get(project.getParent_id()));
-                            idParent = hm.get(project.getParent_id());
-                        }
-                        hm.put(project.getId(), id);
-                        ProjectDB.addCollaborator(id, Global.userID);
-                        break;
-                    case 3:
-                        System.out.println("tasks " + line);
-                        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
-                        List<Task> tasks = new Gson().fromJson(line.substring(0, line.length()-1), listType);
-                        for (Task t : tasks) {
-                            ProjectDB.createTask(t.getDescription(), id);
-                        }
-                        break;
-                    case 4:
-                        System.out.println("tag " + line);
-                        Type listkind = new TypeToken<ArrayList<Tag>>(){}.getType();
-                        List<Tag> tag= new Gson().fromJson(line, listkind);
-                        for(Tag t : tag){
-                            //verifier dans la bdd
-                            idTag = ProjectDB.getTagID(t.getDescription());
-                            if (idTag == 0) {
-                                idTag = ProjectDB.createTag(t.getDescription(), t.getColor());
-                            }
-                            ProjectDB.addTag(idTag, id);
-                        }
-                        // update la view
-                        TreeItem<Project> child = new TreeItem<>(ProjectDB.getProject(id));
-                        Global.TreeMap.put(id, child);
-                        if (idParent == 0) { Global.projectsView.addChild(Global.root, child); }
-                        else { Global.projectsView.addChild(Global.TreeMap.get(idParent), child); }
-                        break;
-                    case 5:
-                        System.out.println("fermante " + line);
-                        break;
-                    default:
-                        if (line.equals("[")) {
-                            count = 1;
-                        } else {
-                            System.out.println("fin " + line);
-                        }
-                }
-            }
+            int projectID = ProjectDB.getProjectID(name);
+            ProjectDB.deleteProject(projectID);
+            init(Global.projectsView, Global.root);
             UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
-            reader.close();
-            deleteFile(jsonFile);
-            return true;
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-            return false;
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The project could not be deleted: \n" + e);
         }
     }
 
-    /**
-     * Check if an archive is valide ("tar.gz" contains a json file).
-     *
-     * @param archivePath String
-     * @return boolean
-     */
-    public static boolean valideArchive(final String archivePath) {
+    @Override
+    public void editProject() {
+        showEditProjectStage();
+    }
+
+    @Override
+    public ObservableList<String> getProjectTags(Project project) {
+        List<Tag> tags = null;
         try {
-            Archiver archiver =
-                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-            File archive = new File(archivePath);
-            ArchiveStream stream = archiver.stream(archive);
-            ArchiveEntry entry;
-            int count = 0;
-            while((entry = stream.getNextEntry()) != null) {
-                ++count;
-                String name = entry.getName();
-                if (count > 1 || ! name.substring(name.length()-4).equals(".json")) {
-                    return false;
+            tags = ProjectDB.getTags(project.getId());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        ObservableList<String> tagsName = FXCollections.observableArrayList();
+        assert tags != null;
+        for (Tag tag : tags) {
+            tagsName.add(tag.getDescription());
+        }
+        return tagsName;
+    }
+
+    @Override
+    public void addTask(String description, int project_id) {
+        tasksController.onAddTask(description, project_id);
+    }
+
+    @Override
+    public void editTask(Task task) {
+        TasksController.showEditTaskStage();
+    }
+
+    @Override
+    public ObservableList<Task> getTasks(Project project) {
+        try {
+            if (project != null) {
+                String projectTitle = project.getTitle();
+                int projectID = ProjectDB.getProjectID(projectTitle);
+                List<Task> taskList = ProjectDB.getTasks(projectID);
+                return FXCollections.observableArrayList(taskList);
+            }
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Could not retrieve tasks: \n" + e);
+        }
+        return FXCollections.observableArrayList();
+    }
+
+    @Override
+    public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
+        collaboratorsController.assignCollaborators(collaborators, task);
+    }
+
+    @Override
+    public ObservableList<String> getTaskCollaborators(Task task) {
+        try {
+            if (task != null) {
+                ObservableList<String> names = FXCollections.observableArrayList();
+                List<Integer> collaborators = ProjectDB.getTaskCollaborator(task.getId());
+                for (Integer collaborator : collaborators) {
+                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
                 }
+                return names;
             }
-            stream.close();
-            return true;
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing task collaborators: \n" + e);
         }
-        catch(Exception ignored) {return false;}
+        return null;
     }
 
-    /**
-     * Zip a file in a "tar.gz" archive.
-     *
-     * @param archiveName String
-     * @param source String
-     * @param destination String
-     * @return boolean
-     */
-    public static boolean zip(String archiveName, String source, String destination) {
-        try {
-            File src = new File(source);
-            File dest = new File(destination);
-            Archiver archiver =
-                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-            archiver.create(archiveName, dest, src);
-            System.out.println("zip");
-            return true;
-        }catch (Exception ignored) {return false;}
+    @Override
+    public void deleteTaskCollaborator(String collaborator, Task task) {
+
     }
 
-    /**
-     * Unzip a tar.gz archive in a directory.
-     *
-     * @param source String
-     * @param destination String
-     * @return boolean
-     */
-    public static boolean unzip(final String source, final String destination) {
+    @Override
+    public void importProject() {
+
+    }
+
+    @Override
+    public boolean exportProject(Project selectedProject, String absolutePath, String s) {
+
+        return false;
+    }
+
+    @Override
+    public void uploadProject() {
+
+    }
+
+    @Override
+    public void downloadProject() {
+
+    }
+
+
+    @Override
+    public void deleteCollaborator(String collaboratorName, int project_id) {
         try {
-            Archiver archiver =
-                    ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-            File archive = new File(source);
-            File dest = new File(destination);
-            System.out.println("WARNINGS are normal");
-            archiver.extract(archive, dest); // WARNING OK
-            System.out.println("unzip");
-            return true;
-        } catch (Exception ignored) {
-            return false;
+            ProjectDB.deleteCollaborator(project_id, Integer.parseInt(UserDB.getUserInfo(collaboratorName).get("id")));
+            UserDB.updateDiskUsage(ProjectDB.getSizeOnDisk());
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "The collaborator could not be deleted: \n" + e);
         }
     }
 
-    /**
-     * Check if one of the sub-project of a complete project
-     * (root and his children) is in the Database.
-     *
-     * @param jsonFile String
-     * @return boolean
-     */
-    public static boolean isProjectInDb(String jsonFile) {
+    @Override
+    public ObservableList<String> getCollaborators(Project project) {
         try {
-            Gson gson = new Gson();
-            BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
-            String line = null;
-            int count = 0;
-            reader.readLine();
-            while ((line = reader.readLine()) != null) {
-                ++count;
-                count %= 6;
-                switch (count) {
-                    case 1:
-                        System.out.println("ouvrante " + line);
-                        break;
-                    case 2:
-                        System.out.println("projet " + line);
-                        Project project = gson.fromJson(line.substring(0, line.length() - 1), Project.class);
-                        int id = ProjectDB.getProjectID(project.getTitle());
-                        if (id != 0) return true;
-                        break;
-                    case 3:
-                        System.out.println("tasks " + line);
-                        Type listType = new TypeToken<ArrayList<Task>>() {
-                        }.getType();
-                        List<Task> tasks = new Gson().fromJson(line.substring(0, line.length() - 1), listType);
-                        break;
-                    case 4:
-                        System.out.println("tag " + line);
-                        Type listkind = new TypeToken<ArrayList<Tag>>() {
-                        }.getType();
-                        List<Tag> tag = new Gson().fromJson(line, listkind);
-                        break;
-                    case 5:
-                        System.out.println("fermante " + line);
-                        break;
-                    default:
-                        if (line.equals("[")) {
-                            count = 1;
-                        } else {
-                            System.out.println("fin " + line);
-                        }
-                }
+            ObservableList<String> names = FXCollections.observableArrayList();
+            List<Integer> collaborators;
+            collaborators = ProjectDB.getCollaborators(project.getId());
+            for (Integer collaborator : collaborators) {
+                names.add((UserDB.getUserInfo(collaborator).get("uName")));
             }
-            reader.close();
-            return false;
-        } catch (Exception e) {return false;}
+            return names;
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error initializing collaborators: \n" + e);
+        }
+        return null;
     }
 
-    /**
-     * Delete a file.
-     *
-     * @param fileName String
-     * @return boolean
-     */
-    public static boolean deleteFile(final String fileName) {
+    @Override
+    public boolean isUserInTask(String user, Task task) {
         try {
-            File myObj = new File(fileName);
-            if (myObj.delete()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception ignored) {
-            return false;
+            return ProjectDB.getTaskCollaborator(task.getId()).contains(Integer.parseInt(UserDB.getUserInfo(user).get("id")));
+        } catch (SQLException e) {
+            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Error in fetching database: \n" + e);
         }
+        return false;
     }
 
-    /**
-     * Raise an alert after an import of export.
-     *
-     * @param choice String
-     * @param succeed boolean
-     */
-    @FXML
-    public static void alertExportImport(String choice, boolean succeed) {
-        //TODO à mettre dans le main controller
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(choice);
-        alert.setHeaderText(null);
-        alert.getDialogPane().setMinWidth(900);
-        if(succeed){
-            alert.setContentText(choice + "ed successfully.");
-            alert.showAndWait();
-        }
-        else {
-            alert.setContentText("Failed to " + choice + " your project");
-            alert.showAndWait();
-        }
-    }
 }
 

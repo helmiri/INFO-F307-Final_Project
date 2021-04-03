@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
+import be.ac.ulb.infof307.g06.controllers.project.IOController;
 import be.ac.ulb.infof307.g06.models.Cloud;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
@@ -127,7 +127,7 @@ public class CloudViewController implements Initializable {
             MainController.alertWindow(Alert.AlertType.INFORMATION, "Identical files", "The file already exists");
         } else {
             Cloud.downloadFile(localPath, cloudPath);
-            ProjectController.importProject(localPath);
+            IOController.importProject(localPath);
         }
     }
 

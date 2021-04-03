@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.views.StatisticsViews;
 
-import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.StatsController;
+import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.models.Statistics;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,9 +64,13 @@ public class StatsViewController implements Initializable {
      */
     @FXML
     private void statsEvents(ActionEvent event) {
-        if (event.getSource() == backToProjectMenu) { MainController.showProjectMenu();}
-        else if (event.getSource() == logOutBtn) { LoginController.show();}
-        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) { exports(event); }
+        if (event.getSource() == backToProjectMenu) {
+            MainController.showProjectMenu();
+        } else if (event.getSource() == logOutBtn) {
+            LoginController.show();
+        } else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
+            exports(event);
+        }
     }
 
     /**

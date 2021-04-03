@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.controllers.project.IOController;
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.Cloud;
 import be.ac.ulb.infof307.g06.models.Global;
@@ -9,7 +10,6 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
-import com.sun.source.tree.Tree;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -151,7 +151,7 @@ public class ProjectsViewController implements Initializable {
                     ProjectController.showEditProjectStage();
                 }
             } else if (event.getSource() == exportProjectBtn) {
-                listener.exportProject();
+                listener.exportProject(selectedProject, selectedDirectory.getAbsolutePath(), selectedDirectory.getAbsolutePath() + "/file.json");
                 exportProject();
             } else if (event.getSource() == importProjectBtn) {
                 listener.importProject();
@@ -291,6 +291,7 @@ public class ProjectsViewController implements Initializable {
                 };
             }
         });
+
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         taskTable.setEditable(false);
@@ -335,10 +336,10 @@ public class ProjectsViewController implements Initializable {
             File selectedDirectory = directoryChooser.showDialog(new Stage());
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory.getAbsolutePath());
-                boolean succeed = controller.exportProject(selectedProject,
+                boolean succeed = listener.exportProject(selectedProject,
                         selectedDirectory.getAbsolutePath(),
                         selectedDirectory.getAbsolutePath() + "/file.json");
-                ProjectController.alertExportImport("export", succeed);
+                IOController.alertExportImport("export", succeed);
             }
         }
     }
@@ -353,7 +354,7 @@ public class ProjectsViewController implements Initializable {
         }
         File selectedDirectory = new File("");
 
-        boolean succeed = controller.exportProject(selectedProject,
+        boolean succeed = listener.exportProject(selectedProject,
                 selectedDirectory.getAbsolutePath(),
                 selectedDirectory.getAbsolutePath() + "/file.json");
         try {
@@ -387,8 +388,8 @@ public class ProjectsViewController implements Initializable {
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
             System.out.println(selectedArchive.getAbsolutePath());
-            boolean succeed = ProjectController.importProject(selectedArchive.getAbsolutePath());
-            ProjectController.alertExportImport("import", succeed);
+            boolean succeed = IOController.importProject(selectedArchive.getAbsolutePath());
+            IOController.alertExportImport("import", succeed);
         }
     }
 
@@ -410,7 +411,7 @@ public class ProjectsViewController implements Initializable {
     @FXML
     public void displayProject(Project project, ObservableList<String> tagsName) {
         projectsDescription.setText(project.getDescription());
-        projectsDate.setText(controller.dateToString(project.getDate()));
+        projectsDate.setText(dateToString(project.getDate()));
         projectsTitle.setText(project.getTitle());
         displayTask();
         displayCollaborators();
@@ -418,6 +419,9 @@ public class ProjectsViewController implements Initializable {
         projectTags.setItems(tagsName);
     }
 
+    private String dateToString(Long date) {
+        return "";
+    }
 
     /**
      * Displays tasks on the table.
@@ -449,6 +453,9 @@ public class ProjectsViewController implements Initializable {
         this.listener = listener;
     }
 
+    public void insertTaskCollaborators(ObservableList<String> names) {
+    }
+
     public interface ViewListener {
         void back();
 
@@ -462,7 +469,7 @@ public class ProjectsViewController implements Initializable {
 
         void addTask(String description, int project_id);
 
-        void editTask(Task task;);
+        void editTask(Task task);
 
         void deleteTask(Task task);
 
@@ -476,7 +483,7 @@ public class ProjectsViewController implements Initializable {
 
         void importProject();
 
-        void exportProject();
+        boolean exportProject(Project selectedProject, String absolutePath, String s);
 
         void uploadProject();
 
