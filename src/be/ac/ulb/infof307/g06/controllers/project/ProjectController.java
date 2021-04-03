@@ -305,6 +305,11 @@ public class ProjectController implements ProjectsViewController.ViewListener {
     }
 
     @Override
+    public boolean isCollaboratorInTask(Task task) {
+        return getTaskCollaborators(task).contains(userID);
+    }
+
+    @Override
     public void addCollaborator(String username, int project_id) {
         try {
             if (!user_db.userExists(username)) {

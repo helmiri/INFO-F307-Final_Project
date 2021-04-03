@@ -1,14 +1,9 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.Tag;
-import be.ac.ulb.infof307.g06.controllers.project.IOController;
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.*;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
 import javafx.beans.property.SimpleStringProperty;
@@ -319,7 +314,7 @@ public class ProjectsViewController implements Initializable {
                 super.updateItem(task, empty);
                 if (task == null)
                     setStyle("");
-                else if (listener.getTaskCollaborators(task).contains(userID)) // TODO
+                else if (listener.isCollaboratorInTask(task)) // TODO
                     setStyle("-fx-background-color: #8fbc8f;");
             }
         });
@@ -495,6 +490,8 @@ public class ProjectsViewController implements Initializable {
         ObservableList<String> getTaskCollaborators(Task task);
 
         void deleteTaskCollaborator(String collaborator, Task task);
+
+        boolean isCollaboratorInTask(Task task);
 
         void importProject(String path);
 
