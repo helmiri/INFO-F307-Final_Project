@@ -1,13 +1,11 @@
 package be.ac.ulb.infof307.g06.models.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public abstract class Database {
-    protected static Connection db;
-    protected static String dbURL;
+    protected Connection db;
+    protected String dbURL;
+    private Statement state;
 
     /**
      * Initializes the database
@@ -18,20 +16,11 @@ public abstract class Database {
      */
     public Database(String dbName) throws ClassNotFoundException, SQLException {
         dbURL = dbName;
+        db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
         Class.forName("org.sqlite.JDBC");
         createTables();
     }
 
-    /**
-     * Establishes a connection to the database
-     *
-     * @return Statement object
-     * @throws SQLException If a database access error occurs
-     */
-    protected static Statement connect() throws SQLException {
-        db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
-        return db.createStatement();
-    }
 
     /**
      * Closes the connections
@@ -40,12 +29,10 @@ public abstract class Database {
      * @throws SQLException If a database access error occurs
      */
     protected static void close(AutoCloseable... objects) throws SQLException {
-        db.close();
         for (AutoCloseable obj : objects) {
             try {
                 obj.close();
             } catch (Exception e) {
-                System.out.println("Error");
                 return;
             }
         }
@@ -58,4 +45,16 @@ public abstract class Database {
      */
     protected abstract void createTables() throws SQLException;
 
+
+    protected ResultSet sqlQuery(String query) throws SQLException {
+        state = db.createStatement();
+        state.close();
+        return state.executeQuery(query);
+    }
+
+    protected void sqlUpdate(String query) throws SQLException {
+        state = db.createStatement();
+        state.executeUpdate(query);
+        state.close();
+    }
 }
