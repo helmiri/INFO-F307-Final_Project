@@ -1,17 +1,13 @@
 package be.ac.ulb.infof307.g06.controllers;
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,7 +15,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class MainController {
     //-------------- ATTRIBUTES ----------------
@@ -83,7 +78,7 @@ public class MainController {
             try {
                 UserDB.setAdmin(256 * 1000000);
             } catch (SQLException throwables) {
-                alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the ");
+                new AlertWindow("Database error", "Could not access the database").errorWindow();
             }
         }
         FXMLLoader loader = new FXMLLoader();
@@ -149,7 +144,7 @@ public class MainController {
             AnchorPane connectionAnchor = loader.load();
             mainLayout.getChildren().setAll(connectionAnchor);
         } catch (IOException e) {
-            alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred when loading the window.");
+            new AlertWindow("Error", "Could not load the window").errorWindow();
         }
     }
 
@@ -173,7 +168,7 @@ public class MainController {
             stage.setResizable(false);
             stage.show();
         }catch(IOException e){
-            alertWindow(Alert.AlertType.ERROR,"Error", "An error has occurred when loading the window.");
+            new AlertWindow("Error", "Could not load the window").errorWindow();
         }
 
     }
@@ -195,29 +190,8 @@ public class MainController {
             if (accept) { ProjectDB.addCollaborator(ProjectDB.getProjectID(project), user); }
             UserDB.removeInvitation(ProjectDB.getProjectID(project), user);
         }catch(SQLException e){
-            MainController.alertWindow(Alert.AlertType.ERROR,"Error", "Error in processing invitation: \n" + e);
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
     }
 
-    /**
-     * Sets a pop window.
-     *
-     * @param type Alert.AlertType
-     * @param title String
-     * @param message String
-     */
-    public static boolean alertWindow(Alert.AlertType type, String title,String message){
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.getDialogPane().setMinWidth(400);
-        alert.setContentText(message);
-        if (type == Alert.AlertType.CONFIRMATION) {
-            Optional<ButtonType> result = alert.showAndWait();
-            return result.get() == ButtonType.OK;
-        } else {
-            alert.showAndWait();
-        }
-        return false;
-    }
 }

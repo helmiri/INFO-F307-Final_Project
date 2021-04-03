@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SettingsController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -115,7 +116,7 @@ public class TagsViewController implements Initializable{
             tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
             defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
         } catch (SQLException throwables) {
-            MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","An Error has occured in the database." + throwables);
+            new AlertWindow("Alert", "An Error has occured in the database." + throwables).errorWindow();
         }
     }
 
@@ -138,7 +139,7 @@ public class TagsViewController implements Initializable{
         try {
             defaultTagsTableView.setItems(FXCollections.observableArrayList(ProjectDB.getAllTags()));
         } catch (SQLException throwables) {
-            MainController.alertWindow(Alert.AlertType.INFORMATION,"Alert","An Error has occured in the database." + throwables);
+            new AlertWindow("Alert", "An Error has occured in the database.").errorWindow();
         }
     }
 

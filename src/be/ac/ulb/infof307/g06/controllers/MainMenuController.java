@@ -1,26 +1,24 @@
 package be.ac.ulb.infof307.g06.controllers;
 
-import be.ac.ulb.infof307.g06.controllers.connection.LoginController;
 import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class MainMenuController {
+public class MainMenuController implements MenuViewController.ViewListener {
     public Listener listener;
     private Stage stage;
     private UserDB user_db;
     private ProjectDB project_db;
     private int userID;
+    private boolean isFirstBoot;
 
     public MainMenuController(Stage stage, Listener listener, UserDB user_db, ProjectDB project_db, int userID) {
         this.userID = userID;
@@ -48,16 +46,48 @@ public class MainMenuController {
             e.printStackTrace();
         }
         MenuViewController controller = loader.getController();
-        controller.setListener(new MenuViewController.ViewListener() {
-            @Override
-            public void showMainMenu() {
-                show(isFirstBoot);
-            }
+        controller.setListener(this);
+        load(940, 1515);
+    }
 
-            @Override
-            public void showProjectsMenu() {
-                showProjectsMenu();
-            }
+    /**
+     * Sets the loader to show the project menu scene.
+     */
+    public void showProjectMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("ProjectMenu.fxml"));
+        loader.load();
+        load(940, 1515);
+    }
+
+    /**
+     * Sets the loader to show the stage with an invitation to join a project.
+     */
+    public void showInvitationStage() throws IOException {
+        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("InvitationView.fxml"));
+        loader.load();
+        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
+    }
+
+
+    public void load(Integer height, Integer width) {
+        // Set main stage
+        stage.setResizable(true);
+        stage.setHeight(height);
+        stage.setWidth(width);
+        stage.centerOnScreen();
+        stage.setResizable(false);
+
+    }
+
+    @Override
+    public void showMainMenu() {
+        show(isFirstBoot);
+    }
+
+    @Override
+    public void showProjectsMenu() {
+        showProjectsMenu();
+    }
 
             @Override
             public void showProjects() {
@@ -93,42 +123,10 @@ public class MainMenuController {
                 //controller.showTags();
             }
 
-            @Override
-            public void logout() {
-                listener.logout();
-                listener.showLogin();
-            }
-        });
-        load(940, 1515);
-    }
-
-    /**
-     * Sets the loader to show the project menu scene.
-     */
-    public void showProjectMenu() throws IOException {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("ProjectMenu.fxml"));
-        loader.load();
-        load(940, 1515);
-    }
-
-    /**
-     * Sets the loader to show the stage with an invitation to join a project.
-     */
-    public void showInvitationStage() throws IOException {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("InvitationView.fxml"));
-        loader.load();
-        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
-    }
-
-
-    public void load(Integer height, Integer width) {
-        // Set main stage
-        stage.setResizable(true);
-        stage.setHeight(height);
-        stage.setWidth(width);
-        stage.centerOnScreen();
-        stage.setResizable(false);
-
+    @Override
+    public void logout() {
+        listener.logout();
+        listener.showLogin();
     }
 
     public interface Listener {

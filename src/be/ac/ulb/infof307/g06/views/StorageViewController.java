@@ -1,12 +1,11 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.controllers.SettingsController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -45,13 +44,13 @@ public class StorageViewController implements Initializable {
             SettingsController.showSettingsMenu();
         } else if (actionEvent.getSource() == saveBtn) {
             if (saveSettings()) {
-                MainController.alertWindow(Alert.AlertType.INFORMATION, "Save", "Changes saved");
+                new AlertWindow("Save", "Changes saved").informationWindow();
             }
         } else if (actionEvent.getSource() == helpBtn) {
             try {
                 opnenLink();
             } catch (IOException | URISyntaxException e) {
-                MainController.alertWindow(Alert.AlertType.ERROR, "Error", "An error has occurred");
+                new AlertWindow("Error", "An error has occurred").errorWindow();
             }
         }
     }
@@ -72,7 +71,7 @@ public class StorageViewController implements Initializable {
         } else if (clientID.isBlank() && accToken.isBlank()) {
             res = false;
         } else if (clientID.isBlank() || accToken.isBlank()) {
-            MainController.alertWindow(Alert.AlertType.ERROR, "Error", "Missing credentials");
+            new AlertWindow("Settings error", "Missing credentials").errorWindow();
             res = false;
         }
 
@@ -94,7 +93,7 @@ public class StorageViewController implements Initializable {
      * @throws URISyntaxException
      */
     public void opnenLink() throws IOException, URISyntaxException {
-        MainController.alertWindow(Alert.AlertType.INFORMATION, "Cloud service set up", "Follow the instructions to set up your credentials");
+        new AlertWindow("Cloud service set up", "Follow the instructions to set up your credentials").informationWindow();
         Desktop.getDesktop().browse(new URL("https://github.com/ULB-INFOF307/2021-groupe-6/blob/master/Dropbox_On-Boarding.md").toURI());
     }
 
