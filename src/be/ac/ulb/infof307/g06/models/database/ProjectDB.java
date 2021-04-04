@@ -156,8 +156,9 @@ public class ProjectDB extends Database {
             res = new Project(id, title, description, date, parent_id);
         } catch (Exception ignored) {
         }
-
-        rs.close();
+        if (rs != null) {
+            rs.close();
+        }
         return res;
     }
 
