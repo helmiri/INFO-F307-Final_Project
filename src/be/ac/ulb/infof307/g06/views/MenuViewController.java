@@ -48,10 +48,8 @@ public class MenuViewController implements Initializable {
     private Button languageBtn;
     @FXML
     private Button backBtn;
+
     public ViewListener listener;
-    private MainController controller;
-    private ProjectDB project_db;
-    private UserDB user_db;
 
     //--------------- METHODS ----------------
 
@@ -62,6 +60,7 @@ public class MenuViewController implements Initializable {
      * @param resourceBundle ResourceBundle
      */
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        /*
         controller = new MainController();
         controller.init(this);
         try {
@@ -69,6 +68,8 @@ public class MenuViewController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
+
     }
 
     /**
@@ -109,6 +110,7 @@ public class MenuViewController implements Initializable {
      */
     public void showInvitation(int projectId, int senderId) {
         // TODO Needs user_db as parameter
+        /*
         try {
             Project project = project_db.getProject(projectId);
             Global.popupProjectTitle = project.getTitle();
@@ -118,6 +120,8 @@ public class MenuViewController implements Initializable {
         } catch (SQLException e) {
             new AlertWindow("Database error", "Could not access the database").errorWindow();
         }
+
+         */
     }
 
     public void setListener(ViewListener listener) {

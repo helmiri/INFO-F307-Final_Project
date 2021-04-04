@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class ProjectsViewController implements Initializable {
+public class ProjectsViewController {
     public Button cloudDownloadBtn;
     public Button cloudUploadBtn;
     //----------ATTRIBUTES---------
@@ -76,6 +76,10 @@ public class ProjectsViewController implements Initializable {
     @FXML
     private TreeTableView<Project> treeProjects;
     @FXML
+    private Button addCollaboratorsBtn;
+    @FXML
+    private TextArea collaboratorsName;
+    @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
     private final TreeItem<Project> root = new TreeItem<Project>();
     public ViewListener listener;
@@ -86,14 +90,7 @@ public class ProjectsViewController implements Initializable {
 
     //---------------METHODES----------------
 
-    /**
-     * Initializes the controller and launchs the init method.
-     *
-     * @param url            URL
-     * @param resourceBundle ResourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void init() {
         initTree();
         List<Project> projectsArray = listener.getProjects();
         hideRoot();
@@ -205,6 +202,10 @@ public class ProjectsViewController implements Initializable {
         displayTask();
     }
 
+    public void addCollaborator() {
+        listener.addCollaborator(collaboratorsName.getText(), getSelectedProject().getId());
+    }
+
     /**
      * Deletes a collaborator from the database and the table.
      */
@@ -260,7 +261,10 @@ public class ProjectsViewController implements Initializable {
      * @return TreeItem<Project>
      */
     public Project getSelectedProject() {
-        return treeProjects.getSelectionModel().getSelectedItem().getValue();
+        if (treeProjects.getSelectionModel().getSelectedItem() != null) {
+            return treeProjects.getSelectionModel().getSelectedItem().getValue();
+        }
+        return null;
     }
 
     /**
@@ -395,10 +399,12 @@ public class ProjectsViewController implements Initializable {
      *
      */
     @FXML
-    public void displayCollaborators(){
+    public void displayCollaborators() {
         Project selectedProject = getSelectedProject();
-        ObservableList<String> oCollaboratorsList = listener.getCollaborators(selectedProject);
-        collaboratorsTable.setItems(oCollaboratorsList);
+        if (selectedProject != null) {
+            ObservableList<String> oCollaboratorsList = listener.getCollaborators(selectedProject);
+            collaboratorsTable.setItems(oCollaboratorsList);
+        }
     }
 
 
@@ -424,8 +430,10 @@ public class ProjectsViewController implements Initializable {
     @FXML
     public void displayTask() {
         selectedProject = getSelectedProject();
-        ObservableList<Task> oTaskList = listener.getTasks(selectedProject);
-        taskTable.setItems(oTaskList);
+        if (selectedProject != null) {
+            ObservableList<Task> oTaskList = listener.getTasks(selectedProject);
+            taskTable.setItems(oTaskList);
+        }
     }
 
 

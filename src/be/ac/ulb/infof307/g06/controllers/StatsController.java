@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
@@ -29,8 +30,8 @@ import java.util.Map;
 public class StatsController extends Controller {
     private StatsViewController statsView;
 
-    public StatsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
-        super(userID, user_db, project_db, stage);
+    public StatsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(userID, user_db, project_db, stage, scene);
     }
 
     /**

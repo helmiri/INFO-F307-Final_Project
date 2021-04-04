@@ -5,6 +5,7 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     public UserDB user_db;
     public ProjectDB project_db;
     public Stage stage;
+    private Scene scene;
     public boolean isFirstBoot;
     private int userID;
     public static void main(String[] args) {
@@ -78,7 +80,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void showMainMenu() {
-        MainMenuController controller = new MainMenuController(userID, user_db, project_db, stage);
+        MainMenuController controller = new MainMenuController(userID, user_db, project_db, stage, scene);
         controller.setListener(this);
         controller.show();
     }

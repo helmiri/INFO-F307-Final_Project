@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
@@ -30,8 +31,8 @@ import java.util.Map;
 public class IOController extends Controller {
     private ProjectsViewController viewController;
 
-    public IOController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
-        super(userID, user_db, project_db, stage);
+    public IOController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(userID, user_db, project_db, stage, scene);
     }
 
     public void setViewController(ProjectsViewController viewController) {

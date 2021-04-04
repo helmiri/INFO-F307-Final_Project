@@ -48,7 +48,7 @@ public class StatsViewController implements Initializable {
     @FXML
     private TreeTableColumn<Statistics, String> estimatedColumn;
     private final TreeItem<Statistics> root = new TreeItem<>();
-    private final StatsController controller = new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
+    //private final StatsController controller = new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
 
     public StatsViewController() throws SQLException, ClassNotFoundException {
     }
@@ -62,7 +62,7 @@ public class StatsViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        controller.init(this, root);
+        //controller.init(this, root);
     }
 
     /**
@@ -77,7 +77,7 @@ public class StatsViewController implements Initializable {
         } /*else if (event.getSource() == logOutBtn) {
 //            LoginController.show();
         } */ else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
-            exports(event);
+            //exports(event);
         }
     }
 
@@ -116,6 +116,7 @@ public class StatsViewController implements Initializable {
      *
      * @param event ActionEvent
      */
+    /*
     public void exports(ActionEvent event) {
         String fileName = fileNameTextField.getText();
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -131,7 +132,7 @@ public class StatsViewController implements Initializable {
             }
         }
     }
-
+    */
     /**
      * Sets text message for exportation.
      *

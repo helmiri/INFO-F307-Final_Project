@@ -8,6 +8,7 @@ import be.ac.ulb.infof307.g06.views.MenuViewController;
 import be.ac.ulb.infof307.g06.views.StorageViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,14 +18,14 @@ import java.util.List;
 
 public class SettingsController extends Controller {
 
-    public SettingsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
-        super(userID, user_db, project_db, stage);
+    public SettingsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(userID, user_db, project_db, stage, scene);
     }
 
     /**
      * Sets the loader to show the tags menu scene.
      */
-    public static void showTags() {
+    public void showTags() {
         FXMLLoader loader = new FXMLLoader(TagsViewController.class.getResource("Tags.fxml"));
         try {
             loader.load();
@@ -34,7 +35,7 @@ public class SettingsController extends Controller {
 
     }
 
-    public static void showStorageMenu() {
+    public void showStorageMenu() {
         FXMLLoader loader = new FXMLLoader(StorageViewController.class.getResource("StorageView.fxml"));
         try {
             loader.load();

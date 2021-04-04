@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,11 +28,12 @@ import java.util.regex.Pattern;
 
 public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
     private ProjectsViewController viewController;
-    private IOController ioController;
+    private final IOController ioController;
 
-    public ProjectController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
-        super(userID, user_db, project_db, stage);
-        ioController = new IOController(userID, user_db, project_db, stage);
+
+    public ProjectController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(userID, user_db, project_db, stage, scene);
+        ioController = new IOController(userID, user_db, project_db, stage, scene);
         ioController.setViewController(viewController);
     }
 
@@ -43,13 +45,14 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public void show() {
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
         try {
-            loader.load();
+            scene = new Scene(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }
         viewController = loader.getController();
         viewController.setListener(this);
-        MainController.load(loader, 940, 1515);
+        stage.setScene(scene);
+        viewController.init();
     }
 
     // ----------------------------- STAGES -----------------------------------
@@ -111,6 +114,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void back() {
+        stage.setScene(prevScene);
     }
 
     @Override

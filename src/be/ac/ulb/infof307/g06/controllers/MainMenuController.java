@@ -14,10 +14,10 @@ import java.sql.SQLException;
 
 public class MainMenuController extends Controller implements MenuViewController.ViewListener {
     public Listener listener;
-    private Scene scene;
 
-    public MainMenuController(int userID, UserDB user_db, ProjectDB project_db, Stage stage) {
-        super(userID, user_db, project_db, stage);
+
+    public MainMenuController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(userID, user_db, project_db, stage, scene);
     }
 
     /**
@@ -31,10 +31,10 @@ public class MainMenuController extends Controller implements MenuViewController
             }
             FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("MenuView.fxml"));
             scene = new Scene(loader.load());
-            stage.setScene(scene);
             MenuViewController controller = loader.getController();
             controller.setListener(this);
             load(940, 1515);
+            stage.setScene(scene);
         } catch (SQLException | IOException e) {
             // TODO Exception
         }
@@ -70,39 +70,43 @@ public class MainMenuController extends Controller implements MenuViewController
     public void showProjectsMenu() {
         FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("ProjectMenu.fxml"));
         try {
-            loader.load();
+            scene = new Scene(loader.load());
+            MenuViewController controller = loader.getController();
+            controller.setListener(this);
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
     public void showProjects() {
-        ProjectController controller = new ProjectController(userID, user_db, project_db, stage);
+        ProjectController controller = new ProjectController(userID, user_db, project_db, stage, scene);
         controller.show();
     }
 
     @Override
     public void showStats() {
-        StatsController controller = new StatsController(userID, user_db, project_db, stage);
+        StatsController controller = new StatsController(userID, user_db, project_db, stage, scene);
         controller.show();
     }
 
     @Override
     public void showStorage() {
-        SettingsController controller = new SettingsController(userID, user_db, project_db, stage);
+        SettingsController controller = new SettingsController(userID, user_db, project_db, stage, scene);
         controller.showStorageMenu();
     }
 
     @Override
     public void showSettings() {
-        SettingsController controller = new SettingsController(userID, user_db, project_db, stage);
+        SettingsController controller = new SettingsController(userID, user_db, project_db, stage, scene);
         controller.show();
     }
 
     @Override
     public void showTags() {
-        SettingsController controller = new SettingsController(userID, user_db, project_db, stage);
+        SettingsController controller = new SettingsController(userID, user_db, project_db, stage, scene);
         controller.showTags();
     }
 
@@ -119,7 +123,6 @@ public class MainMenuController extends Controller implements MenuViewController
 
     public interface Listener {
         void logout();
-
         void showLogin();
     }
 }
