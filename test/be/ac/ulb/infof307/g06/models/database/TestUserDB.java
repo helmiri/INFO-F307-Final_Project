@@ -1,11 +1,13 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 
+import be.ac.ulb.infof307.g06.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,37 +49,41 @@ public class TestUserDB extends TestDatabase {
         state.close();
         res.close();
     }
-//
-//    @Test
-//    @DisplayName("Data validation")
-//    public void testValidateData() throws SQLException {
-//        Statement state = db.createStatement();
-//        ResultSet res = null;
-//        for (int i = 0; i < 10; i++) {
-//            res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
-//            assertTrue(res.next());
-//            res.close();
-//        }
-//        state.close();
-//        assertEquals(0, UserDB.validateData("DoesNotExist", "password"));
-//        assertEquals(0, UserDB.validateData("userName", "wrongPasswd"));
-//
-//        for (int i = 0; i < 10; i++) {
-//            assertEquals(i + 1, UserDB.validateData(testData.get(i).get("userName"), testData.get(i).get("password")));
-//        }
-//    }
-//
-//    @Test
-//    @DisplayName("Get user info")
-//    public void testGetUserInfo() throws SQLException {
-//        for (int i = 0; i < 10; i++) {
-//            Map<String, String> usrInfo = UserDB.getUserInfo(testData.get(i).get("userName"));
-//            assertEquals(testData.get(i).get("fName"), usrInfo.get("fName"));
-//            assertEquals(testData.get(i).get("lName"), usrInfo.get("lName"));
-//            assertEquals(testData.get(i).get("email"), usrInfo.get("email"));
-//        }
-//    }
-//
+
+    @Test
+    @DisplayName("Data validation")
+    public void testValidateData() throws SQLException, ClassNotFoundException {
+        UserDB userDB = new UserDB(DB_PATH);
+        Statement state = db.createStatement();
+        ResultSet res = null;
+        for (int i = 0; i < 10; i++) {
+            res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
+            assertTrue(res.next());
+            res.close();
+        }
+        state.close();
+        assertEquals(0, userDB.validateData("DoesNotExist", "password"));
+        assertEquals(0, userDB.validateData("userName", "wrongPasswd"));
+
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i + 1, userDB.validateData(testData.get(i).get("userName"), testData.get(i).get("password")));
+        }
+    }
+
+    @Test
+    @DisplayName("Get user info")
+    public void testGetUserInfo() throws SQLException, ClassNotFoundException {
+        UserDB userDB = new UserDB(DB_PATH);
+        for (int i = 0; i < 10; i++) {
+            User usrInfo = userDB.getUserInfo(i + 1);
+            assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
+            assertEquals(testData.get(i).get("lName"), usrInfo.getLastName());
+            assertEquals(testData.get(i).get("email"), usrInfo.getEmail());
+            assertEquals(i + 1, usrInfo.getId());
+        }
+    }
+
+    //
 //    @Test
 //    @DisplayName("Send invitation")
 //    public void testSendInvitation() throws SQLException {
@@ -106,17 +112,18 @@ public class TestUserDB extends TestDatabase {
 //    }
 //
 //
-//    @Test
-//    @DisplayName("Add access token")
-//    public void testAddAccToken() throws SQLException {
-//        Global.userID = 1;
-//        UserDB.addCloudCredentials("Random_Token_String", "CLIENTID");
-//        Statement state = db.createStatement();
-//        ResultSet res = state.executeQuery("SELECT accToken from users where userName='User_1_userName'");
-//        String token = res.getString("accToken");
-//        assertEquals("Random_Token_String", token);
-//        state.close();
-//    }
+    @Test
+    @DisplayName("Add access token")
+    public void testAddAccToken() throws SQLException, ClassNotFoundException {
+        UserDB userDB = new UserDB(DB_PATH);
+        assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
+        userDB.addCloudCredentials("Random_Token_String", "CLIENTID");
+        Statement state = db.createStatement();
+        ResultSet res = state.executeQuery("SELECT accToken from users where userName='User_1_userName'");
+        String token = res.getString("accToken");
+        assertEquals("Random_Token_String", token);
+        state.close();
+    }
 //
 //    @Test
 //    @DisplayName("Get access token")
