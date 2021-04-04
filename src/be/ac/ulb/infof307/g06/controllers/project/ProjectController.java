@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -64,10 +65,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public void showAddProjectStage(ProjectsViewController.ViewListener listener) {
         try {
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("AddProjectView.fxml"));
-            loader.load();
+            AnchorPane projectPane = loader.load();
             AddProjectViewController controller = loader.getController();
             controller.init(listener);
-            MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, loader);
+            MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, projectPane);
         } catch (IOException e) {
             // TODO Exception
         }
@@ -79,17 +80,18 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public void showCloudDownloadStage() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
-        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
+        // TODO Download Stage
+//        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
 
 
     public void showEditProjectStage(Project project, ProjectsViewController.ViewListener listener) {
         try {
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("EditProjectView.fxml"));
-            loader.load();
+            AnchorPane editPane = loader.load();
             EditProjectViewController controller = loader.getController();
             controller.init(project, listener);
-            MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, loader);
+            MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, editPane);
         } catch (IOException e) {
             // TODO Exception
         }
@@ -101,10 +103,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public void showEditTaskStage(Task task, ProjectsViewController.ViewListener listener) {
         try {
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("TaskEditView.fxml"));
-            loader.load();
+            AnchorPane taskPane = loader.load();
             EditTaskViewController controller = loader.getController();
             controller.init(task, listener);
-            MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, loader);
+            MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, taskPane);
         } catch (IOException e) {
             // TODO Exception
         }
@@ -118,7 +120,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
         } catch (SQLException throwables) {
             new AlertWindow("Database error", "Could not access the database").errorWindow();
-            throwables.printStackTrace();
         }
         return false;
     }

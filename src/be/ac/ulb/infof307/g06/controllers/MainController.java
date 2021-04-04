@@ -94,9 +94,15 @@ public class MainController {
      * Sets the loader to show the stage with an invitation to join a project.
      */
     public static void showInvitationStage() {
-        FXMLLoader loader =  new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MenuViewController.class.getResource("InvitationView.fxml"));
-        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
+        try {
+            AnchorPane invitationPane = loader.load();
+            MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, invitationPane);
+        } catch (IOException e) {
+            // TODO Exception
+        }
+
     }
 
     /**
@@ -150,25 +156,20 @@ public class MainController {
     /**
      * Sets a new stage.
      *
-     * @param title String
-     * @param width Integer
-     * @param height Integer
-     * @param modality Modality
-     * @param loader FXMLLoader
+     * @param title       String
+     * @param width       Integer
+     * @param height      Integer
+     * @param modality    Modality
+     * @param projectPane FXMLLoader
      */
-    public static void showStage(String title, Integer width, Integer height, Modality modality, FXMLLoader loader ){
-        try {
-            AnchorPane conditionsAnchor = loader.load();
-            stage = new Stage();
-            stage.initModality(modality);
-            stage.setTitle(title);
-            stage.setScene(new Scene(conditionsAnchor, width, height));
-            stage.centerOnScreen();
-            stage.setResizable(false);
-            stage.show();
-        }catch(IOException e){
-            new AlertWindow("Error", "Could not load the window").errorWindow();
-        }
+    public static void showStage(String title, Integer width, Integer height, Modality modality, AnchorPane projectPane) {
+        stage = new Stage();
+        stage.initModality(modality);
+        stage.setTitle(title);
+        stage.setScene(new Scene(projectPane, width, height));
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.show();
 
     }
 

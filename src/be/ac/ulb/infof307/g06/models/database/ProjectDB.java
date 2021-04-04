@@ -164,14 +164,12 @@ public class ProjectDB extends Database {
     // ---------------- COLLABORATORS ----------------
 
     public void addCollaborator(int project_id, int user_id) throws SQLException {
-        ResultSet rs = null;
         if (!getCollaborators(project_id).contains(user_id)) {
             sqlUpdate("INSERT INTO Collaborator (project_id, user_id) VALUES ('" + project_id + "','" + user_id + "');");
         }
         for (Integer subProject : getSubProjects(project_id)) {
             addCollaborator(subProject, user_id);
         }
-        rs.close();
     }
 
     public void deleteCollaborator(int project_id, int user_id) throws SQLException {

@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -46,8 +47,8 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     public void showInvitationStage() throws IOException {
         FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("InvitationView.fxml"));
-        loader.load();
-        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, loader);
+        AnchorPane invitationPane = loader.load();
+        MainController.showStage("Invitation", 571, 473, Modality.APPLICATION_MODAL, invitationPane);
     }
 
 
