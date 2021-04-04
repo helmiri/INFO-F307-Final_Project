@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -21,7 +20,6 @@ import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,7 +27,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 public class ProjectsViewController {
     public Button cloudDownloadBtn;
@@ -138,10 +135,6 @@ public class ProjectsViewController {
             listener.uploadProject();
             uploadFiles();
         } else {
-            if (/*UserDB.availableDisk() <= 0*/ true) {
-                new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").informationWindow();
-                return;
-            }
             if (event.getSource() == addTaskbtn) {
                 listener.addTask(descriptionTask.getText(), getSelectedProject().getId());
                 displayTask();

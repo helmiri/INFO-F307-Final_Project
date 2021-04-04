@@ -54,16 +54,14 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
         int res = 0;
         try {
-            res = user_db.validateData(user, passwd);
+            res = user_db.validateData(passwd, user);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         userID = res;
         switch (res) {
-//            case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong")
-//
-//            case -1 -> loginErrMsg.setText("This user is already connected");
-
+            case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").errorWindow();
+            case -1 -> new AlertWindow("Login Error", "This user is already connected").errorWindow();
             default -> showMainMenu();
         }
     }
@@ -80,6 +78,13 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void showMainMenu() {
+        if (isFirstBoot) {
+            try {
+                user_db.setAdmin(256 * 1000000);
+            } catch (SQLException throwables) {
+                new AlertWindow("Database error", "Could not access the database").errorWindow();
+            }
+        }
         MainMenuController controller = new MainMenuController(userID, user_db, project_db, stage, scene);
         controller.setListener(this);
         controller.show();

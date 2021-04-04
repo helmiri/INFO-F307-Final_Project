@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.controllers.project;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.controllers.MainController;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -109,7 +110,18 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
-
+    public boolean storageLimitReached() {
+        try {
+            if (user_db.availableDisk() <= 0) {
+                new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").informationWindow();
+                return true;
+            }
+        } catch (SQLException throwables) {
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
+            throwables.printStackTrace();
+        }
+        return false;
+    }
     // ------------------------------------- CODE --------------------------------------
 
     @Override
@@ -119,6 +131,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void addProject() {
+        if (storageLimitReached()) {
+            return;
+        }
         showAddProjectStage(this);
     }
 
@@ -136,6 +151,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void onEditProject(Project project, String title, String description, LocalDate date, ObservableList<String> newTags) {
+        if (storageLimitReached()) {
+            return;
+        }
         try {
             int projectID = project.getId();
             if (title == "") {
@@ -162,6 +180,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void editProject(Project project) {
+        if (storageLimitReached()) {
+            return;
+        }
         showEditProjectStage(project, this);
     }
 
@@ -220,16 +241,25 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void addTask(String description, int project_id) {
+        if (storageLimitReached()) {
+            return;
+        }
         onAddTask(description, project_id);
     }
 
     @Override
     public void editTask(Task task) {
+        if (storageLimitReached()) {
+            return;
+        }
         showEditTaskStage(task, this);
     }
 
     @Override
     public void onEditTask(String prev_description, String new_description, Task task) {
+        if (storageLimitReached()) {
+            return;
+        }
         try {
             List<Task> tasks = project_db.getTasks(task.getProjectID());
             List<String> taskNames = new ArrayList<>();
@@ -277,6 +307,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
+        if (storageLimitReached()) {
+            return;
+        }
         // TODO USERNAME INFO GETTER
 //        try {
 //            for (String collaborator : collaborators) {
@@ -321,6 +354,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void addCollaborator(String username, int project_id) {
+        if (storageLimitReached()) {
+            return;
+        }
         // TODO USERNAME INFO GETTER
 //        try {
 //            if (!user_db.userExists(username)) {
@@ -377,6 +413,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void importProject(String path) {
+        if (storageLimitReached()) {
+            return;
+        }
         ioController.onImportProject(path);
     }
 
@@ -391,6 +430,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void downloadProject() {
+
+        if (storageLimitReached()) {
+            return;
+        }
         showCloudDownloadStage();
     }
 
@@ -399,6 +442,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
      * Adds a project to the tree, the map and the database.
      */
     public void onAddProject(String title, String description, LocalDate date, ObservableList<String> tags, String parent) {
+        if (storageLimitReached()) {
+            return;
+        }
         try {
             int parentID = 0;
 
@@ -435,6 +481,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
      * @param taskDescription String
      */
     public void onAddTask(String taskDescription, int project_id) {
+        if (storageLimitReached()) {
+            return;
+        }
         if (taskDescription.isBlank()) {
             return;
         }

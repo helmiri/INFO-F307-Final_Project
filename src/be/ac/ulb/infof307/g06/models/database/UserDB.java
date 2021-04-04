@@ -1,7 +1,6 @@
 
 package be.ac.ulb.infof307.g06.models.database;
 
-import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.User;
 
@@ -41,7 +40,7 @@ public class UserDB extends Database {
      * @throws SQLException
      */
     public void setAdmin(int diskLimit) throws SQLException {
-        sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + Global.userID + "," + diskLimit + ")");
+        sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + 1 + "," + diskLimit + ")");
     }
 
     public void setLimit(int value) throws SQLException {
@@ -87,6 +86,8 @@ public class UserDB extends Database {
         int res = rs.getInt(1);
         rs.close();
         state.close();
+        currentUser = new User(userName, fName, lName, email, false);
+        currentUser.setId(res);
         return res;
     }
 
@@ -119,7 +120,11 @@ public class UserDB extends Database {
         ResultSet res = sqlQuery("SELECT id, password, status FROM main.users WHERE userName='" + userName + "'");
         Integer key = validate(password, res);
         res.close();
-        if (key == null) return -1;
+        if (key == null) {
+            return -1;
+        } else if (key > 0) {
+            currentUser = getUserInfo(key);
+        }
         return key;
     }
 
@@ -178,6 +183,7 @@ public class UserDB extends Database {
     public User getUserInfo(int id) throws SQLException {
         ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email, status from users where id='" + id + "'");
         User user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"), usrInfo.getString("lName"), usrInfo.getString("email"), false);
+        user.setId(id);
         usrInfo.close();
         return user;
     }
@@ -188,7 +194,7 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public void disconnectUser() throws SQLException {
-        sqlUpdate("UPDATE users SET status=false WHERE id='" + Global.userID + "'");
+        sqlUpdate("UPDATE users SET status=false WHERE id='" + currentUser.getId() + "'");
     }
 
     public int sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
@@ -237,7 +243,7 @@ public class UserDB extends Database {
      * @throws SQLException
      */
     public HashMap<String, String> getCloudCredentials() throws SQLException {
-        ResultSet res = sqlQuery("SELECT accToken, clientID from users where id='" + Global.userID + "'");
+        ResultSet res = sqlQuery("SELECT accToken, clientID from users where id='" + currentUser.getId() + "'");
         HashMap<String, String> credentials = new HashMap<>();
         credentials.put("accToken", res.getString("accToken"));
         credentials.put("clientID", res.getString("clientID"));
@@ -253,7 +259,7 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public void addCloudCredentials(String token, String clientID) throws SQLException {
-        sqlUpdate("UPDATE users SET accToken='" + token + "', clientID='" + clientID + "' where id='" + Global.userID + "'");
+        sqlUpdate("UPDATE users SET accToken='" + token + "', clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
     }
 
     /**
@@ -283,7 +289,7 @@ public class UserDB extends Database {
         if (info.isBlank()) {
             return;
         }
-        sqlUpdate("UPDATE users SET " + field + "='" + info + "' WHERE id='" + Global.userID + "'");
+        sqlUpdate("UPDATE users SET " + field + "='" + info + "' WHERE id='" + currentUser.getId() + "'");
     }
 
     /**
@@ -293,7 +299,7 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public int getDiskUsage() throws SQLException {
-        ResultSet res = sqlQuery("SELECT diskUsage from users where id='" + Global.userID + "'");
+        ResultSet res = sqlQuery("SELECT diskUsage from users where id='" + currentUser.getId() + "'");
         int disk = res.getInt("diskUsage");
         res.close();
         return disk;
@@ -316,7 +322,7 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public void updateDiskUsage(int diff) throws SQLException {
-        sqlUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + Global.userID + "'");
+        sqlUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + currentUser.getId() + "'");
     }
 
     /**
