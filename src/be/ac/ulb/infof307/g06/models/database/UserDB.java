@@ -44,7 +44,7 @@ public class UserDB extends Database {
     }
 
     public void setLimit(int value) throws SQLException {
-        sqlUpdate("UPDATE admin SET diskLimit='" + Integer.toString(value) + "'");
+        sqlUpdate("UPDATE admin SET diskLimit='" + value + "'");
     }
 
     @Override

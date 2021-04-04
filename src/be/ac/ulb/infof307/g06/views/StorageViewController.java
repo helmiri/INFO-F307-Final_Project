@@ -118,7 +118,7 @@ public class StorageViewController implements Initializable {
 
             limit.getUnit();
             usage.getUnit();
-            usageText.setText(Double.toString(usage.value) + usage.unit + " / " + Double.toString(limit.value) + limit.unit);
+            usageText.setText(usage.value + usage.unit + " / " + limit.value + limit.unit);
             if (user_db.isAdmin()) {
                 adminText.setVisible(true);
                 limitText.setVisible(true);

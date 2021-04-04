@@ -82,7 +82,7 @@ public class ProjectsViewController {
     public ViewListener listener;
     private Task selectedTask;
     private Project selectedProject;
-    private Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
+    private final Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
     private UserDB user_db;
 
     //---------------METHODES----------------
