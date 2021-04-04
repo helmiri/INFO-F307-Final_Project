@@ -14,17 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 public class TestDatabase {
-    protected static Connection db;
-    protected static List<Map<String, String>> testData;
-    protected static List<String> dbFields;
+    protected final String DB_PATH = "test/be/ac/ulb/infof307/g06/testDB.db";
+    protected Connection db;
+    protected List<Map<String, String>> testData;
+    protected List<String> dbFields;
 
     public TestDatabase() throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
     }
 
     @BeforeAll
-    public static void setup() throws SQLException, ClassNotFoundException {
-        db = DriverManager.getConnection("jdbc:sqlite:test/be/ac/ulb/infof307/g06/testDB.db");
+    void setup() throws SQLException, ClassNotFoundException {
+        db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
         dbFields = new ArrayList<>(5);
         dbFields.add("fName");
         dbFields.add("lName");
@@ -43,8 +44,6 @@ public class TestDatabase {
             }
             testData.add(i, userData);
         }
-        new UserDB("test/be/ac/ulb/infof307/g06/testDB.db");
-        new ProjectDB("test/be/ac/ulb/infof307/g06/testDB.db");
     }
 
     @BeforeEach
@@ -52,7 +51,7 @@ public class TestDatabase {
         /*
           Populate tesDB with testData
          */
-        db = DriverManager.getConnection("jdbc:sqlite:test/be/ac/ulb/infof307/g06/testDB.db");
+        db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
         PreparedStatement state;
         for (int i = 0; i < 10; i++) {
             state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, accToken, clientID) VALUES (?,?,?,?,?,?,?)");
