@@ -2,36 +2,36 @@ package be.ac.ulb.infof307.g06.controllers.connection;
 
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.application.Application;
-import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class ConnectionEngine extends Application implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
-    public final String DB_PATH = "Database.db";
-    public UserDB user_db;
-    public ProjectDB project_db;
-    public Stage stage;
-    private Scene scene;
-    public boolean isFirstBoot;
-    private int userID;
+    private UserDB userDB;
+    private ProjectDB projectDB;
+    private Stage stage;
+    private boolean isFirstBoot;
+
     public static void main(String[] args) {
-        launch(args);
+        Application.launch(args);
     }
 
     @Override
     public void start(Stage stage) throws IOException {
         // Set main stage
         this.stage = stage;
-        userID = 0;
+
         try {
-            user_db = new UserDB(DB_PATH);
-            project_db = new ProjectDB(DB_PATH);
-            isFirstBoot = user_db.isFirstBoot();
+            String DB_PATH = "Database.db";
+            userDB = new UserDB(DB_PATH);
+            projectDB = new ProjectDB(DB_PATH);
+            isFirstBoot = userDB.isFirstBoot();
         } catch (SQLException | ClassNotFoundException throwables) {
             //alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the database");
             return;
@@ -51,18 +51,26 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void onLogin(String passwd, String user) {
-
         int res = 0;
         try {
-            res = user_db.validateData(passwd, user);
+            res = userDB.validateData(passwd, user);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        userID = res;
+
         switch (res) {
             case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").errorWindow();
             case -1 -> new AlertWindow("Login Error", "This user is already connected").errorWindow();
-            default -> showMainMenu();
+            default -> {
+                try {
+                    User current = userDB.getUserInfo(res);
+                    userDB.setCurrentUser(current);
+                    projectDB.setCurrentUser(current);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                showMainMenu();
+            }
         }
     }
 
@@ -78,22 +86,33 @@ public class ConnectionEngine extends Application implements SignUpController.Li
 
     @Override
     public void showMainMenu() {
+        stage.setOnCloseRequest(e -> {
+            logout();
+            Platform.exit();
+            System.exit(0);
+        });
+        setAdminIfFirstBoot();
+        MainMenuController controller = new MainMenuController(userDB, projectDB, stage, stage.getScene());
+        controller.setListener(this);
+        controller.show();
+    }
+
+    private void setAdminIfFirstBoot() {
         if (isFirstBoot) {
             try {
-                user_db.setAdmin(256 * 1000000);
+                userDB.setAdmin(256 * 1000000);
             } catch (SQLException throwables) {
                 new AlertWindow("Database error", "Could not access the database").errorWindow();
             }
         }
-        MainMenuController controller = new MainMenuController(userID, user_db, project_db, stage, scene);
-        controller.setListener(this);
-        controller.show();
     }
 
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
         try {
-            userID = user_db.addUser(firstName, lastName, userName, email, password);
+            User current = userDB.getUserInfo(userDB.addUser(firstName, lastName, userName, email, password));
+            userDB.setCurrentUser(current);
+            projectDB.setCurrentUser(current);
         } catch (SQLException e) {
             new AlertWindow("Error", "An error has occurred when adding the user to the database: " + e).errorWindow();
         }
@@ -108,7 +127,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     @Override
     public boolean doesUserExist(String username) {
         try {
-            return user_db.userExists(username);
+            return userDB.userExists(username);
         } catch (SQLException e) {
             new AlertWindow("Error", "An error has occurred with the database when checking if the user already exists: " + e).errorWindow();
             return true;
@@ -118,9 +137,10 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     @Override
     public void logout() {
         try {
-            user_db.disconnectUser();
+            userDB.disconnectUser();
         } catch (SQLException e) {
             new AlertWindow("Error", "Couldn't disconnect the user: " + e).errorWindow();
         }
     }
+
 }
