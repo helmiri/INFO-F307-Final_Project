@@ -128,37 +128,29 @@ public class UserDB extends Database {
         return key;
     }
 
-    /**
-     * Queries the database for the user's information
-     *
-     * @return Map<String, String> where the key is the field's name containing fName, lName, email, accToken, clientID
-     * @throws SQLException If a database access error occurs
-     */
-    /*public static Map<String, String> getUserInfo(String userName) throws SQLException {
-        Map<String, String> res = new HashMap<>();
-        if (!userExists(userName)) {
-            return res;
+
+    public boolean isAdmin(int id) throws SQLException {
+        ResultSet res = sqlQuery("SELECT id from admin where id='" + id + "'");
+        boolean bool = res.isClosed();
+        if (!bool) {
+            res.close();
         }
+        return bool;
+    }
 
-        Statement state = getStatement();
-        ResultSet usrInfo = sqlQuery("Select id, fName, lName, email, accToken, clientID from users where userName='" + userName + "'");
-
-        res.put("id", Integer.toString(usrInfo.getInt("id")));
-        res.put("fName", usrInfo.getString("fName"));
-        res.put("lName", usrInfo.getString("lName"));
-        res.put("email", usrInfo.getString("email"));
-        res.put("accToken", "");
-        res.put("clientID", "");
-
+    private void setCloudCredentials(ResultSet usrInfo, User user) throws SQLException {
         if (!usrInfo.getString("accToken").isEmpty()) {
-            res.put("accToken", usrInfo.getString("accToken"));
+            user.setAccessToken(usrInfo.getString("accToken"));
+        } else {
+            user.setAccessToken("");
         }
         if (!usrInfo.getString("clientID").isEmpty()) {
-            res.put("clientID", usrInfo.getString("clientID"));
+            user.setClientID(usrInfo.getString("clientID"));
+        } else {
+            user.setClientID("");
         }
-        close(state, usrInfo);
-        return res;
-    }*/
+    }
+
     private Integer validate(String password, ResultSet res) throws SQLException {
         if (res.getBoolean("status")) {
             return null;
@@ -181,9 +173,32 @@ public class UserDB extends Database {
      */
 
     public User getUserInfo(int id) throws SQLException {
-        ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email, status from users where id='" + id + "'");
-        User user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"), usrInfo.getString("lName"), usrInfo.getString("email"), false);
-        user.setId(id);
+        String idField = "from users where id='" + id + "'";
+        return queryUserInfo(idField);
+    }
+
+    /**
+     * Queries the database for the user's information
+     *
+     * @return Map<String, String> where the key is the field's name containing fName, lName, email, accToken, clientID
+     * @throws SQLException If a database access error occurs
+     */
+    @SuppressWarnings("SqlResolve")
+    public User getUserInfo(String userName) throws SQLException {
+        if (!userExists(userName)) {
+            return null;
+        }
+        String usernameField = "from users where userName='" + userName + "'";
+        return queryUserInfo(usernameField);
+    }
+
+    @SuppressWarnings("SqlResolve")
+    private User queryUserInfo(String idField) throws SQLException {
+        ResultSet usrInfo = sqlQuery("Select id, fName, lName, email, accToken, clientID " + idField);
+        User user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"),
+                usrInfo.getString("lName"), usrInfo.getString("email"), isAdmin(usrInfo.getInt("id")));
+        setCloudCredentials(usrInfo, user);
+        user.setId(usrInfo.getInt("id"));
         usrInfo.close();
         return user;
     }
