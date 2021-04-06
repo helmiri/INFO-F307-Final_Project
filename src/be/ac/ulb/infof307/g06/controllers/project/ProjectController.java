@@ -33,9 +33,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
     private final IOController ioController;
 
 
-    public ProjectController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(userID, user_db, project_db, stage, scene);
-        ioController = new IOController(userID, user_db, project_db, stage, scene);
+    public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(user_db, project_db, stage, scene);
+        ioController = new IOController(user_db, project_db, stage, scene);
         ioController.setViewController(viewController);
     }
 
@@ -191,7 +191,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public List<Project> getProjects() {
         List<Project> res = new ArrayList<>();
         try {
-            List<Integer> projectsID = project_db.getUserProjects(userID);
+            List<Integer> projectsID = project_db.getUserProjects(user_db.getCurrentUser().getId());
             for (Integer project : projectsID) {
                 res.add(project_db.getProject(project));
             }
@@ -311,46 +311,46 @@ public class ProjectController extends Controller implements ProjectsViewControl
         if (storageLimitReached()) {
             return;
         }
-        // TODO USERNAME INFO GETTER
-//        try {
-//            for (String collaborator : collaborators) {
-//                project_db.addTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).getId()));
-//            }
-//        } catch (SQLException e) {
-//            // TODO Exception
-//        }
+        try {
+            for (String collaborator : collaborators) {
+                project_db.addTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+            e.printStackTrace();
+        }
     }
 
     @Override
     public ObservableList<String> getTaskCollaborators(Task task) {
-        // TODO USERNAME INFO GETTER
         ObservableList<String> names = FXCollections.observableArrayList();
-//        try {
-//            if (task != null) {
-//                List<Integer> collaborators = project_db.getTaskCollaborator(task.getId());
-//                for (Integer collaborator : collaborators) {
-//                    names.add((UserDB.getUserInfo(collaborator).get("uName")));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            // TODO Exception
-//        }
+        try {
+            if (task != null) {
+                List<Integer> collaborators = project_db.getTaskCollaborator(task.getId());
+                for (Integer collaborator : collaborators) {
+                    names.add((user_db.getUserInfo(collaborator).getUserName()));
+                }
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+            e.printStackTrace();
+        }
         return names;
     }
 
     @Override
     public void deleteTaskCollaborator(String collaborator, Task task) {
-        // TODO USERNAME INFO GETTER
-//        try {
-//            project_db.deleteTaskCollaborator(task.getId(), Integer.parseInt(user_db.getUserInfo(collaborator).get("id")));
-//        } catch (SQLException e) {
-//            // TODO Exeption
-//        }
+        try {
+            project_db.deleteTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
+        } catch (SQLException e) {
+            // TODO Exeption
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean isCollaboratorInTask(Task task) {
-        return getTaskCollaborators(task).contains(userID);
+        return getTaskCollaborators(task).contains(user_db.getCurrentUser().getId());
     }
 
     @Override
@@ -358,57 +358,56 @@ public class ProjectController extends Controller implements ProjectsViewControl
         if (storageLimitReached()) {
             return;
         }
-        // TODO USERNAME INFO GETTER
-//        try {
-//            if (!user_db.userExists(username)) {
-//                // TODO message user doesnt exist
-//            }
-//            int receiverID = Integer.parseInt(user_db.getUserInfo(username).get("id"));
-//            if (project_db.getCollaborators(project_id).contains(receiverID)) {
-//                // TODO message colalborator already in project
-//            }
-//            user_db.sendInvitation(project_id, userID, receiverID);
-//            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-//        } catch (SQLException e) {
-//            // TODO exception
-//        }
+        try {
+            if (!user_db.userExists(username)) {
+                // TODO message user doesnt exist
+            }
+            int receiverID = user_db.getUserInfo(username).getId();
+            if (project_db.getCollaborators(project_id).contains(receiverID)) {
+                // TODO message colalborator already in project
+            }
+            user_db.sendInvitation(project_id, user_db.getCurrentUser().getId(), receiverID);
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO exception
+        }
     }
 
     @Override
     public void deleteCollaborator(String collaboratorName, int project_id) {
-        // TODO USERNAME INFO GETTER
-//        try {
-//            project_db.deleteCollaborator(project_id, Integer.parseInt(user_db.getUserInfo(collaboratorName).get("id")));
-//            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-//        } catch (SQLException e) {
-//            // TODO Exception
-//        }
+        try {
+            project_db.deleteCollaborator(project_id, user_db.getUserInfo(collaboratorName).getId());
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        } catch (SQLException e) {
+            // TODO Exception
+            e.printStackTrace();
+        }
     }
 
     @Override
     public ObservableList<String> getCollaborators(Project project) {
-        // TODO USERNAME INFO GETTER
         ObservableList<String> names = FXCollections.observableArrayList();
-//        try {
-//            List<Integer> collaborators;
-//            collaborators = project_db.getCollaborators(project.getId());
-//            for (Integer collaborator : collaborators) {
-//                names.add((user_db.getUserInfo(collaborator).get("uName")));
-//            }
-//        } catch (SQLException e) {
-//            // TODO Exception
-//        }
+        try {
+            List<Integer> collaborators;
+            collaborators = project_db.getCollaborators(project.getId());
+            for (Integer collaborator : collaborators) {
+                names.add((user_db.getUserInfo(collaborator).getUserName()));
+            }
+        } catch (SQLException e) {
+            // TODO Exception
+            e.printStackTrace();
+        }
         return names;
     }
 
     @Override
     public boolean isUserInTask(String user, Task task) {
-        // TODO USERNAME INFO GETTER
-//        try {
-//            return project_db.getTaskCollaborator(task.getId()).contains(Integer.parseInt(user_db.getUserInfo(user).get("id")));
-//        } catch (SQLException e) {
-//            // TODO Exception
-//        }
+        try {
+            return project_db.getTaskCollaborator(task.getId()).contains((user_db.getUserInfo(user).getId()));
+        } catch (SQLException e) {
+            // TODO Exception
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -465,8 +464,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     project_db.addTag(project_db.getTagID(tag), newProjectID);
                 }
 
-                project_db.addCollaborator(newProjectID, userID);
-                TreeItem<Project> child = new TreeItem<Project>(project_db.getProject(newProjectID));
+                project_db.addCollaborator(newProjectID, user_db.getCurrentUser().getId());
+                TreeItem<Project> child = new TreeItem<>(project_db.getProject(newProjectID));
                 viewController.insertProject(newProjectID, child, parentID);
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
