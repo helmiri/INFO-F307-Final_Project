@@ -1,29 +1,34 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class Invitation {
+    private final int invitationID;
+    private final Project project;
     //-------------- ATTRIBUTES ----------------
-    int id;
-    int projectId;
-    int senderId;
-    int receiverId;
+    User receiver;
+    User sender;
+
+    public Invitation(int id, Project project, User receiver, User sender) {
+        this.project = project;
+        invitationID = id;
+        this.receiver = receiver;
+        this.sender = sender;
+    }
     //-------------- METHODS ----------------
-    /**
-     * Constructor.
-     *
-     * @param id int
-     * @param projectId int
-     * @param senderId int
-     * @param receiverId int
-     */
-    public Invitation(int id, int projectId, int senderId, int receiverId) {
-        this.id = id;
-        this.projectId = projectId;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+
+    public Project getProject() {
+        return project;
     }
 
-    public int getId() { return id; }
-    public int getProject_id() { return projectId; }
-    public int getSender_id() { return senderId; }
-    public int getReceiver_id() { return receiverId; }
+    public User getSender() {
+        return sender;
+    }
+
+    public int getInvitationID() {
+        return invitationID;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
 }

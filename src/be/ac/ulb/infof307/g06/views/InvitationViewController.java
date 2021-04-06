@@ -1,52 +1,60 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.models.Global;
+import be.ac.ulb.infof307.g06.models.Invitation;
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class InvitationViewController implements Initializable {
+public class InvitationViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
     private Button acceptBtn;
-    @FXML
-    private Button declineBtn;
     @FXML
     private TextField descriptionTextField;
     @FXML
     private TextField senderNameTextField;
     @FXML
     private TextField projectNameTextField;
+
+    private Stage stage;
+    private ViewListener listener;
+
+    private Invitation invitation;
     //--------------- METHODS ----------------
-    /**
-     * Launchs the initFields method.
-     *
-     * @param url URL
-     * @param resourceBundle ResourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
-        initFields();
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
     }
 
     /**
      * Initializes the fields related to the edition of a project.
-     *
      */
-    @FXML
-    public void initFields(){
-        String projectName = Global.popupProjectTitle;
-        String projectDescription = Global.popupProjectDescription;
-        String senderName = Global.popupSenderUsername;
-        senderNameTextField.setText(senderName);
-        projectNameTextField.setText(projectName);
-        descriptionTextField.setText(projectDescription);
+    public void show(Invitation invitation, AnchorPane invitationPane) {
+        Project invitedProject = invitation.getProject();
+        User sender = invitation.getSender();
+
+        this.invitation = invitation;
+        stage = new Stage();
+        senderNameTextField.setText(sender.getUserName());
+        projectNameTextField.setText(invitedProject.getTitle());
+        descriptionTextField.setText(invitedProject.getDescription());
+        showStage(invitationPane);
+    }
+
+    private void showStage(AnchorPane invitationPane) {
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Invitation");
+        stage.setScene(new Scene(invitationPane, 571, 473));
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.showAndWait();
     }
 
     /**
@@ -55,16 +63,18 @@ public class InvitationViewController implements Initializable {
      * @param event ActionEvent
      */
     @FXML
-    public void events(ActionEvent event){
-        if(event.getSource() == acceptBtn){
-            MainController.invitation(true, Global.popupProjectTitle, Global.userID);
-            MainController.closeStage();
-        }
-        if(event.getSource() == declineBtn){
-            MainController.invitation(false, Global.popupProjectTitle, Global.userID);
-            MainController.closeStage();
+    public void events(ActionEvent event) {
+        if (event.getSource() == acceptBtn) {
+            listener.acceptInvitation(invitation, stage);
+        } else {
+            listener.declineInvitation(invitation, stage);
         }
     }
 
+    public interface ViewListener {
+        void acceptInvitation(Invitation invitation, Stage stage);
+
+        void declineInvitation(Invitation invitation, Stage stage);
+    }
 
 }
