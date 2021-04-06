@@ -9,6 +9,7 @@ import be.ac.ulb.infof307.g06.views.StorageViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,10 +17,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsController extends Controller {
+public class SettingsController extends Controller implements TagsViewController.ViewListener {
 
-    public SettingsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(userID, user_db, project_db, stage, scene);
+    public SettingsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(user_db, project_db, stage, scene);
     }
 
     /**
@@ -28,11 +29,13 @@ public class SettingsController extends Controller {
     public void showTags() {
         FXMLLoader loader = new FXMLLoader(TagsViewController.class.getResource("Tags.fxml"));
         try {
-            loader.load();
-        } catch (IOException e) {
+            AnchorPane tagsPane = loader.load();
+            TagsViewController controller = loader.getController();
+            controller.setListener(this);
+            controller.initialize(project_db.getAllTags());
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void showStorageMenu() {
@@ -50,8 +53,10 @@ public class SettingsController extends Controller {
     @Override
     public void show() {
         FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("SettingsMenu.fxml"));
+        scene = stage.getScene();
+
         try {
-            loader.load();
+            stage.setScene(new Scene(loader.load()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,7 +107,35 @@ public class SettingsController extends Controller {
     }
 
 
+    @Override
+    public void onBackButtonClicked() {
+        this.stage.setScene(this.scene);
+    }
 
+    @Override
+    public void onAddButtonClicked(String text, String toRGBCode) {
+        try {
+            project_db.createTag(text, toRGBCode);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
+    @Override
+    public void onUpdateButtonClicked(Tag selectedTag, String text, String toRGBCode) {
+        try {
+            project_db.editTag(selectedTag.getId(), text, toRGBCode);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
+    @Override
+    public void deleteSelectedTag(Tag selectedTag) {
+        try {
+            project_db.deleteTag(selectedTag.getId());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }
