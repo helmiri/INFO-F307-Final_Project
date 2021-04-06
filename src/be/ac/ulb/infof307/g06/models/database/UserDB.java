@@ -50,7 +50,7 @@ public class UserDB extends Database {
     @Override
     protected void createTables() throws SQLException {
         sqlUpdate("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
-                "email varchar(40), password varchar(20), status boolean, accToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
+                "email varchar(40), password varchar(20), status boolean, accessToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
         sqlUpdate("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit integer)");
     }
 
@@ -139,12 +139,12 @@ public class UserDB extends Database {
     }
 
     private void setCloudCredentials(ResultSet usrInfo, User user) throws SQLException {
-        if (!usrInfo.getString("accToken").isEmpty()) {
-            user.setAccessToken(usrInfo.getString("accToken"));
+        if (usrInfo.getString("accessToken") != null) {
+            user.setAccessToken(usrInfo.getString("accessToken"));
         } else {
             user.setAccessToken("");
         }
-        if (!usrInfo.getString("clientID").isEmpty()) {
+        if (usrInfo.getString("clientID") != null) {
             user.setClientID(usrInfo.getString("clientID"));
         } else {
             user.setClientID("");
@@ -180,7 +180,7 @@ public class UserDB extends Database {
     /**
      * Queries the database for the user's information
      *
-     * @return Map<String, String> where the key is the field's name containing fName, lName, email, accToken, clientID
+     * @return Map<String, String> where the key is the field's name containing fName, lName, email, accessToken, clientID
      * @throws SQLException If a database access error occurs
      */
     @SuppressWarnings("SqlResolve")
@@ -194,7 +194,7 @@ public class UserDB extends Database {
 
     @SuppressWarnings("SqlResolve")
     private User queryUserInfo(String idField) throws SQLException {
-        ResultSet usrInfo = sqlQuery("Select id, fName, lName, email, accToken, clientID " + idField);
+        ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email, accessToken, clientID " + idField);
         User user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"),
                 usrInfo.getString("lName"), usrInfo.getString("email"), isAdmin(usrInfo.getInt("id")));
         setCloudCredentials(usrInfo, user);
@@ -254,13 +254,13 @@ public class UserDB extends Database {
     /**
      * Queries the access token and clientID of the user's cloud service
      *
-     * @return A HashMap containing accToken and clientID
+     * @return A HashMap containing accessToken and clientID
      * @throws SQLException
      */
     public HashMap<String, String> getCloudCredentials() throws SQLException {
-        ResultSet res = sqlQuery("SELECT accToken, clientID from users where id='" + currentUser.getId() + "'");
+        ResultSet res = sqlQuery("SELECT accessToken, clientID from users where id='" + currentUser.getId() + "'");
         HashMap<String, String> credentials = new HashMap<>();
-        credentials.put("accToken", res.getString("accToken"));
+        credentials.put("accessToken", res.getString("accessToken"));
         credentials.put("clientID", res.getString("clientID"));
         res.close();
         return credentials;
@@ -274,7 +274,7 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public void addCloudCredentials(String token, String clientID) throws SQLException {
-        sqlUpdate("UPDATE users SET accToken='" + token + "', clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
+        sqlUpdate("UPDATE users SET accessToken='" + token + "', clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
     }
 
     /**
