@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +23,6 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Insert")
     public void testAddUser() throws Exception {
-        UserDB userDB = new UserDB(DB_PATH);
         assertEquals(11, userDB.addUser("User1_fName", "User1_lname", "User1_userName", "user1.email.com", "123passwd"));
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("Select fName from users where fName='User1_fName'");
@@ -35,7 +35,6 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("User Exists")
     public void testUserExists() throws Exception {
-        UserDB userDB = new UserDB(DB_PATH);
         assertFalse(userDB.userExists("doesNotExist"));
 
         Statement state = db.createStatement();
@@ -53,9 +52,8 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Data validation")
     public void testValidateData() throws SQLException, ClassNotFoundException {
-        UserDB userDB = new UserDB(DB_PATH);
         Statement state = db.createStatement();
-        ResultSet res = null;
+        ResultSet res;
         for (int i = 0; i < 10; i++) {
             res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
             assertTrue(res.next());
@@ -73,7 +71,6 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Get user info")
     public void testGetUserInfo() throws SQLException, ClassNotFoundException {
-        UserDB userDB = new UserDB(DB_PATH);
         for (int i = 0; i < 10; i++) {
             User usrInfo = userDB.getUserInfo(i + 1);
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
@@ -114,29 +111,28 @@ public class TestUserDB extends TestDatabase {
 //
     @Test
     @DisplayName("Add access token")
-    public void testAddAccToken() throws SQLException, ClassNotFoundException {
-        UserDB userDB = new UserDB(DB_PATH);
+    public void testAddaccessToken() throws SQLException, ClassNotFoundException {
         assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
         userDB.addCloudCredentials("Random_Token_String", "CLIENTID");
         Statement state = db.createStatement();
-        ResultSet res = state.executeQuery("SELECT accToken from users where userName='User_1_userName'");
-        String token = res.getString("accToken");
+        ResultSet res = state.executeQuery("SELECT accessToken from users where userName='User_1_userName'");
+        String token = res.getString("accessToken");
         assertEquals("Random_Token_String", token);
         state.close();
     }
-//
-//    @Test
-//    @DisplayName("Get access token")
-//    public void testGetToken() throws SQLException {
-//        Global.userID = 1;
-//        Statement state = db.createStatement();
-//        state.executeUpdate("UPDATE users SET accToken='RANDOM_TOKEN' where id='1'");
-//        state.executeUpdate("UPDATE users SET clientID='RANDOM_CLIENTID' where id='1'");
-//        state.close();
-//        Map<String, String> res = UserDB.getCloudCredentials();
-//        assertEquals("RANDOM_TOKEN", res.get("accToken"));
-//        assertEquals("RANDOM_CLIENTID", res.get("clientID"));
-//    }
+
+    @Test
+    @DisplayName("Get access token")
+    public void testGetToken() throws SQLException, ClassNotFoundException {
+        Statement state = db.createStatement();
+        assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
+        state.executeUpdate("UPDATE users SET accessToken='RANDOM_TOKEN' where id='1'");
+        state.executeUpdate("UPDATE users SET clientID='RANDOM_CLIENTID' where id='1'");
+        state.close();
+        Map<String, String> res = userDB.getCloudCredentials();
+        assertEquals("RANDOM_TOKEN", res.get("accessToken"));
+        assertEquals("RANDOM_CLIENTID", res.get("clientID"));
+    }
 //
 //    @Test
 //    @DisplayName("Set user info")
