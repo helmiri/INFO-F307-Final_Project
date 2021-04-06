@@ -12,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUpController {
-    public Listener listener;
-    public Stage stage;
-    public Scene scene;
-    public FXMLLoader loader;
-    public Scene previousScene;
+    private Listener listener;
+    private Stage stage;
+    private Scene scene;
+    private FXMLLoader loader;
+    private Scene previousScene;
 
     public SignUpController(Stage stage, Listener listener, Scene loginScene) {
         this.stage = stage;
@@ -69,9 +69,6 @@ public class SignUpController {
                 stage.setScene(previousScene);
             }
         });
-//        stage.setResizable(true);
-//        stage.setHeight(465);
-//        stage.setWidth(715);
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();
