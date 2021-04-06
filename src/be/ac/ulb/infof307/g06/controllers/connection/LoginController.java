@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
 import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -41,17 +40,6 @@ public class LoginController {
             }
         });
         stage.setTitle("Projet génie logiciel");
-        // Disconnect user before closing
-        stage.setOnCloseRequest(e -> {
-//            try {
-//                if (Global.userID != 0) UserDB.disconnectUser();
-//            } catch (SQLException throwables) {
-//                throwables.printStackTrace();
-//            }
-            Platform.exit();
-            System.exit(0);
-        });
-
 
         stage.setResizable(true);
         stage.setHeight(465);
@@ -64,7 +52,6 @@ public class LoginController {
 
     public interface Listener {
         void onLogin(String username, String password);
-
         void onSignup();
     }
 }

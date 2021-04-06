@@ -30,8 +30,8 @@ import java.util.Map;
 public class StatsController extends Controller {
     private StatsViewController statsView;
 
-    public StatsController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(userID, user_db, project_db, stage, scene);
+    public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(user_db, project_db, stage, scene);
     }
 
     /**
@@ -70,7 +70,7 @@ public class StatsController extends Controller {
      */
     public List<Integer> getProjects() throws DatabaseException {
         try {
-            return project_db.getUserProjects(userID);
+            return project_db.getUserProjects(user_db.getCurrentUser().getId());
         } catch(SQLException e) {
             throw new DatabaseException(e);
         }

@@ -188,7 +188,7 @@ public class MainController {
         // TODO Needs UserDB as parameter
 //        List<Invitation> invitations = UserDB.getInvitations(1);
 //        for (Invitation invitation : invitations) {
-//            view.showInvitation(invitation.getProject_id(), invitation.getSender_id());
+        //    view.showInvitation(invitation.getProject_id(), invitation.getSender_id());
 //        }
     }
 

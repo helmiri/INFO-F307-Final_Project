@@ -1,20 +1,15 @@
 package be.ac.ulb.infof307.g06.views.ProjectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
-import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-import javax.swing.text.View;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
 
 public class EditProjectViewController extends ProjectInputViewController{
     //---------- ATTRIBUTE ----------------
@@ -49,7 +44,7 @@ public class EditProjectViewController extends ProjectInputViewController{
     }
 
     public void init(Project project, ProjectsViewController.ViewListener listener) {
-        super.init(listener);
+        init(listener);
         this.project = project;
         initFields();
     }

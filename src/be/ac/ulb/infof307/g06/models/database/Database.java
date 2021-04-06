@@ -1,11 +1,14 @@
 package be.ac.ulb.infof307.g06.models.database;
 
+import be.ac.ulb.infof307.g06.models.User;
+
 import java.sql.*;
 
 public abstract class Database {
     protected Connection db;
     protected String dbURL;
     private Statement state;
+    protected User currentUser;
 
     /**
      * Initializes the database
@@ -40,5 +43,13 @@ public abstract class Database {
         state = db.createStatement();
         state.executeUpdate(query);
         state.close();
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User current) {
+        currentUser = current;
     }
 }

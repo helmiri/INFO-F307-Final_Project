@@ -1,21 +1,10 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.Global;
-import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
-
-public class MenuViewController implements Initializable {
+public class MenuViewController {
     //-------------- ATTRIBUTES ----------------
 
     @FXML
@@ -49,28 +38,10 @@ public class MenuViewController implements Initializable {
     @FXML
     private Button backBtn;
 
-    public ViewListener listener;
+    private ViewListener listener;
 
     //--------------- METHODS ----------------
 
-    /**
-     * Initializes the controller and checks the invitations.
-     *
-     * @param url            URL
-     * @param resourceBundle ResourceBundle
-     */
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        /*
-        controller = new MainController();
-        controller.init(this);
-        try {
-            controller.checkInvites();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-    }
 
     /**
      * The main method for button's events.

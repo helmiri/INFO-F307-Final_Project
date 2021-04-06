@@ -1,22 +1,18 @@
 package be.ac.ulb.infof307.g06.views;
 
-import be.ac.ulb.infof307.g06.controllers.SettingsController;
-import be.ac.ulb.infof307.g06.models.Global;
 import be.ac.ulb.infof307.g06.models.Tag;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+import java.util.List;
 
-public class TagsViewController implements Initializable{
+public class TagsViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
     private Button backBtn;
@@ -33,8 +29,22 @@ public class TagsViewController implements Initializable{
     @FXML
     private TableColumn<Tag, String> defaultTagsColumn;
 
-    private SettingsController controller;
+    private ViewListener listener;
     //--------------- METHODS ----------------
+
+    /**
+     * Returns the corresponding javafx.scene.paint.Color to HEX code
+     *
+     * @param hexCode String
+     * @return javafx.scene.paint.Color
+     */
+    public static Color toColor(String hexCode) {
+        java.awt.Color color = java.awt.Color.decode(hexCode);
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+        return Color.rgb(r, g, b);
+    }
 
     /**
      * The main method for button's events
@@ -42,16 +52,16 @@ public class TagsViewController implements Initializable{
      * @param event ActionEvent
      */
     @FXML
-    private void events(ActionEvent event) throws Exception{
-        if(event.getSource() == backBtn) {
-//            SettingsController.showSettingsMenu();
+    private void events(ActionEvent event) throws Exception {
+        if (event.getSource() == backBtn) {
+            listener.onBackButtonClicked();
         }
-        if(event.getSource() == addBtn ) {
-            controller.addTag(this, defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
+        if (event.getSource() == addBtn) {
+            listener.onAddButtonClicked(defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
             refresh();
         }
-        if (event.getSource() == updateBtn){
-            controller.editTag(this, Global.selectedTag, defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
+        if (event.getSource() == updateBtn) {
+            listener.onUpdateButtonClicked(getSelectedTag(), defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
             refresh();
         }
     }
@@ -62,39 +72,18 @@ public class TagsViewController implements Initializable{
      * @param color javafx.scene.paint.Color
      * @return String
      */
-    public static String toRGBCode( Color color )
-    {
-        return String.format( "#%02X%02X%02X",
-                (int)( color.getRed() * 255 ),
-                (int)( color.getGreen() * 255 ),
-                (int)( color.getBlue() * 255 ) );
+    public String toRGBCode(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
     }
 
-    /**
-     * Returns the corresponding javafx.scene.paint.Color to HEX code
-     *
-     * @param hexCode String
-     * @return javafx.scene.paint.Color
-     */
-    public static Color toColor(String hexCode){
-        java.awt.Color color =  java.awt.Color.decode(hexCode);
-        int r = color.getRed();
-        int g = color.getGreen();
-        int b = color.getBlue();
-        javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.rgb(r, g, b);
-        return fxColor;
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
     }
 
-    /**
-     * Initializes the controller and launches the init method.
-     *
-     * @param url URL
-     * @param resourceBundle ResourceBundle
-     */
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
-//        controller = new SettingsController();
+    public void initialize(List<Tag> tags) {
         defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         defaultTagsTableView.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
@@ -108,10 +97,7 @@ public class TagsViewController implements Initializable{
                 }
             }
         });
-        //            Global.selectedTag = ProjectDB.getAllTags().get(0);
-        defaultTagNameTextField.setText(Global.selectedTag.getDescription());
-        tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
-        defaultTagsTableView.setItems(FXCollections.observableArrayList(/*ProjectDB.getAllTags()*/ (Tag) null));
+        defaultTagsTableView.setItems(FXCollections.observableArrayList(tags));
     }
 
     /**
@@ -149,23 +135,28 @@ public class TagsViewController implements Initializable{
      */
     @FXML
     public void onTagSelected() {
-        // TODO Make this not use global
-//        Global.selectedTag = getSelectedTag();
-//        if (Global.selectedTag!= null ){
-//            defaultTagNameTextField.setText(Global.selectedTag.getDescription());
-//            tagsColorPicker.setValue(toColor(Global.selectedTag.getColor()));
-//        }
+        defaultTagNameTextField.setText(getSelectedTag().getDescription());
+        tagsColorPicker.setValue(toColor(getSelectedTag().getColor()));
     }
 
     /**
      * Delete selected tag
-     * throws SQLException throwable
+     * throws SQLException
      */
 
-   @FXML
+    @FXML
     public void deleteTag() throws SQLException {
-       // TODO selected tag getter. Get rid of global.
-//       controller.deleteTag(Global.selectedTag);
-       refresh();
-   }
+        listener.deleteSelectedTag(getSelectedTag());
+        refresh();
+    }
+
+    public interface ViewListener {
+        void onBackButtonClicked();
+
+        void onAddButtonClicked(String text, String toRGBCode);
+
+        void onUpdateButtonClicked(Tag selectedTag, String text, String toRGBCode);
+
+        void deleteSelectedTag(Tag selectedTag);
+    }
 }

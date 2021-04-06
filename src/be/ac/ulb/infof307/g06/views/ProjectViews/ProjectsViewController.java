@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectsViewController {
-    public Button cloudDownloadBtn;
-    public Button cloudUploadBtn;
+    private Button cloudDownloadBtn;
+    private Button cloudUploadBtn;
     //----------ATTRIBUTES---------
     @FXML
     private Button exportProjectBtn;
@@ -79,7 +79,7 @@ public class ProjectsViewController {
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
     private final TreeItem<Project> root = new TreeItem<Project>();
-    public ViewListener listener;
+    private ViewListener listener;
     private Task selectedTask;
     private Project selectedProject;
     private final Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();

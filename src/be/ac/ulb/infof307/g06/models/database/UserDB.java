@@ -11,12 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- *
- */
+
 public class UserDB extends Database {
-    User currentUser;
-    boolean isAdmin;
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
@@ -43,6 +39,7 @@ public class UserDB extends Database {
         sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + 1 + "," + diskLimit + ")");
     }
 
+    @SuppressWarnings("SqlWithoutWhere")
     public void setLimit(int value) throws SQLException {
         sqlUpdate("UPDATE admin SET diskLimit='" + value + "'");
     }
@@ -122,8 +119,6 @@ public class UserDB extends Database {
         res.close();
         if (key == null) {
             return -1;
-        } else if (key > 0) {
-            currentUser = getUserInfo(key);
         }
         return key;
     }
@@ -212,7 +207,7 @@ public class UserDB extends Database {
         sqlUpdate("UPDATE users SET status=false WHERE id='" + currentUser.getId() + "'");
     }
 
-    public int sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
+    public void sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
         ResultSet rs = null;
         int id;
         try {   // Generate id
@@ -220,36 +215,34 @@ public class UserDB extends Database {
             id = rs.getInt("id");
             id++;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             id = 1;
         }
         sqlUpdate("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + project_id + "', '" + sender_id + "','" + receiver_id + "');");
         assert rs != null;
         rs.close();
-        return id;
     }
 
-    public void removeInvitation(int project_id, int receiver_id) throws SQLException {
-        sqlUpdate("DELETE FROM Invitations WHERE project_id = '" + project_id + "' AND user2_id = '" + receiver_id + "';");
+    public void removeInvitation(int inviteID) throws SQLException {
+        sqlUpdate("DELETE FROM Invitations WHERE id = '" + inviteID + "';");
     }
 
-    public List<Invitation> getInvitations(int user_id) throws SQLException {
+    public List<Invitation> getInvitations(ProjectDB projectDB) throws SQLException {
         List<Invitation> invitations = new ArrayList<>();
-        ResultSet rs = sqlQuery("SELECT id, project_id, user1_id FROM Invitations WHERE user2_id = '" + user_id + "';");
+        ResultSet rs = sqlQuery("SELECT id, project_id, user1_id FROM Invitations WHERE user2_id = '" + currentUser.getId() + "';");
         while (rs.next()) {
-            invitations.add(new Invitation(rs.getInt("id"), rs.getInt("project_id"), rs.getInt("user1_id"), user_id));
+            invitations.add(new Invitation(rs.getInt("id"), projectDB.getProject(rs.getInt("project_id")), currentUser, getUserInfo(rs.getInt("user1_id"))));
         }
         rs.close();
         return invitations;
     }
 
-    public Invitation getInvitation(int id) throws SQLException {
-        Invitation invitation;
-        ResultSet rs = sqlQuery("SELECT id, project_id, user1_id, user2_id FROM Invitations WHERE id = '" + id + "';");
-        invitation = new Invitation(rs.getInt("id"), rs.getInt("project_id"), rs.getInt("user1_id"), rs.getInt("user2_id"));
-        rs.close();
-        return invitation;
-    }
+//    public Invitation getInvitation() throws SQLException {
+//        Invitation invitation;
+//        ResultSet rs = sqlQuery("SELECT id, project_id, user1_id, user2_id FROM Invitations WHERE id = '" + currentUser.getId() + "';");
+//        invitation = new Invitation(rs.getInt("id"), rs.getInt("project_id"), rs.getInt("user1_id"), rs.getInt("user2_id"));
+//        rs.close();
+//        return invitation;
+//    }
 
     /**
      * Queries the access token and clientID of the user's cloud service

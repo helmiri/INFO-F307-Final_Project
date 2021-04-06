@@ -31,8 +31,8 @@ import java.util.Map;
 public class IOController extends Controller {
     private ProjectsViewController viewController;
 
-    public IOController(int userID, UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(userID, user_db, project_db, stage, scene);
+    public IOController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+        super(user_db, project_db, stage, scene);
     }
 
     public void setViewController(ProjectsViewController viewController) {
@@ -49,8 +49,8 @@ public class IOController extends Controller {
      */
     public void initProjectExport(ProjectInputViewController inputView) {
         try {
-            final ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
-            List<Integer> ProjectIDList = project_db.getUserProjects(userID);
+            ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
+            List<Integer> ProjectIDList = project_db.getUserProjects(user_db.getCurrentUser().getId());
             for (Integer projectID : ProjectIDList) {
                 projectsTitleList.add(project_db.getProject(projectID).getTitle());
             }
@@ -163,7 +163,7 @@ public class IOController extends Controller {
                             idParent = hm.get(project.getParent_id());
                         }
                         hm.put(project.getId(), id);
-                        project_db.addCollaborator(id, userID);
+                        project_db.addCollaborator(id, user_db.getCurrentUser().getId());
                         break;
                     case 3:
                         System.out.println("tasks " + line);

@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProjectDB extends Database {
 
@@ -55,7 +56,7 @@ public class ProjectDB extends Database {
                 addTag(parent_tag.getId(), id);
             }
         }
-        rs.close();
+        Objects.requireNonNull(rs).close();
         return id;
     }
 
@@ -64,11 +65,15 @@ public class ProjectDB extends Database {
     }
 
     private void editSubTags(int project_id, List<Tag> oldTags, List<Integer> newTags) throws SQLException {
-        for (int i = 0; i < oldTags.size(); i++) {
-            removeTag(oldTags.get(i).getId(), project_id);
+        for (Tag oldTag : oldTags) {
+            removeTag(oldTag.getId(), project_id);
         }
-        for (int i = 0; i < newTags.size(); i++) {
-            addTag(newTags.get(i), project_id);
+        addTags(project_id, oldTags, newTags);
+    }
+
+    private void addTags(int project_id, List<Tag> oldTags, List<Integer> newTags) throws SQLException {
+        for (Integer newTag : newTags) {
+            addTag(newTag, project_id);
         }
         for (int i = 0; i < getSubProjects(project_id).size(); i++) {
             editSubTags(getSubProjects(project_id).get(i), oldTags, newTags);
@@ -108,7 +113,7 @@ public class ProjectDB extends Database {
         }
 
 
-        rs.close();
+        Objects.requireNonNull(rs).close();
         return id;
     }
 
@@ -116,7 +121,7 @@ public class ProjectDB extends Database {
         // TODO Needs UserID
         Project current;
         int total = 0;
-        for (Integer projectID : getUserProjects(/*Global.userID*/ 1)) {
+        for (Integer projectID : getUserProjects(currentUser.getId())) {
             total += getProjectInfoSize(projectID);
         }
         return total;
@@ -228,7 +233,7 @@ public class ProjectDB extends Database {
         }
         sqlUpdate("INSERT INTO Task (id, description, project_id) VALUES('" +
                 id + "','" + description + "','" + project_id + "');");
-        rs.close();
+        Objects.requireNonNull(rs).close();
         return id;
     }
 
@@ -256,7 +261,7 @@ public class ProjectDB extends Database {
         } catch (Exception e) {
             res = null;
         }
-        rs.close();
+        Objects.requireNonNull(rs).close();
         return res;
     }
 
@@ -280,11 +285,9 @@ public class ProjectDB extends Database {
     }
 
     public void addTaskCollaborator(int task_id, int user_id) throws SQLException {
-        ResultSet rs = null;
         if (!getTaskCollaborator(task_id).contains(user_id)) {
             sqlUpdate("INSERT INTO tasks_users (task_id, user_id) VALUES ('" + task_id + "','" + user_id + "');");
         }
-        rs.close();
     }
 
     public void deleteTaskCollaborator(int task_id, int user_id) throws SQLException {
@@ -327,7 +330,7 @@ public class ProjectDB extends Database {
             }
             sqlUpdate("INSERT INTO Tag (id, description, color) VALUES('" +
                     id + "','" + description + "','" + color + "');");
-            rs.close();
+            Objects.requireNonNull(rs).close();
         } else {
             return getTagID(description);
         }
@@ -351,7 +354,7 @@ public class ProjectDB extends Database {
 
         } catch (Exception e) {
             res = null;
-            System.out.println(e);
+            //TODO Exception
         }
         assert rs != null;
         rs.close();
@@ -387,17 +390,12 @@ public class ProjectDB extends Database {
     public void editTags(int project_id, List<Integer> tags_id) throws SQLException {
         List<Tag> oldTags = getTags(project_id);
 
-        for (int i = 0; i < oldTags.size(); i++) {
-            System.out.println(oldTags.get(i).getId());
-            removeTag(oldTags.get(i).getId(), project_id);
+        for (Tag oldTag : oldTags) {
+            System.out.println(oldTag.getId());
+            removeTag(oldTag.getId(), project_id);
         }
 
-        for (int i = 0; i < tags_id.size(); i++) {
-            addTag(tags_id.get(i), project_id);
-        }
-        for (int i=0; i<getSubProjects(project_id).size(); i++){
-            editSubTags(getSubProjects(project_id).get(i), oldTags, tags_id);
-        }
+        addTags(project_id, oldTags, tags_id);
     }
 
     public List<Tag> getTags(int project_id) throws SQLException {
@@ -419,6 +417,7 @@ public class ProjectDB extends Database {
             rs = sqlQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
             id = rs.getInt("id");
         } catch (Exception e) {
+            e.printStackTrace();
         }
         assert rs != null;
         rs.close();

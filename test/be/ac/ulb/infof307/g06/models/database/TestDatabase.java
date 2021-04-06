@@ -18,9 +18,17 @@ public class TestDatabase {
     protected Connection db;
     protected List<Map<String, String>> testData;
     protected List<String> dbFields;
+    protected UserDB userDB;
+    protected ProjectDB projectDB;
 
     public TestDatabase() throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
+    }
+
+    @AfterAll
+    public static void deleteDB() {
+        File dbFile = new File("test/be/ac/ulb/infof307/g06/testDB.db");
+        dbFile.delete();
     }
 
     @BeforeAll
@@ -44,23 +52,8 @@ public class TestDatabase {
             }
             testData.add(i, userData);
         }
-    }
-
-    @BeforeEach
-    private void prepareUserData() throws SQLException {
-        /*
-          Populate tesDB with testData
-         */
-        db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-        PreparedStatement state;
-        for (int i = 0; i < 10; i++) {
-            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, accToken, clientID) VALUES (?,?,?,?,?,?,?)");
-            for (int j = 0; j < 7; j++) {
-                state.setString(j + 1, testData.get(i).get(dbFields.get(j)));
-            }
-            state.execute();
-            state.close();
-        }
+        userDB = new UserDB(DB_PATH);
+        projectDB = new ProjectDB(DB_PATH);
     }
 
     @SuppressWarnings("SqlWithoutWhere")
@@ -79,9 +72,20 @@ public class TestDatabase {
         db.close();
     }
 
-    @AfterAll
-    public static void deleteDB() {
-        File dbFile = new File("testDB");
-        dbFile.delete();
+    @BeforeEach
+    private void prepareUserData() throws SQLException {
+        /*
+          Populate tesDB with testData
+         */
+        db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+        PreparedStatement state;
+        for (int i = 0; i < 10; i++) {
+            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, accessToken, clientID) VALUES (?,?,?,?,?,?,?)");
+            for (int j = 0; j < 7; j++) {
+                state.setString(j + 1, testData.get(i).get(dbFields.get(j)));
+            }
+            state.execute();
+            state.close();
+        }
     }
 }
