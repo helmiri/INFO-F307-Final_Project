@@ -7,19 +7,19 @@ import be.ac.ulb.infof307.g06.models.Statistics;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
 import be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController;
 import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,39 +27,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatsController extends Controller {
+public class StatsController extends Controller implements StatsViewController.ViewListener  {
     private StatsViewController statsView;
 
     public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }
 
-    /**
-     * Initializes the main view and the tree. Sets values.
-     *
-     * @param view StatsViewController
-     * @param root TreeItem<Statistics>
-     */
-    public void init(StatsViewController view, TreeItem<Statistics> root) {
-        statsView = view;
-        statsView.initTree();
-        List<Integer> projectsArray;
-        try {
-            projectsArray = getProjects();
-            setStats(projectsArray, root);
-        } catch (DatabaseException e) {
-            new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
-        }
 
-    }
+
 
     /**
      * Sets the loader to show the statistics scene.
      */
+    @Override
     public void show() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
-        MainController.load(loader, 940, 1515);
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        statsView = loader.getController();
+        statsView.setListener(this);
+        stage.setScene(scene);
+        statsView.init();
+        //MainController.load(loader, 940, 1515);
     }
 
     /**
@@ -68,6 +62,7 @@ public class StatsController extends Controller {
      * @return List<Integer>
      * @throws DatabaseException e
      */
+    @Override
     public List<Integer> getProjects() throws DatabaseException {
         try {
             return project_db.getUserProjects(user_db.getCurrentUser().getId());
@@ -134,6 +129,7 @@ public class StatsController extends Controller {
      * @param root TreeItem<Statistics>
      * @throws DatabaseException e
      */
+    @Override
     public void setStats(List<Integer> projects,TreeItem<Statistics> root) throws DatabaseException {
         try{
             Map<Integer, TreeItem<Statistics>> statsTreeMap = new HashMap<>();
@@ -180,6 +176,7 @@ public class StatsController extends Controller {
      * @param fileName String
      * @param root     TreeItem<Statistics>
      */
+    @Override
     public void exportStatsAsJson(String fileName, String path, TreeItem<Statistics> root) {
         try {
             Gson gson = new Gson();
@@ -256,7 +253,7 @@ public class StatsController extends Controller {
      * @param path     String : path given for the destination of the file exported
      * @param root     TreeItem<Statistics> : root of the TreeTableView
      */
-    public void exportStatsAsCSV(final String fileName, String path, TreeItem<Statistics> root) {
+    public void exportStatsAsCSV(String fileName, String path, TreeItem<Statistics> root) {
         try {
             PrintWriter csv = new PrintWriter(path + fileName);
             // Name of columns
@@ -297,4 +294,13 @@ public class StatsController extends Controller {
         }
         return content;
     }
+
+
+    // ------------------------------------- CODE --------------------------------------
+
+    @Override
+    public void back() {
+        stage.setScene(prevScene);
+    }
+
 }
