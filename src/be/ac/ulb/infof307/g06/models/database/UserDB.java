@@ -40,7 +40,7 @@ public class UserDB extends Database {
     }
 
     @SuppressWarnings("SqlWithoutWhere")
-    public void setLimit(int value) throws SQLException {
+    public void setLimit(long value) throws SQLException {
         sqlUpdate("UPDATE admin SET diskLimit='" + value + "'");
     }
 
@@ -48,7 +48,7 @@ public class UserDB extends Database {
     protected void createTables() throws SQLException {
         sqlUpdate("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
                 "email varchar(40), password varchar(20), status boolean, accessToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
-        sqlUpdate("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit integer)");
+        sqlUpdate("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit long)");
     }
 
     public boolean isFirstBoot() throws SQLException {
@@ -268,6 +268,18 @@ public class UserDB extends Database {
      */
     public void addCloudCredentials(String token, String clientID) throws SQLException {
         sqlUpdate("UPDATE users SET accessToken='" + token + "', clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
+        currentUser.setAccessToken(token);
+        currentUser.setClientID(clientID);
+    }
+
+    public void addAccessToken(String token) throws SQLException {
+        sqlUpdate("UPDATE users SET accessToken='" + token + "' where id='" + currentUser.getId() + "'");
+        currentUser.setAccessToken(token);
+    }
+
+    public void addClientID(String clientID) throws SQLException {
+        sqlUpdate("UPDATE users SET clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
+        currentUser.setClientID(clientID);
     }
 
     /**
@@ -319,7 +331,7 @@ public class UserDB extends Database {
      * @return Available disk space in bytes
      * @throws SQLException
      */
-    public int availableDisk() throws SQLException {
+    public long availableDisk() throws SQLException {
         return getDiskLimit() - getDiskUsage();
     }
 
@@ -339,9 +351,9 @@ public class UserDB extends Database {
      * @return Limit in bytes
      * @throws SQLException When a database access error occurs
      */
-    public int getDiskLimit() throws SQLException {
+    public long getDiskLimit() throws SQLException {
         ResultSet res = sqlQuery("SELECT diskLimit FROM admin");
-        int limit = res.getInt("diskLimit");
+        long limit = res.getLong("diskLimit");
         res.close();
         return limit;
     }
