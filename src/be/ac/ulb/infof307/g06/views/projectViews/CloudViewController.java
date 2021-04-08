@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views.ProjectViews;
+package be.ac.ulb.infof307.g06.views.projectViews;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Cloud;
@@ -7,7 +7,6 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -19,16 +18,14 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class CloudViewController{
     //--------------- ATTRIBUTES ----------------
-
+    @FXML
     private AnchorPane downloadAnchor;
     @FXML
     private TableView<String> cloudTable;

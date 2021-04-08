@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views.StatisticsViews;
+package be.ac.ulb.infof307.g06.views.statisticsViews;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
@@ -12,7 +12,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 
 public class StatsViewController{

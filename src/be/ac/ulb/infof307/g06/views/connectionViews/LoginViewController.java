@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views.ConnectionsViews;
+package be.ac.ulb.infof307.g06.views.connectionViews;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,7 +8,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

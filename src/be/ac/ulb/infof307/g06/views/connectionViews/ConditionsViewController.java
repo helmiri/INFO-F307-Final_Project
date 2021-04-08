@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views.ConnectionsViews;
+package be.ac.ulb.infof307.g06.views.connectionViews;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

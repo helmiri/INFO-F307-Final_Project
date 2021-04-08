@@ -7,7 +7,7 @@
 <AnchorPane fx:id="downloadAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="be.ac.ulb.infof307.g06.views.ProjectViews.CloudViewController">
+            fx:controller="be.ac.ulb.infof307.g06.views.projectViews.CloudViewController">
     <children>
         <TableView fx:id="cloudTable" layoutX="-1.0" prefHeight="303.0" prefWidth="600.0"
                    AnchorPane.bottomAnchor="96.80000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

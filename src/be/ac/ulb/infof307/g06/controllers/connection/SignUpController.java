@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.views.ConnectionsViews.ConditionsViewController;
-import be.ac.ulb.infof307.g06.views.ConnectionsViews.SignUpViewController;
+import be.ac.ulb.infof307.g06.views.connectionViews.ConditionsViewController;
+import be.ac.ulb.infof307.g06.views.connectionViews.SignUpViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

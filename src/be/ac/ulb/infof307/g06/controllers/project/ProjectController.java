@@ -8,7 +8,7 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.ProjectViews.*;
+import be.ac.ulb.infof307.g06.views.projectViews.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

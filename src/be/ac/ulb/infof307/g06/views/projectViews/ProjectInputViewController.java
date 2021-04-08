@@ -1,18 +1,14 @@
-package be.ac.ulb.infof307.g06.views.ProjectViews;
+package be.ac.ulb.infof307.g06.views.projectViews;
 
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.CheckComboBox;
 import javafx.scene.text.Text;
-import java.net.URL;
+
 import java.time.LocalDate;
-import java.util.ResourceBundle;
 
 public class ProjectInputViewController {
     //---------- ATTRIBUTES ----------------

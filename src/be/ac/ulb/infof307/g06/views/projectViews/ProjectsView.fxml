@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController">
    <children>
       <Polygon fill="#4fc3f70d" layoutX="720.0" layoutY="-284.0" points="467.5, 1184.0, 780.0, 285.0, 780.0, 1184.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="1249.0" layoutY="-476.0" points="-374.0, 1376.0, 251.0, 476.0, 251.0, 1376.0" stroke="TRANSPARENT" strokeType="INSIDE" />

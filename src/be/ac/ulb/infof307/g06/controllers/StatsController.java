@@ -7,16 +7,13 @@ import be.ac.ulb.infof307.g06.models.Statistics;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.ProjectViews.ProjectsViewController;
-import be.ac.ulb.infof307.g06.views.StatisticsViews.StatsViewController;
+import be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController;
 import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views.ProjectViews;
+package be.ac.ulb.infof307.g06.views.projectViews;
 
 import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.models.Project;

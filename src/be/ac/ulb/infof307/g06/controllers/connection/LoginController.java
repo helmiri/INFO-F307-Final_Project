@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers.connection;
 
-import be.ac.ulb.infof307.g06.views.ConnectionsViews.LoginViewController;
+import be.ac.ulb.infof307.g06.views.connectionViews.LoginViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
