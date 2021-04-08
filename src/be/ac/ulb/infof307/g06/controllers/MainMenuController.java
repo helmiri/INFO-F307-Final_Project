@@ -121,8 +121,6 @@ public class MainMenuController extends Controller implements MenuViewController
         stage.hide();
         controller.show();
         stage.show();
-        //SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
-        //controller.showStorageMenu();
     }
 
     @Override

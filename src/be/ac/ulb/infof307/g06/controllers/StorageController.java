@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.StorageViewController;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class StorageController extends Controller implements StorageViewController.ViewListener {
+    User currentUser;
+
     //--------------- METHODS ----------------
     public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
@@ -20,46 +23,67 @@ public class StorageController extends Controller implements StorageViewControll
 
     @Override
     public void show() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(TagsViewController.class.getResource("StorageView.fxml"));
+        StorageViewController storageViewController;
+        currentUser = user_db.getCurrentUser();
         try {
-            scene = new Scene(loader.load());
-        } catch (IOException e) {
+            storageViewController = getStorageViewController();
+            storageViewController.setListener(this);
+            stage.setScene(scene);
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin(),
+                    currentUser.getAccessToken(), currentUser.getClientID());
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        StorageViewController storageViewController = loader.getController();
-        storageViewController.setListener(this);
-        stage.setScene(scene);
+    }
 
-        try {
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
+    private StorageViewController getStorageViewController() throws IOException {
+        FXMLLoader loader = new FXMLLoader(TagsViewController.class.getResource("StorageView.fxml"));
+        scene = new Scene(loader.load());
+        return loader.getController();
     }
 
     @Override
-    public boolean saveSettings(String clientID, String accessToken, String limit) throws SQLException {
+    public boolean saveSettings(String clientID, String accessToken, String limit, StorageViewController storageViewController) throws SQLException {
+        boolean res;
+        res = saveCredentials(clientID, accessToken);
+        if (user_db.isAdmin()) {
+            if (!limit.isBlank()) {
+                try {
+                    setLimit(limit);
+                    res = true;
+                } catch (NumberFormatException e) {
+                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").errorWindow();
+                }
+            }
+        }
+        storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin(),
+                currentUser.getAccessToken(), currentUser.getClientID());
+        return res;
+    }
+
+    private void setLimit(String limit) throws SQLException {
+        int newLimit = Integer.parseInt(limit);
+        if (newLimit == 0) {
+            throw new NumberFormatException("Invalid number");
+        }
+        user_db.setLimit(Integer.parseInt(limit) * 1000L * 1000L);
+    }
+
+    private boolean saveCredentials(String clientID, String accessToken) throws SQLException {
         boolean res = false;
         if (!clientID.isBlank() && !accessToken.isBlank()) {
             user_db.addCloudCredentials(accessToken, clientID);
             res = true;
-        } else if (clientID.isBlank() && accessToken.isBlank()) {
-            res = false;
-        } else if (clientID.isBlank() || accessToken.isBlank()) {
-            new AlertWindow("Settings error", "Missing credentials").errorWindow();
-            res = false;
-        }
-
-        if (user_db.isAdmin()) {
-            String value = limit;
-            if (!value.isBlank()) {
-                user_db.setLimit(Integer.parseInt(limit));
+        } else {
+            if (!accessToken.isBlank()) {
+                user_db.addAccessToken(accessToken);
                 res = true;
             }
-
+            if (!clientID.isBlank()) {
+                user_db.addClientID(clientID);
+                res = true;
+            }
         }
         return res;
     }

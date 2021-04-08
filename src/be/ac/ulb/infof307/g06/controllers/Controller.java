@@ -5,6 +5,9 @@ import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 public abstract class Controller {
     //--------------- ATTRIBUTES ----------------
     protected Stage stage;
@@ -21,6 +24,6 @@ public abstract class Controller {
         prevScene = scene;
     }
 
-    public abstract void show();
+    public abstract void show() throws IOException, SQLException;
 
 }
