@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class TagsController extends Controller implements TagsViewController.ViewListener {
-
+    //--------------- METHODS ----------------
     public TagsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }

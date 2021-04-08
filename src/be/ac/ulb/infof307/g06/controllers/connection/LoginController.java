@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginController {
+    //--------------- ATTRIBUTES ----------------
     private final Stage stage;
     private final Listener listener;
     private AnchorPane mainLayout;
 
+    //--------------- METHODS ----------------
     public LoginController(Stage stage, Listener listener) {
         this.stage = stage;
         this.listener = listener;
@@ -31,6 +33,7 @@ public class LoginController {
         controller.setListener(new LoginViewController.ViewListener() {
             @Override
             public void login(String username, String password) {
+
                 listener.onLogin(username, password);
             }
 
@@ -50,7 +53,6 @@ public class LoginController {
     }
 
     //--------------- LISTENER ----------------
-
     public interface Listener {
         void onLogin(String username, String password);
         void onSignup();

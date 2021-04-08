@@ -29,11 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectsViewController {
-    @FXML
-    private Button cloudDownloadBtn;
-
-    @FXML
-    private Button cloudUploadBtn;
     //----------ATTRIBUTES---------
     @FXML
     private Button exportProjectBtn;
@@ -49,6 +44,10 @@ public class ProjectsViewController {
     private Button backBtn;
     @FXML
     private Button assignTaskCollaboratorBtn;
+    @FXML
+    private Button cloudDownloadBtn;
+    @FXML
+    private Button cloudUploadBtn;
     @FXML
     private Label projectsDate;
     @FXML
@@ -88,8 +87,7 @@ public class ProjectsViewController {
     private final Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
     private UserDB user_db;
 
-    //---------------METHODES----------------
-
+    //---------------METHODS----------------
     public void init() {
         initTree();
         List<Project> projectsArray = listener.getProjects();
@@ -448,6 +446,7 @@ public class ProjectsViewController {
         return collaboratorsTable.getSelectionModel().getSelectedItem();
     }
 
+    //--------------- LISTENER ----------------
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

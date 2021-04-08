@@ -12,7 +12,7 @@ public class ConditionsViewController {
     @FXML
     private CheckBox acceptConditionsBox;
 
-    protected ViewListener listener;
+    private ViewListener listener;
     //-------------- METHODS -------------
 
     /**
@@ -31,6 +31,7 @@ public class ConditionsViewController {
         }
     }
 
+    //--------------- LISTENER ----------------
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

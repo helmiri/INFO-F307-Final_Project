@@ -29,10 +29,11 @@ import java.util.regex.Pattern;
 
 
 public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
+    //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
     private final IOController ioController;
 
-
+    //--------------- METHODS ----------------
     public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
         ioController = new IOController(user_db, project_db, stage, scene);

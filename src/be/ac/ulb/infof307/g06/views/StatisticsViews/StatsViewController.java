@@ -44,13 +44,11 @@ public class StatsViewController{
     @FXML
     private TreeTableColumn<Statistics, String> estimatedColumn;
     private final TreeItem<Statistics> root = new TreeItem<>();
-    protected StatsViewController.ViewListener listener;
+    private StatsViewController.ViewListener listener;
     //private final StatsController controller =
     // new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
 
     //--------------- METHODS ----------------
-
-
     /**
      * Initializes the main view and the tree. Sets values.
      */
@@ -147,7 +145,6 @@ public class StatsViewController{
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
-
 
     public interface ViewListener {
         void onBackButtonClicked();

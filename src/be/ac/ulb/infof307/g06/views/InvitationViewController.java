@@ -29,10 +29,6 @@ public class InvitationViewController {
     private Invitation invitation;
     //--------------- METHODS ----------------
 
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
-    }
-
     /**
      * Initializes the fields related to the edition of a project.
      */
@@ -69,6 +65,12 @@ public class InvitationViewController {
         } else {
             listener.declineInvitation(invitation, stage);
         }
+    }
+
+    //-------------- LISTENER ----------------
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
     }
 
     public interface ViewListener {

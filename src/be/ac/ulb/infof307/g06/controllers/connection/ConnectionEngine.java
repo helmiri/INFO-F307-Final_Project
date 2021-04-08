@@ -13,15 +13,29 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class ConnectionEngine extends Application implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
+    //-------------- ATTRIBUTES ----------------
     private UserDB userDB;
     private ProjectDB projectDB;
     private Stage stage;
     private boolean isFirstBoot;
 
+
+    //-------------- METHODS ----------------
+    /**
+     * Lauchs the main application
+     *
+     * @param args String[] Arguments
+     */
     public static void main(String[] args) {
         Application.launch(args);
     }
 
+    /**
+     * Starts the main stage
+     *
+     * @param stage Stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         // Set main stage
@@ -39,6 +53,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         showLogin();
     }
 
+    /**
+     * Manages the display of the log in window.
+     */
     @Override
     public void showLogin() {
         LoginController controller = new LoginController(stage, this);
@@ -49,15 +66,20 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         }
     }
 
+    /**
+     * Validates user data for the log in.
+     *
+     * @param username Username (String)
+     * @param password User's password (String)
+     */
     @Override
-    public void onLogin(String passwd, String user) {
+    public void onLogin(String username, String password) {
         int res = 0;
         try {
-            res = userDB.validateData(passwd, user);
+            res = userDB.validateData(username, password);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         switch (res) {
             case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").errorWindow();
             case -1 -> new AlertWindow("Login Error", "This user is already connected").errorWindow();
@@ -74,6 +96,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         }
     }
 
+    /**
+     * Manages the display of the sign up window.
+     */
     @Override
     public void onSignup() {
         SignUpController controller = new SignUpController(stage, this, stage.getScene());
@@ -84,6 +109,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         }
     }
 
+    /**
+     * Shows the main menu.
+     */
     @Override
     public void showMainMenu() {
         stage.setOnCloseRequest(e -> {
@@ -97,6 +125,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         controller.show();
     }
 
+    /**
+     * Sets
+     */
     private void setAdminIfFirstBoot() {
         if (isFirstBoot) {
             try {
@@ -107,6 +138,15 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         }
     }
 
+    /**
+     * Creates a user in the database.
+     *
+     * @param firstName String
+     * @param lastName String
+     * @param userName String
+     * @param email String
+     * @param password String
+     */
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
         try {
@@ -134,6 +174,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
         }
     }
 
+    /**
+     * Logs the user out.
+     */
     @Override
     public void logout() {
         try {

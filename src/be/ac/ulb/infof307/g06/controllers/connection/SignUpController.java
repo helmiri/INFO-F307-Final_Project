@@ -12,12 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUpController {
-    private Listener listener;
-    private Stage stage;
-    private Scene scene;
-    private FXMLLoader loader;
-    private Scene previousScene;
+    //--------------- ATTRIBUTES ----------------
+    private final Listener listener;
+    private final Stage stage;
+    private final FXMLLoader loader;
+    private final Scene previousScene;
 
+    //--------------- METHODS ----------------
     public SignUpController(Stage stage, Listener listener, Scene loginScene) {
         this.stage = stage;
         this.listener = listener;
@@ -29,7 +30,7 @@ public class SignUpController {
      * Sets the loader to show the Sign Up scene.
      */
     public void show() throws IOException {
-        scene = new Scene(loader.load());
+        Scene scene = new Scene(loader.load());
         stage.setScene(scene);
         stage.sizeToScene();
         SignUpViewController controller = loader.getController();
@@ -103,7 +104,6 @@ public class SignUpController {
         });
     }
 
-
     /**
      * Validates the user's inputs according to a pattern given.
      *
@@ -117,7 +117,7 @@ public class SignUpController {
         return m.matches();
     }
 
-
+    //--------------- LISTENER ----------------
     public interface Listener {
         void createUser(String firstName, String lastName, String userName, String email, String password);
 

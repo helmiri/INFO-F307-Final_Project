@@ -25,7 +25,7 @@ public class LoginViewController implements Initializable {
     @FXML
     private PasswordField logInPasswordField;
 
-    protected ViewListener listener;
+    private ViewListener listener;
     //--------------- METHODS ----------------
 
     /**
@@ -44,7 +44,7 @@ public class LoginViewController implements Initializable {
      * @param event ActionEvent
      */
     @FXML
-    private void logInEvents(ActionEvent event) throws IOException {
+    private void logInEvents(ActionEvent event) {
         if (event.getSource() == connectionBtn) {
             listener.login(getTextField(logInUsernameField), getTextField(logInPasswordField));
         } else if (event.getSource() == registerBtn) {
@@ -81,12 +81,14 @@ public class LoginViewController implements Initializable {
         return textField.getText();
     }
 
+    //--------------- LISTENER ----------------
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
 
     public interface ViewListener {
         void login(String username, String password);
+
         void signup();
     }
 

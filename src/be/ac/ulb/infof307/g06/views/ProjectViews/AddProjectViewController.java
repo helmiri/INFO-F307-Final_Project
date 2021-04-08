@@ -10,7 +10,7 @@ public class AddProjectViewController extends ProjectInputViewController {
     //-------------- ATTRIBUTE ----------------
     @FXML
     private Button addProjectBtn;
-    //--------------- METHOD ----------------
+    //--------------- METHODS ----------------
 
     /**
      * The main method for button's events

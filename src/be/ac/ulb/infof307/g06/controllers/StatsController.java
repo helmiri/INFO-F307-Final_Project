@@ -28,8 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 public class StatsController extends Controller implements StatsViewController.ViewListener  {
+    //--------------- ATTRIBUTE ----------------
     private StatsViewController statsView;
 
+    //--------------- METHODS ----------------
     public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }

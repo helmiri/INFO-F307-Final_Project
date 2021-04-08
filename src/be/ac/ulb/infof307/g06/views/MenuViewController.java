@@ -8,7 +8,7 @@ public class MenuViewController {
     //-------------- ATTRIBUTES ----------------
 
     @FXML
-    public Button storageBtn;
+    private Button storageBtn;
     //* MAIN MENU *
     @FXML
     private Button logOutBtn;
@@ -95,9 +95,8 @@ public class MenuViewController {
          */
     }
 
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
-    }
+    //--------------- LISTENER ----------------
+    public void setListener(ViewListener listener) { this.listener = listener; }
 
     public interface ViewListener {
         void showMainMenu();

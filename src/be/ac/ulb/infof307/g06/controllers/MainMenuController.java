@@ -18,9 +18,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainMenuController extends Controller implements MenuViewController.ViewListener, InvitationViewController.ViewListener {
+    //--------------- ATTRIBUTE ----------------
     private Listener listener;
 
-
+    //--------------- METHODS ----------------
     public MainMenuController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }
@@ -58,6 +59,12 @@ public class MainMenuController extends Controller implements MenuViewController
     }
 
 
+    /**
+     * Loads stage.
+     *
+     * @param height Integer
+     * @param width Integer
+     */
     public void load(Integer height, Integer width) {
         // Set main stage
         stage.setResizable(true);
@@ -68,6 +75,7 @@ public class MainMenuController extends Controller implements MenuViewController
 
     }
 
+    //--------------- STAGES ----------------
     @Override
     public void showMainMenu() {
         show();
@@ -145,10 +153,6 @@ public class MainMenuController extends Controller implements MenuViewController
         listener.showLogin();
     }
 
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public void acceptInvitation(Invitation invitation, Stage invitationStage) {
         Project project = invitation.getProject();
@@ -173,9 +177,21 @@ public class MainMenuController extends Controller implements MenuViewController
         }
     }
 
+    //--------------- LISTENER ----------------
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
     public interface Listener {
+
+        /**
+         * Logs the user out.
+         */
         void logout();
 
+        /**
+         * Shows the login
+         */
         void showLogin();
     }
 }

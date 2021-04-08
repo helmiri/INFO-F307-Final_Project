@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 public class IOController extends Controller {
+    //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
 
+    //--------------- METHODS ----------------
     public IOController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }
@@ -40,9 +42,7 @@ public class IOController extends Controller {
     }
 
     @Override
-    public void show() {
-
-    }
+    public void show() {}
 
     /**
      * @param inputView ProjectInputViewController
@@ -189,6 +189,7 @@ public class IOController extends Controller {
                         }
                         // update la view
                         TreeItem<Project> child = new TreeItem<>(project_db.getProject(id));
+                        System.out.println("AAAAAAAA  " + viewController);
                         viewController.insertProject(id, child, idParent);
                         break;
                     case 5:
@@ -211,7 +212,7 @@ public class IOController extends Controller {
     }
 
     /**
-     * Check if an archive is valide ("tar.gz" contains a json file).
+     * Checks if an archive is valide ("tar.gz" contains a json file).
      *
      * @param archivePath String
      * @return boolean

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class StorageController extends Controller implements StorageViewController.ViewListener {
+    //--------------- METHODS ----------------
     public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }

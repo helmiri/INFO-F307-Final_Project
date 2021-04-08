@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CloudViewController{
+    //--------------- ATTRIBUTES ----------------
+
     private AnchorPane downloadAnchor;
     @FXML
     private TableView<String> cloudTable;
@@ -35,9 +37,9 @@ public class CloudViewController{
     @FXML
     private Button downloadBtn;
 
-
     private static List<Metadata> files;
 
+    //--------------- METHODS ----------------
     public void initialize() {
         filesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         filesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
