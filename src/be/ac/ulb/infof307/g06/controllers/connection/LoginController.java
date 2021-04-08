@@ -49,6 +49,7 @@ public class LoginController {
         stage.show();
     }
 
+    //--------------- LISTENER ----------------
 
     public interface Listener {
         void onLogin(String username, String password);

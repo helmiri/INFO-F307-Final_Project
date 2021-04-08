@@ -66,7 +66,9 @@ public class SignUpController {
 
             @Override
             public void back() {
+                stage.hide();
                 stage.setScene(previousScene);
+                stage.show();
             }
         });
         stage.centerOnScreen();
@@ -78,7 +80,7 @@ public class SignUpController {
      * Sets the loader to show the condition stage.
      */
     public void showConditionStage(String firstName, String lastName, String userName, String email, String password) throws IOException {
-        FXMLLoader loader = new FXMLLoader(ConditionsViewController.class.getResource("TermsV2.fxml"));
+        FXMLLoader loader = new FXMLLoader(ConditionsViewController.class.getResource("Conditions.fxml"));
         Stage termsStage = new Stage();
         Scene termsScene = new Scene(loader.load());
         termsStage.setScene(termsScene);
