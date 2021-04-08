@@ -29,7 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectsViewController {
+    @FXML
     private Button cloudDownloadBtn;
+
+    @FXML
     private Button cloudUploadBtn;
     //----------ATTRIBUTES---------
     @FXML
@@ -134,7 +137,7 @@ public class ProjectsViewController {
         } else if (event.getSource() == cloudUploadBtn) {
             listener.uploadProject();
             uploadFiles();
-        } else {
+        } else { // TODO QUESTION ALINE : Pq faire un "else" et pas de "else if" ??
             if (event.getSource() == addTaskbtn) {
                 listener.addTask(descriptionTask.getText(), getSelectedProject().getId());
                 displayTask();

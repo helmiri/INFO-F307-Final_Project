@@ -26,8 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CloudViewController implements Initializable {
-    @FXML
+public class CloudViewController{
     private AnchorPane downloadAnchor;
     @FXML
     private TableView<String> cloudTable;
@@ -39,8 +38,7 @@ public class CloudViewController implements Initializable {
 
     private static List<Metadata> files;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize() {
         filesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         filesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         HashMap<String, String> usrCreds = null;

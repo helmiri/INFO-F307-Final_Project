@@ -80,7 +80,9 @@ public class MainMenuController extends Controller implements MenuViewController
             scene = new Scene(loader.load());
             MenuViewController controller = loader.getController();
             controller.setListener(this);
+            stage.hide();
             stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,32 +92,51 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showProjects() {
         ProjectController controller = new ProjectController(user_db, project_db, stage, scene);
+        stage.hide();
         controller.show();
+        stage.show();
     }
 
     @Override
     public void showStats() {
         StatsController controller = new StatsController(user_db, project_db, stage, scene);
+        stage.hide();
         controller.show();
+        stage.show();
+
+        // Sous WINDOWS CA FONCTIONNE AUSSI QU'AVEC 1 SEULE LIGNE (controller.show())
     }
 
     @Override
     public void showStorage() {
-        SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
-        controller.showStorageMenu();
+        StorageController controller = new StorageController(user_db, project_db, stage, scene);
+        stage.hide();
+        controller.show();
+        stage.show();
+        //SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
+        //controller.showStorageMenu();
     }
 
     @Override
     public void showSettings() {
-        SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
-        controller.show();
+        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("SettingsMenu.fxml"));
+        try {
+            scene = new Scene(loader.load());
+            MenuViewController controller = loader.getController();
+            controller.setListener(this);
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //controller.show();
     }
 
     @Override
     public void showTags() {
-        SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
-        controller.showTags();
-    }
+        TagsController controller = new TagsController(user_db, project_db, stage, scene);
+        stage.hide();
+        controller.show();
+        stage.show();    }
 
 
     @Override

@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -17,7 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class StorageViewController implements Initializable {
+public class StorageViewController {
     public Button backBtn;
     public TextField accTokenField;
     public TextField clientIDField;
@@ -30,6 +31,7 @@ public class StorageViewController implements Initializable {
     public Text limitText;
     public Text adminText;
     private UserDB user_db;
+    protected ViewListener listener;
 
     /**
      * Button handling
@@ -40,9 +42,10 @@ public class StorageViewController implements Initializable {
     public void events(ActionEvent actionEvent) throws SQLException {
 
         if (actionEvent.getSource() == backBtn) {
+            listener.onBackButtonClicked();
 //            SettingsController.showSettingsMenu();
         } else if (actionEvent.getSource() == saveBtn) {
-            if (saveSettings()) {
+            if (listener.saveSettings(clientIDField.getText(), accTokenField.getText(), limitField.getText())) {
                 new AlertWindow("Save", "Changes saved").informationWindow();
             }
         } else if (actionEvent.getSource() == helpBtn) {
@@ -60,30 +63,31 @@ public class StorageViewController implements Initializable {
      * @return
      * @throws SQLException
      */
-    public boolean saveSettings() throws SQLException {
-        String clientID = clientIDField.getText();
-        String accToken = accTokenField.getText();
-        boolean res = false;
-        if (!clientID.isBlank() && !accToken.isBlank()) {
-            user_db.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
-            res = true;
-        } else if (clientID.isBlank() && accToken.isBlank()) {
-            res = false;
-        } else if (clientID.isBlank() || accToken.isBlank()) {
-            new AlertWindow("Settings error", "Missing credentials").errorWindow();
-            res = false;
-        }
-
-        if (user_db.isAdmin()) {
-            String value = limitField.getText();
-            if (!value.isBlank()) {
-                user_db.setLimit(Integer.parseInt(limitField.getText()));
-                res = true;
-            }
-
-        }
-        return res;
-    }
+    // TODO Question Aline : Il ne faudrait pas le mettre dans le StorageController ?
+//    public boolean saveSettings(UserDB user_db) throws SQLException {
+//        String clientID = clientIDField.getText();
+//        String accToken = accTokenField.getText();
+//        boolean res = false;
+//        if (!clientID.isBlank() && !accToken.isBlank()) {
+//            user_db.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
+//            res = true;
+//        } else if (clientID.isBlank() && accToken.isBlank()) {
+//            res = false;
+//        } else if (clientID.isBlank() || accToken.isBlank()) {
+//            new AlertWindow("Settings error", "Missing credentials").errorWindow();
+//            res = false;
+//        }
+//
+//        if (user_db.isAdmin()) {
+//            String value = limitField.getText();
+//            if (!value.isBlank()) {
+//                user_db.setLimit(Integer.parseInt(limitField.getText()));
+//                res = true;
+//            }
+//
+//        }
+//        return res;
+//    }
 
     /**
      * Link to the tutorial on how to use dropbox.
@@ -96,17 +100,12 @@ public class StorageViewController implements Initializable {
         Desktop.getDesktop().browse(new URL("https://github.com/ULB-INFOF307/2021-groupe-6/blob/master/Dropbox_On-Boarding.md").toURI());
     }
 
-    @Override
     /**
      * Initializing the cloud parameters.
      */
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(UserDB user_db) {
         // TODO: pass UserDB as parameter
-        try {
-            user_db = new UserDB("Database.db");
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+
         try {
             user_db.updateDiskUsage(/*ProjectDB.getSizeOnDisk()*/ 2);
 
@@ -150,5 +149,16 @@ public class StorageViewController implements Initializable {
                 unit = "GB";
             }
         }
+    }
+
+
+    //--------------- LISTENER ----------------
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener; }
+
+    public interface ViewListener {
+        void onBackButtonClicked();
+        boolean saveSettings(String clientID, String accessToken, String limit) throws SQLException;
     }
 }

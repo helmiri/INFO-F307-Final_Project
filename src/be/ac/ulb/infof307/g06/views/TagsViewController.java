@@ -79,9 +79,7 @@ public class TagsViewController {
                 (int) (color.getBlue() * 255));
     }
 
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
-    }
+
 
     public void initialize(List<Tag> tags) {
         defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
@@ -99,6 +97,8 @@ public class TagsViewController {
         });
         defaultTagsTableView.setItems(FXCollections.observableArrayList(tags));
     }
+
+
 
     /**
      * Shows the Tags Table View
@@ -140,7 +140,7 @@ public class TagsViewController {
     }
 
     /**
-     * Delete selected tag
+     * Deletes selected tag
      * throws SQLException
      */
 
@@ -149,6 +149,11 @@ public class TagsViewController {
         listener.deleteSelectedTag(getSelectedTag());
         refresh();
     }
+
+    //--------------- LISTENER ----------------
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener; }
 
     public interface ViewListener {
         void onBackButtonClicked();

@@ -34,9 +34,6 @@ public class StatsController extends Controller implements StatsViewController.V
         super(user_db, project_db, stage, scene);
     }
 
-
-
-
     /**
      * Sets the loader to show the statistics scene.
      */
@@ -51,6 +48,7 @@ public class StatsController extends Controller implements StatsViewController.V
         }
         statsView = loader.getController();
         statsView.setListener(this);
+
         stage.setScene(scene);
         statsView.init();
         //MainController.load(loader, 940, 1515);
@@ -299,8 +297,10 @@ public class StatsController extends Controller implements StatsViewController.V
     // ------------------------------------- CODE --------------------------------------
 
     @Override
-    public void back() {
+    public void onBackButtonClicked() {
+        stage.hide();
         stage.setScene(prevScene);
+        stage.show();
     }
 
 }

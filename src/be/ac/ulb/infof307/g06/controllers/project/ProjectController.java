@@ -78,8 +78,20 @@ public class ProjectController extends Controller implements ProjectsViewControl
      * Sets the loader to show the stage to edit a project.
      */
     public void showCloudDownloadStage() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
+        //FXMLLoader loader = new FXMLLoader();
+        //loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
+
+        try {
+            FXMLLoader loader = new FXMLLoader(CloudViewController.class.getResource("CloudView.fxml"));
+            AnchorPane cloudPane = loader.load();
+            CloudViewController controller = loader.getController();
+            controller.initialize();
+
+            MainController.showStage("Download", 541, 473, Modality.APPLICATION_MODAL, cloudPane);
+
+        } catch (IOException e) {
+            // TODO Exception
+        }
         // TODO Download Stage
 //        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
@@ -127,7 +139,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void back() {
+        stage.hide();
         stage.setScene(prevScene);
+        stage.show();
     }
 
     @Override
@@ -430,7 +444,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void downloadProject() {
-
         if (storageLimitReached()) {
             return;
         }
