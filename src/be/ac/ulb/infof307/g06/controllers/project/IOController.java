@@ -356,7 +356,6 @@ public class IOController extends Controller {
      */
     @FXML
     public void alertExportImport(String choice, boolean succeed) {
-        //TODO à mettre dans le main controller
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(choice);
         alert.setHeaderText(null);

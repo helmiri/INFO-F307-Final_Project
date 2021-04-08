@@ -1,18 +1,10 @@
 package be.ac.ulb.infof307.g06.views.StatisticsViews;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
-import be.ac.ulb.infof307.g06.controllers.StatsController;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.Invitation;
-import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Statistics;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.InvitationViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
@@ -20,10 +12,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
@@ -55,11 +45,9 @@ public class StatsViewController{
     private TreeTableColumn<Statistics, String> estimatedColumn;
     private final TreeItem<Statistics> root = new TreeItem<>();
     protected StatsViewController.ViewListener listener;
+    //private final StatsController controller =
+    // new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
 
-    //private final StatsController controller = new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
-
-    public StatsViewController() throws SQLException, ClassNotFoundException {
-    }
     //--------------- METHODS ----------------
 
 
@@ -75,7 +63,6 @@ public class StatsViewController{
         } catch (DatabaseException e) {
             new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
         }
-
     }
 
     /**
@@ -86,7 +73,7 @@ public class StatsViewController{
     @FXML
     private void statsEvents(ActionEvent event) {
         if (event.getSource() == backToProjectMenu) {
-            listener.back();
+            listener.onBackButtonClicked();
             //MainController.showProjectMenu();
         }
         else if (event.getSource() == logOutBtn) {
@@ -96,7 +83,6 @@ public class StatsViewController{
         else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
             exports(event);
         }
-
     }
 
     /**
@@ -134,7 +120,6 @@ public class StatsViewController{
      *
      * @param event ActionEvent
      */
-
     public void exports(ActionEvent event) {
         String fileName = fileNameTextField.getText();
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -158,13 +143,14 @@ public class StatsViewController{
      */
     public void setMsg(String msg){ msgExportText.setText(msg); }
 
+    //--------------- LISTENER ----------------
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
 
 
     public interface ViewListener {
-        void back();
+        void onBackButtonClicked();
 
         List<Integer> getProjects() throws DatabaseException;
 
