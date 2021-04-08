@@ -18,7 +18,7 @@ public class StorageViewController {
     @FXML
     private Button backBtn;
     @FXML
-    private TextField accTokenField;
+    private TextField accessTokenField;
     @FXML
     private TextField clientIDField;
     @FXML
@@ -45,16 +45,15 @@ public class StorageViewController {
      * @throws SQLException
      */
     public void events(ActionEvent actionEvent) throws SQLException {
-
         if (actionEvent.getSource() == backBtn) {
             listener.onBackButtonClicked();
         } else if (actionEvent.getSource() == saveBtn) {
-            if (listener.saveSettings(clientIDField.getText(), accTokenField.getText(), limitField.getText())) {
+            if (listener.saveSettings(clientIDField.getText(), accessTokenField.getText(), limitField.getText(), this)) {
                 new AlertWindow("Save", "Changes saved").informationWindow();
             }
         } else if (actionEvent.getSource() == helpBtn) {
             try {
-                opnenLink();
+                openLink();
             } catch (IOException | URISyntaxException e) {
                 new AlertWindow("Error", "An error has occurred").errorWindow();
             }
@@ -67,7 +66,7 @@ public class StorageViewController {
      * @throws IOException
      * @throws URISyntaxException
      */
-    public void opnenLink() throws IOException, URISyntaxException {
+    public void openLink() throws IOException, URISyntaxException {
         new AlertWindow("Cloud service set up", "Follow the instructions to set up your credentials").informationWindow();
         Desktop.getDesktop().browse(new URL("https://github.com/ULB-INFOF307/2021-groupe-6/blob/master/Dropbox_On-Boarding.md").toURI());
     }
@@ -75,18 +74,36 @@ public class StorageViewController {
     /**
      * Initializing the cloud parameters.
      */
-    public void initialize(int diskLimit, int diskUsage, boolean isAdmin) {
+    public void initialize(long diskLimit, int diskUsage, boolean isAdmin, String accessToken, String clientID) {
         try {
-            UnitValue usage = new UnitValue();
-            UnitValue limit = new UnitValue();
-            limit.setValue(diskLimit);
-            usage.setValue(diskUsage);
-            diskBar.setProgress(usage.getValue() / limit.getValue());
-            usageText.setText(usage.getValue() + usage.getUnit() + " / " + limit.getValue() + limit.getUnit());
+            refresh(diskLimit, diskUsage, isAdmin, accessToken, clientID);
             showAdminSettings(isAdmin);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void refresh(long diskLimit, long diskUsage, boolean isAdmin, String accessToken, String clientID) {
+        accessTokenField.clear();
+        accessTokenField.setPromptText(accessToken);
+
+        clientIDField.clear();
+        clientIDField.setPromptText(clientID);
+
+        if (isAdmin) {
+            limitField.clear();
+            UnitValue limit = refreshStorageUse(diskLimit, diskUsage);
+            limitField.setPromptText(Long.toString(limit.getValue()) + limit.getUnit());
+        }
+    }
+
+    public UnitValue refreshStorageUse(long diskLimit, long diskUsage) {
+        UnitValue usage = new UnitValue(diskUsage);
+        UnitValue limit = new UnitValue(diskLimit);
+        //noinspection IntegerDivisionInFloatingPointContext (will never happen)
+        diskBar.setProgress(diskUsage / diskLimit);
+        usageText.setText(usage.getValue() + usage.getUnit() + " / " + limit.getValue() + limit.getUnit());
+        return limit;
     }
 
     private void showAdminSettings(boolean isAdmin) throws SQLException {
@@ -109,35 +126,46 @@ public class StorageViewController {
     public interface ViewListener {
         void onBackButtonClicked();
 
-        boolean saveSettings(String clientID, String accessToken, String limit) throws SQLException;
+        boolean saveSettings(String clientID, String accessToken, String limit, StorageViewController storageViewController) throws SQLException;
     }
 
     private class UnitValue {
-        private double value;
+        String unit;
+        private long value;
 
-        public double getValue() {
+        public UnitValue(long newValue) {
+            value = newValue;
+            convert();
+        }
+
+        public long getValue() {
             return value;
         }
 
-        public void setValue(double value) {
-            this.value = value;
+        public String getUnit() {
+            return unit;
         }
 
-        public String getUnit() {
-            String unit;
-            if (value < 1000) {
+        public void convert() {
+            long KILOBYTE = 1000L;
+            long MEGABYTE = 1000L * 1000L;
+            long GIGABYTE = 1000L * 1000L * 1000L;
+            long TERABYTE = 1000L * 1000L * 1000L * 1000L;
+            if (value < KILOBYTE) {
                 unit = "B";
-            } else if (value < 1000000 && value > 1000) {
-                value = value / 10000;
+            } else if (value < MEGABYTE) {
+                value = value / KILOBYTE;
                 unit = "KB";
-            } else if (value > 1000000 && value < 1000000000) {
-                value = value / 1000000;
+            } else if (value < GIGABYTE) {
+                value = value / MEGABYTE;
                 unit = "MB";
-            } else {
-                value = value / 1000000;
+            } else if (value < TERABYTE) {
+                value = value / GIGABYTE;
                 unit = "GB";
+            } else {
+                value = value / TERABYTE;
+                unit = "TB";
             }
-            return unit;
         }
     }
 }
