@@ -118,8 +118,6 @@ public class ProjectDB extends Database {
     }
 
     public int getSizeOnDisk() throws SQLException {
-        // TODO Needs UserID
-        Project current;
         int total = 0;
         for (Integer projectID : getUserProjects(currentUser.getId())) {
             total += getProjectInfoSize(projectID);
@@ -215,11 +213,11 @@ public class ProjectDB extends Database {
 
     // ---------------TASKS --------------
 
-    public int createTask(String description, int project_id) throws SQLException {
+    public void createTask(String description, int project_id) throws SQLException {
         ResultSet rs = null;
         for (int i = 0; i < getTasks(project_id).size(); i++) {
             if (getTasks(project_id).get(i).getDescription().equals(description)) {
-                return 0;
+                return;
             }
         }
         int id;
@@ -234,7 +232,6 @@ public class ProjectDB extends Database {
         sqlUpdate("INSERT INTO Task (id, description, project_id) VALUES('" +
                 id + "','" + description + "','" + project_id + "');");
         Objects.requireNonNull(rs).close();
-        return id;
     }
 
     public void editTask(String prev_description, String new_description, int project_id) throws SQLException {

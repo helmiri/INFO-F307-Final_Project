@@ -1,14 +1,11 @@
 package be.ac.ulb.infof307.g06.views;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.Tag;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import java.awt.*;
@@ -16,22 +13,30 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class StorageViewController {
-    public Button backBtn;
-    public TextField accTokenField;
-    public TextField clientIDField;
-    public Button saveBtn;
-    public AnchorPane anchorPane;
-    public Button helpBtn;
-    public ProgressBar diskBar;
-    public Text usageText;
-    public TextField limitField;
-    public Text limitText;
-    public Text adminText;
-    private UserDB user_db;
-    protected ViewListener listener;
+    @FXML
+    private Button backBtn;
+    @FXML
+    private TextField accTokenField;
+    @FXML
+    private TextField clientIDField;
+    @FXML
+    private Button saveBtn;
+    @FXML
+    private Button helpBtn;
+    @FXML
+    private ProgressBar diskBar;
+    @FXML
+    private Text usageText;
+    @FXML
+    private TextField limitField;
+    @FXML
+    private Text limitText;
+    @FXML
+    private Text adminText;
+
+    private ViewListener listener;
 
     /**
      * Button handling
@@ -43,7 +48,6 @@ public class StorageViewController {
 
         if (actionEvent.getSource() == backBtn) {
             listener.onBackButtonClicked();
-//            SettingsController.showSettingsMenu();
         } else if (actionEvent.getSource() == saveBtn) {
             if (listener.saveSettings(clientIDField.getText(), accTokenField.getText(), limitField.getText())) {
                 new AlertWindow("Save", "Changes saved").informationWindow();
@@ -56,38 +60,6 @@ public class StorageViewController {
             }
         }
     }
-
-    /**
-     * Save the user's cloud settings (token, username, diskspace,..)
-     *
-     * @return
-     * @throws SQLException
-     */
-    // TODO Question Aline : Il ne faudrait pas le mettre dans le StorageController ?
-//    public boolean saveSettings(UserDB user_db) throws SQLException {
-//        String clientID = clientIDField.getText();
-//        String accToken = accTokenField.getText();
-//        boolean res = false;
-//        if (!clientID.isBlank() && !accToken.isBlank()) {
-//            user_db.addCloudCredentials(accTokenField.getText(), clientIDField.getText());
-//            res = true;
-//        } else if (clientID.isBlank() && accToken.isBlank()) {
-//            res = false;
-//        } else if (clientID.isBlank() || accToken.isBlank()) {
-//            new AlertWindow("Settings error", "Missing credentials").errorWindow();
-//            res = false;
-//        }
-//
-//        if (user_db.isAdmin()) {
-//            String value = limitField.getText();
-//            if (!value.isBlank()) {
-//                user_db.setLimit(Integer.parseInt(limitField.getText()));
-//                res = true;
-//            }
-//
-//        }
-//        return res;
-//    }
 
     /**
      * Link to the tutorial on how to use dropbox.
@@ -103,39 +75,56 @@ public class StorageViewController {
     /**
      * Initializing the cloud parameters.
      */
-    public void initialize(UserDB user_db) {
-        // TODO: pass UserDB as parameter
-
+    public void initialize(int diskLimit, int diskUsage, boolean isAdmin) {
         try {
-            user_db.updateDiskUsage(/*ProjectDB.getSizeOnDisk()*/ 2);
-
             UnitValue usage = new UnitValue();
             UnitValue limit = new UnitValue();
-            limit.value = user_db.getDiskLimit();
-            usage.value = user_db.getDiskUsage();
-            diskBar.setProgress(usage.value / limit.value);
-
-            limit.getUnit();
-            usage.getUnit();
-            usageText.setText(usage.value + usage.unit + " / " + limit.value + limit.unit);
-            if (user_db.isAdmin()) {
-                adminText.setVisible(true);
-                limitText.setVisible(true);
-                limitField.setVisible(true);
-            }
-
+            limit.setValue(diskLimit);
+            usage.setValue(diskUsage);
+            diskBar.setProgress(usage.getValue() / limit.getValue());
+            usageText.setText(usage.getValue() + usage.getUnit() + " / " + limit.getValue() + limit.getUnit());
+            showAdminSettings(isAdmin);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
+    private void showAdminSettings(boolean isAdmin) throws SQLException {
+        if (!isAdmin) {
+            return;
+        }
+        adminText.setVisible(true);
+        limitText.setVisible(true);
+        limitField.setVisible(true);
+
+    }
+
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
+
+
+    //--------------- LISTENER ----------------
+
+    public interface ViewListener {
+        void onBackButtonClicked();
+
+        boolean saveSettings(String clientID, String accessToken, String limit) throws SQLException;
+    }
 
     private class UnitValue {
-        public String unit;
-        public double value;
+        private double value;
 
+        public double getValue() {
+            return value;
+        }
 
-        public void getUnit() {
+        public void setValue(double value) {
+            this.value = value;
+        }
+
+        public String getUnit() {
+            String unit;
             if (value < 1000) {
                 unit = "B";
             } else if (value < 1000000 && value > 1000) {
@@ -148,17 +137,7 @@ public class StorageViewController {
                 value = value / 1000000;
                 unit = "GB";
             }
+            return unit;
         }
-    }
-
-
-    //--------------- LISTENER ----------------
-
-    public void setListener(ViewListener listener) {
-        this.listener = listener; }
-
-    public interface ViewListener {
-        void onBackButtonClicked();
-        boolean saveSettings(String clientID, String accessToken, String limit) throws SQLException;
     }
 }

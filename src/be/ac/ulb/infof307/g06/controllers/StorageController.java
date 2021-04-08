@@ -7,7 +7,6 @@ import be.ac.ulb.infof307.g06.views.StorageViewController;
 import be.ac.ulb.infof307.g06.views.TagsViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,9 +29,16 @@ public class StorageController extends Controller implements StorageViewControll
         StorageViewController storageViewController = loader.getController();
         storageViewController.setListener(this);
         stage.setScene(scene);
-        storageViewController.initialize(user_db);
+
+        try {
+            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
+
     @Override
     public boolean saveSettings(String clientID, String accessToken, String limit) throws SQLException {
         boolean res = false;
