@@ -283,11 +283,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 taskNames.add(task2.getDescription());
             }
             if (taskNames.contains(new_description)) {
+                new AlertWindow("Warning", "This task already exists.").warningWindow();
                 // TODO Exception task already exists
             }
             if (new_description.equals("")) {
                 deleteTask(task);
             } else if (validateDescription(new_description)) {
+                System.out.println("ICI");
                 project_db.editTask(prev_description, new_description, task.getProjectID());
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
@@ -327,9 +329,15 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         try {
-            for (String collaborator : collaborators) {
-                project_db.addTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
+            if (task != null){
+                for (String collaborator : collaborators) {
+                    project_db.addTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
+                }
             }
+            else{
+                new AlertWindow("Warning", "Please select a task before assigning a collaborator.").warningWindow();
+            }
+
         } catch (SQLException e) {
             // TODO Exception
             e.printStackTrace();
@@ -345,6 +353,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 for (Integer collaborator : collaborators) {
                     names.add((user_db.getUserInfo(collaborator).getUserName()));
                 }
+            }
+            else{
+                new AlertWindow("Warning", "Please select a task.").warningWindow();
             }
         } catch (SQLException e) {
             // TODO Exception
@@ -508,6 +519,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 taskNames.add(task.getDescription());
             }
             if (taskNames.contains(taskDescription)) {
+                new AlertWindow("Warning", "This task already exists.").warningWindow();
                 // TODO Task already exists
                 return;
             }

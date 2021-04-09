@@ -24,7 +24,7 @@ public class LoginViewController implements Initializable {
     @FXML
     private PasswordField logInPasswordField;
 
-    private ViewListener listener;
+    protected ViewListener listener;
     //--------------- METHODS ----------------
 
     /**

@@ -137,8 +137,14 @@ public class ProjectsViewController {
             uploadFiles();
         } else { // TODO QUESTION ALINE : Pq faire un "else" et pas de "else if" ??
             if (event.getSource() == addTaskbtn) {
-                listener.addTask(descriptionTask.getText(), getSelectedProject().getId());
-                displayTask();
+                if (getSelectedProject() != null){
+                    listener.addTask(descriptionTask.getText(), getSelectedProject().getId());
+                    displayTask();
+                }
+                else{
+                    new AlertWindow("Warning", "Please select a project before adding a tag.").warningWindow();
+                }
+
             } else if (event.getSource() == addBtn) {
                 listener.addProject();
             } else if (event.getSource() == assignTaskCollaboratorBtn) {
@@ -197,7 +203,12 @@ public class ProjectsViewController {
     }
 
     public void addCollaborator() {
-        listener.addCollaborator(collaboratorsName.getText(), getSelectedProject().getId());
+        if (getSelectedProject() != null){
+            listener.addCollaborator(collaboratorsName.getText(), getSelectedProject().getId());
+        }
+        else{
+            new AlertWindow("Warning", "Please select a project before adding a collaborator.").warningWindow();
+        }
     }
 
     /**
@@ -205,8 +216,13 @@ public class ProjectsViewController {
      */
     public void deleteCollaborator() {
         String collaborator = getSelectedUser();
-        listener.deleteCollaborator(collaborator, getSelectedProject().getId());
-        collaboratorsTable.getItems().removeAll(collaborator);
+        if (getSelectedProject() != null){
+            listener.deleteCollaborator(collaborator, getSelectedProject().getId());
+            collaboratorsTable.getItems().removeAll(collaborator);        }
+        else{
+            new AlertWindow("Warning", "Please select a project before deleting a collaborator.").warningWindow();
+        }
+
     }
 
     public void deleteTaskCollaborator() {
@@ -258,6 +274,7 @@ public class ProjectsViewController {
         if (treeProjects.getSelectionModel().getSelectedItem() != null) {
             return treeProjects.getSelectionModel().getSelectedItem().getValue();
         }
+
         return null;
     }
 
