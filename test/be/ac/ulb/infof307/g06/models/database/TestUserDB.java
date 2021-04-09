@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 
+import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,21 +78,30 @@ public class TestUserDB extends TestDatabase {
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
             assertEquals(testData.get(i).get("lName"), usrInfo.getLastName());
             assertEquals(testData.get(i).get("email"), usrInfo.getEmail());
+            assertEquals(testData.get(i).get("accToken"), usrInfo.getAccessToken());
+            assertEquals(testData.get(i).get("clientID"), usrInfo.getClientID());
             assertEquals(i + 1, usrInfo.getId());
         }
     }
 
+
+    @Test
+    @DisplayName("Send invitation")
+    public void testSendInvitation() throws SQLException {
+        // Necessary setup
+        userDB.sendInvitation(1, 2, 1);
+        userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password"));
+        projectDB.setCurrentUser(userDB.getCurrentUser());
+        projectDB.createProject("Title", "Desc", 1000L, 1);
+
+        // Test
+        List<Invitation> invitations = userDB.getInvitations(projectDB);
+        assertEquals(1, invitations.get(0).getProject().getId());
+        assertEquals(2, invitations.get(0).getSender().getId());
+        assertEquals(1, invitations.get(0).getReceiver().getId());
+    }
+
     //
-//    @Test
-//    @DisplayName("Send invitation")
-//    public void testSendInvitation() throws SQLException {
-//        int id1 = UserDB.sendInvitation(1, 1, 2);
-//        Invitation invitation = UserDB.getInvitation(id1);
-//        assertEquals(1, invitation.getProject_id());
-//        assertEquals(1, invitation.getSender_id());
-//        assertEquals(2, invitation.getReceiver_id());
-//    }
-//
 //    @Test
 //    @DisplayName("Get user invitations")
 //    public void testGetInvitations() throws SQLException {
@@ -111,7 +122,7 @@ public class TestUserDB extends TestDatabase {
 //
     @Test
     @DisplayName("Add access token")
-    public void testAddaccessToken() throws SQLException, ClassNotFoundException {
+    public void testAddAccessToken() throws SQLException, ClassNotFoundException {
         assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
         userDB.addCloudCredentials("Random_Token_String", "CLIENTID");
         Statement state = db.createStatement();

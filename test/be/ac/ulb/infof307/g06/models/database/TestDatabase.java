@@ -68,6 +68,8 @@ public class TestDatabase {
         state.executeUpdate("DELETE FROM Collaborator");
         state.executeUpdate("DELETE FROM Task");
         state.executeUpdate("DELETE FROM admin");
+        state.executeUpdate("DELETE FROM Invitations");
+        state.executeUpdate("DELETE FROM Collaborator");
         state.close();
         db.close();
     }

@@ -120,6 +120,7 @@ public class UserDB extends Database {
         if (key == null) {
             return -1;
         }
+        currentUser = getUserInfo(key);
         return key;
     }
 
