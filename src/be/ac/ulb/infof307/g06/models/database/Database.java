@@ -8,7 +8,7 @@ public abstract class Database {
     protected Connection db;
     protected String dbURL;
     private Statement state;
-    protected User currentUser;
+    protected static User currentUser;
 
     /**
      * Initializes the database
@@ -46,10 +46,6 @@ public abstract class Database {
     }
 
     public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User current) {
-        currentUser = current;
+        return Database.currentUser;
     }
 }

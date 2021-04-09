@@ -83,8 +83,8 @@ public class UserDB extends Database {
         int res = rs.getInt(1);
         rs.close();
         state.close();
-        currentUser = new User(userName, fName, lName, email, false);
-        currentUser.setId(res);
+        Database.currentUser = new User(userName, fName, lName, email, false);
+        Database.currentUser.setId(res);
         return res;
     }
 

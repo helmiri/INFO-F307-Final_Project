@@ -86,8 +86,6 @@ public class ConnectionEngine extends Application implements SignUpController.Li
             default -> {
                 try {
                     User current = userDB.getUserInfo(res);
-                    userDB.setCurrentUser(current);
-                    projectDB.setCurrentUser(current);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -151,8 +149,6 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
         try {
             User current = userDB.getUserInfo(userDB.addUser(firstName, lastName, userName, email, password));
-            userDB.setCurrentUser(current);
-            projectDB.setCurrentUser(current);
         } catch (SQLException e) {
             new AlertWindow("Error", "An error has occurred when adding the user to the database: " + e).errorWindow();
         }
