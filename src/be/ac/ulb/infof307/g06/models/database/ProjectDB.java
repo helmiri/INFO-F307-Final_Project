@@ -414,7 +414,7 @@ public class ProjectDB extends Database {
             rs = sqlQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
             id = rs.getInt("id");
         } catch (Exception e) {
-            e.printStackTrace();
+           return 0;
         }
         assert rs != null;
         rs.close();

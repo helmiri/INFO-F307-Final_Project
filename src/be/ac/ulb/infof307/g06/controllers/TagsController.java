@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class TagsController extends Controller implements TagsViewController.ViewListener {
+    TagsViewController viewController;
     //--------------- METHODS ----------------
     public TagsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
@@ -26,17 +27,16 @@ public class TagsController extends Controller implements TagsViewController.Vie
         } catch (IOException e) {
             e.printStackTrace();
         }
-        TagsViewController tagsView = loader.getController();
-        tagsView.setListener(this);
+        viewController = loader.getController();
+        viewController.setListener(this);
         stage.setScene(scene);
-        try{
-            tagsView.initialize(project_db.getAllTags());
-        }
-        catch (SQLException e){
+        try {
+            viewController.initialize(project_db.getAllTags());
+        } catch (SQLException e) {
             e.printStackTrace();
             // TODO EXCEPTION
         }
-}
+    }
 
     @Override
     public void onBackButtonClicked() {
@@ -49,9 +49,9 @@ public class TagsController extends Controller implements TagsViewController.Vie
     public void onAddButtonClicked(String text, String toRGBCode) {
         try {
             project_db.createTag(text, toRGBCode);
+            viewController.refresh(project_db.getAllTags());
         } catch (SQLException throwables) {
             new AlertWindow("Error", "Can't add the tag.").errorWindow();
-
             throwables.printStackTrace();
         }
     }
@@ -60,18 +60,22 @@ public class TagsController extends Controller implements TagsViewController.Vie
     public void onUpdateButtonClicked(Tag selectedTag, String text, String toRGBCode) {
         try {
             project_db.editTag(selectedTag.getId(), text, toRGBCode);
+            viewController.refresh(project_db.getAllTags());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
     }
 
     @Override
     public void deleteSelectedTag(Tag selectedTag) {
         try {
             project_db.deleteTag(selectedTag.getId());
+            viewController.refresh(project_db.getAllTags());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
+
 
 }

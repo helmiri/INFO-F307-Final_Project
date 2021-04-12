@@ -58,11 +58,9 @@ public class TagsViewController {
         }
         if (event.getSource() == addBtn) {
             listener.onAddButtonClicked(defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
-            refresh();
         }
         if (event.getSource() == updateBtn) {
             listener.onUpdateButtonClicked(getSelectedTag(), defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
-            refresh();
         }
     }
 
@@ -103,7 +101,7 @@ public class TagsViewController {
     /**
      * Shows the Tags Table View
      */
-    public void refresh(){
+    public void refresh(List<Tag> tags) {
         defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         defaultTagsTableView.setRowFactory(tv -> new TableRow<>() {
@@ -116,7 +114,7 @@ public class TagsViewController {
                 }
             }
         });
-        defaultTagsTableView.setItems(FXCollections.observableArrayList(/*ProjectDB.getAllTags()*/ (Tag) null));
+        defaultTagsTableView.setItems(FXCollections.observableArrayList(tags));
     }
 
     /**
@@ -135,8 +133,10 @@ public class TagsViewController {
      */
     @FXML
     public void onTagSelected() {
-        defaultTagNameTextField.setText(getSelectedTag().getDescription());
-        tagsColorPicker.setValue(toColor(getSelectedTag().getColor()));
+        if (getSelectedTag() != null) {
+            defaultTagNameTextField.setText(getSelectedTag().getDescription());
+            tagsColorPicker.setValue(toColor(getSelectedTag().getColor()));
+        }
     }
 
     /**
@@ -147,7 +147,6 @@ public class TagsViewController {
     @FXML
     public void deleteTag() throws SQLException {
         listener.deleteSelectedTag(getSelectedTag());
-        refresh();
     }
 
     //--------------- LISTENER ----------------
