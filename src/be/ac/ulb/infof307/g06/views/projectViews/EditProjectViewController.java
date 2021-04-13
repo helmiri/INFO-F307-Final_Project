@@ -26,7 +26,7 @@ public class EditProjectViewController extends ProjectInputViewController{
     @Override
     protected void events(ActionEvent event){
         if (event.getSource() == editProjectBtn) {
-            listener.onEditProject(project, nameProject.getText(), descriptionProject.getText(), dateProject.getValue(), tagsProject.getCheckModel().getCheckedItems());
+            listener.onEditProject(project, nameProject.getText(), descriptionProject.getText(), dateProject.getValue(), endDateProject.getValue(), tagsProject.getCheckModel().getCheckedItems());
             MainController.closeStage();
         }
     }
@@ -40,7 +40,8 @@ public class EditProjectViewController extends ProjectInputViewController{
         descriptionProject.setText(project.getDescription());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateProject.setValue(LocalDate.parse(dateFormat.format(project.getDate() * 86400000L), formatter));
+        dateProject.setValue(LocalDate.parse(dateFormat.format(project.getStartDate() * 86400000L), formatter));
+        // TODO end date
     }
 
     public void init(Project project, ProjectsViewController.ViewListener listener) {

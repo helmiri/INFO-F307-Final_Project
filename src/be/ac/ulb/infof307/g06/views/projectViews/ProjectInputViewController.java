@@ -17,6 +17,8 @@ public class ProjectInputViewController {
     @FXML
     protected DatePicker dateProject;
     @FXML
+    protected DatePicker endDateProject;
+    @FXML
     protected TextField descriptionProject;
     @FXML
     protected TextField nameProject;
@@ -39,17 +41,41 @@ public class ProjectInputViewController {
      * @param event ActionEvent
      */
     @FXML
-    protected void events(ActionEvent event){}
+    protected void events(ActionEvent event) {
+    }
+
     @FXML
-    public void setError(String txt){ errorText.setText(txt); }
+    public void setError(String txt) {
+        errorText.setText(txt);
+    }
+
     @FXML
-    public ObservableList<String> getSelectedTags(){ return tagsProject.getCheckModel().getCheckedItems(); }
+    public ObservableList<String> getSelectedTags() {
+        return tagsProject.getCheckModel().getCheckedItems();
+    }
+
     @FXML
-    public LocalDate getDateProject(){return dateProject.getValue();}
+    public LocalDate getDateProject() {
+        return dateProject.getValue();
+    }
+
     @FXML
-    public String getNameProject(){return nameProject.getText();}
+    public LocalDate getEndDateProject() {
+        return endDateProject.getValue();
+    }
+
     @FXML
-    public String getDescriptionProject(){return descriptionProject.getText();}
+    public String getNameProject() {
+        return nameProject.getText();
+    }
+
     @FXML
-    public String getParentProjectName(){return parentProject.getText();}
+    public String getDescriptionProject() {
+        return descriptionProject.getText();
+    }
+
+    @FXML
+    public String getParentProjectName() {
+        return parentProject.getText();
+    }
 }

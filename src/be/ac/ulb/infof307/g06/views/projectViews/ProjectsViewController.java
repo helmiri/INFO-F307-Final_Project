@@ -426,7 +426,8 @@ public class ProjectsViewController {
     public void displayProject(Project project, ObservableList<String> tagsName) {
         projectsDescription.setText(project.getDescription());
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        projectsDate.setText(dateFormat.format(project.getDate() * 86400000L));
+        projectsDate.setText(dateFormat.format(project.getStartDate() * 86400000L));
+        // TODO add end date
         projectsTitle.setText(project.getTitle());
         displayTask();
         displayCollaborators();
@@ -473,13 +474,13 @@ public class ProjectsViewController {
 
         void addProject();
 
-        void onAddProject(String title, String description, LocalDate date, ObservableList<String> tags, String parent);
+        void onAddProject(String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> tags, String parent);
 
         void deleteProject(String name);
 
         void editProject(Project project);
 
-        void onEditProject(Project project, String title, String description, LocalDate date, ObservableList<String> tags);
+        void onEditProject(Project project, String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> tags);
 
         List<Project> getProjects();
 

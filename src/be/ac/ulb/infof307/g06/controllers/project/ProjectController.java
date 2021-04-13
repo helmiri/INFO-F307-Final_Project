@@ -166,7 +166,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     }
 
     @Override
-    public void onEditProject(Project project, String title, String description, LocalDate date, ObservableList<String> newTags) {
+    public void onEditProject(Project project, String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> newTags) {
         if (storageLimitReached()) {
             return;
         }
@@ -179,7 +179,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
                         projectID,
                         title,
                         description,
-                        date.toEpochDay()
+                        startDate.toEpochDay(),
+                        endDate.toEpochDay()
                 );
                 List<Integer> tags = new ArrayList<>();
                 for (String newTag : newTags) {
@@ -466,7 +467,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     /**
      * Adds a project to the tree, the map and the database.
      */
-    public void onAddProject(String title, String description, LocalDate date, ObservableList<String> tags, String parent) {
+    public void onAddProject(String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> tags, String parent) {
         if (storageLimitReached()) {
             return;
         }
@@ -477,14 +478,16 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 // TODO Cannot add a project with an empty title
             } else if (project_db.getProjectID(title) != 0) {
                 // TODO A project with the same title already exists.
-            } else if (date == null) {
+            } else if (startDate == null) {
+                // TODO Cannot create a project without a date.
+            } else if (endDate == null) {
                 // TODO Cannot create a project without a date.
             } else if (parent.equals("") || project_db.getProjectID(parent) != 0) {
 
                 if (!parent.equals("")) {
                     parentID = project_db.getProjectID(parent);
                 }
-                int newProjectID = project_db.createProject(title, description, date.toEpochDay(), parentID);
+                int newProjectID = project_db.createProject(title, description, startDate.toEpochDay(), endDate.toEpochDay(), parentID);
                 for (String tag : tags) {
                     project_db.addTag(project_db.getTagID(tag), newProjectID);
                 }

@@ -9,7 +9,8 @@ public class Project {
     private final int id;
     private final String title;
     private final String description;
-    private final Long date;
+    private final Long startDate;
+    private final Long endDate;
     private int projectId;
     private ObservableList<String> tagsName;
     //-------------- METHODS ----------------
@@ -20,22 +21,25 @@ public class Project {
      * @param id          int
      * @param title       String
      * @param description String
-     * @param date        Long
+     * @param startDate   Long
+     * @param endDate     Long
      * @param projectId   int
      */
-    public Project(int id, String title, String description, Long date, int projectId) {
+    public Project(int id, String title, String description, Long startDate, Long endDate, int projectId) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.date = date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.projectId = projectId;
     }
 
-    public Project(int id, String title, String description, Long date, ObservableList<String> tags) {
+    public Project(int id, String title, String description, Long startDate, Long endDate, ObservableList<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.date = date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         tagsName = tags;
     }
 
@@ -43,7 +47,8 @@ public class Project {
         id = 0;
         title = "";
         description = "";
-        date = 0L;
+        startDate = 0L;
+        endDate = 0L;
         projectId = 0;
     }
 
@@ -55,10 +60,26 @@ public class Project {
         return tagsName;
     }
 
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public Long getDate() { return date; }
-    public int getParent_id() { return projectId; }
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Long getStartDate() {
+        return startDate;
+    }
+
+    public Long getEndDate() {
+        return endDate;
+    }
+
+    public int getParent_id() {
+        return projectId;
+    }
+
     public int getSize() {
         int res = 0;
 
@@ -69,5 +90,9 @@ public class Project {
         res += title.length() + description.length();
 
         return res;
+    }
+
+    public Long getDuration() {
+        return endDate - startDate;
     }
 }

@@ -19,7 +19,7 @@ public class ProjectDB extends Database {
 
     @Override
     protected void createTables() throws SQLException {
-        sqlUpdate("CREATE TABLE IF NOT EXISTS Project(id Integer, title varchar(20), description varchar(20), date Long, parent_id Integer);");
+        sqlUpdate("CREATE TABLE IF NOT EXISTS Project(id Integer, title varchar(20), description varchar(20), startDate Long, endDate Long, parent_id Integer);");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Collaborator(project_id Integer, user_id Integer);");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Task(id Integer, description varchar(20), project_id Integer);");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Tag(id Integer, description varchar(20), color varchar(20));");
@@ -36,7 +36,7 @@ public class ProjectDB extends Database {
      * @return The newly created project's ID
      * @throws SQLException
      */
-    public int createProject(String title, String description, Long date, int parent_id) throws SQLException {
+    public int createProject(String title, String description, Long startDate, Long endDate, int parent_id) throws SQLException {
         ResultSet rs = null;
         int id;
         try {   // Generate id
@@ -49,8 +49,8 @@ public class ProjectDB extends Database {
         }
 
         sqlUpdate("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
-                id + "','" + title + "','" + description + "','" + date + "','" + parent_id + "');");
-        if (parent_id != 0){    // Add the parent tags to the current tags
+                id + "','" + title + "','" + description + "','" + startDate + "','" + endDate + "','" + parent_id + "');");
+        if (parent_id != 0) {    // Add the parent tags to the current tags
             List<Tag> parent_tags = getTags(parent_id);
             for (Tag parent_tag : parent_tags) {
                 addTag(parent_tag.getId(), id);
@@ -60,8 +60,8 @@ public class ProjectDB extends Database {
         return id;
     }
 
-    public void editProject(int id, String title, String description, Long date) throws SQLException {
-        sqlUpdate("UPDATE Project SET title = '" + title + "', description = '" + description + "', date = '" + date + "' WHERE id = '" + id + "';");
+    public void editProject(int id, String title, String description, Long startDate, Long endDate) throws SQLException {
+        sqlUpdate("UPDATE Project SET title = '" + title + "', description = '" + description + "', startDate = '" + startDate + "', endDate = '" + endDate + "' WHERE id = '" + id + "';");
     }
 
     private void editSubTags(int project_id, List<Tag> oldTags, List<Integer> newTags) throws SQLException {
@@ -150,13 +150,14 @@ public class ProjectDB extends Database {
         ResultSet rs = null;
         Project res = null;
         try {
-            rs = sqlQuery("SELECT title,description,date,parent_id FROM Project WHERE id='" + id + "';");
+            rs = sqlQuery("SELECT title,description,startDate,endDate,parent_id FROM Project WHERE id='" + id + "';");
 
             String title = rs.getString("title");
             String description = rs.getString("description");
-            Long date = rs.getLong("date");
+            Long startDate = rs.getLong("startDate");
+            Long endDate = rs.getLong("startDate");
             int parent_id = rs.getInt("parent_id");
-            res = new Project(id, title, description, date, parent_id);
+            res = new Project(id, title, description, startDate, endDate, parent_id);
         } catch (Exception ignored) {
         }
         if (rs != null) {
