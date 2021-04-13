@@ -144,7 +144,7 @@ public class StatsViewController{
      *
      * @param root TreeItem<Statistics>
      */
-    public void expandRoot(TreeItem<Statistics> root){root.setExpanded(true);}
+    public void expandRoot(TreeItem<Project> root){root.setExpanded(true);}
 
     /**
      * Adds a child to the related parent in the TreeTableView.
@@ -161,21 +161,21 @@ public class StatsViewController{
      *
      * @param event ActionEvent
      */
-    public void exports(ActionEvent event) {
-        String fileName = fileNameTextField.getText();
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("src"));
-        File selectedDirectory = directoryChooser.showDialog(new Stage());
-        if (selectedDirectory != null) {
-            if (event.getSource() == exportJSONBtn) {
-                if (fileName.equals("")) { listener.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
-                else { listener.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }
-            } else if (event.getSource() == exportCSVBtn) {
-                if (fileName.equals("")) { listener.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
-                else { listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
-            }
-        }
-    }
+//    public void exports(ActionEvent event) {
+//        String fileName = fileNameTextField.getText();
+//        DirectoryChooser directoryChooser = new DirectoryChooser();
+//        directoryChooser.setInitialDirectory(new File("src"));
+//        File selectedDirectory = directoryChooser.showDialog(new Stage());
+//        if (selectedDirectory != null) {
+//            if (event.getSource() == exportJSONBtn) {
+//                if (fileName.equals("")) { listener.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
+//                else { listener.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }
+//            } else if (event.getSource() == exportCSVBtn) {
+//                if (fileName.equals("")) { listener.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
+//                else { listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
+//            }
+//        }
+//    }
 
     /**
      * Sets text message for exportation.
@@ -198,10 +198,16 @@ public class StatsViewController{
 
         List<Integer> getProjects() throws DatabaseException;
 
-        void setStats(List<Integer> projects,TreeItem<Statistics> root) throws DatabaseException;
+        void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
 
         void exportStatsAsJson(String fileName, String path, TreeItem<Statistics> root);
 
         void exportStatsAsCSV(String fileName, String path, TreeItem<Statistics> root);
+
+        List<Integer> countOverallStats() throws SQLException;
+
+        List<Integer> countProjectStats(Project selectedProject) throws SQLException;
+
+
     }
 }

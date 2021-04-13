@@ -20,6 +20,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,7 +144,7 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException {
         try{
-            Map<Integer, TreeItem<Statistics>> statsTreeMap = new HashMap<>();
+            Map<Integer, TreeItem<Project>> statsTreeMap = new HashMap<>();
             for(Integer project : projects){
                 Project childProject = project_db.getProject(project);
                 int parentID = childProject.getParent_id();
@@ -303,6 +304,55 @@ public class StatsController extends Controller implements StatsViewController.V
             }
         }
         return content;
+    }
+
+    @Override
+    public List<Integer> countOverallStats() throws SQLException {
+        List<Integer> projects = project_db.getUserProjects(user_db.getCurrentUser().getId());
+        List<Integer> res = new ArrayList<>();
+        int tasks =0;
+        List<Integer> collaborators=new ArrayList<>();
+        for(int i=0;i<projects.size();i++){
+            tasks+=project_db.countTasks(projects.get(i));
+            List<Integer> projectsCollaborators=project_db.getCollaborators(projects.get(i));
+            for(Integer collaborator : projectsCollaborators){
+                if(!collaborators.contains(collaborator)){ collaborators.add(collaborator); } }
+        }
+
+        res.add(projects.size());
+        res.add(tasks);
+        res.add(collaborators.size() - 1);
+
+        return res;
+    }
+
+    @Override
+    public List<Integer> countProjectStats(Project selectedProject) throws SQLException {
+        List<Integer> res = new ArrayList<>();
+        int sub = 0;
+        if(selectedProject != null) {
+            int projectId = selectedProject.getId();
+            res.add(countSubProject(projectId, sub));
+            res.add(project_db.countTasks(projectId));
+            res.add(project_db.countCollaborators(projectId));
+
+        }
+        return res;
+    }
+
+
+    /**
+     * @param projectID int
+     * @param counter int
+     * @return int
+     * @throws SQLException e
+     */
+    public int countSubProject(int projectID, int counter) throws SQLException {
+        for (int k = 0; k < project_db.getSubProjects(projectID).size(); k++) {
+            counter += 1;
+            counter = countSubProject(project_db.getSubProjects(projectID).get(k), counter);
+        }
+        return counter;
     }
 
 
