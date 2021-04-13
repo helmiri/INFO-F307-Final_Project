@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
@@ -68,7 +69,7 @@
             </Pane>
             <Pane layoutX="89.0" layoutY="465.0" prefHeight="459.0" prefWidth="546.0">
                <children>
-                  <TableView fx:id="taskTable" editable="true" layoutX="25.0" layoutY="44.0" onMouseClicked="#onTaskSelected" prefHeight="317.0" prefWidth="512.0">
+                  <TableView fx:id="taskTable" editable="true" layoutX="17.0" layoutY="14.0" onMouseClicked="#onTaskSelected" prefHeight="317.0" prefWidth="512.0">
                      <columns>
                         <TableColumn fx:id="taskColumn" prefWidth="403.0" text="Tasks" />
                         <TableColumn fx:id="taskTime" prefWidth="108.0" text="Time left" />
@@ -82,8 +83,10 @@
                         </ContextMenu>
                      </contextMenu>
                   </TableView>
-                  <Button fx:id="addTaskbtn" layoutX="442.0" layoutY="374.0" mnemonicParsing="false" onAction="#events" prefHeight="43.0" prefWidth="90.0" style="-fx-background-color: #4fc3f7;" text="ADD" />
-                  <TextArea fx:id="descriptionTask" layoutX="25.0" layoutY="371.0" prefHeight="48.0" prefWidth="413.0" />
+                  <Button fx:id="addTaskbtn" layoutX="442.0" layoutY="399.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" style="-fx-background-color: #4fc3f7;" text="ADD" />
+                  <TextArea fx:id="descriptionTask" layoutX="17.0" layoutY="398.0" prefHeight="37.0" prefWidth="413.0" />
+                  <DatePicker fx:id="startDateTask" layoutX="17.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0" promptText="Start date" />
+                  <DatePicker fx:id="endDateTask" layoutX="285.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0" promptText="End date" />
                </children>
             </Pane>
             <Pane layoutX="664.0" layoutY="14.0" prefHeight="440.0" prefWidth="330.0">
