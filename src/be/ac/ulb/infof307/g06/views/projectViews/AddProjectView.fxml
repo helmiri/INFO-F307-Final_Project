@@ -11,11 +11,12 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.projectViews.AddProjectViewController">
    <children>
-      <VBox layoutX="158.0" layoutY="77.0" prefHeight="293.0" prefWidth="226.0" spacing="40.0">
+      <VBox layoutX="151.0" layoutY="37.0" prefHeight="293.0" prefWidth="226.0" spacing="40.0">
          <children>
             <TextField fx:id="nameProject" prefHeight="35.0" promptText="Project's name" />
             <TextField fx:id="descriptionProject" prefHeight="35.0" promptText="Description" />
-            <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Date" />
+            <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Start date" />
+            <DatePicker fx:id="endDateProject" layoutX="10.0" layoutY="142.0" prefHeight="35.0" prefWidth="295.0" promptText="End date" />
             <CheckComboBox fx:id="tagsProject" prefHeight="35.0" prefWidth="226.0" />
             <TextField fx:id="parentProject" prefHeight="35.0" prefWidth="283.0" promptText="Parent( optionnal )" />
          </children>

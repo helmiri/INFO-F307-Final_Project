@@ -15,7 +15,8 @@
          <children>
             <TextField fx:id="nameProject" prefHeight="35.0" promptText="Project's name" />
             <TextField fx:id="descriptionProject" prefHeight="35.0" promptText="Description" />
-            <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Date" />
+            <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Start date" />
+            <DatePicker fx:id="endDateProject" layoutX="10.0" layoutY="160.0" prefHeight="35.0" prefWidth="295.0" promptText="End date" />
             <CheckComboBox fx:id="tagsProject" prefHeight="35.0" prefWidth="226.0" />
          </children>
       </VBox>
