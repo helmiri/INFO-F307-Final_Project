@@ -160,7 +160,7 @@ public class StatsController extends Controller implements StatsViewController.V
     public Statistics createStat(Project childProject, Integer project, String title, int childID) throws SQLException {
         ObservableList<String> collaboratorsNames = collaboratorsToString(project);
         ObservableList<String> tasksDescriptions = tasksToString(project);
-        String date = dateToString(childProject.getDate());
+        String date = dateToString(childProject.getStartDate());
         String collaboratorsList = listToString(collaboratorsNames);
         String tasksList = listToString(tasksDescriptions);
         return (new Statistics(childID,title,collaboratorsList,tasksList,date));

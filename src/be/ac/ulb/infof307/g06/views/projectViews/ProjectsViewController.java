@@ -79,6 +79,11 @@ public class ProjectsViewController {
     @FXML
     private TextArea collaboratorsName;
     @FXML
+    protected DatePicker endDateTask;
+    @FXML
+    private TableColumn<Task, String> taskTime;
+
+    @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
     private final TreeItem<Project> root = new TreeItem<Project>();
     private ViewListener listener;
@@ -90,6 +95,7 @@ public class ProjectsViewController {
     //---------------METHODS----------------
     public void init() {
         initTree();
+        root.getChildren().clear();
         List<Project> projectsArray = listener.getProjects();
         hideRoot();
         for (Project project : projectsArray) {
@@ -120,6 +126,10 @@ public class ProjectsViewController {
         treeProjects.setShowRoot(true);
     }
 
+    public void refreshTree(Project selected) {
+        selectedProject = selected;
+        init();
+    }
     // --------------------------------------- EVENTS -----------------------------------
 
     /**
@@ -137,11 +147,10 @@ public class ProjectsViewController {
             uploadFiles();
         } else { // TODO QUESTION ALINE : Pq faire un "else" et pas de "else if" ??
             if (event.getSource() == addTaskbtn) {
-                if (getSelectedProject() != null){
-                    listener.addTask(descriptionTask.getText(), getSelectedProject().getId());
+                if (selectedProject != null) {
+                    listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
                     displayTask();
-                }
-                else{
+                } else {
                     new AlertWindow("Warning", "Please select a project before adding a tag.").warningWindow();
                 }
 
@@ -151,7 +160,7 @@ public class ProjectsViewController {
                 listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
             } else if (event.getSource() == editBtn) {
                 if (!projectsTitle.getText().equals("")) {
-                    listener.editProject(getSelectedProject());
+                    listener.editProject(selectedProject);
                 }
             } else if (event.getSource() == exportProjectBtn) {
                 exportProject();
@@ -203,10 +212,9 @@ public class ProjectsViewController {
     }
 
     public void addCollaborator() {
-        if (getSelectedProject() != null){
-            listener.addCollaborator(collaboratorsName.getText(), getSelectedProject().getId());
-        }
-        else{
+        if (selectedProject != null) {
+            listener.addCollaborator(collaboratorsName.getText(), selectedProject.getId());
+        } else {
             new AlertWindow("Warning", "Please select a project before adding a collaborator.").warningWindow();
         }
     }
@@ -216,10 +224,10 @@ public class ProjectsViewController {
      */
     public void deleteCollaborator() {
         String collaborator = getSelectedUser();
-        if (getSelectedProject() != null){
-            listener.deleteCollaborator(collaborator, getSelectedProject().getId());
-            collaboratorsTable.getItems().removeAll(collaborator);        }
-        else{
+        if (selectedProject != null) {
+            listener.deleteCollaborator(collaborator, selectedProject.getId());
+            collaboratorsTable.getItems().removeAll(collaborator);
+        } else {
             new AlertWindow("Warning", "Please select a project before deleting a collaborator.").warningWindow();
         }
 
@@ -256,6 +264,11 @@ public class ProjectsViewController {
     }
     // --------------------------------- CODE ------------------------------------
 
+
+    public void refreshProject() {
+        displayProject(selectedProject, listener.getProjectTags(selectedProject));
+    }
+
     public void insertProject(int newProjectID, TreeItem<Project> project, int parentID) {
         TreeMap.put(newProjectID, project);
         if (parentID == 0) {
@@ -274,7 +287,6 @@ public class ProjectsViewController {
         if (treeProjects.getSelectionModel().getSelectedItem() != null) {
             return treeProjects.getSelectionModel().getSelectedItem().getValue();
         }
-
         return null;
     }
 
@@ -315,6 +327,8 @@ public class ProjectsViewController {
         });
         taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        taskTime.setCellValueFactory(new PropertyValueFactory<Task, String>("time"));
+        taskTime.setCellFactory(TextFieldTableCell.forTableColumn());
         taskTable.setEditable(false);
         taskTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
         taskTable.setRowFactory(tv -> new TableRow<>() {
@@ -331,22 +345,10 @@ public class ProjectsViewController {
 
 
     /**
-     * Adds a child to a parent in the tree.
-     *
-     * @param parent TreeItem<Project>
-     * @param child TreeItem<Project>
-     */
-    @FXML
-    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
-        parent.getChildren().add(child);
-    }
-
-    /**
      * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
      */
     // TODO Yassine déplace le code dans controller stp
     public void exportProject(){
-        Project selectedProject = getSelectedProject();
         if (selectedProject != null) {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File("src"));
@@ -362,7 +364,6 @@ public class ProjectsViewController {
      * Choose the file we want to upload to the cloud via a filechooser.
      */
     public void uploadFiles() {
-        Project selectedProject = getSelectedProject();
         if (selectedProject == null) {
             return;
         }
@@ -411,7 +412,6 @@ public class ProjectsViewController {
      */
     @FXML
     public void displayCollaborators() {
-        Project selectedProject = getSelectedProject();
         if (selectedProject != null) {
             ObservableList<String> oCollaboratorsList = listener.getCollaborators(selectedProject);
             collaboratorsTable.setItems(oCollaboratorsList);
@@ -426,12 +426,12 @@ public class ProjectsViewController {
     public void displayProject(Project project, ObservableList<String> tagsName) {
         projectsDescription.setText(project.getDescription());
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        projectsDate.setText(dateFormat.format(project.getStartDate() * 86400000L));
+        projectsDate.setText(dateFormat.format(project.getStartDate() * 86400000L) + " - " + dateFormat.format(project.getEndDate() * 86400000L));
         // TODO add end date
         projectsTitle.setText(project.getTitle());
         displayTask();
         displayCollaborators();
-        collabComboBox.getItems().setAll(listener.getCollaborators(selectedProject));
+        collabComboBox.getItems().setAll(listener.getCollaborators(project));
         projectTags.setItems(tagsName);
     }
 
@@ -441,7 +441,6 @@ public class ProjectsViewController {
      */
     @FXML
     public void displayTask() {
-        selectedProject = getSelectedProject();
         if (selectedProject != null) {
             ObservableList<Task> oTaskList = listener.getTasks(selectedProject);
             taskTable.setItems(oTaskList);
@@ -490,11 +489,11 @@ public class ProjectsViewController {
 
         Tag getTag(String name);
 
-        void addTask(String description, int project_id);
+        void addTask(String description, int project_id, Long startDate, Long endDate);
 
         void editTask(Task task);
 
-        void onEditTask(String prev_description, String new_description, Task task);
+        void onEditTask(String prev_description, String new_description, Long startDate, Long endDate, Task task);
 
         void deleteTask(Task task);
 

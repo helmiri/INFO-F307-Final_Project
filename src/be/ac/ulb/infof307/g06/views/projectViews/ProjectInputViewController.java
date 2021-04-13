@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 import javafx.scene.text.Text;
 
@@ -27,9 +28,11 @@ public class ProjectInputViewController {
     @FXML
     protected Text errorText;
     protected ProjectsViewController.ViewListener listener;
+    protected Stage stage;
 
     //--------------- METHODS ----------------
-    public void init(ProjectsViewController.ViewListener listener) {
+    public void init(ProjectsViewController.ViewListener listener, Stage stage) {
+        this.stage = stage;
         this.listener = listener;
         ObservableList<String> tags = listener.getAllTags();
         tagsProject.getItems().addAll(tags);
@@ -77,5 +80,9 @@ public class ProjectInputViewController {
     @FXML
     public String getParentProjectName() {
         return parentProject.getText();
+    }
+
+    public void close() {
+        stage.close();
     }
 }

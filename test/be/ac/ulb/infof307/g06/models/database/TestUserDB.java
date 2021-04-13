@@ -91,7 +91,7 @@ public class TestUserDB extends TestDatabase {
         // Necessary setup
         userDB.sendInvitation(1, 2, 1);
         userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password"));
-        projectDB.createProject("Title", "Desc", 1000L, 1);
+        projectDB.createProject("Title", "Desc", 1000L, 1000L, 1);
 
         // Test
         List<Invitation> invitations = userDB.getInvitations(projectDB);

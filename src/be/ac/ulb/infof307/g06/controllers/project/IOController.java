@@ -156,10 +156,10 @@ public class IOController extends Controller {
                         System.out.println("projet " + line);
                         Project project = gson.fromJson(line.substring(0, line.length() - 1), Project.class);
                         if (hm.size() == 0) {
-                            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getDate(), 0);
+                            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), 0);
                             hm.put(project.getParent_id(), 0);
                         } else {
-                            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getDate(), hm.get(project.getParent_id()));
+                            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), hm.get(project.getParent_id()));
                             idParent = hm.get(project.getParent_id());
                         }
                         hm.put(project.getId(), id);
@@ -171,7 +171,7 @@ public class IOController extends Controller {
                         }.getType();
                         List<Task> tasks = new Gson().fromJson(line.substring(0, line.length() - 1), listType);
                         for (Task t : tasks) {
-                            project_db.createTask(t.getDescription(), id);
+                            project_db.createTask(t.getDescription(), id, t.getStartDate(), t.getEndDate());
                         }
                         break;
                     case 4:

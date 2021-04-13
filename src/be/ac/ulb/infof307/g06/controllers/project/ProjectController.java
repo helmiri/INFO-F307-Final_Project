@@ -68,8 +68,14 @@ public class ProjectController extends Controller implements ProjectsViewControl
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("AddProjectView.fxml"));
             AnchorPane projectPane = loader.load();
             AddProjectViewController controller = loader.getController();
-            controller.init(listener);
-            MainController.showStage("Add project", 541, 473, Modality.APPLICATION_MODAL, projectPane);
+            Stage addStage = new Stage();
+            addStage.initModality(Modality.APPLICATION_MODAL);
+            addStage.setTitle("Add project");
+            addStage.setScene(new Scene(projectPane));
+            addStage.centerOnScreen();
+            addStage.setResizable(false);
+            addStage.show();
+            controller.init(listener, addStage);
         } catch (IOException e) {
             // TODO Exception
         }
@@ -103,8 +109,14 @@ public class ProjectController extends Controller implements ProjectsViewControl
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("EditProjectView.fxml"));
             AnchorPane editPane = loader.load();
             EditProjectViewController controller = loader.getController();
-            controller.init(project, listener);
-            MainController.showStage("Edit Project", 541, 473, Modality.APPLICATION_MODAL, editPane);
+            Stage editStage = new Stage();
+            editStage.initModality(Modality.APPLICATION_MODAL);
+            editStage.setTitle("Add project");
+            editStage.setScene(new Scene(editPane));
+            editStage.centerOnScreen();
+            editStage.setResizable(false);
+            editStage.show();
+            controller.init(project, listener, editStage);
         } catch (IOException e) {
             // TODO Exception
         }
@@ -187,11 +199,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     tags.add(project_db.getTagID(newTag));
                 }
                 project_db.editTags(projectID, tags);
-                // TODO refresh
             }
+            viewController.refreshTree(project_db.getProject(projectID));
+            viewController.displayProject(project_db.getProject(projectID), newTags);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO Exception
+            System.out.println(e);
         }
     }
 
@@ -257,11 +270,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
     }
 
     @Override
-    public void addTask(String description, int project_id) {
+    public void addTask(String description, int project_id, Long startDate, Long endDate) {
         if (storageLimitReached()) {
             return;
         }
-        onAddTask(description, project_id);
+        onAddTask(description, project_id, startDate, endDate);
     }
 
     @Override
@@ -273,29 +286,30 @@ public class ProjectController extends Controller implements ProjectsViewControl
     }
 
     @Override
-    public void onEditTask(String prev_description, String new_description, Task task) {
+    public void onEditTask(String prev_description, String new_description, Long startDate, Long endDate, Task task) {
         if (storageLimitReached()) {
             return;
         }
         try {
             List<Task> tasks = project_db.getTasks(task.getProjectID());
-            List<String> taskNames = new ArrayList<>();
-            for (Task task2 : tasks) {
-                taskNames.add(task2.getDescription());
-            }
-            if (taskNames.contains(new_description)) {
-                new AlertWindow("Warning", "This task already exists.").warningWindow();
-                // TODO Exception task already exists
+            if (!new_description.equals(prev_description)) {
+                List<String> taskNames = new ArrayList<>();
+                for (Task task2 : tasks) {
+                    taskNames.add(task2.getDescription());
+                }
+                if (taskNames.contains(new_description)) {
+                    new AlertWindow("Warning", "This task already exists.").warningWindow();
+                }
             }
             if (new_description.equals("")) {
                 deleteTask(task);
             } else if (validateDescription(new_description)) {
-                System.out.println("ICI");
-                project_db.editTask(prev_description, new_description, task.getProjectID());
+                project_db.editTask(prev_description, new_description, task.getProjectID(), startDate, endDate);
             }
+            viewController.displayTask();
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO Exception
+            System.out.println(e);
         }
     }
 
@@ -498,7 +512,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO Exception
+            System.out.println(e);
         }
     }
 
@@ -508,7 +522,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      *
      * @param taskDescription String
      */
-    public void onAddTask(String taskDescription, int project_id) {
+    public void onAddTask(String taskDescription, int project_id, Long startDate, Long endDate) {
         if (storageLimitReached()) {
             return;
         }
@@ -527,7 +541,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 return;
             }
             if (project_id != 0) {
-                project_db.createTask(taskDescription, project_id);
+                project_db.createTask(taskDescription, project_id, startDate, endDate);
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {

@@ -5,6 +5,7 @@ import be.ac.ulb.infof307.g06.models.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,7 +28,7 @@ public class EditProjectViewController extends ProjectInputViewController{
     protected void events(ActionEvent event){
         if (event.getSource() == editProjectBtn) {
             listener.onEditProject(project, nameProject.getText(), descriptionProject.getText(), dateProject.getValue(), endDateProject.getValue(), tagsProject.getCheckModel().getCheckedItems());
-            MainController.closeStage();
+            close();
         }
     }
 
@@ -41,11 +42,12 @@ public class EditProjectViewController extends ProjectInputViewController{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateProject.setValue(LocalDate.parse(dateFormat.format(project.getStartDate() * 86400000L), formatter));
+        endDateProject.setValue(LocalDate.parse(dateFormat.format(project.getEndDate() * 86400000L), formatter));
         // TODO end date
     }
 
-    public void init(Project project, ProjectsViewController.ViewListener listener) {
-        init(listener);
+    public void init(Project project, ProjectsViewController.ViewListener listener, Stage stage) {
+        init(listener, stage);
         this.project = project;
         initFields();
     }

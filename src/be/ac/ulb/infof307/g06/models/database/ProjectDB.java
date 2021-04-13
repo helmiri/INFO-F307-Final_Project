@@ -21,7 +21,7 @@ public class ProjectDB extends Database {
     protected void createTables() throws SQLException {
         sqlUpdate("CREATE TABLE IF NOT EXISTS Project(id Integer, title varchar(20), description varchar(20), startDate Long, endDate Long, parent_id Integer);");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Collaborator(project_id Integer, user_id Integer);");
-        sqlUpdate("CREATE TABLE IF NOT EXISTS Task(id Integer, description varchar(20), project_id Integer);");
+        sqlUpdate("CREATE TABLE IF NOT EXISTS Task(id Integer, description varchar(20), project_id Integer, startDate Long, endDate Long);");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Tag(id Integer, description varchar(20), color varchar(20));");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Tag_projects(tag_id Integer, project_id Integer);");
         sqlUpdate("CREATE TABLE IF NOT EXISTS Invitations(id Integer, project_id Integer, user1_id Integer, user2_id Integer);");
@@ -31,7 +31,6 @@ public class ProjectDB extends Database {
     /**
      * @param title       Title
      * @param description Description
-     * @param date        Date
      * @param parent_id   Parent project ID if it's a sub porject
      * @return The newly created project's ID
      * @throws SQLException
@@ -48,7 +47,7 @@ public class ProjectDB extends Database {
             id = 1;
         }
 
-        sqlUpdate("INSERT INTO Project (id, title, description, date, parent_id) VALUES('" +
+        sqlUpdate("INSERT INTO Project (id, title, description, startDate, endDate, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + startDate + "','" + endDate + "','" + parent_id + "');");
         if (parent_id != 0) {    // Add the parent tags to the current tags
             List<Tag> parent_tags = getTags(parent_id);
@@ -155,7 +154,7 @@ public class ProjectDB extends Database {
             String title = rs.getString("title");
             String description = rs.getString("description");
             Long startDate = rs.getLong("startDate");
-            Long endDate = rs.getLong("startDate");
+            Long endDate = rs.getLong("endDate");
             int parent_id = rs.getInt("parent_id");
             res = new Project(id, title, description, startDate, endDate, parent_id);
         } catch (Exception ignored) {
@@ -214,7 +213,7 @@ public class ProjectDB extends Database {
 
     // ---------------TASKS --------------
 
-    public void createTask(String description, int project_id) throws SQLException {
+    public void createTask(String description, int project_id, Long startDate, Long endDate) throws SQLException {
         ResultSet rs = null;
         for (int i = 0; i < getTasks(project_id).size(); i++) {
             if (getTasks(project_id).get(i).getDescription().equals(description)) {
@@ -230,19 +229,19 @@ public class ProjectDB extends Database {
             System.out.println(e.getMessage());
             id = 1;
         }
-        sqlUpdate("INSERT INTO Task (id, description, project_id) VALUES('" +
-                id + "','" + description + "','" + project_id + "');");
+        sqlUpdate("INSERT INTO Task (id, description, project_id, startDate, endDate) VALUES('" +
+                id + "','" + description + "','" + project_id + "','" + startDate + "','" + endDate + "');");
         Objects.requireNonNull(rs).close();
     }
 
-    public void editTask(String prev_description, String new_description, int project_id) throws SQLException {
+    public void editTask(String prev_description, String new_description, int project_id, Long startDate, Long endDate) throws SQLException {
         List<Task> tasks = getTasks(project_id);
         List<String> taskNames = new ArrayList<>();
         for (Task task : tasks) {
             taskNames.add(task.getDescription());
         }
-        if (!taskNames.contains(new_description)) {
-            sqlUpdate("UPDATE Task SET description = '" + new_description + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
+        if (!taskNames.contains(new_description) || new_description.equals(prev_description)) {
+            sqlUpdate("UPDATE Task SET description = '" + new_description + "', startDate = '" + startDate + "', endDate = '" + endDate + "' WHERE project_id = '" + project_id + "' AND description = '" + prev_description + "';");
         }
     }
 
@@ -254,8 +253,8 @@ public class ProjectDB extends Database {
         ResultSet rs = null;
         Task res;
         try {
-            rs = sqlQuery("SELECT id, description FROM Task WHERE id='" + id + "';");
-            res = new Task(rs.getInt("id"), rs.getString("description"), id);
+            rs = sqlQuery("SELECT id, description, startDate, endDate FROM Task WHERE id='" + id + "';");
+            res = new Task(rs.getInt("id"), rs.getString("description"), id, rs.getLong("startDate"), rs.getLong("endDate"));
         } catch (Exception e) {
             res = null;
         }
@@ -264,11 +263,11 @@ public class ProjectDB extends Database {
     }
 
     public List<Task> getTasks(int project_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT id, description FROM Task WHERE project_id='" + project_id + "';");
+        ResultSet rs = sqlQuery("SELECT id, description, startDate, endDate FROM Task WHERE project_id='" + project_id + "';");
         List<Task> res = new ArrayList<>();
 
         while (rs.next()) {
-            res.add(new Task(rs.getInt("id"), rs.getString("description"), project_id));
+            res.add(new Task(rs.getInt("id"), rs.getString("description"), project_id, rs.getLong("startDate"), rs.getLong("endDate")));
         }
         rs.close();
         return res;
