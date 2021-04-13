@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="900.0" prefWidth="1500.0" styleClass="gradient-background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController">
+   <children>
+      <Button fx:id="backToProjectMenu" layoutX="1364.0" layoutY="820.0" minWidth="53.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="56.0" prefWidth="110.0" style="-fx-background-color: #6BC5EC;" text="BACK" textFill="WHITE">
+         <font>
+            <Font name="Cambria Bold" size="18.0" />
+         </font>
+      </Button>
+      <VBox layoutX="548.0" layoutY="107.0" prefHeight="704.0" prefWidth="283.0" spacing="51.0">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Collaborators" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="collaboratorsNumber" layoutX="112.0" layoutY="65.0" text="20" textFill="WHITE">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="116.0" styleClass="shadow" stylesheets="@styles.css" text="Tasks" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="tasksNumber" layoutX="125.0" layoutY="65.0" text="9" textFill="WHITE">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="116.0" styleClass="shadow" stylesheets="@styles.css" text="Projects" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="projectsNumber" layoutX="112.0" layoutY="65.0" text="53" textFill="WHITE">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <VBox layoutX="873.0" layoutY="107.0" prefHeight="704.0" prefWidth="513.0" spacing="50.0">
+         <children>
+            <Pane prefHeight="326.0" prefWidth="508.0" styleClass="container" stylesheets="@styles.css">
+               <children>
+                  <PieChart fx:id="projectsChart" layoutX="7.0" layoutY="14.0" prefHeight="299.0" prefWidth="499.0" />
+               </children>
+            </Pane>
+            <Pane prefHeight="326.0" prefWidth="508.0" styleClass="container" stylesheets="@styles.css">
+               <children>
+                  <BarChart fx:id="collaboratorsChart" layoutX="15.0" layoutY="14.0" prefHeight="299.0" prefWidth="479.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Pane layoutX="119.0" layoutY="107.0" prefHeight="704.0" prefWidth="380.0" styleClass="container" stylesheets="@styles.css">
+         <children>
+            <Button fx:id="overallViewBtn" layoutX="89.0" layoutY="61.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@styles.css" text="OVERALL VIEW" textFill="WHITE">
+               <font>
+                  <Font name="Cambria" size="18.0" />
+               </font>
+            </Button>
+            <TextField fx:id="fileNameTextField" alignment="CENTER" layoutX="45.0" layoutY="533.0" prefHeight="26.0" prefWidth="290.0" promptText="Statistics (Filename by default) " />
+            <Button fx:id="exportCSVBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="106.0" layoutY="579.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="39.0" prefWidth="74.0" style="-fx-background-color: #6BC5EC;" text=".csv" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="exportJSONBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="579.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="39.0" prefWidth="74.0" style="-fx-background-color: #6BC5EC;" text=".json" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="18.0" />
+               </font>
+            </Button>
+            <Text fx:id="msgExportText" fill="#407a4b" layoutX="45.0" layoutY="675.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="289.99999999999994" />
+            <Button fx:id="projectViewBtn" layoutX="89.0" layoutY="273.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@styles.css" text="PROJECT VIEW" textFill="WHITE">
+               <font>
+                  <Font name="Cambria" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+      <Line endX="1394.0" layoutX="104.0" layoutY="96.0" startX="-100.0" stroke="WHITE" />
+      <Label layoutX="33.0" layoutY="16.0" prefHeight="48.0" prefWidth="231.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

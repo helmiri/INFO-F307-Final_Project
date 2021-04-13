@@ -39,7 +39,7 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public void show() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(StatsViewController.class.getResource("StatsView.fxml"));
+        loader.setLocation(StatsViewController.class.getResource("StatsViewV2.fxml"));
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
@@ -47,10 +47,24 @@ public class StatsController extends Controller implements StatsViewController.V
         }
         statsView = loader.getController();
         statsView.setListener(this);
-
         stage.setScene(scene);
-        statsView.init();
+        statsView.initOverallStats();
         //MainController.load(loader, 940, 1515);
+    }
+
+    @Override
+    public void showStatsProject() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(StatsViewController.class.getResource("StatsProject.fxml"));
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        statsView = loader.getController();
+        statsView.setListener(this);
+        stage.setScene(scene);
+        statsView.initTree();
     }
 
     /**
@@ -127,7 +141,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @throws DatabaseException e
      */
     @Override
-    public void setStats(List<Integer> projects,TreeItem<Statistics> root) throws DatabaseException {
+    public void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException {
         try{
             Map<Integer, TreeItem<Statistics>> statsTreeMap = new HashMap<>();
             for(Integer project : projects){
@@ -135,11 +149,10 @@ public class StatsController extends Controller implements StatsViewController.V
                 int parentID = childProject.getParent_id();
                 String title = childProject.getTitle();
                 int childID = project_db.getProjectID(title);
-                Statistics stat = createStat(childProject, project, title, childID);
-                TreeItem<Statistics> statsItem = new TreeItem<>(stat);
-                statsTreeMap.put(childID, statsItem);
-                if (parentID== 0){ statsView.addChild(root,statsItem); }
-                else { statsView.addChild(statsTreeMap.get(parentID),statsItem); }
+                TreeItem<Project> projectTreeItem = new TreeItem<>(childProject);
+                statsTreeMap.put(childID, projectTreeItem);
+                if (parentID== 0){ statsView.addChild(root,projectTreeItem); }
+                else { statsView.addChild(statsTreeMap.get(parentID),projectTreeItem); }
             }
             statsView.expandRoot(root);
         }catch(SQLException e){

@@ -2,9 +2,12 @@ package be.ac.ulb.infof307.g06.views.statisticsViews;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Statistics;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
@@ -12,37 +15,49 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
     @FXML
-    private Button exportJSONBtn;
+    private Button backToProjectMenu;
+    @FXML
+    private Button projectViewBtn;
+    @FXML
+    private Button overallViewBtn;
     @FXML
     private Button exportCSVBtn;
     @FXML
-    private Button backToProjectMenu;
+    private Button exportJSONBtn;
     @FXML
-    private Button logOutBtn;
+    private Label collaboratorsNumber;
     @FXML
-    private TextField fileNameTextField;
+    private Label tasksNumber;
+    @FXML
+    private Label projectsNumber;
+    @FXML
+    private Label startDate;
+    @FXML
+    private Label estimatedDate;
+    @FXML
+    private Label finishDate;
     @FXML
     private Text msgExportText;
     @FXML
-    private TreeTableView<Statistics> projectsTreeView;
+    private TextField fileNameTextField;
     @FXML
-    private TreeTableColumn<Statistics, String> projectsColumn;
+    private TreeTableColumn<Project, String> projectsColumn;
     @FXML
-    private TreeTableColumn<Statistics, String> collaboratorsColumn;
+    private TreeTableView<Project> projectsTreeView;
     @FXML
-    private TreeTableColumn<Statistics, String> tasksColumn;
-    /*
+    private PieChart projectsChart;
     @FXML
-    private TreeTableColumn<Statistics, String> realColumn;
-    */
-    @FXML
-    private TreeTableColumn<Statistics, String> estimatedColumn;
-    private final TreeItem<Statistics> root = new TreeItem<>();
+    private BarChart<?, ?> collaboratorsChart;
+    private Project selectedProject;
+
+    private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
     //private final StatsController controller =
     // new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
@@ -51,15 +66,61 @@ public class StatsViewController{
     /**
      * Initializes the main view and the tree. Sets values.
      */
-    public void init() {
-        initTree();
-        List<Integer> projectsArray;
+    //public void init() { initOverallStats(); }
+
+    /**
+     * Initializes the tree table with values.
+     */
+    @FXML
+    public void initTree(){
         try {
-            projectsArray = listener.getProjects();
-            listener.setStats(projectsArray, root);
+        List<Integer> projectsArray;
+        projectsColumn  .setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
+        projectsTreeView.setRoot(root);
+        projectsArray = listener.getProjects();
+        listener.setStats(projectsArray, root);
         } catch (DatabaseException e) {
             new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
         }
+    }
+
+    /**
+     *
+     */
+    public void initOverallStats() {
+        try{
+        List<Integer> infos = listener.countOverallStats();
+        projectsNumber.setText(Integer.toString(infos.get(0)));
+        tasksNumber.setText(infos.get(1).toString());
+        collaboratorsNumber.setText(Integer.toString(infos.get(2)));
+
+        }catch(SQLException e){
+            System.out.println("erreur");
+        }
+    }
+
+    @FXML
+    public void displayStats() throws SQLException {
+        List<Integer> infos = listener.countProjectStats(getSelectedProject());
+        projectsNumber.setText(Integer.toString(infos.get(0)));
+        tasksNumber.setText(infos.get(1).toString());
+        collaboratorsNumber.setText(Integer.toString(infos.get(2)));
+    }
+
+    @FXML
+    public void onProjectSelected() throws SQLException {
+        selectedProject = getSelectedProject();
+        if (selectedProject == null) {
+            return;
+        }
+        displayStats();
+    }
+
+    public Project getSelectedProject(){
+        if (projectsTreeView.getSelectionModel().getSelectedItem() != null) {
+            return projectsTreeView.getSelectionModel().getSelectedItem().getValue();
+        }
+        return null;
     }
 
     /**
@@ -69,30 +130,13 @@ public class StatsViewController{
      */
     @FXML
     private void statsEvents(ActionEvent event) {
-        if (event.getSource() == backToProjectMenu) {
-            listener.onBackButtonClicked();
-            //MainController.showProjectMenu();
-        }
-        else if (event.getSource() == logOutBtn) {
-            System.out.println("ICI");
-//            LoginController.show();
-        }
-        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
-            exports(event);
-        }
-    }
+        if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
+        else if (event.getSource() == overallViewBtn     ) { listener.show()               ; }
+        else if (event.getSource() == projectViewBtn     ) { listener.showStatsProject()   ; }
 
-    /**
-     * Initializes the tree table with values.
-     */
-    @FXML
-    public void initTree() {
-        projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
-        collaboratorsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("collaborators"));
-        tasksColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("tasks"));
-        //realColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("finalDate"));
-        estimatedColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("estimatedDate"));
-        projectsTreeView.setRoot(root);
+//        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
+//            exports(event);
+//        }
     }
 
     /**
@@ -108,7 +152,7 @@ public class StatsViewController{
      * @param parent TreeItem<Statistics>
      * @param child TreeItem<Statistics>
      */
-    public void addChild(TreeItem<Statistics> parent, TreeItem<Statistics> child){
+    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
         parent.getChildren().add(child);
     }
 
@@ -146,6 +190,10 @@ public class StatsViewController{
     }
 
     public interface ViewListener {
+        void show();
+
+        void showStatsProject();
+
         void onBackButtonClicked();
 
         List<Integer> getProjects() throws DatabaseException;

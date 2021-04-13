@@ -82,6 +82,8 @@ public class ProjectsViewController {
     protected DatePicker endDateTask;
     @FXML
     private TableColumn<Task, String> taskTime;
+    @FXML
+    protected DatePicker startDateTask;
 
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;

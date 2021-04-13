@@ -25,5 +25,4 @@ public abstract class Controller {
     }
 
     public abstract void show() throws IOException, SQLException;
-
 }
