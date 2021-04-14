@@ -28,7 +28,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="collaboratorsNumber" layoutX="112.0" layoutY="65.0" text="6" textFill="WHITE">
+                  <Label fx:id="collaboratorsNumber" layoutX="112.0" layoutY="65.0" text="0" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -42,7 +42,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="tasksNumber" layoutX="112.0" layoutY="65.0" text="3" textFill="WHITE">
+                  <Label fx:id="tasksNumber" layoutX="112.0" layoutY="65.0" text="0" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -56,7 +56,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="projectsNumber" layoutX="112.0" layoutY="65.0" text="4" textFill="WHITE">
+                  <Label fx:id="projectsNumber" layoutX="116.0" layoutY="65.0" text="0" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -106,7 +106,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="startDate" layoutX="7.0" layoutY="65.0" text="25/06/2021" textFill="WHITE">
+                  <Label fx:id="startDate" layoutX="7.0" layoutY="65.0" text="01/01/2021" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -120,7 +120,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="estimatedDate" layoutX="7.0" layoutY="65.0" text="30/06/2021" textFill="WHITE">
+                  <Label fx:id="estimatedDate" layoutX="7.0" layoutY="65.0" text="01/01/2021" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -134,7 +134,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="finishDate" layoutX="7.0" layoutY="65.0" text="28/06/2021" textFill="WHITE">
+                  <Label fx:id="finishDate" layoutX="7.0" layoutY="65.0" text="01/01/2021" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -148,5 +148,10 @@
           <TreeTableColumn fx:id="projectsColumn" prefWidth="337.0" text="Projects" />
         </columns>
       </TreeTableView>
+      <Label layoutX="44.0" layoutY="69.0" prefHeight="17.0" prefWidth="151.0" styleClass="shadow" stylesheets="@styles.css" text="Project view">
+         <font>
+            <Font name="DejaVu Sans Condensed Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -82,6 +82,13 @@ public class StatsController extends Controller implements StatsViewController.V
             throw new DatabaseException(e);
         }
     }
+    @Override
+    public Project getProjectsFromID(int id) throws DatabaseException{
+        try {
+            return project_db.getProject(id);} catch(SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
 
     /**
      * Changes a list to a string without brackets.
@@ -188,18 +195,20 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param root     TreeItem<Statistics>
      */
     @Override
-    public void exportStatsAsJson(String fileName, String path, TreeItem<Statistics> root) {
+    public void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) {
         try {
             Gson gson = new Gson();
             String finalString = "{\n";
 
             for (int i = 0; i < root.getChildren().size(); i++) {
-                Statistics child = root.getChildren().get(i).getValue();
+                Project child = root.getChildren().get(i).getValue();
                 String treeBranchString = "";
                 String title = child.getTitle();
                 int id = project_db.getProjectID(title);
                 treeBranchString = statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
-                String infoStat = gson.toJson(child);
+                List<Integer> counts =countProjectStats(child);
+                String startDate = dateToString(child.getStartDate()), endDate = dateToString(child.getEndDate());
+                String infoStat = "{"+"'Collaborators':"+ counts.get(2) + ",'Tasks':"+counts.get(1)+",'Sub projects':"+counts.get(0)+ ",'Start date':"+ startDate+ ",'Estimated date:"+endDate+"}";
                 String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
                 treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
                 finalString += treeBranchString;
@@ -219,17 +228,18 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param root TreeItem<Statistics>
      * @return String
      */
-    public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Statistics> root) throws SQLException {
+    public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Project> root) throws SQLException {
         List<Integer> projectsID = project_db.getSubProjects(id);
         for (int k = 0; k < projectsID.size(); k++) {
-            Statistics stat = root.getChildren().get(k).getValue();
+            Project stat = root.getChildren().get(k).getValue();
+            List<Integer> counts =countProjectStats(stat);
+            String startDate = dateToString(stat.getStartDate()), endDate = dateToString(stat.getEndDate());
+            String infoStat = "{"+"'Collaborators':"+ counts.get(2) + ",'Tasks':"+counts.get(1)+",'Sub projects':"+counts.get(0)+ ",'Start date':"+ startDate+ ",'Estimated date:"+endDate+"}";
             if (project_db.getSubProjects(projectsID.get(k)).size() == 0) {
                 //Has no children so we can let the brackets closed --> 'name':{info}.
-                String infoStat = gson.toJson(root.getChildren().get(k).getValue());
                 treeBranchString = (treeBranchString + "'" + stat.getTitle() + "'" + " :" + infoStat + ",");
             } else {
                 //Has a child so we let it open -->'Name':{info,... and check the child's children.
-                String infoStat = gson.toJson(stat);
                 String gotChild = "{" + infoStat.replaceAll("(^\\{|}$)", "");
                 treeBranchString += "'" + stat.getTitle() + "'" + " :" + gotChild + ",";
                 treeBranchString = statToJsonString(project_db.getSubProjects(id).get(k), gson, treeBranchString, root.getChildren().get(k));
@@ -264,7 +274,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param path     String : path given for the destination of the file exported
      * @param root     TreeItem<Statistics> : root of the TreeTableView
      */
-    public void exportStatsAsCSV(String fileName, String path, TreeItem<Statistics> root) {
+    public void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root) {
         try {
             PrintWriter csv = new PrintWriter(path + fileName);
             // Name of columns
@@ -294,9 +304,12 @@ public class StatsController extends Controller implements StatsViewController.V
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
-    public String statsToCSVString(int currentStatID, Statistics currentStat, String content, TreeItem<Statistics> root) throws SQLException {
-        if (project_db.getSubProjects(currentStatID).size() == 0) {
-            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + project_db.getProject(currentStatID).getParent_id() + "\r\n";
+    public String statsToCSVString(int currentProjectID, Project currentProject, String content, TreeItem<Project> root) throws SQLException {
+        List<Integer> counter = countProjectStats(currentProject);
+        int numberOfCollaborators = counter.get(2), numberOfTasks = counter.get(1), numberOfSubProjects = counter.get(0);
+        String startDate = dateToString(currentProject.getStartDate()), endDate = dateToString(currentProject.getEndDate());
+        if (project_db.getSubProjects(currentProjectID).size() == 0) {
+            content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators+ '"' + "," + '"' + numberOfTasks+ '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParent_id() + "," + startDate+"," +  endDate + "\r\n";
         } else {
             content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + project_db.getProject(currentStatID).getParent_id() + "\r\n";
             for (int k = 0; k < project_db.getSubProjects(currentStatID).size(); k++) {
@@ -310,19 +323,24 @@ public class StatsController extends Controller implements StatsViewController.V
     public List<Integer> countOverallStats() throws SQLException {
         List<Integer> projects = project_db.getUserProjects(user_db.getCurrentUser().getId());
         List<Integer> res = new ArrayList<>();
-        int tasks =0;
-        List<Integer> collaborators=new ArrayList<>();
-        for(int i=0;i<projects.size();i++){
-            tasks+=project_db.countTasks(projects.get(i));
-            List<Integer> projectsCollaborators=project_db.getCollaborators(projects.get(i));
-            for(Integer collaborator : projectsCollaborators){
-                if(!collaborators.contains(collaborator)){ collaborators.add(collaborator); } }
+        if(projects.size()!=0) {
+            int tasks = 0;
+            List<Integer> collaborators = new ArrayList<>();
+            for (int i = 0; i < projects.size(); i++) {
+                tasks += project_db.countTasks(projects.get(i));
+                List<Integer> projectsCollaborators = project_db.getCollaborators(projects.get(i));
+                for (Integer collaborator : projectsCollaborators) {
+                    if (!collaborators.contains(collaborator)) { collaborators.add(collaborator); }
+                }
+            }
+            res.add(projects.size());
+            res.add(tasks);
+            res.add(collaborators.size() - 1);
         }
-
-        res.add(projects.size());
-        res.add(tasks);
-        res.add(collaborators.size() - 1);
-
+        else{
+            for(int k=0;k<3;k++)
+                res.add(0);
+        }
         return res;
     }
 
@@ -334,7 +352,7 @@ public class StatsController extends Controller implements StatsViewController.V
             int projectId = selectedProject.getId();
             res.add(countSubProject(projectId, sub));
             res.add(project_db.countTasks(projectId));
-            res.add(project_db.countCollaborators(projectId));
+            res.add(project_db.countCollaborators(projectId)-1);
 
         }
         return res;
@@ -355,6 +373,31 @@ public class StatsController extends Controller implements StatsViewController.V
         return counter;
     }
 
+    @Override
+    public void exportAsCSVOverallView(String fileName, String path){
+        try {
+            PrintWriter csv = new PrintWriter(path + fileName);
+            // Name of columns
+            String content = "User"+","+"Collaborators" + "," + "Tasks" + "," + "projects" + ","+"\r\n";
+            csv.write(content);
+            List<Integer> counts = countOverallStats();
+            content += user_db.getCurrentUser().getUserName()+","+counts.get(2) +","+ counts.get(1)+","+counts.get(0);
+            csv.write(content);
+            csv.close();
+        }catch(FileNotFoundException | SQLException e){
+            new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
+        }
+    }
+    @Override
+    public void exportAsJSONOverallView(String fileName, String path){
+        try{
+        List<Integer> counts = countOverallStats();
+        String json= "{"+user_db.getCurrentUser().getUserName()+":{"+"'Collaborators':"+ counts.get(2) + ",'Tasks':"+counts.get(1)+",'Projects':"+counts.get(0)+"}";
+        write(json, fileName, path);
+        }catch(SQLException e ){
+            new AlertWindow("Error", "An error has occurred during the exportation. Couldn't find some informations in the database: " + e).errorWindow();
+        }
+    }
 
     // ------------------------------------- CODE --------------------------------------
 

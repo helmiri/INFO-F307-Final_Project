@@ -3,7 +3,8 @@ package be.ac.ulb.infof307.g06.views.statisticsViews;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.Statistics;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -13,10 +14,8 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class StatsViewController{
@@ -56,6 +55,7 @@ public class StatsViewController{
     @FXML
     private BarChart<?, ?> collaboratorsChart;
     private Project selectedProject;
+    private boolean isOverallView=true;
 
     private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
@@ -82,6 +82,7 @@ public class StatsViewController{
         } catch (DatabaseException e) {
             new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
         }
+        isOverallView=false;
     }
 
     /**
@@ -97,6 +98,26 @@ public class StatsViewController{
         }catch(SQLException e){
             System.out.println("erreur");
         }
+        isOverallView=true;
+        pieChartInitializer();
+
+    }
+
+    public void pieChartInitializer(){
+        try{
+            List<Integer> projects= listener.getProjects();
+            ObservableList<PieChart.Data> datas= FXCollections.observableArrayList();
+            for(int i=0;i<projects.size();i++){
+                Project project =listener.getProjectsFromID(projects.get(i));
+                datas.add(i,new PieChart.Data(project.getTitle(),project.getDuration()));
+            }
+            projectsChart.setData(datas);
+
+        }
+        catch(DatabaseException e){
+            new AlertWindow("Error", "An error has occured with the database.").errorWindow();
+        }
+
     }
 
     @FXML
@@ -131,12 +152,11 @@ public class StatsViewController{
     @FXML
     private void statsEvents(ActionEvent event) {
         if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
-        else if (event.getSource() == overallViewBtn     ) { listener.show()               ; }
-        else if (event.getSource() == projectViewBtn     ) { listener.showStatsProject()   ; }
-
-//        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
-//            exports(event);
-//        }
+        else if (event.getSource() == overallViewBtn     ) { listener.show()               ;}
+        else if (event.getSource() == projectViewBtn     ) { listener.showStatsProject()   ;}
+        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
+            exports(event);
+        }
     }
 
     /**
@@ -161,21 +181,31 @@ public class StatsViewController{
      *
      * @param event ActionEvent
      */
-//    public void exports(ActionEvent event) {
-//        String fileName = fileNameTextField.getText();
-//        DirectoryChooser directoryChooser = new DirectoryChooser();
-//        directoryChooser.setInitialDirectory(new File("src"));
-//        File selectedDirectory = directoryChooser.showDialog(new Stage());
-//        if (selectedDirectory != null) {
-//            if (event.getSource() == exportJSONBtn) {
-//                if (fileName.equals("")) { listener.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
-//                else { listener.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }
-//            } else if (event.getSource() == exportCSVBtn) {
-//                if (fileName.equals("")) { listener.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
-//                else { listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
-//            }
-//        }
-//    }
+    public void exports(ActionEvent event) {
+        String fileName = fileNameTextField.getText();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("src"));
+        File selectedDirectory = directoryChooser.showDialog(new Stage());
+        if (selectedDirectory != null) {
+            System.out.println(isOverallView);
+            if (event.getSource() == exportJSONBtn && !isOverallView) {
+                if (fileName.equals("")) { listener.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
+                else { listener.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }
+              }
+            else if (event.getSource() == exportCSVBtn && !isOverallView) {
+                if (fileName.equals("")) { listener.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
+                else { listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
+            }
+            else if(event.getSource() == exportJSONBtn && isOverallView){
+                if (fileName.equals("")) { listener.exportAsJSONOverallView("\\Statistics.json",selectedDirectory.getAbsolutePath()); }
+                else { listener.exportAsJSONOverallView("\\" + fileName + ".json",selectedDirectory.getAbsolutePath()); }
+            }
+            else if (event.getSource() == exportCSVBtn && isOverallView){
+                if (fileName.equals("")) { listener.exportAsCSVOverallView("\\Statistics.csv", selectedDirectory.getAbsolutePath()); }
+                else { listener.exportAsCSVOverallView("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath()); }
+            }
+        }
+    }
 
     /**
      * Sets text message for exportation.
