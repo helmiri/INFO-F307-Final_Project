@@ -9,6 +9,7 @@ import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.InvitationViewController;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
+import com.calendarfx.view.CalendarView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -142,7 +143,20 @@ public class MainMenuController extends Controller implements MenuViewController
         TagsController controller = new TagsController(user_db, project_db, stage, scene);
         stage.hide();
         controller.show();
-        stage.show();    }
+        stage.show();
+    }
+
+    @Override
+    public void showCalendar() {
+        CalendarController controller = new CalendarController(user_db, project_db, stage, scene);
+        stage.hide();
+        try {
+            controller.show();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        stage.show();
+    }
 
 
     @Override

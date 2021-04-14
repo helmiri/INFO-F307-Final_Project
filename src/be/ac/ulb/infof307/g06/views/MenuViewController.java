@@ -70,6 +70,8 @@ public class MenuViewController {
             listener.showMainMenu();
         } else if (event.getSource() == storageBtn) {
             listener.showStorage();
+        } else if (event.getSource() == calendarAccessBtn) {
+            listener.showCalendar();
         }
     }
 
@@ -112,6 +114,8 @@ public class MenuViewController {
         void showSettings();
 
         void showTags();
+
+        void showCalendar();
 
         void logout();
     }
