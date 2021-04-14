@@ -122,10 +122,13 @@ public class StatsViewController{
 
     @FXML
     public void displayStats() throws SQLException {
-        List<Integer> infos = listener.countProjectStats(getSelectedProject());
+        Project selectedProjet = getSelectedProject();
+        List<Integer> infos = listener.countProjectStats(selectedProject);
         projectsNumber.setText(Integer.toString(infos.get(0)));
         tasksNumber.setText(infos.get(1).toString());
         collaboratorsNumber.setText(Integer.toString(infos.get(2)));
+        startDate.setText(listener.dateToString(selectedProjet.getStartDate()));
+        estimatedDate.setText(listener.dateToString(selectedProjet.getEndDate()));
     }
 
     @FXML
@@ -230,14 +233,20 @@ public class StatsViewController{
 
         void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
 
-        void exportStatsAsJson(String fileName, String path, TreeItem<Statistics> root);
+        void exportStatsAsJson(String fileName, String path, TreeItem<Project> root);
 
-        void exportStatsAsCSV(String fileName, String path, TreeItem<Statistics> root);
+        void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root);
 
         List<Integer> countOverallStats() throws SQLException;
 
         List<Integer> countProjectStats(Project selectedProject) throws SQLException;
 
+        void exportAsCSVOverallView(String fileName, String path);
 
+        void exportAsJSONOverallView(String fileName, String path);
+
+        Project getProjectsFromID(int id) throws DatabaseException;
+
+        String dateToString(Long date);
     }
 }

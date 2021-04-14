@@ -136,6 +136,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param date Long
      * @return String
      */
+    @Override
     public String dateToString(Long date){
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(date * 86400000L);
@@ -256,7 +257,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param fileName     String
      * @param path         String
      */
-    public void write(String chosenString, final String fileName,String path) {
+    public void write(String chosenString, String fileName,String path) {
         try {
             FileWriter fw = new FileWriter(path + fileName, true);
             fw.write(chosenString + "\n");
@@ -278,7 +279,7 @@ public class StatsController extends Controller implements StatsViewController.V
         try {
             PrintWriter csv = new PrintWriter(path + fileName);
             // Name of columns
-            String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "EstimatedDate" + "," + "Parent ID" + "\r\n";
+            String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "Sub projects" + "," + "Parent ID" + "," + "Start date" + "," + "Estimated date" + "\r\n";
             for (int i = 0; i < root.getChildren().size(); i++) {
                 String mainProjectTitle = root.getChildren().get(i).getValue().getTitle();
                 int mainProjectID = project_db.getProjectID(mainProjectTitle);
@@ -297,10 +298,10 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Returns CSV format.
      *
-     * @param currentStatID Integer : ID of the current object statistics
-     * @param currentStat   Statistics : the information to add in the content
-     * @param content       String : CSV format
-     * @param root          TreeItem<Statistics> : root of the TreeTableView
+     * @param currentProjectID Integer : ID of the current object statistics
+     * @param currentProject   Statistics : the information to add in the content
+     * @param content          String : CSV format
+     * @param root              TreeItem<Statistics> : root of the TreeTableView
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
@@ -311,9 +312,9 @@ public class StatsController extends Controller implements StatsViewController.V
         if (project_db.getSubProjects(currentProjectID).size() == 0) {
             content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators+ '"' + "," + '"' + numberOfTasks+ '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParent_id() + "," + startDate+"," +  endDate + "\r\n";
         } else {
-            content += currentStatID + "," + currentStat.getTitle() + "," + '"' + currentStat.getCollaborators() + '"' + "," + '"' + currentStat.getTasks() + '"' + "," + currentStat.getEstimatedDate() + "," + project_db.getProject(currentStatID).getParent_id() + "\r\n";
-            for (int k = 0; k < project_db.getSubProjects(currentStatID).size(); k++) {
-                content = statsToCSVString(project_db.getSubProjects(currentStatID).get(k), root.getChildren().get(k).getValue(), content, root.getChildren().get(k));
+            content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators+ '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParent_id() + "," + startDate+"," +  endDate + "\r\n";
+            for (int k = 0; k < project_db.getSubProjects(currentProjectID).size(); k++) {
+                content = statsToCSVString(project_db.getSubProjects(currentProjectID).get(k), root.getChildren().get(k).getValue(), content, root.getChildren().get(k));
             }
         }
         return content;
@@ -357,7 +358,6 @@ public class StatsController extends Controller implements StatsViewController.V
         }
         return res;
     }
-
 
     /**
      * @param projectID int
