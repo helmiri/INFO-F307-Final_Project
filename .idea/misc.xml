@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CafeBabe.Configuration">
+    <option name="lastSelectedFile" value="$PROJECT_DIR$/../Desktop/view-11.8.3/com/calendarfx/model/Calendar.class" />
+  </component>
   <component name="EntryPointsManager">
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="org.junit.jupiter.api.BeforeAll" />

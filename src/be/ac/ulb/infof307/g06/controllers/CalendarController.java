@@ -33,30 +33,34 @@ public class CalendarController extends Controller implements CalendarViewContro
     @Override
     public void show() throws IOException, SQLException {
         Calendar test = new Calendar("Week overview");
-
-
+        Calendar days = new Calendar();
+        Calendar currentDay = new Calendar();
         view = new AllDayView();
 
         CalendarSource source = new CalendarSource("calendars");
-        source.getCalendars().setAll(test);
+        source.getCalendars().setAll(test, days, currentDay);
         view.getCalendarSources().setAll(source);
-
         view.setAdjustToFirstDayOfWeek(false);
-
+        view.setRowHeight(50);
         viewController = new CalendarViewController();
-
+        currentDay.setStyle("orange");
+        test.setStyle("olive");
+        days.setStyle("white");
         viewController.setListener(this);
-
         scene = new Scene(view);
         stage.setScene(scene);
         stage.show();
 
-        for (int i = 1; i < 25; i++) {
-            Entry<String> testEntry = new Entry<>("" + LocalDate.of(2021, 4, i));
-            testEntry.changeStartDate(LocalDate.of(2021, 4, i));
-            testEntry.changeEndDate(LocalDate.of(2021, 4, i));
+        for (int i = 0; i < 25; i++) {
+            Entry<String> testEntry = new Entry<>("" + LocalDate.now().plusDays(i));
+            testEntry.changeStartDate(LocalDate.now().plusDays(i));
+            testEntry.changeEndDate(LocalDate.now().plusDays(i));
             testEntry.setFullDay(true);
-            test.addEntry(testEntry);
+            if (i == 0) {
+                currentDay.addEntry(testEntry);
+            } else {
+                days.addEntry(testEntry);
+            }
         }
 
         Entry<String> testEntry = new Entry<>("test");
@@ -68,6 +72,8 @@ public class CalendarController extends Controller implements CalendarViewContro
         testEntry2.changeStartDate(LocalDate.of(2021, 4, 15));
         testEntry2.changeEndDate(LocalDate.of(2021, 4, 18));
         testEntry2.setFullDay(true);
+
+        testEntry2.getStyleClass().setAll("style5");
         test.addEntry(testEntry2);
 
     }
