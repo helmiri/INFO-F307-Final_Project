@@ -15,7 +15,7 @@
     <orderEntry type="library" name="windows" level="project" />
     <orderEntry type="library" name="gson-2.8.6" level="project" />
     <orderEntry type="library" name="java" level="project" />
-    <orderEntry type="library" name="view-11.8.3" level="project" />
-    <orderEntry type="library" name="activation-1.1" level="application" />
+    <orderEntry type="library" name="activation-1.1" level="project" />
+    <orderEntry type="library" name="calendarfx" level="project" />
   </component>
 </module>
