@@ -82,6 +82,7 @@ public class StatsController extends Controller implements StatsViewController.V
             throw new DatabaseException(e);
         }
     }
+
     @Override
     public Project getProjectsFromID(int id) throws DatabaseException{
         try {
@@ -388,6 +389,7 @@ public class StatsController extends Controller implements StatsViewController.V
             new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
         }
     }
+
     @Override
     public void exportAsJSONOverallView(String fileName, String path){
         try{
@@ -398,6 +400,9 @@ public class StatsController extends Controller implements StatsViewController.V
             new AlertWindow("Error", "An error has occurred during the exportation. Couldn't find some informations in the database: " + e).errorWindow();
         }
     }
+
+    @Override
+    public Integer countTasksOfAProject(int project_id) throws SQLException { return project_db.countTasks(project_id); }
 
     // ------------------------------------- CODE --------------------------------------
 

@@ -9,8 +9,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -47,13 +50,19 @@ public class StatsViewController{
     @FXML
     private TextField fileNameTextField;
     @FXML
+    private AnchorPane barChartAnchorPane;
+    @FXML
+    private AnchorPane pieChartAnchorPane;
+    @FXML
+    private Pane barChartPane;
+    @FXML
     private TreeTableColumn<Project, String> projectsColumn;
     @FXML
     private TreeTableView<Project> projectsTreeView;
     @FXML
     private PieChart projectsChart;
     @FXML
-    private BarChart<?, ?> collaboratorsChart;
+    private BarChart<?, ?> tasksChart;
     private Project selectedProject;
     private boolean isOverallView=true;
 
@@ -99,8 +108,9 @@ public class StatsViewController{
             System.out.println("erreur");
         }
         isOverallView=true;
+        tasksChart.setLegendVisible(false);
         pieChartInitializer();
-
+        barChartInitializer();
     }
 
     public void pieChartInitializer(){
@@ -108,16 +118,42 @@ public class StatsViewController{
             List<Integer> projects= listener.getProjects();
             ObservableList<PieChart.Data> datas= FXCollections.observableArrayList();
             for(int i=0;i<projects.size();i++){
+                projectsChart.setPrefWidth(513+(10*i));
+                projectsChart.setPrefHeight(322+(4*i));
+                pieChartAnchorPane.setPrefWidth(513+(10*i));
+                pieChartAnchorPane.setPrefHeight(322+(4*i));
                 Project project =listener.getProjectsFromID(projects.get(i));
                 datas.add(i,new PieChart.Data(project.getTitle(),project.getDuration()));
             }
             projectsChart.setData(datas);
-
         }
         catch(DatabaseException e){
             new AlertWindow("Error", "An error has occured with the database.").errorWindow();
         }
+    }
 
+    public void barChartInitializer(){
+        XYChart.Series series = new XYChart.Series<>();
+        try{
+            List<Integer> projects = listener.getProjects();
+            int numberOfProjects=0;
+            for (int i = 0; i < projects.size(); i++){
+                Project project =listener.getProjectsFromID(projects.get(i));
+                Integer tasksCount= listener.countTasksOfAProject(project.getId());
+                if( tasksCount!=0){
+                    numberOfProjects++;
+                    tasksChart.setPrefWidth(513+(numberOfProjects*20));
+                    barChartAnchorPane.setPrefWidth(513+(numberOfProjects*30));
+                    barChartPane.setPrefWidth(513+(numberOfProjects*30));
+                    series.getData().add(new XYChart.Data(project.getTitle(),tasksCount));
+                }
+            }
+            tasksChart.getData().addAll(series);
+
+        }
+        catch(DatabaseException | SQLException e){
+            new AlertWindow("Error", "An error has occured with the database.").errorWindow();
+        }
     }
 
     @FXML
@@ -248,5 +284,7 @@ public class StatsViewController{
         Project getProjectsFromID(int id) throws DatabaseException;
 
         String dateToString(Long date);
+
+        Integer countTasksOfAProject(int project_id) throws SQLException;
     }
 }
