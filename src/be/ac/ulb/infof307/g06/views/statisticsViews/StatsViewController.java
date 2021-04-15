@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -61,7 +62,7 @@ public class StatsViewController{
     @FXML
     private PieChart projectsChart;
     @FXML
-    private BarChart<?, ?> collaboratorsChart;
+    private BarChart<?, ?> tasksChart;
     private Project selectedProject;
     private boolean isOverallView=true;
 
@@ -109,7 +110,7 @@ public class StatsViewController{
         isOverallView=true;
         tasksChart.setLegendVisible(false);
         pieChartInitializer();
-
+        barChartInitializer();
     }
 
     public void pieChartInitializer(){
@@ -125,12 +126,34 @@ public class StatsViewController{
                 datas.add(i,new PieChart.Data(project.getTitle(),project.getDuration()));
             }
             projectsChart.setData(datas);
-
         }
         catch(DatabaseException e){
             new AlertWindow("Error", "An error has occured with the database.").errorWindow();
         }
+    }
 
+    public void barChartInitializer(){
+        XYChart.Series series = new XYChart.Series<>();
+        try{
+            List<Integer> projects = listener.getProjects();
+            int numberOfProjects=0;
+            for (int i = 0; i < projects.size(); i++){
+                Project project =listener.getProjectsFromID(projects.get(i));
+                Integer tasksCount= listener.countTasksOfAProject(project.getId());
+                if( tasksCount!=0){
+                    numberOfProjects++;
+                    tasksChart.setPrefWidth(513+(numberOfProjects*20));
+                    barChartAnchorPane.setPrefWidth(513+(numberOfProjects*30));
+                    barChartPane.setPrefWidth(513+(numberOfProjects*30));
+                    series.getData().add(new XYChart.Data(project.getTitle(),tasksCount));
+                }
+            }
+            tasksChart.getData().addAll(series);
+
+        }
+        catch(DatabaseException | SQLException e){
+            new AlertWindow("Error", "An error has occured with the database.").errorWindow();
+        }
     }
 
     @FXML
