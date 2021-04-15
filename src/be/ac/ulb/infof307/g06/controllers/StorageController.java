@@ -29,6 +29,7 @@ public class StorageController extends Controller implements StorageViewControll
             storageViewController = getStorageViewController();
             storageViewController.setListener(this);
             stage.setScene(scene);
+            stage.sizeToScene();
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin(),
                     currentUser.getAccessToken(), currentUser.getClientID());
@@ -90,8 +91,7 @@ public class StorageController extends Controller implements StorageViewControll
 
     @Override
     public void onBackButtonClicked() {
-        stage.hide();
         stage.setScene(prevScene);
-        stage.show();
+        stage.sizeToScene();
     }
 }

@@ -30,6 +30,7 @@ public class TagsController extends Controller implements TagsViewController.Vie
         viewController = loader.getController();
         viewController.setListener(this);
         stage.setScene(scene);
+        stage.sizeToScene();
         try {
             viewController.initialize(project_db.getAllTags());
         } catch (SQLException e) {
@@ -40,9 +41,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
 
     @Override
     public void onBackButtonClicked() {
-        stage.hide();
         stage.setScene(prevScene);
-        stage.show();
+        stage.sizeToScene();
     }
 
     @Override

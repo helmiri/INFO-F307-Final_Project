@@ -47,8 +47,9 @@ public class CalendarController extends Controller implements CalendarViewContro
         test.setStyle("olive");
         days.setStyle("white");
         viewController.setListener(this);
-        scene = new Scene(view);
+        scene = new Scene(view, 1515,940);
         stage.setScene(scene);
+        stage.sizeToScene();
         stage.show();
 
         for (int i = 0; i < 25; i++) {

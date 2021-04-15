@@ -37,8 +37,9 @@ public class MainMenuController extends Controller implements MenuViewController
             scene = new Scene(loader.load());
             MenuViewController controller = loader.getController();
             controller.setListener(this);
-            load(940, 1515);
             stage.setScene(scene);
+            stage.sizeToScene();
+            load(940, 1515);
             for (Invitation invitation : user_db.getInvitations(project_db)) {
                 showInvitationStage(invitation);
             }
@@ -68,11 +69,11 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     public void load(Integer height, Integer width) {
         // Set main stage
-        stage.setResizable(true);
+        //stage.setResizable(true);
         stage.setHeight(height);
         stage.setWidth(width);
         stage.centerOnScreen();
-        stage.setResizable(false);
+        //stage.setResizable(false);
 
     }
 
@@ -89,9 +90,8 @@ public class MainMenuController extends Controller implements MenuViewController
             scene = new Scene(loader.load());
             MenuViewController controller = loader.getController();
             controller.setListener(this);
-            stage.hide();
             stage.setScene(scene);
-            stage.show();
+            stage.sizeToScene();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,17 +101,13 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showProjects() {
         ProjectController controller = new ProjectController(user_db, project_db, stage, scene);
-        stage.hide();
         controller.show();
-        stage.show();
     }
 
     @Override
     public void showStats() {
         StatsController controller = new StatsController(user_db, project_db, stage, scene);
-        stage.hide();
         controller.show();
-        stage.show();
 
         // Sous WINDOWS CA FONCTIONNE AUSSI QU'AVEC 1 SEULE LIGNE (controller.show())
     }
@@ -119,9 +115,7 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showStorage() {
         StorageController controller = new StorageController(user_db, project_db, stage, scene);
-        stage.hide();
         controller.show();
-        stage.show();
     }
 
     @Override
@@ -132,6 +126,7 @@ public class MainMenuController extends Controller implements MenuViewController
             MenuViewController controller = loader.getController();
             controller.setListener(this);
             stage.setScene(scene);
+            stage.sizeToScene();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,21 +136,17 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showTags() {
         TagsController controller = new TagsController(user_db, project_db, stage, scene);
-        stage.hide();
         controller.show();
-        stage.show();
     }
 
     @Override
     public void showCalendar() {
         CalendarController controller = new CalendarController(user_db, project_db, stage, scene);
-        stage.hide();
         try {
             controller.show();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        stage.show();
     }
 
 
