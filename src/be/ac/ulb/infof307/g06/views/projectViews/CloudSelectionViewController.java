@@ -23,7 +23,7 @@ public class CloudSelectionViewController {
         stage = new Stage();
         stage.setScene(new Scene(pane));
         stage.setTitle("Cloud service selection");
-        stage.show();
+        stage.showAndWait();
     }
 
     public void serviceSelect(ActionEvent actionEvent) {
@@ -37,7 +37,6 @@ public class CloudSelectionViewController {
 
     public interface ViewListener {
         void selectGoogleDrive();
-
         void selectDropBox();
     }
 }

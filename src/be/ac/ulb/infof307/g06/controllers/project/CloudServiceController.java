@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.controllers.project;
 
-import be.ac.ulb.infof307.g06.controllers.MainController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.DropBoxAPI;
 import be.ac.ulb.infof307.g06.models.GoogleDriveAPI;
@@ -13,7 +12,6 @@ import com.dropbox.core.v2.files.Metadata;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -106,16 +104,23 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private void downloadDropBox(String cloudPath, String localPath) {
         Metadata fileMeta = getFile(cloudPath);
         File localFile = new File(localPath);
-        if (!localFile.exists() && !isFileIdentical(cloudPath, localPath, (FileMetadata) fileMeta)) {
+        boolean download = false;
+        if (!localFile.exists()) {
+            download = true;
+        } else if (isFileIdentical(cloudPath, localPath, (FileMetadata) fileMeta)) {
+            new AlertWindow("Identical files", "The file already exists").informationWindow();
+        } else {
+            download = true;
+        }
+
+        if (download) {
             try {
                 dbxClient.downloadFile(localPath, cloudPath);
             } catch (IOException | DbxException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-        } else {
-            new AlertWindow("Identical files", "The file already exists").informationWindow();
         }
-        projectController.importProject(localPath);
+//        projectController.importProject(localPath);
     }
 
     private Metadata getFile(String cloudPath) {
@@ -137,16 +142,13 @@ public class CloudServiceController implements CloudSelectionViewController.View
      * Sets the loader to show the stage to edit a project.
      */
     public void showCloudDownloadStage() {
-        //FXMLLoader loader = new FXMLLoader();
-        //loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
 
         try {
             FXMLLoader loader = new FXMLLoader(CloudViewController.class.getResource("CloudView.fxml"));
             AnchorPane cloudPane = loader.load();
             CloudViewController controller = loader.getController();
-            controller.show(dboxFiles);
-            MainController.showStage("Download", 541, 473, Modality.APPLICATION_MODAL, cloudPane);
-
+            controller.setListener(this);
+            controller.show(dboxFiles, cloudPane);
         } catch (IOException e) {
             // TODO Exception
         }
@@ -154,16 +156,28 @@ public class CloudServiceController implements CloudSelectionViewController.View
 //        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
 
-    public void showSelectionStage() {
+    public void showSelectionStage(boolean isDownload) {
         FXMLLoader loader = new FXMLLoader(CloudSelectionViewController.class.getResource("CloudSelectionView.fxml"));
         try {
             AnchorPane selectionPane = loader.load();
             CloudSelectionViewController controller = loader.getController();
             controller.setListener(this);
             controller.show(selectionPane);
+            if (isDownload) {
+                showCloudDownloadStage();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void uploadProject(String fileName, String localFilePath) {
+        try {
+            dbxClient.uploadFile(localFilePath, fileName);
+        } catch (IOException | DbxException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

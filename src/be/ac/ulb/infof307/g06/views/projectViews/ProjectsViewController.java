@@ -1,8 +1,10 @@
 package be.ac.ulb.infof307.g06.views.projectViews;
 
-import be.ac.ulb.infof307.g06.models.*;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Tag;
+import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import com.dropbox.core.DbxException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,8 +21,6 @@ import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -145,21 +145,18 @@ public class ProjectsViewController {
         if (event.getSource() == backBtn) {
             listener.back();
         } else if (event.getSource() == cloudUploadBtn) {
-            listener.uploadProject();
-            uploadFiles();
-        } else { // TODO QUESTION ALINE : Pq faire un "else" et pas de "else if" ??
-            if (event.getSource() == addTaskbtn) {
-                if (selectedProject != null) {
-                    listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
-                    displayTask();
-                } else {
-                    new AlertWindow("Warning", "Please select a project before adding a tag.").warningWindow();
-                }
-
-            } else if (event.getSource() == addBtn) {
-                listener.addProject();
-            } else if (event.getSource() == assignTaskCollaboratorBtn) {
-                listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
+            listener.uploadProject(selectedProject);
+        } else if (event.getSource() == addTaskbtn) {
+            if (selectedProject != null) {
+                listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
+                displayTask();
+            } else {
+                new AlertWindow("Warning", "Please select a project before adding a tag.").warningWindow();
+            }
+        } else if (event.getSource() == addBtn) {
+            listener.addProject();
+        } else if (event.getSource() == assignTaskCollaboratorBtn) {
+            listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
             } else if (event.getSource() == editBtn) {
                 if (!projectsTitle.getText().equals("")) {
                     listener.editProject(selectedProject);
@@ -172,7 +169,7 @@ public class ProjectsViewController {
                 listener.downloadProject();
             }
         }
-    }
+
 
 
     /**
@@ -362,37 +359,6 @@ public class ProjectsViewController {
         }
     }
 
-    /**
-     * Choose the file we want to upload to the cloud via a filechooser.
-     */
-    public void uploadFiles() {
-        if (selectedProject == null) {
-            return;
-        }
-        File selectedDirectory = new File("");
-
-        listener.exportProject(selectedProject,
-                selectedDirectory.getAbsolutePath());
-        try {
-            Map<String, String> creds = user_db.getCloudCredentials();
-            if (creds.get("accToken") == null || creds.get("clientID") == null) {
-                new AlertWindow("Cloud service", "Could not connect to DropBox. Check that your credentials are valid").errorWindow();
-                return;
-            }
-            DropBoxAPI dbxClient = new DropBoxAPI(creds.get("accToken"), creds.get("clientID"));
-            String fileName = "/" + selectedProject.getTitle() + ".tar.gz";
-            String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
-
-            dbxClient.uploadFile(localFilePath, fileName);
-            new AlertWindow("Upload", "Uploaded successfully").informationWindow();
-        } catch (DbxException e) {
-            new AlertWindow("Cloud service error", "Error connecting to DropBox").errorWindow();
-        } catch (IOException e) {
-            new AlertWindow("IO Error", "Error reading the file").errorWindow();
-        } catch (SQLException throwables) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-        }
-    }
 
     /**
      * Imports the file selected from a file chooser stage.
@@ -513,7 +479,7 @@ public class ProjectsViewController {
 
         void exportProject(Project project, String path);
 
-        void uploadProject();
+        void uploadProject(Project project);
 
         void downloadProject();
 

@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -450,9 +451,15 @@ public class ProjectController extends Controller implements ProjectsViewControl
     }
 
     @Override
-    public void uploadProject() {
+    public void uploadProject(Project project) {
         if (setServiceProvider()) return;
-        cloudServiceController.showSelectionStage();
+        File selectedDirectory = new File("");
+        exportProject(project, selectedDirectory.getAbsolutePath());
+        String fileName = "/" + project.getTitle() + ".tar.gz";
+        String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
+
+        cloudServiceController.showSelectionStage(false);
+        cloudServiceController.uploadProject(fileName, localFilePath);
     }
 
     @Override
@@ -461,7 +468,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         if (storageLimitReached()) {
             return;
         }
-        cloudServiceController.showSelectionStage();
+        cloudServiceController.showSelectionStage(true);
     }
 
     private boolean setServiceProvider() {

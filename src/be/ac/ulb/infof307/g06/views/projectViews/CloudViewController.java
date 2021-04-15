@@ -3,10 +3,13 @@ package be.ac.ulb.infof307.g06.views.projectViews;
 import com.dropbox.core.v2.files.Metadata;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +22,19 @@ public class CloudViewController {
     private TableColumn<String, String> filesColumn;
     private List<Metadata> files;
     private ViewListener listener;
+    private Stage stage;
     //--------------- METHODS ----------------
 
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
 
-    public void show(List<Metadata> files) {
+    public void show(List<Metadata> files, AnchorPane cloudPane) {
+        stage = new Stage();
+        stage.setScene(new Scene(cloudPane));
+        stage.setTitle("Dropbox Files");
+        stage.show();
+
         filesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         filesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         try {
@@ -37,22 +46,6 @@ public class CloudViewController {
         }
     }
 
-    /*
-    public List<Metadata> filterFolders(List<Metadata> entries) {
-        List<Metadata> folders = new ArrayList<>();
-
-        for (int i = 0; i < entries.size(); i++) {
-            for (int j = 0; j < entries.size(); j++) {
-                if (entries.get(j).getPathDisplay().contains(entries.get(i).getPathDisplay())
-                        && !entries.get(j).getPathDisplay().equals(entries.get(i).getPathDisplay())) {
-                    folders.add(entries.get(i));
-                    entries.remove(j);
-                }
-
-            }
-        }
-        return folders;
-    }*/
 
     /**
      * Returns the valid files contained in the dropbox.
@@ -71,12 +64,12 @@ public class CloudViewController {
         return lst;
     }
 
-
     /**
      * button handling
      **/
     public void events() {
         listener.downloadFile(getSelectedItem());
+        stage.close();
     }
 
     private String getSelectedItem() {
