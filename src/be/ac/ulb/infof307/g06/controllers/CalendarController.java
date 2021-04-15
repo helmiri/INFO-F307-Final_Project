@@ -3,23 +3,17 @@ package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.CalendarViewController;
-import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.AllDayView;
-import com.calendarfx.view.CalendarView;
-import com.calendarfx.view.DayViewBase;
-import com.calendarfx.view.DetailedWeekView;
 import com.calendarfx.view.page.WeekPage;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
     private CalendarViewController viewController;

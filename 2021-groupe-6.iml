@@ -14,9 +14,7 @@
     <orderEntry type="library" name="com.dropbox.core:dropbox-core-sdk:3.1.5" level="project" />
     <orderEntry type="library" name="windows" level="project" />
     <orderEntry type="library" name="gson-2.8.6" level="project" />
-    <orderEntry type="library" name="calendarfx" level="project" />
-    <orderEntry type="library" name="calendarfx" level="project" />
-    <orderEntry type="library" name="calendarfx" level="project" />
-    <orderEntry type="library" name="view-11.8.3" level="project" />
+    <orderEntry type="library" name="dropbox" level="project" />
+    <orderEntry type="library" name="com.calendarfx:view:11.9.0" level="project" />
   </component>
 </module>
