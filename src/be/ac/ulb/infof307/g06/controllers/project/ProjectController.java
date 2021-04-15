@@ -8,7 +8,10 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.projectViews.*;
+import be.ac.ulb.infof307.g06.views.projectViews.AddProjectViewController;
+import be.ac.ulb.infof307.g06.views.projectViews.EditProjectViewController;
+import be.ac.ulb.infof307.g06.views.projectViews.EditTaskViewController;
+import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,6 +35,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
     private final IOController ioController;
+    private CloudServiceController cloudServiceController = null;
 
     //--------------- METHODS ----------------
     public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
@@ -81,27 +85,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
-    /**
-     * Sets the loader to show the stage to edit a project.
-     */
-    public void showCloudDownloadStage() {
-        //FXMLLoader loader = new FXMLLoader();
-        //loader.setLocation(CloudViewController.class.getResource("CloudView.fxml"));
-
-        try {
-            FXMLLoader loader = new FXMLLoader(CloudViewController.class.getResource("CloudView.fxml"));
-            AnchorPane cloudPane = loader.load();
-            CloudViewController controller = loader.getController();
-            controller.initialize();
-
-            MainController.showStage("Download", 541, 473, Modality.APPLICATION_MODAL, cloudPane);
-
-        } catch (IOException e) {
-            // TODO Exception
-        }
-        // TODO Download Stage
-//        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
-    }
 
 
     public void showEditProjectStage(Project project, ProjectsViewController.ViewListener listener) {
@@ -467,14 +450,30 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void uploadProject() {
+        if (setServiceProvider()) return;
+        cloudServiceController.showSelectionStage();
     }
 
     @Override
     public void downloadProject() {
+        if (setServiceProvider()) return;
         if (storageLimitReached()) {
             return;
         }
-        showCloudDownloadStage();
+        cloudServiceController.showSelectionStage();
+    }
+
+    private boolean setServiceProvider() {
+        if (cloudServiceController == null) {
+            try {
+                cloudServiceController = new CloudServiceController(this, user_db);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                cloudServiceController = null;
+                return true;
+            }
+        }
+        return false;
     }
 
 

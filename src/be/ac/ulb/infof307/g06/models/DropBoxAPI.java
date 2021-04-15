@@ -13,8 +13,8 @@ import java.util.List;
 
 
 @SuppressWarnings("ALL")
-public class Cloud {
-    private static DbxClientV2 dboxClient;
+public class DropBoxAPI {
+    private DbxClientV2 dboxClient;
 
     /**
      * Initializes the connection with the dropboxaccount.
@@ -24,12 +24,12 @@ public class Cloud {
      * @throws DbxException
      * @throws IOException
      */
-    public static void init(String ACCESS_TOKEN, String clientidentifier) throws DbxException, IOException {
+    public DropBoxAPI(String accessToken, String clientID) {
         // Create Dropbox client
-        DbxRequestConfig config = new DbxRequestConfig(clientidentifier, "en_US");
-        dboxClient = new DbxClientV2(config, ACCESS_TOKEN);
-
+        DbxRequestConfig config = new DbxRequestConfig(clientID, "en_US");
+        dboxClient = new DbxClientV2(config, accessToken);
     }
+
 
     /**
      * Returns the list of all the files contained in the dropbox account
@@ -37,11 +37,10 @@ public class Cloud {
      * @return
      * @throws DbxException
      */
-    public static List<Metadata> getFiles() throws DbxException {
+    public List<Metadata> getFiles() throws DbxException {
         ListFolderBuilder listFolderBuilder = dboxClient.files().listFolderBuilder("");
         ListFolderResult result = listFolderBuilder.withRecursive(true).start();
         List<Metadata> res = new ArrayList<>();
-
 
         while (true) {
             res.addAll(result.getEntries());
@@ -65,7 +64,7 @@ public class Cloud {
      * @throws DbxException
      */
 
-    public static void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
+    public void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
         InputStream in = new FileInputStream(localFilePath);
         UploadBuilder uploadBuilder = dboxClient.files().uploadBuilder(cloudFilePath);
         uploadBuilder.withMode(WriteMode.OVERWRITE);
@@ -82,7 +81,7 @@ public class Cloud {
      * @throws DbxException
      * @throws NoSuchAlgorithmException
      */
-    public static void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
+    public void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
         String tempPath = localFilePath;
         OutputStream outputStream = new FileOutputStream(tempPath);
         FileMetadata metadata = dboxClient.files()
@@ -98,7 +97,7 @@ public class Cloud {
      * @param file
      * @return
      */
-    public static String dropBoxHash(String file) {
+    public String dropBoxHash(String file) {
         MessageDigest hasher = new DropBoxContentHasher();
         byte[] buf = new byte[1024];
         try (InputStream in = new FileInputStream(file)) {

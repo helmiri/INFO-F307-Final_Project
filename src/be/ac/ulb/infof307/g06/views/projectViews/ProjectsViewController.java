@@ -379,11 +379,11 @@ public class ProjectsViewController {
                 new AlertWindow("Cloud service", "Could not connect to DropBox. Check that your credentials are valid").errorWindow();
                 return;
             }
-            Cloud.init(creds.get("accToken"), creds.get("clientID"));
+            DropBoxAPI dbxClient = new DropBoxAPI(creds.get("accToken"), creds.get("clientID"));
             String fileName = "/" + selectedProject.getTitle() + ".tar.gz";
             String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
 
-            Cloud.uploadFile(localFilePath, fileName);
+            dbxClient.uploadFile(localFilePath, fileName);
             new AlertWindow("Upload", "Uploaded successfully").informationWindow();
         } catch (DbxException e) {
             new AlertWindow("Cloud service error", "Error connecting to DropBox").errorWindow();
