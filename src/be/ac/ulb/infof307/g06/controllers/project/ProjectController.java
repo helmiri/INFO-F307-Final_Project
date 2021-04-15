@@ -59,6 +59,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         viewController = loader.getController();
         viewController.setListener(this);
         stage.setScene(scene);
+        stage.sizeToScene();
         viewController.init();
     }
 

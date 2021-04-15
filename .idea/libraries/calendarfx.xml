@@ -19,6 +19,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/lib/calendarfx/ical4j-3.0.10.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/view-11.8.3-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

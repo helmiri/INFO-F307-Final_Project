@@ -29,6 +29,7 @@ public class StatsController extends Controller implements StatsViewController.V
     //--------------- ATTRIBUTE ----------------
     private StatsViewController statsView;
 
+
     //--------------- METHODS ----------------
     public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
@@ -49,6 +50,7 @@ public class StatsController extends Controller implements StatsViewController.V
         statsView = loader.getController();
         statsView.setListener(this);
         stage.setScene(scene);
+        stage.sizeToScene();
         statsView.initOverallStats();
         //MainController.load(loader, 940, 1515);
     }
@@ -65,6 +67,7 @@ public class StatsController extends Controller implements StatsViewController.V
         statsView = loader.getController();
         statsView.setListener(this);
         stage.setScene(scene);
+        stage.sizeToScene();
         statsView.initTree();
     }
 
@@ -408,9 +411,8 @@ public class StatsController extends Controller implements StatsViewController.V
 
     @Override
     public void onBackButtonClicked() {
-        stage.hide();
         stage.setScene(prevScene);
-        stage.show();
+        stage.sizeToScene();
     }
 
 }

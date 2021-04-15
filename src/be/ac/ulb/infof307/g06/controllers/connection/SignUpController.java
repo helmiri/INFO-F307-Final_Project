@@ -67,9 +67,7 @@ public class SignUpController {
 
             @Override
             public void back() {
-                stage.hide();
                 stage.setScene(previousScene);
-                stage.show();
             }
         });
         stage.centerOnScreen();
