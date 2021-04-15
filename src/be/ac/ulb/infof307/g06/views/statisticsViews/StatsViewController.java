@@ -11,6 +11,8 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -46,6 +48,12 @@ public class StatsViewController{
     private Text msgExportText;
     @FXML
     private TextField fileNameTextField;
+    @FXML
+    private AnchorPane barChartAnchorPane;
+    @FXML
+    private AnchorPane pieChartAnchorPane;
+    @FXML
+    private Pane barChartPane;
     @FXML
     private TreeTableColumn<Project, String> projectsColumn;
     @FXML
@@ -99,6 +107,7 @@ public class StatsViewController{
             System.out.println("erreur");
         }
         isOverallView=true;
+        tasksChart.setLegendVisible(false);
         pieChartInitializer();
 
     }
@@ -108,6 +117,10 @@ public class StatsViewController{
             List<Integer> projects= listener.getProjects();
             ObservableList<PieChart.Data> datas= FXCollections.observableArrayList();
             for(int i=0;i<projects.size();i++){
+                projectsChart.setPrefWidth(513+(10*i));
+                projectsChart.setPrefHeight(322+(4*i));
+                pieChartAnchorPane.setPrefWidth(513+(10*i));
+                pieChartAnchorPane.setPrefHeight(322+(4*i));
                 Project project =listener.getProjectsFromID(projects.get(i));
                 datas.add(i,new PieChart.Data(project.getTitle(),project.getDuration()));
             }
@@ -248,5 +261,7 @@ public class StatsViewController{
         Project getProjectsFromID(int id) throws DatabaseException;
 
         String dateToString(Long date);
+
+        Integer countTasksOfAProject(int project_id) throws SQLException;
     }
 }
