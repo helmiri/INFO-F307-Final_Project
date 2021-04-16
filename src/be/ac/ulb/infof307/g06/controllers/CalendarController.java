@@ -24,52 +24,32 @@ public class CalendarController extends Controller implements CalendarViewContro
         super(user_db, project_db, stage, scene);
     }
 
+    public void createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color) {
+        Calendar newCalendar = new Calendar();
+        newCalendar.setStyle(color);
+        source.getCalendars().add(newCalendar);
+        Entry<String> testEntry = new Entry<>(name);
+        testEntry.changeStartDate(start);
+        testEntry.changeEndDate(end);
+        testEntry.setFullDay(true);
+        newCalendar.addEntry(testEntry);
+    }
+
     @Override
     public void show() throws IOException, SQLException {
-        Calendar test = new Calendar("Week overview");
-        Calendar days = new Calendar();
-        Calendar currentDay = new Calendar();
         view = new AllDayView();
-
         CalendarSource source = new CalendarSource("calendars");
-        source.getCalendars().setAll(test, days, currentDay);
         view.getCalendarSources().setAll(source);
         view.setAdjustToFirstDayOfWeek(false);
         view.setRowHeight(50);
         viewController = new CalendarViewController();
-        currentDay.setStyle("orange");
-        test.setStyle("olive");
-        days.setStyle("white");
         viewController.setListener(this);
-        scene = new Scene(view, 1515,940);
+        scene = new Scene(view, 1515, 940);
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();
-
-        for (int i = 0; i < 25; i++) {
-            Entry<String> testEntry = new Entry<>("" + LocalDate.now().plusDays(i));
-            testEntry.changeStartDate(LocalDate.now().plusDays(i));
-            testEntry.changeEndDate(LocalDate.now().plusDays(i));
-            testEntry.setFullDay(true);
-            if (i == 0) {
-                currentDay.addEntry(testEntry);
-            } else {
-                days.addEntry(testEntry);
-            }
-        }
-
-        Entry<String> testEntry = new Entry<>("test");
-        testEntry.changeStartDate(LocalDate.now());
-        testEntry.changeEndDate(LocalDate.of(2021, 4, 16));
-        testEntry.setFullDay(true);
-        test.addEntry(testEntry);
-        Entry<String> testEntry2 = new Entry<>("tes2");
-        testEntry2.changeStartDate(LocalDate.of(2021, 4, 15));
-        testEntry2.changeEndDate(LocalDate.of(2021, 4, 18));
-        testEntry2.setFullDay(true);
-
-        testEntry2.getStyleClass().setAll("style5");
-        test.addEntry(testEntry2);
+        createEntry(source, "test1", LocalDate.now(), LocalDate.now().plusDays(5), "blue");
+        createEntry(source, "test2", LocalDate.now().plusDays(2), LocalDate.now().plusDays(3), "red");
 
     }
 }
