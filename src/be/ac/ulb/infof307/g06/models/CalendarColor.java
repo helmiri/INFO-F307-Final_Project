@@ -1,10 +1,13 @@
 package be.ac.ulb.infof307.g06.models;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CalendarColor {
-    Map<String, String> colorsMap = new HashMap<>();
+    private Map<String, String> colorsMap = new HashMap<>();
 
     public CalendarColor() {
         colorsMap.put("AliceBlue", "#F0F8FF");
@@ -126,7 +129,6 @@ public class CalendarColor {
         colorsMap.put("Plum", "#DDA0DD");
         colorsMap.put("PowderBlue", "#B0E0E6");
         colorsMap.put("Purple", "#800080");
-        colorsMap.put("RebeccaPurple", "#663399");
         colorsMap.put("Red", "#FF0000");
         colorsMap.put("RosyBrown", "#BC8F8F");
         colorsMap.put("RoyalBlue", "#4169E1");
@@ -155,5 +157,13 @@ public class CalendarColor {
         colorsMap.put("WhiteSmoke", "#F5F5F5");
         colorsMap.put("Yellow", "#FFFF00");
         colorsMap.put("YellowGreen", "#9ACD32");
+    }
+
+    public String getHex(String color) {
+        return colorsMap.get(color);
+    }
+
+    public ObservableList<String> getAllColors() {
+        return FXCollections.observableArrayList(colorsMap.keySet());
     }
 }

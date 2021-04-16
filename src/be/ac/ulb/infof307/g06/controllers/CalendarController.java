@@ -1,5 +1,8 @@
 package be.ac.ulb.infof307.g06.controllers;
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.CalendarColor;
+import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 
@@ -22,43 +25,62 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.junit.platform.commons.util.CollectionUtils;
 
 import javax.naming.Context;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.*;
 
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
-    ObservableList<String> colors = FXCollections.observableArrayList("gainsboro", "blue", "silver", "darkgray", "gray", "dimgray ", "black", "whitesmoke", "lightgray", "lightcoral", "rosybrown", "indianred", "red", "maroon", "snow", "mistyrose", "salmon", "orangered");
-
+    CalendarColor colorObject = new CalendarColor();
     private CalendarViewController viewController;
     private AllDayView projects;
     private AllDayView tasks;
     private CalendarSource projectSource;
     private CalendarSource taskSource;
     private WeekDayHeaderView header;
-    private String selectedProject;
+    private Entry<?> selectedProject;
     private LocalDate currentDate = LocalDate.now();
-
+    private ObservableList<String> currentProjects = FXCollections.observableArrayList();
     private String selectedColor;
+    private Map<String, String> projectsColor = new HashMap<>();
+    private Map<String, Calendar> calendarMap = new HashMap<>();
 
     public CalendarController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
     }
 
     public void initCalendar() {
-
+        try {
+            List<Integer> userProjects = project_db.getUserProjects(user_db.getCurrentUser().getId());
+            ObservableList<String> projects = FXCollections.observableArrayList();
+            for (Integer project : userProjects) {
+                projects.add(project_db.getProject(project).getTitle());
+            }
+            viewController.initComboBox(projects);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public void createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color) {
-        Calendar newCalendar = new Calendar();
-        newCalendar.setStyle(color);
-        source.getCalendars().add(newCalendar);
         Entry<String> testEntry = new Entry<>(name);
         testEntry.changeStartDate(start);
         testEntry.changeEndDate(end);
         testEntry.setFullDay(true);
-        newCalendar.addEntry(testEntry);
+        if (calendarMap.containsKey(color)) {
+            calendarMap.get(color).addEntry(testEntry);
+        } else {
+            Calendar newCalendar = new Calendar();
+            newCalendar.setStyle(color);
+            source.getCalendars().add(newCalendar);
+            newCalendar.addEntry(testEntry);
+            calendarMap.put(color, newCalendar);
+        }
+
+
     }
 
     @Override
@@ -102,17 +124,22 @@ public class CalendarController extends Controller implements CalendarViewContro
 
         projects.setAdjustToFirstDayOfWeek(true);
         tasks.setAdjustToFirstDayOfWeek(true);
-        createEntry(projectSource, "project1", LocalDate.now().minusDays(2), LocalDate.now().plusDays(20), "blue");
-        createEntry(taskSource, "task1", LocalDate.now().minusDays(20), LocalDate.now(), "blue");
-        viewController.fillColors(colors);
-    }
 
+        viewController.fillColors(colorObject);
+        initCalendar();
+    }
 
 
     public void onProjectSelected() {
         ObservableList<Entry<?>> entry = FXCollections.observableArrayList(projects.getSelections());
-        selectedProject = entry.get(0).getTitle();
+        selectedProject = entry.get(0);
         viewController.setColor(entry.get(0).getCalendar().getStyle());
+    }
+
+    @Override
+    public void changeColor(String color) {
+        selectedProject.getCalendar().setStyle(color);
+        projects.refreshData();
     }
 
     @Override
@@ -130,6 +157,30 @@ public class CalendarController extends Controller implements CalendarViewContro
         header.setDate(currentDate);
         projects.setDate(currentDate);
         tasks.setDate(currentDate);
+    }
+
+    @Override
+    public void addProject(ObservableList<? extends String> projectsList) {
+        try {
+            projectSource.getCalendars().clear();
+            taskSource.getCalendars().clear();
+            projects.refreshData();
+            for (String project : projectsList) {
+                String color;
+                if (projectsColor.containsKey(project)) {
+                    color = projectsColor.get(project);
+                } else {
+                    Random rand = new Random();
+                    color = colorObject.getAllColors().get(rand.nextInt(colorObject.getAllColors().size()));
+                    projectsColor.put(project, color);
+                }
+                Project currentProject = project_db.getProject(project_db.getProjectID(project));
+                createEntry(projectSource, currentProject.getTitle(), LocalDate.ofEpochDay(currentProject.getStartDate()), LocalDate.ofEpochDay(currentProject.getEndDate()), color);
+            }
+
+        } catch (SQLException e) {
+            new AlertWindow("Error", "" + e).errorWindow();
+        }
     }
 
     @Override
