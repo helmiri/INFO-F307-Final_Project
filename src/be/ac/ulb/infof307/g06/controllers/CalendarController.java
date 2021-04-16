@@ -10,7 +10,6 @@ import com.calendarfx.view.AllDayView;
 import com.calendarfx.view.page.WeekPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;

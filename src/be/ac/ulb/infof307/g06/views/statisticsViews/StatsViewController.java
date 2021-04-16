@@ -3,6 +3,7 @@ package be.ac.ulb.infof307.g06.views.statisticsViews;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
+import com.calendarfx.view.WeekDayHeaderView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,11 +19,11 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 
 public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
+
     @FXML
     private Button backToProjectMenu;
     @FXML
@@ -65,20 +66,26 @@ public class StatsViewController{
     private BarChart<?, ?> tasksChart;
     private Project selectedProject;
     private boolean isOverallView=true;
-
     private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
-    //private final StatsController controller =
-    // new StatsController(1, new UserDB("Database.db"), new ProjectDB("Database.db"), new Stage());
-
     //--------------- METHODS ----------------
     /**
-     * Initializes the main view and the tree. Sets values.
+     * The main method for button's events.
+     *
+     * @param event ActionEvent
      */
-    //public void init() { initOverallStats(); }
+    @FXML
+    private void statsEvents(ActionEvent event) {
+        if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
+        else if (event.getSource() == overallViewBtn     ) { listener.show()               ;}
+        else if (event.getSource() == projectViewBtn     ) { listener.showStatsProject()   ;}
+        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
+            exports(event);
+        }
+    }
 
     /**
-     * Initializes the tree table with values.
+     * Initializes the project view with the tree table with values and sets stats on the screen.
      */
     @FXML
     public void initTree(){
@@ -95,24 +102,19 @@ public class StatsViewController{
     }
 
     /**
-     *
+     * Initializes the overall view, sets stats and charts.
      */
     public void initOverallStats() {
-        try{
-        List<Integer> infos = listener.countOverallStats();
-        projectsNumber.setText(Integer.toString(infos.get(0)));
-        tasksNumber.setText(infos.get(1).toString());
-        collaboratorsNumber.setText(Integer.toString(infos.get(2)));
-
-        }catch(SQLException e){
-            System.out.println("erreur");
-        }
+        displayBasicStats();
         isOverallView=true;
         tasksChart.setLegendVisible(false);
         pieChartInitializer();
         barChartInitializer();
     }
 
+    /**
+     * Initializes the pie chart that shows projects by their time.
+     */
     public void pieChartInitializer(){
         try{
             List<Integer> projects= listener.getProjects();
@@ -128,74 +130,77 @@ public class StatsViewController{
             projectsChart.setData(datas);
         }
         catch(DatabaseException e){
-            new AlertWindow("Error", "An error has occured with the database.").errorWindow();
+            new AlertWindow("Error", "An error has occurred with the database: "+e).errorWindow();
         }
     }
 
+    /**
+     * Initializes the bar chart that shows the number of tasks of projects.
+     */
     public void barChartInitializer(){
         XYChart.Series series = new XYChart.Series<>();
         try{
             List<Integer> projects = listener.getProjects();
             int numberOfProjects=0;
-            for (int i = 0; i < projects.size(); i++){
-                Project project =listener.getProjectsFromID(projects.get(i));
-                Integer tasksCount= listener.countTasksOfAProject(project.getId());
-                if( tasksCount!=0){
+            for (Integer integer : projects) {
+                Project project = listener.getProjectsFromID(integer);
+                Integer tasksCount = listener.countTasksOfAProject(project.getId());
+                if (tasksCount != 0) {
                     numberOfProjects++;
-                    tasksChart.setPrefWidth(513+(numberOfProjects*20));
-                    barChartAnchorPane.setPrefWidth(513+(numberOfProjects*30));
-                    barChartPane.setPrefWidth(513+(numberOfProjects*30));
-                    series.getData().add(new XYChart.Data(project.getTitle(),tasksCount));
+                    tasksChart.setPrefWidth(513 + (numberOfProjects * 20));
+                    barChartAnchorPane.setPrefWidth(513 + (numberOfProjects * 30));
+                    barChartPane.setPrefWidth(513 + (numberOfProjects * 30));
+                    series.getData().add(new XYChart.Data(project.getTitle(), tasksCount));
                 }
             }
             tasksChart.getData().addAll(series);
-
         }
-        catch(DatabaseException | SQLException e){
-            new AlertWindow("Error", "An error has occured with the database.").errorWindow();
+        catch(DatabaseException e){
+            new AlertWindow("Error", "An error has occurred with the database while loading the bar chart: "+e).errorWindow();
         }
     }
 
-    @FXML
-    public void displayStats() throws SQLException {
-        Project selectedProjet = getSelectedProject();
+    /**
+     * Displays stats of the number of sub/projects, tasks and collaborators.
+     */
+    public void displayBasicStats(){
         List<Integer> infos = listener.countProjectStats(selectedProject);
         projectsNumber.setText(Integer.toString(infos.get(0)));
         tasksNumber.setText(infos.get(1).toString());
         collaboratorsNumber.setText(Integer.toString(infos.get(2)));
-        startDate.setText(listener.dateToString(selectedProjet.getStartDate()));
-        estimatedDate.setText(listener.dateToString(selectedProjet.getEndDate()));
     }
 
-    @FXML
-    public void onProjectSelected() throws SQLException {
+    /**
+     * Displays stats for a specific project.
+     */
+    public void displayProjectStats() {
+        Project selectedProject = getSelectedProject();
+        displayBasicStats();
+        startDate.setText(listener.dateToString(selectedProject.getStartDate()));
+        estimatedDate.setText(listener.dateToString(selectedProject.getEndDate()));
+    }
+
+    /**
+     * Displays stats when a project is selected.
+     */
+    public void onProjectSelected(){
         selectedProject = getSelectedProject();
         if (selectedProject == null) {
             return;
         }
-        displayStats();
+        displayProjectStats();
     }
 
+    /**
+     * Gets the selected project in the tree table.
+     *
+     * @return Project, the selected project on the tree table.
+     */
     public Project getSelectedProject(){
         if (projectsTreeView.getSelectionModel().getSelectedItem() != null) {
             return projectsTreeView.getSelectionModel().getSelectedItem().getValue();
         }
         return null;
-    }
-
-    /**
-     * The main method for button's events.
-     *
-     * @param event ActionEvent
-     */
-    @FXML
-    private void statsEvents(ActionEvent event) {
-        if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
-        else if (event.getSource() == overallViewBtn     ) { listener.show()               ;}
-        else if (event.getSource() == projectViewBtn     ) { listener.showStatsProject()   ;}
-        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
-            exports(event);
-        }
     }
 
     /**
@@ -267,24 +272,25 @@ public class StatsViewController{
 
         List<Integer> getProjects() throws DatabaseException;
 
+        Integer countTasksOfAProject(int project_id) throws DatabaseException;
+
+        Project getProjectsFromID(int id) throws DatabaseException;
+
         void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
 
         void exportStatsAsJson(String fileName, String path, TreeItem<Project> root);
 
         void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root);
 
-        List<Integer> countOverallStats() throws SQLException;
+        List<Integer> countOverallStats() ;
 
-        List<Integer> countProjectStats(Project selectedProject) throws SQLException;
+        List<Integer> countProjectStats(Project selectedProject);
 
         void exportAsCSVOverallView(String fileName, String path);
 
         void exportAsJSONOverallView(String fileName, String path);
 
-        Project getProjectsFromID(int id) throws DatabaseException;
-
         String dateToString(Long date);
 
-        Integer countTasksOfAProject(int project_id) throws SQLException;
     }
 }

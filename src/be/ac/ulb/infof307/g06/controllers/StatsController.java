@@ -89,49 +89,11 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public Project getProjectsFromID(int id) throws DatabaseException{
         try {
-            return project_db.getProject(id);} catch(SQLException e) {
+            return project_db.getProject(id);
+        }
+        catch(SQLException e) {
             throw new DatabaseException(e);
         }
-    }
-
-    /**
-     * Changes a list to a string without brackets.
-     *
-     * @param list ObservableList<String>
-     * @return String
-     */
-    public String listToString(ObservableList<String> list){ return list.toString().replaceAll("(^\\[|]$)",""); }
-
-    /**
-     * Returns a list of collaborators names from their id.
-     *
-     * @param project Integer
-     * @return ObservableList<String>
-     * @throws SQLException;
-     */
-    public ObservableList<String> collaboratorsToString(Integer project) throws SQLException {
-        ObservableList<String> collaboratorsNames = FXCollections.observableArrayList();
-        List<Integer> collaborators = project_db.getCollaborators(project);
-        for (Integer collaborator : collaborators) {
-            collaboratorsNames.add(user_db.getUserInfo(collaborator).getUserName());
-        }
-        return collaboratorsNames;
-    }
-
-    /**
-     * Returns a list of tasks descriptions from their id.
-     *
-     * @param project Integer
-     * @return ObservableList<String>
-     * @throws SQLException;
-     */
-    public ObservableList<String> tasksToString(Integer project) throws SQLException {
-        ObservableList<String> tasksDescriptions = FXCollections.observableArrayList();
-        List<Task> tasks = project_db.getTasks(project);
-        for (Task task : tasks) {
-            tasksDescriptions.add(task.getDescription());
-        }
-        return tasksDescriptions;
     }
 
     /**
@@ -173,24 +135,62 @@ public class StatsController extends Controller implements StatsViewController.V
         }
     }
 
-    /**
-     * Creates a Statistics object
-     *
-     * @param childProject Project
-     * @param project Integer
-     * @param title String
-     * @param childID String
-     * @return Statistics
-     * @throws SQLException;
-     */
-    public Statistics createStat(Project childProject, Integer project, String title, int childID) throws SQLException {
-        ObservableList<String> collaboratorsNames = collaboratorsToString(project);
-        ObservableList<String> tasksDescriptions = tasksToString(project);
-        String date = dateToString(childProject.getStartDate());
-        String collaboratorsList = listToString(collaboratorsNames);
-        String tasksList = listToString(tasksDescriptions);
-        return (new Statistics(childID,title,collaboratorsList,tasksList,date));
+    @Override
+    public List<Integer> countOverallStats() {
+        List<Integer> res = new ArrayList<>();
+        try {
+            List<Integer> projects = project_db.getUserProjects(user_db.getCurrentUser().getId());
+            if (projects.size() != 0) {
+                int tasks = 0;
+                List<Integer> collaborators = new ArrayList<>();
+                for (Integer project : projects) {
+                    tasks += project_db.countTasks(project);
+                    List<Integer> projectsCollaborators = project_db.getCollaborators(project);
+                    for (Integer collaborator : projectsCollaborators) {
+                        if (!collaborators.contains(collaborator)) { collaborators.add(collaborator); }
+                    }
+                }
+                res.add(projects.size());
+                res.add(tasks);
+                res.add(collaborators.size() - 1);
+            } else {
+                emptyStats(res);
+            }
+        }catch(SQLException e){
+            new AlertWindow("Error", "An error has occurred with the database while trying to load counts: "+e).errorWindow();
+            emptyStats(res);
+            return res;
+        }
+        return res;
+    }
 
+    @Override
+    public List<Integer> countProjectStats(Project selectedProject){
+        List<Integer> res = new ArrayList<>();
+        try{
+            int sub = 0;
+            if(selectedProject != null) {
+                int projectId = selectedProject.getId();
+                res.add(countSubProject(projectId, sub));
+                res.add(project_db.countTasks(projectId));
+                res.add(project_db.countCollaborators(projectId)-1);
+            }
+            return res;
+        }
+        catch (SQLException e){
+            new AlertWindow("Error", "An error has occurred with the database while trying to load counts: "+e).errorWindow();
+            emptyStats(res);
+            return res;
+        }
+    }
+
+    @Override
+    public Integer countTasksOfAProject(int project_id) throws DatabaseException {
+        try{
+            return project_db.countTasks(project_id);
+        }catch(SQLException e){
+            throw new DatabaseException(e);
+        }
     }
 
     /**
@@ -255,30 +255,13 @@ public class StatsController extends Controller implements StatsViewController.V
     }
 
     /**
-     * Writes informations in a file for a json format.
-     *
-     * @param chosenString String
-     * @param fileName     String
-     * @param path         String
-     */
-    public void write(String chosenString, String fileName,String path) {
-        try {
-            FileWriter fw = new FileWriter(path + fileName, true);
-            fw.write(chosenString + "\n");
-            fw.close();
-            statsView.setMsg("The exportation succeeded.");
-        } catch (IOException e) {
-            statsView.setMsg("The exportation failed.");
-        }
-    }
-
-    /**
      * Exports the statistics in CSV file.
      *
      * @param fileName String : name given to the file
      * @param path     String : path given for the destination of the file exported
      * @param root     TreeItem<Statistics> : root of the TreeTableView
      */
+    @Override
     public void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root) {
         try {
             PrintWriter csv = new PrintWriter(path + fileName);
@@ -293,8 +276,10 @@ public class StatsController extends Controller implements StatsViewController.V
             csv.close();
             statsView.setMsg("The exportation succeeded.");
         }catch(FileNotFoundException e){
-            new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
+            new AlertWindow("Error", "Couldn't find or access to this file: "+e).errorWindow();
+            statsView.setMsg("The exportation failed.");
         }catch (SQLException e) {
+            new AlertWindow("Error", "An error has occurred with the database while trying to export stats: "+e).errorWindow();
             statsView.setMsg("The exportation failed.");
         }
     }
@@ -325,42 +310,49 @@ public class StatsController extends Controller implements StatsViewController.V
     }
 
     @Override
-    public List<Integer> countOverallStats() throws SQLException {
-        List<Integer> projects = project_db.getUserProjects(user_db.getCurrentUser().getId());
-        List<Integer> res = new ArrayList<>();
-        if(projects.size()!=0) {
-            int tasks = 0;
-            List<Integer> collaborators = new ArrayList<>();
-            for (int i = 0; i < projects.size(); i++) {
-                tasks += project_db.countTasks(projects.get(i));
-                List<Integer> projectsCollaborators = project_db.getCollaborators(projects.get(i));
-                for (Integer collaborator : projectsCollaborators) {
-                    if (!collaborators.contains(collaborator)) { collaborators.add(collaborator); }
-                }
-            }
-            res.add(projects.size());
-            res.add(tasks);
-            res.add(collaborators.size() - 1);
+    public void exportAsCSVOverallView(String fileName, String path){
+        try {
+            PrintWriter csv = new PrintWriter(path + fileName);
+            // Name of columns
+            String content = "User"+","+"Collaborators" + "," + "Tasks" + "," + "projects" + ","+"\r\n";
+            csv.write(content);
+            List<Integer> counts = countOverallStats();
+            content += user_db.getCurrentUser().getUserName()+","+counts.get(2) +","+ counts.get(1)+","+counts.get(0);
+            csv.write(content);
+            csv.close();
+        }catch(FileNotFoundException e){
+            new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
         }
-        else{
-            for(int k=0;k<3;k++)
-                res.add(0);
-        }
-        return res;
     }
 
     @Override
-    public List<Integer> countProjectStats(Project selectedProject) throws SQLException {
-        List<Integer> res = new ArrayList<>();
-        int sub = 0;
-        if(selectedProject != null) {
-            int projectId = selectedProject.getId();
-            res.add(countSubProject(projectId, sub));
-            res.add(project_db.countTasks(projectId));
-            res.add(project_db.countCollaborators(projectId)-1);
+    public void exportAsJSONOverallView(String fileName, String path){
+        List<Integer> counts = countOverallStats();
+        String json= "{"+user_db.getCurrentUser().getUserName()+":{"+"'Collaborators':"+ counts.get(2) + ",'Tasks':"+counts.get(1)+",'Projects':"+counts.get(0)+"}";
+        write(json, fileName, path);
+    }
 
+    /**
+     * Writes informations in a file for a json format.
+     *
+     * @param chosenString String
+     * @param fileName     String
+     * @param path         String
+     */
+    public void write(String chosenString, String fileName,String path) {
+        try {
+            FileWriter fw = new FileWriter(path + fileName, true);
+            fw.write(chosenString + "\n");
+            fw.close();
+            statsView.setMsg("The exportation succeeded.");
+        } catch (IOException e) {
+            statsView.setMsg("The exportation failed.");
         }
-        return res;
+    }
+
+    public void emptyStats(List<Integer> counts){
+        for(int k=0;k<3;k++)
+            counts.add(0);
     }
 
     /**
@@ -377,35 +369,6 @@ public class StatsController extends Controller implements StatsViewController.V
         return counter;
     }
 
-    @Override
-    public void exportAsCSVOverallView(String fileName, String path){
-        try {
-            PrintWriter csv = new PrintWriter(path + fileName);
-            // Name of columns
-            String content = "User"+","+"Collaborators" + "," + "Tasks" + "," + "projects" + ","+"\r\n";
-            csv.write(content);
-            List<Integer> counts = countOverallStats();
-            content += user_db.getCurrentUser().getUserName()+","+counts.get(2) +","+ counts.get(1)+","+counts.get(0);
-            csv.write(content);
-            csv.close();
-        }catch(FileNotFoundException | SQLException e){
-            new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
-        }
-    }
-
-    @Override
-    public void exportAsJSONOverallView(String fileName, String path){
-        try{
-        List<Integer> counts = countOverallStats();
-        String json= "{"+user_db.getCurrentUser().getUserName()+":{"+"'Collaborators':"+ counts.get(2) + ",'Tasks':"+counts.get(1)+",'Projects':"+counts.get(0)+"}";
-        write(json, fileName, path);
-        }catch(SQLException e ){
-            new AlertWindow("Error", "An error has occurred during the exportation. Couldn't find some informations in the database: " + e).errorWindow();
-        }
-    }
-
-    @Override
-    public Integer countTasksOfAProject(int project_id) throws SQLException { return project_db.countTasks(project_id); }
 
     // ------------------------------------- CODE --------------------------------------
 
