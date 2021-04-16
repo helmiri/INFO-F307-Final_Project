@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.views;
+package be.ac.ulb.infof307.g06.views.calendarViews;
 
 import be.ac.ulb.infof307.g06.models.CalendarColor;
 import com.calendarfx.view.AllDayView;
@@ -13,7 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
+
+import java.awt.*;
 
 public class CalendarViewController {
     @FXML
@@ -33,12 +36,23 @@ public class CalendarViewController {
     @FXML
     private AllDayView projects;
     @FXML
-    private CheckComboBox<?> projectComboBox;
+    private CheckComboBox<String> projectComboBox;
+    @FXML
+    private ComboBox<String> colorsComboBox;
 
-    private ViewListener listener;
+    private CalendarViewController.ViewListener listener;
 
-    public void showCalendar(Stage primaryStage) {
+    public void initComboBox(ObservableList<String> projects) {
+        projectComboBox.getItems().addAll(projects);
+        projectComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends String> change) {
+                listener.addProject(change.getList());
+            }
+        });
+    }
 
+    public void init() {
 
     }
 
