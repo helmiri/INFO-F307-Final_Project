@@ -29,6 +29,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
+    ObservableList<String> colors = FXCollections.observableArrayList("gainsboro", "blue", "silver", "darkgray", "gray", "dimgray ", "black", "whitesmoke", "lightgray", "lightcoral", "rosybrown", "indianred", "red", "maroon", "snow", "mistyrose", "salmon", "orangered");
+
     private CalendarViewController viewController;
     private AllDayView projects;
     private AllDayView tasks;
@@ -36,8 +38,8 @@ public class CalendarController extends Controller implements CalendarViewContro
     private CalendarSource taskSource;
     private WeekDayHeaderView header;
     private String selectedProject;
-    private LocalDate currentDate = LocalDate.now();//
-    private ComboBox<String> colorsComboBox;
+    private LocalDate currentDate = LocalDate.now();
+
     private String selectedColor;
 
     public CalendarController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
@@ -102,17 +104,15 @@ public class CalendarController extends Controller implements CalendarViewContro
         tasks.setAdjustToFirstDayOfWeek(true);
         createEntry(projectSource, "project1", LocalDate.now().minusDays(2), LocalDate.now().plusDays(20), "blue");
         createEntry(taskSource, "task1", LocalDate.now().minusDays(20), LocalDate.now(), "blue");
-
+        viewController.fillColors(colors);
     }
 
-    public void fillColors() {
-        ObservableList<String> colors = FXCollections.observableArrayList("gainsboro", "silver", "darkgray", "gray", "dimgray ", "black", "whitesmoke", "lightgray", "lightcoral", "rosybrown", "indianred", "red", "maroon", "snow", "mistyrose", "salmon", "orangered");
-        colorsComboBox.setItems(colors);
-    }
+
 
     public void onProjectSelected() {
         ObservableList<Entry<?>> entry = FXCollections.observableArrayList(projects.getSelections());
         selectedProject = entry.get(0).getTitle();
+        viewController.setColor(entry.get(0).getCalendar().getStyle());
     }
 
     @Override

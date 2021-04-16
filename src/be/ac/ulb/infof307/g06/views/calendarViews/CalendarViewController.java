@@ -2,9 +2,12 @@ package be.ac.ulb.infof307.g06.views;
 
 import com.calendarfx.view.AllDayView;
 import com.calendarfx.view.WeekDayHeaderView;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
@@ -34,6 +37,15 @@ public class CalendarViewController {
     public void showCalendar(Stage primaryStage) {
 
 
+    }
+
+    public void setColor(String color) {
+        colorsComboBox.setValue(color);
+        System.out.println(color);
+    }
+
+    public void fillColors(ObservableList<String> colors) {
+        colorsComboBox.setItems(colors);
     }
 
     @FXML
