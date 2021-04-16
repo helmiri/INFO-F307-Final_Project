@@ -9,6 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="controlsfx-11.1.0" level="project" />
     <orderEntry type="library" name="javafx" level="project" />
+    <orderEntry type="library" name="view-11.8.3" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>

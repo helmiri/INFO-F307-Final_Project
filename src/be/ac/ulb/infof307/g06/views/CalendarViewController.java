@@ -27,7 +27,11 @@ public class CalendarViewController {
     }
 
     public interface ViewListener {
+        void nextWeek();
 
+        void prevWeek();
+
+        void goToday();
     }
 
 }
