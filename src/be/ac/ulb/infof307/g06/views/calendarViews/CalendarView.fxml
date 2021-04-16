@@ -9,11 +9,13 @@
 <?import org.controlsfx.control.CheckComboBox?>
 
 
+<?import javafx.scene.layout.VBox?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="916.0" prefWidth="1528.0" xmlns="http://javafx.com/javafx/15.0.1"
             fx:controller="be.ac.ulb.infof307.g06.views.calendarViews.CalendarViewController">
     <children>
         <Button fx:id="backBtn" layoutX="1423.0" layoutY="873.0" mnemonicParsing="false" prefHeight="37.0"
+                onAction="#calendarEvents"
                 prefWidth="70.0" text="BACK"/>
         <HBox layoutX="23.0" layoutY="17.0" prefHeight="25.0" prefWidth="139.0" spacing="20.0">
             <children>
