@@ -1,19 +1,31 @@
 package be.ac.ulb.infof307.g06.views;
 
-import com.calendarfx.model.Calendar;
-import com.calendarfx.model.Calendar.Style;
-import com.calendarfx.model.CalendarSource;
-import com.calendarfx.view.CalendarView;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import com.calendarfx.view.AllDayView;
+import com.calendarfx.view.WeekDayHeaderView;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+import org.controlsfx.control.CheckComboBox;
 
 public class CalendarViewController {
+    @FXML
+    private Button backBtn;
+    @FXML
+    private Button previousWeekBtn;
+    @FXML
+    private Button todayBtn;
+    @FXML
+    private Button nextWeekBtn;
+    @FXML
+    private WeekDayHeaderView weekDays;
+    @FXML
+    private AnchorPane anchorPaneDayView;
+    @FXML
+    private AllDayView allDayViewID;
+    @FXML
+    private CheckComboBox<?> projectComboBox;
+
     private ViewListener listener;
 
     public void showCalendar(Stage primaryStage) {
