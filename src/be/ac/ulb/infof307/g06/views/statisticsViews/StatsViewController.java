@@ -105,8 +105,9 @@ public class StatsViewController{
      * Initializes the overall view, sets stats and charts.
      */
     public void initOverallStats() {
-        displayBasicStats();
-        isOverallView=true;
+        List<Integer> infos = listener.countOverallStats();
+        displayBasicStats(infos);
+        isOverallView = true;
         tasksChart.setLegendVisible(false);
         pieChartInitializer();
         barChartInitializer();
@@ -163,8 +164,7 @@ public class StatsViewController{
     /**
      * Displays stats of the number of sub/projects, tasks and collaborators.
      */
-    public void displayBasicStats(){
-        List<Integer> infos = listener.countProjectStats(selectedProject);
+    public void displayBasicStats(List<Integer> infos) {
         projectsNumber.setText(Integer.toString(infos.get(0)));
         tasksNumber.setText(infos.get(1).toString());
         collaboratorsNumber.setText(Integer.toString(infos.get(2)));
@@ -174,8 +174,9 @@ public class StatsViewController{
      * Displays stats for a specific project.
      */
     public void displayProjectStats() {
+        List<Integer> infos = listener.countProjectStats(selectedProject);
         Project selectedProject = getSelectedProject();
-        displayBasicStats();
+        displayBasicStats(infos);
         startDate.setText(listener.dateToString(selectedProject.getStartDate()));
         estimatedDate.setText(listener.dateToString(selectedProject.getEndDate()));
     }

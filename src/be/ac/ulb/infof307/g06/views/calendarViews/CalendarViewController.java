@@ -41,6 +41,8 @@ public class CalendarViewController {
     private CheckComboBox<String> projectComboBox;
     @FXML
     private ComboBox<String> colorsComboBox;
+    @FXML
+    private Label monthLabel;
 
     private CalendarViewController.ViewListener listener;
 
