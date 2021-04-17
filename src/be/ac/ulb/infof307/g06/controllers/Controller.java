@@ -24,5 +24,10 @@ public abstract class Controller {
         prevScene = scene;
     }
 
+    public void back() {
+        stage.setScene(prevScene);
+        stage.sizeToScene();
+    }
+
     public abstract void show() throws IOException, SQLException;
 }

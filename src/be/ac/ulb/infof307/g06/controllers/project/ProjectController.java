@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.CalendarDB;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.AddProjectViewController;
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
 
 public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
     //--------------- ATTRIBUTES ----------------
+    private CalendarDB calendar_db;
     private ProjectsViewController viewController;
     private final IOController ioController;
     private CloudServiceController cloudServiceController = null;
@@ -51,6 +53,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     @Override
     public void show() {
+        try {
+            calendar_db = new CalendarDB("database.db");
+            project_db.createTag("tag1", "#ff55ff");
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsViewV2.fxml"));
         try {
             scene = new Scene(loader.load());
@@ -101,8 +109,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
             editStage.centerOnScreen();
             editStage.setResizable(false);
             editStage.show();
-            controller.init(project, listener, editStage);
-        } catch (IOException e) {
+            controller.init(project, listener, editStage, project_db.getTags(project.getId()));
+        } catch (IOException | SQLException e) {
             // TODO Exception
         }
     }
@@ -137,9 +145,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void back() {
-        stage.hide();
-        stage.setScene(prevScene);
-        stage.show();
+        super.back();
     }
 
     @Override
@@ -155,8 +161,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             int projectID = project_db.getProjectID(name);
             project_db.deleteProject(projectID);
-            // TODO refresh
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            calendar_db.removeProject(name);
         } catch (SQLException e) {
             // TODO Exception
         }
@@ -179,6 +185,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
                         startDate.toEpochDay(),
                         endDate.toEpochDay()
                 );
+                String color = calendar_db.getColor(project.getTitle());
+                calendar_db.removeProject(project.getTitle());
+                calendar_db.addProject(title, color);
                 List<Integer> tags = new ArrayList<>();
                 for (String newTag : newTags) {
                     tags.add(project_db.getTagID(newTag));

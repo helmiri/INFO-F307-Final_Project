@@ -11,12 +11,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
 import java.awt.*;
+import java.util.Map;
 
 public class CalendarViewController {
     @FXML
@@ -42,18 +44,17 @@ public class CalendarViewController {
 
     private CalendarViewController.ViewListener listener;
 
-    public void initComboBox(ObservableList<String> projects) {
+    public void initComboBox(ObservableList<String> projects, Map<String, String> allProjects) {
         projectComboBox.getItems().addAll(projects);
+        for (String project : allProjects.keySet()) {
+            projectComboBox.getCheckModel().check(project);
+        }
         projectComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
             @Override
             public void onChanged(ListChangeListener.Change<? extends String> change) {
                 listener.addProject(change.getList());
             }
         });
-    }
-
-    public void init() {
-
     }
 
     public void setColor(String selectedColor) {
@@ -98,6 +99,10 @@ public class CalendarViewController {
         listener.changeColor(colorsComboBox.getSelectionModel().getSelectedItem());
     }
 
+    public void setMonth(String month) {
+        monthLabel.setText(month);
+    }
+
     @FXML
     private void calendarEvents(ActionEvent event) {
         if (event.getSource() == previousWeekBtn) {
@@ -106,7 +111,10 @@ public class CalendarViewController {
             listener.goToday();
         } else if (event.getSource() == nextWeekBtn) {
             listener.nextWeek();
+        } else if (event.getSource() == backBtn) {
+            listener.back();
         }
+
     }
 
     public AllDayView getProjectsView() {
@@ -126,6 +134,8 @@ public class CalendarViewController {
     }
 
     public interface ViewListener {
+        void back();
+
         void nextWeek();
 
         void prevWeek();
