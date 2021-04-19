@@ -120,7 +120,10 @@ public class UserDB extends Database {
         if (key == null) {
             return -1;
         }
-        currentUser = getUserInfo(key);
+        Database.currentUser = getUserInfo(key);
+        if (Database.currentUser == null) {
+            return 0;
+        }
         return key;
     }
 
@@ -191,6 +194,9 @@ public class UserDB extends Database {
     @SuppressWarnings("SqlResolve")
     private User queryUserInfo(String idField) throws SQLException {
         ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email, accessToken, clientID " + idField);
+        if (usrInfo.isClosed()) {
+            return null;
+        }
         User user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"),
                 usrInfo.getString("lName"), usrInfo.getString("email"), isAdmin(usrInfo.getInt("id")));
         setCloudCredentials(usrInfo, user);
