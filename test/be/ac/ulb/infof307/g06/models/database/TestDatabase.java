@@ -1,10 +1,7 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.sql.*;
@@ -13,8 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestDatabase {
-    protected final String DB_PATH = "test/be/ac/ulb/infof307/g06/testDB.db";
+    protected static final String DB_PATH = "test/be/ac/ulb/infof307/g06/models/database/testDB.db";
     protected Connection db;
     protected List<Map<String, String>> testData;
     protected List<String> dbFields;
@@ -26,9 +24,14 @@ public class TestDatabase {
     }
 
     @AfterAll
-    public static void deleteDB() {
-        File dbFile = new File("test/be/ac/ulb/infof307/g06/testDB.db");
-        dbFile.delete();
+    public void deleteDB() throws SQLException {
+        db.close();
+        userDB.disconnectDB();
+        projectDB.disconnectDB();
+        File dbFile = new File(DB_PATH);
+        if (!dbFile.delete()) {
+            System.out.println("Unable to delete testDB. Connection left open?");
+        }
     }
 
     @BeforeAll
@@ -71,7 +74,6 @@ public class TestDatabase {
         state.executeUpdate("DELETE FROM Invitations");
         state.executeUpdate("DELETE FROM Collaborator");
         state.close();
-        db.close();
     }
 
     @BeforeEach
@@ -79,7 +81,6 @@ public class TestDatabase {
         /*
           Populate tesDB with testData
          */
-        db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
         PreparedStatement state;
         for (int i = 0; i < 10; i++) {
             state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, accessToken, clientID) VALUES (?,?,?,?,?,?,?)");

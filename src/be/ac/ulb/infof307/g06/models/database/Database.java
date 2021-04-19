@@ -48,4 +48,8 @@ public abstract class Database {
     public User getCurrentUser() {
         return Database.currentUser;
     }
+
+    public void disconnectDB() throws SQLException {
+        db.close();
+    }
 }

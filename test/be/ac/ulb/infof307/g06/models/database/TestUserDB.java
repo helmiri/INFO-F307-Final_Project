@@ -40,20 +40,19 @@ public class TestUserDB extends TestDatabase {
         assertFalse(userDB.userExists("doesNotExist"));
 
         Statement state = db.createStatement();
-        ResultSet res = null;
+        ResultSet res;
         for (int i = 0; i < 10; i++) {
             res = state.executeQuery("Select userName from users where userName='" + testData.get(i).get("userName") + "'");
             assertTrue(res.next());
             assertTrue(userDB.userExists(testData.get(i).get("userName")));
+            res.close();
         }
-
         state.close();
-        res.close();
     }
 
     @Test
     @DisplayName("Data validation")
-    public void testValidateData() throws SQLException, ClassNotFoundException {
+    public void testValidateData() throws SQLException {
         Statement state = db.createStatement();
         ResultSet res;
         for (int i = 0; i < 10; i++) {
@@ -72,7 +71,7 @@ public class TestUserDB extends TestDatabase {
 
     @Test
     @DisplayName("Get user info")
-    public void testGetUserInfo() throws SQLException, ClassNotFoundException {
+    public void testGetUserInfo() throws SQLException {
         for (int i = 0; i < 10; i++) {
             User usrInfo = userDB.getUserInfo(i + 1);
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
@@ -121,7 +120,7 @@ public class TestUserDB extends TestDatabase {
 //
     @Test
     @DisplayName("Add access token")
-    public void testAddAccessToken() throws SQLException, ClassNotFoundException {
+    public void testAddAccessToken() throws SQLException {
         assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
         userDB.addCloudCredentials("Random_Token_String", "CLIENTID");
         Statement state = db.createStatement();
@@ -129,11 +128,12 @@ public class TestUserDB extends TestDatabase {
         String token = res.getString("accessToken");
         assertEquals("Random_Token_String", token);
         state.close();
+        res.close();
     }
 
     @Test
     @DisplayName("Get access token")
-    public void testGetToken() throws SQLException, ClassNotFoundException {
+    public void testGetToken() throws SQLException {
         Statement state = db.createStatement();
         assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
         state.executeUpdate("UPDATE users SET accessToken='RANDOM_TOKEN' where id='1'");
