@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g06.views.calendarViews;
 
 import be.ac.ulb.infof307.g06.models.CalendarColor;
-import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.AllDayView;
@@ -14,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Line;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
@@ -22,6 +22,18 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class CalendarViewController {
+    @FXML
+    private Line line1;
+    @FXML
+    private Line line2;
+    @FXML
+    private Line line3;
+    @FXML
+    private Line line4;
+    @FXML
+    private Line line5;
+    @FXML
+    private Line line6;
     @FXML
     private AllDayView tasks;
     @FXML
@@ -120,11 +132,43 @@ public class CalendarViewController {
         projects.refreshData();
     }
 
-    public void setNewDate(LocalDate date) {
+    public void setNewDate(LocalDate date, boolean isCurrent) {
         monthLabel.setText(date.getMonth() + " " + date.getYear());
         weekDays.setDate(date);
         projects.setDate(date);
         tasks.setDate(date);
+        line1.setStyle("-fx-stroke: BLACK;");
+        line2.setStyle("-fx-stroke: BLACK;");
+        line3.setStyle("-fx-stroke: BLACK;");
+        line4.setStyle("-fx-stroke: BLACK;");
+        line5.setStyle("-fx-stroke: BLACK;");
+        line6.setStyle("-fx-stroke: BLACK;");
+        if (isCurrent) {
+            switch (date.getDayOfWeek()) {
+                case MONDAY -> line1.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                case TUESDAY -> {
+                    line1.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                    line2.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                }
+                case WEDNESDAY -> {
+                    line2.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                    line3.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                }
+                case THURSDAY -> {
+                    line3.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                    line4.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                }
+                case FRIDAY -> {
+                    line4.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                    line5.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                }
+                case SATURDAY -> {
+                    line5.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                    line6.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+                }
+                case SUNDAY -> line6.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
+            }
+        }
     }
 
     @FXML
@@ -140,18 +184,6 @@ public class CalendarViewController {
             listener.back();
 
         }
-    }
-
-    public AllDayView getProjectsView() {
-        return projects;
-    }
-
-    public AllDayView getTasksView() {
-        return tasks;
-    }
-
-    public WeekDayHeaderView getWeekDays() {
-        return weekDays;
     }
 
     public void setListener(ViewListener listener) {

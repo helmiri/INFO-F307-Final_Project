@@ -73,7 +73,6 @@ public class CalendarController extends Controller implements CalendarViewContro
         } catch (SQLException e) {
             new AlertWindow("Error", "" + e).errorWindow();
         }
-
     }
 
     public void createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color, String projectName) {
@@ -121,7 +120,7 @@ public class CalendarController extends Controller implements CalendarViewContro
         stage.sizeToScene();
         viewController.init(projectSource, taskSource);
         viewController.fillColors(colorObject);
-        viewController.setNewDate(currentDate);
+        viewController.setNewDate(currentDate, true);
 
         initCalendar();
     }
@@ -167,14 +166,14 @@ public class CalendarController extends Controller implements CalendarViewContro
     @Override
     public void nextWeek() {
         currentDate = currentDate.plusDays(7);
-        viewController.setNewDate(currentDate);
+        viewController.setNewDate(currentDate, LocalDate.now().equals(currentDate));
 
     }
 
     @Override
     public void prevWeek() {
         currentDate = currentDate.minusDays(7);
-        viewController.setNewDate(currentDate);
+        viewController.setNewDate(currentDate, LocalDate.now().equals(currentDate));
     }
 
     @Override
@@ -224,7 +223,7 @@ public class CalendarController extends Controller implements CalendarViewContro
     @Override
     public void goToday() {
         currentDate = LocalDate.now();
-        viewController.setNewDate(currentDate);
+        viewController.setNewDate(currentDate, LocalDate.now().equals(currentDate));
 
     }
 }

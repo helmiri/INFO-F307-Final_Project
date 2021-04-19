@@ -19,7 +19,7 @@
     <children>
         <ComboBox fx:id="colorsComboBox" layoutX="632.0" layoutY="27.0" onAction="#onColorSelected" prefWidth="150.0"/>
         <Button fx:id="backBtn" layoutX="1387.0" layoutY="846.0" mnemonicParsing="false" onAction="#calendarEvents"
-                prefHeight="40.0" prefWidth="88.0" style="-fx-background-color: #4BBAEB;" text="BACK"/>
+                prefHeight="40.0" prefWidth="88.0" style="-fx-background-color: #4BBAEB;" text="BACK" textFill="white"/>
         <HBox layoutX="20.0" layoutY="19.0" prefHeight="40.0" prefWidth="187.0" spacing="20.0">
             <children>
                 <Button fx:id="previousWeekBtn" mnemonicParsing="false" onAction="#calendarEvents" prefHeight="40.0"
@@ -44,16 +44,16 @@
                                             prefWidth="1485.0" rowHeight="20.0"/>
                             </children>
                         </VBox>
-                        <Line endX="210.5" opacity="0.2" startX="210.5" startY="9.9999999999999E13"/>
-                        <Line endX="415.0" layoutX="10.0" layoutY="10.0" opacity="0.2" startX="415.0"
+                        <Line fx:id="line1" endX="210.5" opacity="0.2" startX="210.5" startY="9.9999999999999E13"/>
+                        <Line fx:id="line2" endX="415.0" layoutX="10.0" layoutY="10.0" opacity="0.2" startX="415.0"
                               startY="9.9999999999999E13"/>
-                        <Line endX="619.5" layoutX="20.0" layoutY="20.0" opacity="0.2" startX="619.5"
+                        <Line fx:id="line3" endX="619.5" layoutX="20.0" layoutY="20.0" opacity="0.2" startX="619.5"
                               startY="9.9999999999999E13"/>
-                        <Line endX="823.75" layoutX="30.0" layoutY="30.0" opacity="0.2" startX="823.75"
+                        <Line fx:id="line4" endX="823.75" layoutX="30.0" layoutY="30.0" opacity="0.2" startX="823.75"
                               startY="9.9999999999999E13"/>
-                        <Line endX="1027.75" layoutX="40.0" layoutY="40.0" opacity="0.2" startX="1027.75"
+                        <Line fx:id="line5" endX="1027.75" layoutX="40.0" layoutY="40.0" opacity="0.2" startX="1027.75"
                               startY="9.9999999999999E13"/>
-                        <Line endX="1232.15" layoutX="50.0" layoutY="50.0" opacity="0.2" startX="1232.15"
+                        <Line fx:id="line6" endX="1232.15" layoutX="50.0" layoutY="50.0" opacity="0.2" startX="1232.15"
                               startY="9.9999999999999E13"/>
                     </children>
                 </AnchorPane>

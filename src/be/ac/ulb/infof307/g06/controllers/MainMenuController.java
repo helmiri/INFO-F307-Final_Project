@@ -1,14 +1,16 @@
 package be.ac.ulb.infof307.g06.controllers;
 
-import be.ac.ulb.infof307.g06.controllers.project.ProjectController;
+import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
+import be.ac.ulb.infof307.g06.controllers.settingsControllers.StorageController;
+import be.ac.ulb.infof307.g06.controllers.settingsControllers.TagsController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.InvitationViewController;
-import be.ac.ulb.infof307.g06.views.MenuViewController;
+import be.ac.ulb.infof307.g06.views.mainMenuViews.InvitationViewController;
+import be.ac.ulb.infof307.g06.views.mainMenuViews.MenuViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;

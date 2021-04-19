@@ -4,7 +4,6 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -75,8 +74,6 @@ public class ProjectsViewController {
     @FXML
     private TreeTableView<Project> treeProjects;
     @FXML
-    private Button addCollaboratorsBtn;
-    @FXML
     private TextArea collaboratorsName;
     @FXML
     protected DatePicker endDateTask;
@@ -87,12 +84,11 @@ public class ProjectsViewController {
 
     @FXML
     private TreeTableColumn<Project, String> treeProjectColumn;
-    private final TreeItem<Project> root = new TreeItem<Project>();
+    private final TreeItem<Project> root = new TreeItem<>();
     private ViewListener listener;
     private Task selectedTask;
     private Project selectedProject;
     private final Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
-    private UserDB user_db;
 
     //---------------METHODS----------------
     public void init() {
@@ -101,7 +97,7 @@ public class ProjectsViewController {
         List<Project> projectsArray = listener.getProjects();
         hideRoot();
         for (Project project : projectsArray) {
-            TreeItem<Project> child = new TreeItem<Project>(project);
+            TreeItem<Project> child = new TreeItem<>(project);
             TreeMap.put(project.getId(), child);
             if (project.getParent_id() == 0) {
                 root.getChildren().add(child);
@@ -170,14 +166,12 @@ public class ProjectsViewController {
             }
         }
 
-
-
     /**
      * Deletes a project in the Database and in the tree table view.
      */
     @SuppressWarnings("unchecked")
     @FXML
-    private void deleteProject(ActionEvent event) {
+    private void deleteProject() {
         if (treeProjects.getSelectionModel().getSelectedItem() != null && treeProjects.getSelectionModel().getSelectedItem().getValue() != null) {
             Project child = treeProjects.getSelectionModel().getSelectedItem().getValue();
             listener.deleteProject(child.getTitle());
@@ -189,7 +183,6 @@ public class ProjectsViewController {
             }
         }
     }
-
 
     /**
      * Deletes the selected task in the table and in the database.
@@ -264,10 +257,6 @@ public class ProjectsViewController {
     // --------------------------------- CODE ------------------------------------
 
 
-    public void refreshProject() {
-        displayProject(selectedProject, listener.getProjectTags(selectedProject));
-    }
-
     public void insertProject(int newProjectID, TreeItem<Project> project, int parentID) {
         TreeMap.put(newProjectID, project);
         if (parentID == 0) {
@@ -295,7 +284,7 @@ public class ProjectsViewController {
     @FXML
     public void initTree(){
         treeProjects.setRoot(root);
-        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<Project, String>("title"));
+        treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
 
         collaboratorsTable.setEditable(false);
         collaboratorsTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
@@ -305,16 +294,16 @@ public class ProjectsViewController {
         taskCollaboratorTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
         taskCollaboratorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         taskCollaboratorColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        projectTags.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+        projectTags.setCellFactory(new Callback<>() {
             @Override
             public ListCell<String> call(ListView<String> p) {
-                return new ListCell<String>() {
+                return new ListCell<>() {
                     @Override
                     protected void updateItem(String t, boolean bln) {
                         super.updateItem(t, bln);
                         if (t != null) {
                             setText(t);
-                            setStyle("-fx-background-color: " + listener.getTag(t).getColor() + ";"); // TODO
+                            setStyle("-fx-background-color: " + listener.getTag(t).getColor() + ";");
                         } else {
                             setText(null);
                             setGraphic(null);
@@ -324,9 +313,9 @@ public class ProjectsViewController {
                 };
             }
         });
-        taskColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+        taskColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        taskTime.setCellValueFactory(new PropertyValueFactory<Task, String>("time"));
+        taskTime.setCellValueFactory(new PropertyValueFactory<>("time"));
         taskTime.setCellFactory(TextFieldTableCell.forTableColumn());
         taskTable.setEditable(false);
         taskTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
@@ -336,7 +325,7 @@ public class ProjectsViewController {
                 super.updateItem(task, empty);
                 if (task == null)
                     setStyle("");
-                else if (listener.isCollaboratorInTask(task)) // TODO
+                else if (listener.isCollaboratorInTask(task))
                     setStyle("-fx-background-color: #8fbc8f;");
             }
         });
@@ -346,7 +335,6 @@ public class ProjectsViewController {
     /**
      * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
      */
-    // TODO Yassine déplace le code dans controller stp
     public void exportProject(){
         if (selectedProject != null) {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -395,7 +383,6 @@ public class ProjectsViewController {
         projectsDescription.setText(project.getDescription());
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         projectsDate.setText(dateFormat.format(project.getStartDate() * 86400000L) + " - " + dateFormat.format(project.getEndDate() * 86400000L));
-        // TODO add end date
         projectsTitle.setText(project.getTitle());
         displayTask();
         displayCollaborators();
