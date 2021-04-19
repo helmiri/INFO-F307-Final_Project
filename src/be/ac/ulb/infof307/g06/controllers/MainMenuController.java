@@ -9,7 +9,6 @@ import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.InvitationViewController;
 import be.ac.ulb.infof307.g06.views.MenuViewController;
-import com.calendarfx.view.CalendarView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -44,7 +43,7 @@ public class MainMenuController extends Controller implements MenuViewController
                 showInvitationStage(invitation);
             }
         } catch (IOException | SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -93,7 +92,7 @@ public class MainMenuController extends Controller implements MenuViewController
             stage.setScene(scene);
             stage.sizeToScene();
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
 
     }
@@ -128,7 +127,7 @@ public class MainMenuController extends Controller implements MenuViewController
             stage.setScene(scene);
             stage.sizeToScene();
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         //controller.show();
     }
@@ -145,7 +144,7 @@ public class MainMenuController extends Controller implements MenuViewController
         try {
             controller.show();
         } catch (IOException | SQLException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -165,8 +164,7 @@ public class MainMenuController extends Controller implements MenuViewController
             user_db.removeInvitation(invitation.getInvitationID());
             invitationStage.close();
         } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-            e.printStackTrace();
+            new AlertWindow("Database error", "Could not access the database \n" + e).errorWindow();
         }
     }
 
@@ -175,8 +173,8 @@ public class MainMenuController extends Controller implements MenuViewController
         try {
             user_db.removeInvitation(invitation.getInvitationID());
             invitationStage.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("Database error", "Could not access the database \n" + e).errorWindow();
         }
     }
 

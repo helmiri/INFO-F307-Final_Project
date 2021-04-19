@@ -38,7 +38,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     private CalendarDB calendar_db;
     private ProjectsViewController viewController;
     private final IOController ioController;
-    private CloudServiceController cloudServiceController = null;
+    private CloudServiceController cloudServiceController;
 
     //--------------- METHODS ----------------
     public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
@@ -63,7 +63,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         viewController = loader.getController();
         viewController.setListener(this);
@@ -91,7 +91,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             addStage.show();
             controller.init(listener, addStage);
         } catch (IOException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -111,7 +111,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             editStage.show();
             controller.init(project, listener, editStage, project_db.getTags(project.getId()));
         } catch (IOException | SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -126,7 +126,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             controller.init(task, listener);
             MainController.showStage("Edit Task", 435, 256, Modality.APPLICATION_MODAL, taskPane);
         } catch (IOException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -164,7 +164,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             calendar_db.removeProject(name);
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -175,8 +175,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
         try {
             int projectID = project.getId();
-            if (title == "") {
-                // TODO Cannot edit a project with an empty name.
+            if (title.equals("")) {
+                new AlertWindow("Alert", "Project title cannot be empty").errorWindow();
             } else {
                 project_db.editProject(
                         projectID,
@@ -198,7 +198,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             viewController.displayProject(project_db.getProject(projectID), newTags);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            System.out.println(e);
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -219,7 +219,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 res.add(project_db.getProject(project));
             }
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return res;
     }
@@ -233,7 +233,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 tagsName.add(tag.getDescription());
             }
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return tagsName;
     }
@@ -247,7 +247,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 tagsName.add(tag.getDescription());
             }
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return tagsName;
     }
@@ -303,7 +303,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             viewController.displayTask();
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            System.out.println(e);
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -313,7 +313,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             project_db.deleteTask(task.getDescription(), task.getProjectID());
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -327,7 +327,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 return FXCollections.observableArrayList(taskList);
             }
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return FXCollections.observableArrayList();
     }
@@ -348,8 +348,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
 
         } catch (SQLException e) {
-            // TODO Exception
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -367,8 +366,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 new AlertWindow("Warning", "Please select a task.").warningWindow();
             }
         } catch (SQLException e) {
-            // TODO Exception
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return names;
     }
@@ -378,8 +376,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             project_db.deleteTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
         } catch (SQLException e) {
-            // TODO Exeption
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -395,16 +392,17 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
         try {
             if (!user_db.userExists(username)) {
-                // TODO message user doesnt exist
+                new AlertWindow("Alert", "User '" + username + "' doesn't exist").errorWindow();
             }
             int receiverID = user_db.getUserInfo(username).getId();
             if (project_db.getCollaborators(project_id).contains(receiverID)) {
-                // TODO message colalborator already in project
+                new AlertWindow("Alert", "User '" + username + "' is already a collaborator in this project").errorWindow();
+                return;
             }
             user_db.sendInvitation(project_id, user_db.getCurrentUser().getId(), receiverID);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -414,8 +412,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             project_db.deleteCollaborator(project_id, user_db.getUserInfo(collaboratorName).getId());
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO Exception
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -429,8 +426,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 names.add((user_db.getUserInfo(collaborator).getUserName()));
             }
         } catch (SQLException e) {
-            // TODO Exception
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return names;
     }
@@ -440,8 +436,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             return project_db.getTaskCollaborator(task.getId()).contains((user_db.getUserInfo(user).getId()));
         } catch (SQLException e) {
-            // TODO Exception
-            e.printStackTrace();
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         return false;
     }
@@ -505,13 +500,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
             int parentID = 0;
 
             if (title.equals("")) {
-                // TODO Cannot add a project with an empty title
+                new AlertWindow("Alert", "Title cannot be empty").errorWindow();
             } else if (project_db.getProjectID(title) != 0) {
-                // TODO A project with the same title already exists.
+                new AlertWindow("Alert", "Project '" + title + "' Already exists").errorWindow();
             } else if (startDate == null) {
-                // TODO Cannot create a project without a date.
+                new AlertWindow("Alert", "Project needs a start date").errorWindow();
             } else if (endDate == null) {
-                // TODO Cannot create a project without a date.
+                new AlertWindow("Alert", "Project needs an end date").errorWindow();
             } else if (parent.equals("") || project_db.getProjectID(parent) != 0) {
 
                 if (!parent.equals("")) {
@@ -528,7 +523,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            System.out.println(e);
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
@@ -553,7 +548,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
             if (taskNames.contains(taskDescription)) {
                 new AlertWindow("Warning", "This task already exists.").warningWindow();
-                // TODO Task already exists
                 return;
             }
             if (project_id != 0) {
@@ -561,7 +555,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 

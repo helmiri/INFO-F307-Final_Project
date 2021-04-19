@@ -1,23 +1,24 @@
 package be.ac.ulb.infof307.g06.views.calendarViews;
 
 import be.ac.ulb.infof307.g06.models.CalendarColor;
+import com.calendarfx.model.Calendar;
+import com.calendarfx.model.CalendarSource;
+import com.calendarfx.model.Entry;
 import com.calendarfx.view.AllDayView;
 import com.calendarfx.view.WeekDayHeaderView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class CalendarViewController {
@@ -34,8 +35,6 @@ public class CalendarViewController {
     @FXML
     private WeekDayHeaderView weekDays;
     @FXML
-    private AnchorPane anchorPaneDayView;
-    @FXML
     private AllDayView projects;
     @FXML
     private CheckComboBox<String> projectComboBox;
@@ -51,12 +50,13 @@ public class CalendarViewController {
         for (String project : allProjects.keySet()) {
             projectComboBox.getCheckModel().check(project);
         }
-        projectComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends String> change) {
-                listener.addProject(change.getList());
-            }
-        });
+        projectComboBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) change -> addProject(change.getList()));
+    }
+
+    public void addProject(ObservableList<? extends String> list) {
+        listener.addProject(list);
+        projects.refreshData();
+        tasks.refreshData();
     }
 
     public void setColor(String selectedColor) {
@@ -68,11 +68,10 @@ public class CalendarViewController {
     }
 
     public void fillColors(CalendarColor colorObject) {
-        colorsComboBox.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-
+        colorsComboBox.setCellFactory(new Callback<>() {
             @Override
             public ListCell<String> call(ListView<String> param) {
-                return new ListCell<String>() {
+                return new ListCell<>() {
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         if (item != null) {
@@ -96,17 +95,41 @@ public class CalendarViewController {
 
     }
 
-    @FXML
-    public void onColorSelected() {
-        listener.changeColor(colorsComboBox.getSelectionModel().getSelectedItem());
+    public void init(CalendarSource projectSource, CalendarSource taskSource) {
+        projects.setEntryFactory(param -> null);
+        projects.setEntryContextMenuCallback(entryContextMenuParameter -> null);
+        projects.setEntryDetailsCallback(entryDetailsParameter -> {
+            listener.onProjectSelected(projects.getSelections());
+            return null;
+        });
+        projects.setContextMenuCallback(null);
+        projects.setOnMouseClicked(null);
+        projects.getCalendarSources().setAll(projectSource);
+        tasks.getCalendarSources().setAll(taskSource);
+        projects.setRowHeight(50);
+        projects.setShowToday(false);
+        tasks.setShowToday(false);
+        projects.setAdjustToFirstDayOfWeek(true);
+        tasks.setAdjustToFirstDayOfWeek(true);
     }
 
-    public void setMonth(String month) {
-        monthLabel.setText(month);
+    @FXML
+    public void onColorSelected() {
+        listener.changeColor(colorsComboBox.getSelectionModel().getSelectedItem(), projects.getSelections());
+        tasks.refreshData();
+        projects.refreshData();
+    }
+
+    public void setNewDate(LocalDate date) {
+        monthLabel.setText(date.getMonth() + " " + date.getYear());
+        weekDays.setDate(date);
+        projects.setDate(date);
+        tasks.setDate(date);
     }
 
     @FXML
     private void calendarEvents(ActionEvent event) {
+
         if (event.getSource() == previousWeekBtn) {
             listener.prevWeek();
         } else if (event.getSource() == todayBtn) {
@@ -115,8 +138,8 @@ public class CalendarViewController {
             listener.nextWeek();
         } else if (event.getSource() == backBtn) {
             listener.back();
-        }
 
+        }
     }
 
     public AllDayView getProjectsView() {
@@ -140,13 +163,15 @@ public class CalendarViewController {
 
         void nextWeek();
 
+        void onProjectSelected(ObservableSet<Entry<?>> selections);
+
         void prevWeek();
 
         void addProject(ObservableList<? extends String> projects);
 
         void goToday();
 
-        void changeColor(String color);
+        void changeColor(String color, ObservableSet<Entry<?>> selections);
     }
 
 }

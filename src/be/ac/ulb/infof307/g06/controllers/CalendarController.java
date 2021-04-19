@@ -12,16 +12,12 @@ import be.ac.ulb.infof307.g06.views.calendarViews.CalendarViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
-import com.calendarfx.view.AllDayView;
-import com.calendarfx.view.DateControl;
-import com.calendarfx.view.WeekDayHeaderView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,19 +27,13 @@ import java.util.*;
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
     CalendarColor colorObject = new CalendarColor();
     private CalendarViewController viewController;
-    private AllDayView projects;
-    private AllDayView tasks;
     private CalendarSource projectSource;
     private CalendarSource taskSource;
-    private WeekDayHeaderView header;
     private Entry<?> selectedProject;
-    private final ObservableList<String> currentProjects = FXCollections.observableArrayList();
     private LocalDate currentDate = LocalDate.now();
     private final Map<String, String> projectsColor = new HashMap<>();
-    private String selectedColor;
     private final Map<String, Calendar> projectsMap = new HashMap<>();
     private final Map<String, Calendar> tasksMap = new HashMap<>();
-    private final Map<Calendar, Calendar> projectsTasks = new HashMap<>();
     private CalendarDB database;
 
     public CalendarController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
@@ -62,7 +52,7 @@ public class CalendarController extends Controller implements CalendarViewContro
             viewController.initComboBox(projects, allProjects);
             for (String project : allProjects.keySet()) {
                 Project currentProject = project_db.getProject(project_db.getProjectID(project));
-                Calendar projectCalendar = createEntry(projectSource,
+                createEntry(projectSource,
                         project,
                         LocalDate.ofEpochDay(currentProject.getStartDate()),
                         LocalDate.ofEpochDay(currentProject.getEndDate()),
@@ -71,23 +61,22 @@ public class CalendarController extends Controller implements CalendarViewContro
                 );
                 projectsColor.put(project, allProjects.get(project));
                 for (Task task : project_db.getTasks(currentProject.getId())) {
-                    Calendar taskCalendar = createEntry(taskSource,
+                    createEntry(taskSource,
                             task.getDescription(),
                             LocalDate.ofEpochDay(task.getStartDate()),
                             LocalDate.ofEpochDay(task.getEndDate()),
                             allProjects.get(project),
                             currentProject.getTitle()
                     );
-                    projectsTasks.put(projectCalendar, taskCalendar);
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("Error", "" + e).errorWindow();
         }
 
     }
 
-    public Calendar createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color, String projectName) {
+    public void createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color, String projectName) {
         Entry<String> testEntry = new Entry<>(name);
         testEntry.changeStartDate(start);
         testEntry.changeEndDate(end);
@@ -113,62 +102,32 @@ public class CalendarController extends Controller implements CalendarViewContro
                 tasksMap.put(projectName, newCalendar);
             }
         }
-        return newCalendar;
     }
 
     @Override
     public void show() throws IOException, SQLException {
         projectSource = new CalendarSource("projects");
         taskSource = new CalendarSource("tasks");
-        try {
-            database = new CalendarDB("Database.db");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         FXMLLoader loader = new FXMLLoader(CalendarViewController.class.getResource("CalendarView.fxml"));
         try {
+            database = new CalendarDB("Database.db");
             scene = new Scene(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            new AlertWindow("Error", "" + e).errorWindow();
         }
         viewController = loader.getController();
         viewController.setListener(this);
         stage.setScene(scene);
         stage.sizeToScene();
-        projects = viewController.getProjectsView();
-        tasks = viewController.getTasksView();
-        projects.setEntryFactory(param -> null);
-        projects.setEntryContextMenuCallback(new Callback<DateControl.EntryContextMenuParameter, ContextMenu>() {
-            @Override
-            public ContextMenu call(DateControl.EntryContextMenuParameter entryContextMenuParameter) {
-                return null;
-            }
-        });
-        projects.setEntryDetailsCallback(new Callback<DateControl.EntryDetailsParameter, Boolean>() {
-            @Override
-            public Boolean call(DateControl.EntryDetailsParameter entryDetailsParameter) {
-                onProjectSelected();
-                return null;
-            }
-        });
-        projects.setContextMenuCallback(null);
-        projects.setOnMouseClicked(null);
-
-        header = viewController.getWeekDays();
-        projects.getCalendarSources().setAll(projectSource);
-        tasks.getCalendarSources().setAll(taskSource);
-        projects.setRowHeight(50);
-
-        projects.setAdjustToFirstDayOfWeek(true);
-        tasks.setAdjustToFirstDayOfWeek(true);
-
+        viewController.init(projectSource, taskSource);
         viewController.fillColors(colorObject);
-        viewController.setMonth(currentDate.getMonth() + " " + currentDate.getYear());
+        viewController.setNewDate(currentDate);
+
         initCalendar();
     }
 
-    public void onProjectSelected() {
-        ObservableList<Entry<?>> entry = FXCollections.observableArrayList(projects.getSelections());
+    public void onProjectSelected(ObservableSet<Entry<?>> projects) {
+        ObservableList<Entry<?>> entry = FXCollections.observableArrayList(projects);
         selectedProject = entry.get(0);
         viewController.setColor(entry.get(0).getCalendar().getStyle());
     }
@@ -183,10 +142,9 @@ public class CalendarController extends Controller implements CalendarViewContro
     }
 
     @Override
-    public void changeColor(String color) {
-        ObservableList<Entry<?>> entry = FXCollections.observableArrayList(projects.getSelections());
+    public void changeColor(String color, ObservableSet<Entry<?>> selections) {
+        ObservableList<Entry<?>> entry = FXCollections.observableArrayList(selections);
         if (entry.size() != 0) {
-            String prevColor = selectedProject.getCalendar().getStyle();
             Calendar calendar = selectedProject.getCalendar();
             calendar.setStyle(color);
             try {
@@ -199,31 +157,24 @@ public class CalendarController extends Controller implements CalendarViewContro
                     calendar = tasksMap.get(selectedProject.getTitle());
                     calendar.setStyle(color);
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException e) {
+                new AlertWindow("Error", "" + e).errorWindow();
             }
-            tasks.refreshData();
-            projects.refreshData();
+
         }
     }
 
     @Override
     public void nextWeek() {
-
         currentDate = currentDate.plusDays(7);
-        viewController.setMonth(currentDate.getMonth() + " " + currentDate.getYear());
-        header.setDate(currentDate);
-        projects.setDate(currentDate);
-        tasks.setDate(currentDate);
+        viewController.setNewDate(currentDate);
+
     }
 
     @Override
     public void prevWeek() {
         currentDate = currentDate.minusDays(7);
-        viewController.setMonth(currentDate.getMonth() + " " + currentDate.getYear());
-        header.setDate(currentDate);
-        projects.setDate(currentDate);
-        tasks.setDate(currentDate);
+        viewController.setNewDate(currentDate);
     }
 
     @Override
@@ -241,7 +192,7 @@ public class CalendarController extends Controller implements CalendarViewContro
                     projectsColor.put(project, color);
                 }
                 Project currentProject = project_db.getProject(project_db.getProjectID(project));
-                Calendar proejctCalendar = createEntry(projectSource,
+                createEntry(projectSource,
                         currentProject.getTitle(),
                         LocalDate.ofEpochDay(currentProject.getStartDate()),
                         LocalDate.ofEpochDay(currentProject.getEndDate()),
@@ -250,21 +201,19 @@ public class CalendarController extends Controller implements CalendarViewContro
                 );
                 database.addProject(currentProject.getTitle(), color);
                 for (Task task : project_db.getTasks(currentProject.getId())) {
-                    Calendar taskCalendar = createEntry(taskSource,
+                    createEntry(taskSource,
                             task.getDescription(),
                             LocalDate.ofEpochDay(task.getStartDate()),
                             LocalDate.ofEpochDay(task.getEndDate()),
                             color,
                             currentProject.getTitle()
                     );
-                    projectsTasks.put(proejctCalendar, taskCalendar);
                 }
             }
         } catch (SQLException e) {
             new AlertWindow("Error", "" + e).errorWindow();
         }
-        projects.refreshData();
-        tasks.refreshData();
+
     }
 
     @Override
@@ -275,8 +224,7 @@ public class CalendarController extends Controller implements CalendarViewContro
     @Override
     public void goToday() {
         currentDate = LocalDate.now();
-        header.setDate(currentDate);
-        projects.setDate(currentDate);
-        tasks.setDate(currentDate);
+        viewController.setNewDate(currentDate);
+
     }
 }
