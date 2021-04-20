@@ -3,7 +3,6 @@ package be.ac.ulb.infof307.g06.views.statisticsViews;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
-import com.calendarfx.view.WeekDayHeaderView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -78,27 +77,28 @@ public class StatsViewController{
     private void statsEvents(ActionEvent event) {
         if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
         else if (event.getSource() == overallViewBtn     ) { listener.show()               ;}
-        else if (event.getSource() == projectViewBtn     ) { listener.showStatsProject()   ;}
-        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
-            exports(event);
-        }
+        else if (event.getSource() == projectViewBtn     ) { listener.showIndividualStats()   ;}
+        else if (event.getSource() == exportJSONBtn
+                || event.getSource() == exportCSVBtn     ) { exports(event); }
     }
 
     /**
      * Initializes the project view with the tree table with values and sets stats on the screen.
      */
     @FXML
-    public void initTree(){
+    public void initTreeTableView(){
         try {
-        List<Integer> projectsArray;
-        projectsColumn  .setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
-        projectsTreeView.setRoot(root);
-        projectsArray = listener.getProjects();
-        listener.setStats(projectsArray, root);
+            List<Integer> projectsArray;
+            projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
+            projectsTreeView.setRoot(root);
+            projectsArray = listener.getProjects();
+            listener.setStats(projectsArray, root);
         } catch (DatabaseException e) {
             new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
         }
         isOverallView=false;
+        overallViewBtn.setDisable(false);
+        projectViewBtn.setDisable(true);
     }
 
     /**
@@ -111,6 +111,8 @@ public class StatsViewController{
         tasksChart.setLegendVisible(false);
         pieChartInitializer();
         barChartInitializer();
+        overallViewBtn.setDisable(true);
+        projectViewBtn.setDisable(false);
     }
 
     /**
@@ -174,7 +176,7 @@ public class StatsViewController{
      * Displays stats for a specific project.
      */
     public void displayProjectStats() {
-        List<Integer> infos = listener.countProjectStats(selectedProject);
+        List<Integer> infos = listener.countIndividualProjectStats(selectedProject);
         Project selectedProject = getSelectedProject();
         displayBasicStats(infos);
         startDate.setText(listener.dateToString(selectedProject.getStartDate()));
@@ -187,9 +189,23 @@ public class StatsViewController{
     public void onProjectSelected(){
         selectedProject = getSelectedProject();
         if (selectedProject == null) {
+            resetTextLabel();
             return;
         }
         displayProjectStats();
+    }
+
+    /**
+     * Resets the texts in labels in statistics.
+     */
+    public void resetTextLabel(){
+        projectsNumber.setText("0");
+        tasksNumber.setText("0");
+        collaboratorsNumber.setText("0");
+        startDate.setText("?/?/?");
+        estimatedDate.setText("?/?/?");
+        finishDate.setText("?/?/?");
+
     }
 
     /**
@@ -252,13 +268,6 @@ public class StatsViewController{
         }
     }
 
-    /**
-     * Sets text message for exportation.
-     *
-     * @param msg String
-     */
-    public void setMsg(String msg){ msgExportText.setText(msg); }
-
     //--------------- LISTENER ----------------
     public void setListener(ViewListener listener) {
         this.listener = listener;
@@ -267,7 +276,7 @@ public class StatsViewController{
     public interface ViewListener {
         void show();
 
-        void showStatsProject();
+        void showIndividualStats();
 
         void onBackButtonClicked();
 
@@ -285,7 +294,7 @@ public class StatsViewController{
 
         List<Integer> countOverallStats() ;
 
-        List<Integer> countProjectStats(Project selectedProject);
+        List<Integer> countIndividualProjectStats(Project selectedProject);
 
         void exportAsCSVOverallView(String fileName, String path);
 

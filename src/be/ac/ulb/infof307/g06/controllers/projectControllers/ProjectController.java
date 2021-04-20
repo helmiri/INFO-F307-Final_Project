@@ -78,7 +78,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     public void showAddProjectStage(ProjectsViewController.ViewListener listener) {
         try {
-            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("AddProjectView.fxml"));
+            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("popups/AddProjectView.fxml"));
             AnchorPane projectPane = loader.load();
             AddProjectViewController controller = loader.getController();
             Stage addStage = new Stage();
@@ -119,7 +119,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     public void showEditTaskStage(Task task, ProjectsViewController.ViewListener listener) {
         try {
-            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("EditTaskView.fxml"));
+            FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("popups/EditTaskView.fxml"));
             AnchorPane taskPane = loader.load();
             EditTaskViewController controller = loader.getController();
             Stage editTaskStage = new Stage();

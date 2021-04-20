@@ -128,7 +128,7 @@
          </children>
       </Pane>
       <Line endX="1394.0" layoutX="104.0" layoutY="96.0" startX="-100.0" stroke="WHITE" />
-      <Label layoutX="33.0" layoutY="16.0" prefHeight="70.0" prefWidth="202.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics ">
+      <Label layoutX="33.0" layoutY="16.0" prefHeight="70.0" prefWidth="283.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics ">
          <font>
             <Font size="48.0" />
          </font>

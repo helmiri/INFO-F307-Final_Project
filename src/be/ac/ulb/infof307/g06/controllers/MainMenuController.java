@@ -86,7 +86,19 @@ public class MainMenuController extends Controller implements MenuViewController
 
     @Override
     public void showProjectsMenu() {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("ProjectMenu.fxml"));
+        String fxmlFileName = "ProjectMenu.fxml";
+        loadMenu(fxmlFileName);
+
+    }
+
+    @Override
+    public void showSettings() {
+        String fxmlFileName = "SettingsMenu.fxml";
+        loadMenu(fxmlFileName);
+    }
+
+    private void loadMenu(String fxmlFileName) {
+        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource(fxmlFileName));
         try {
             scene = new Scene(loader.load());
             MenuViewController controller = loader.getController();
@@ -96,7 +108,6 @@ public class MainMenuController extends Controller implements MenuViewController
         } catch (IOException e) {
             new AlertWindow("Error", "" + e).errorWindow();
         }
-
     }
 
     @Override
@@ -109,29 +120,12 @@ public class MainMenuController extends Controller implements MenuViewController
     public void showStats() {
         StatsController controller = new StatsController(user_db, project_db, stage, scene);
         controller.show();
-
-        // Sous WINDOWS CA FONCTIONNE AUSSI QU'AVEC 1 SEULE LIGNE (controller.show())
     }
 
     @Override
     public void showStorage() {
         StorageController controller = new StorageController(user_db, project_db, stage, scene);
         controller.show();
-    }
-
-    @Override
-    public void showSettings() {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("SettingsMenu.fxml"));
-        try {
-            scene = new Scene(loader.load());
-            MenuViewController controller = loader.getController();
-            controller.setListener(this);
-            stage.setScene(scene);
-            stage.sizeToScene();
-        } catch (IOException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
-        }
-        //controller.show();
     }
 
     @Override

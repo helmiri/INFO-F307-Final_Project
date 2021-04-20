@@ -92,11 +92,6 @@
          </children>
       </Pane>
       <Line endX="1394.0" layoutX="104.0" layoutY="96.0" startX="-100.0" stroke="WHITE" />
-      <Label layoutX="33.0" layoutY="16.0" prefHeight="48.0" prefWidth="231.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics">
-         <font>
-            <Font size="48.0" />
-         </font>
-      </Label>
       <VBox layoutX="1161.0" layoutY="107.0" prefHeight="704.0" prefWidth="258.0" spacing="50.0">
          <children>
             <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
@@ -106,7 +101,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="startDate" layoutX="7.0" layoutY="65.0" text="01/01/2021" textFill="WHITE">
+                  <Label fx:id="startDate" layoutX="7.0" layoutY="65.0" text="?/?/?" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -120,7 +115,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="estimatedDate" layoutX="7.0" layoutY="65.0" text="01/01/2021" textFill="WHITE">
+                  <Label fx:id="estimatedDate" layoutX="7.0" layoutY="65.0" text="?/?/?" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -134,7 +129,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="finishDate" layoutX="7.0" layoutY="65.0" text="01/01/2021" textFill="WHITE">
+                  <Label fx:id="finishDate" layoutX="7.0" layoutY="65.0" text="?/?/?" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -148,7 +143,12 @@
           <TreeTableColumn fx:id="projectsColumn" prefWidth="337.0" text="Projects" />
         </columns>
       </TreeTableView>
-      <Label layoutX="44.0" layoutY="69.0" prefHeight="17.0" prefWidth="151.0" styleClass="shadow" stylesheets="@styles.css" text="Project view">
+      <Label layoutX="33.0" layoutY="16.0" prefHeight="70.0" prefWidth="283.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics ">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="44.0" layoutY="69.0" prefHeight="17.0" prefWidth="151.0" styleClass="shadow" stylesheets="@styles.css" text="Individual project view">
          <font>
             <Font name="DejaVu Sans Condensed Bold" size="12.0" />
          </font>
