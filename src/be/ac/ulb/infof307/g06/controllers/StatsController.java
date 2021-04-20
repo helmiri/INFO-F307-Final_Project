@@ -6,7 +6,6 @@ import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController;
-import com.google.gson.Gson;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
@@ -85,6 +84,13 @@ public class StatsController extends Controller implements StatsViewController.V
         }
     }
 
+    /**
+     * Returns a project thanks to its id.
+     *
+     * @param id int
+     * @return Project
+     * @throws DatabaseException e
+     */
     @Override
     public Project getProjectsFromID(int id) throws DatabaseException{
         try {
@@ -222,7 +228,6 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) {
         try {
-            Gson gson = new Gson();
             String finalString = "{\n";
 
             for (int i = 0; i < root.getChildren().size(); i++) {
@@ -230,7 +235,7 @@ public class StatsController extends Controller implements StatsViewController.V
                 String treeBranchString = "";
                 String title = child.getTitle();
                 int id = project_db.getProjectID(title);
-                treeBranchString = statToJsonString(id, gson, treeBranchString, root.getChildren().get(i));
+                treeBranchString = statToJsonString(id, treeBranchString, root.getChildren().get(i));
                 String informationRelatedToStats = generateJSONFormat(child);
                 String gotChild = "{" + informationRelatedToStats.replaceAll("(^\\{|}$)", "");
                 treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
@@ -246,12 +251,11 @@ public class StatsController extends Controller implements StatsViewController.V
      * Transforms a stat into a json string with his children recursively.
      *
      * @param id Integer
-     * @param gson Gson
      * @param treeBranchString String
      * @param root TreeItem<Statistics>
      * @return String
      */
-    public String statToJsonString(Integer id,Gson gson,String treeBranchString,TreeItem<Project> root) throws SQLException {
+    public String statToJsonString(Integer id,String treeBranchString,TreeItem<Project> root) throws SQLException {
         List<Integer> projectsID = project_db.getSubProjects(id);
         for (int k = 0; k < projectsID.size(); k++) {
             Project currentProject = root.getChildren().get(k).getValue();
@@ -264,7 +268,7 @@ public class StatsController extends Controller implements StatsViewController.V
                 //Has a child so we let it open -->'Name':{info,... and check the child's children.
                 String gotChild = "{" + informationRelatedToStats .replaceAll("(^\\{|}$)", "");
                 treeBranchString += "'" + currentProject.getTitle() + "'" + " :" + gotChild + ",";
-                treeBranchString = statToJsonString(project_db.getSubProjects(id).get(k), gson, treeBranchString, root.getChildren().get(k));
+                treeBranchString = statToJsonString(project_db.getSubProjects(id).get(k), treeBranchString, root.getChildren().get(k));
             }
         }
         treeBranchString += "},";
@@ -272,8 +276,10 @@ public class StatsController extends Controller implements StatsViewController.V
     }
 
     /**
-     * @param currentProject
-     * @return
+     * Generates the JSON format.
+     *
+     * @param currentProject Project
+     * @return String
      */
     private String generateJSONFormat(Project currentProject) {
         List<Integer> counts = countIndividualProjectStats(currentProject);
@@ -405,7 +411,7 @@ public class StatsController extends Controller implements StatsViewController.V
 
     @Override
     public void onBackButtonClicked() {
-        super.back();
+        back();
     }
 
 }
