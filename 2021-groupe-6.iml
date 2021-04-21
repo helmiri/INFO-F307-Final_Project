@@ -16,5 +16,9 @@
     <orderEntry type="library" name="gson-2.8.6" level="project" />
     <orderEntry type="library" name="dropbox" level="project" />
     <orderEntry type="library" name="view-11.8.3" level="project" />
+    <orderEntry type="library" name="api" level="application" />
+    <orderEntry type="library" name="com.google.apis:google-api-services-drive:v3-rev197-1.25.0" level="project" />
+    <orderEntry type="library" name="com.google.api-client:google-api-client:1.25.0" level="project" />
+    <orderEntry type="library" name="com.google.oauth-client:google-oauth-client-jetty:1.25.0" level="project" />
   </component>
 </module>
