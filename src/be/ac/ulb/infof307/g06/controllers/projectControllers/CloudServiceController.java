@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.projectControllers;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.cloudModels.DropBoxAPI;
+import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAPI;
 import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDriveAPI;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudSelectionViewController;

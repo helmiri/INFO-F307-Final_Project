@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.models.cloudModels;
+package be.ac.ulb.infof307.g06.models.cloudModels.DropBox;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;

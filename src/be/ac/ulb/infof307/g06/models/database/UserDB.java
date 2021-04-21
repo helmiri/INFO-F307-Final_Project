@@ -20,10 +20,7 @@ public class UserDB extends Database {
 
     public boolean isAdmin() throws SQLException {
         ResultSet res = sqlQuery("SELECT id FROM admin");
-        boolean check = false;
-        if (res.getInt("id") == currentUser.getId()) {
-            check = true;
-        }
+        boolean check = res.getInt("id") == currentUser.getId();
         res.close();
         return check;
     }
@@ -49,6 +46,7 @@ public class UserDB extends Database {
         sqlUpdate("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
                 "email varchar(40), password varchar(20), status boolean, accessToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
         sqlUpdate("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit long)");
+        sqlUpdate("CREATE TABLE IF NOT EXISTS DropBoxCredentials(id integer, userID varchar(256), accountID varchar(256), accessToken varchar(256), expiration long, refreshToken varchar(256))");
     }
 
     public boolean isFirstBoot() throws SQLException {

@@ -3,8 +3,11 @@ package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.User;
+import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAuthorization;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.json.JsonReader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -19,14 +22,21 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     private Stage stage;
     private boolean isFirstBoot;
 
+    public ConnectionEngine() throws JsonReader.FileLoadException {
+    }
+
 
     //-------------- METHODS ----------------
+
     /**
      * Lauchs the main application
      *
      * @param args String[] Arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonReader.FileLoadException, IOException, DbxException {
+        DropBoxAuthorization d = new DropBoxAuthorization();
+        System.out.println(d.getUrl());
+        d.getAuthorization();
         Application.launch(args);
     }
 
