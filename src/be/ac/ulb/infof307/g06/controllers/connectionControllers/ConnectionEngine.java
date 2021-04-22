@@ -3,7 +3,6 @@ package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.User;
-import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAuthorization;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import com.dropbox.core.DbxException;
@@ -13,6 +12,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 
 public class ConnectionEngine extends Application implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
@@ -33,10 +33,22 @@ public class ConnectionEngine extends Application implements SignUpController.Li
      *
      * @param args String[] Arguments
      */
-    public static void main(String[] args) throws JsonReader.FileLoadException, IOException, DbxException {
-        DropBoxAuthorization d = new DropBoxAuthorization();
-        System.out.println(d.getUrl());
-        d.getAuthorization();
+    public static void main(String[] args) throws JsonReader.FileLoadException, IOException, DbxException, GeneralSecurityException {
+//        DropBoxAuthorization auth = new DropBoxAuthorization();
+//        System.out.println(auth.getUrl());
+//        auth.getAuthorization();
+
+//        GoogleDriveAuthorization auth = new GoogleDriveAuthorization("user");
+//        NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+//        GoogleDriveAPI api = new GoogleDriveAPI(auth.getCredentials(HTTP_TRANSPORT), HTTP_TRANSPORT);
+//        api.uploadFile("Name.tar.gz", "Name.tar.gz");
+//        String fileID = "";
+//        for (File file : api.getFiles()){
+//            fileID = file.getId();
+//        }
+//        api.downloadFile("downloadTest.tar.gz", fileID);
+
+
         Application.launch(args);
     }
 

@@ -29,7 +29,7 @@ public class CloudViewController {
         this.listener = listener;
     }
 
-    public void show(List<Metadata> files, AnchorPane cloudPane) {
+    public void show(List<String> files, AnchorPane cloudPane) {
         stage = new Stage();
         stage.setScene(new Scene(cloudPane));
         stage.setTitle("Dropbox Files");
@@ -38,8 +38,8 @@ public class CloudViewController {
         filesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         filesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         try {
-            for (Metadata metadata : filterValidFiles(files)) {
-                cloudTable.getItems().add(metadata.getPathDisplay());
+            for (String name : filterValidFiles(files)) {
+                cloudTable.getItems().add(name);
             }
         } finally {
             cloudTable.setPlaceholder(new Label("Could not retrieve the content"));
@@ -53,11 +53,10 @@ public class CloudViewController {
      * @param entries List of all the files contained in the cloud.
      * @return
      */
-    public List<Metadata> filterValidFiles(List<Metadata> entries) {
-        List<Metadata> lst = new ArrayList<>();
-        for (Metadata entry : entries) {
-            String pathDisplay = entry.getPathDisplay();
-            if (pathDisplay.contains(".tar.gz")) {
+    public List<String> filterValidFiles(List<String> entries) {
+        List<String> lst = new ArrayList<>();
+        for (String entry : entries) {
+            if (entry.contains(".tar.gz")) {
                 lst.add(entry);
             }
         }

@@ -2,13 +2,16 @@ package be.ac.ulb.infof307.g06.controllers.projectControllers;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAPI;
-import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDriveAPI;
+import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAPI;
+import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAuthorization;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudSelectionViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudViewController;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -16,23 +19,27 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener {
     private final ProjectController projectController;
+    private final UserDB userDB;
     private String accessToken;
     private String clientID;
-    private DropBoxAPI dbxClient;
-    private GoogleDriveAPI gDriveClient;
+    private DropBoxAPI dbxClient = null;
+    private GoogleDriveAPI gDriveClient = null;
     private boolean isDBox;
-
     private List<Metadata> dboxFiles;
+    private List<com.google.api.services.drive.model.File> gDriveFiles;
 
     public CloudServiceController(ProjectController projectController, UserDB userDB) throws SQLException {
         this.projectController = projectController;
+        this.userDB = userDB;
         HashMap<String, String> credentials = userDB.getCloudCredentials();
         accessToken = credentials.get("accessToken");
         clientID = credentials.get("clientID");
@@ -67,6 +74,16 @@ public class CloudServiceController implements CloudSelectionViewController.View
     @Override
     public void selectGoogleDrive() {
         isDBox = false;
+        try {
+            if (gDriveClient == null) {
+                GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(userDB.getCurrentUser().getUserName());
+                NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+                gDriveClient = new GoogleDriveAPI(authorization.getCredentials(httpTransport), httpTransport);
+            }
+            gDriveFiles = gDriveClient.getFiles();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -92,13 +109,52 @@ public class CloudServiceController implements CloudSelectionViewController.View
         if (isDBox) {
             downloadDropBox(cloudPath, localPath);
         } else {
-            downloadGoogleDrive(cloudPath, localPath);
+            try {
+                downloadGoogleDrive(cloudPath, localPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void downloadGoogleDrive(String cloudPath, String localPath) throws IOException {
+        com.google.api.services.drive.model.File fileMeta = getGDriveFile(cloudPath);
+        String tempPath = localPath + "temp";
+        gDriveClient.downloadFile(tempPath, fileMeta.getId());
+        File localFile = new File(localPath);
+        File tempFile = new File(tempPath);
+        boolean download = false;
+        if (!localFile.exists()) {
+            download = true;
+        } else {
+            try {
+                if (isGFileIdentical(localFile, tempFile)) {
+                    new AlertWindow("Identical files", "The file already exists").informationWindow();
+                } else {
+                    download = true;
+                }
+                tempFile.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            if (download) {
+                gDriveClient.downloadFile(localPath, fileMeta.getId());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
-    private void downloadGoogleDrive(String cloudPath, String localPath) {
-
+    private com.google.api.services.drive.model.File getGDriveFile(String cloudPath) {
+        for (com.google.api.services.drive.model.File file : gDriveFiles) {
+            if (file.getName().equals(cloudPath)) {
+                return file;
+            }
+        }
+        return null;
     }
 
     private void downloadDropBox(String cloudPath, String localPath) {
@@ -112,7 +168,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
         } else {
             download = true;
         }
-
         if (download) {
             try {
                 dbxClient.downloadFile(localPath, cloudPath);
@@ -135,7 +190,13 @@ public class CloudServiceController implements CloudSelectionViewController.View
     }
 
     private boolean isFileIdentical(String cloudPath, String localPath, FileMetadata fileMeta) {
-        return fileMeta.getContentHash().equals(dbxClient.dropBoxHash(localPath));
+        return fileMeta.getContentHash().equals(dbxClient.getHash(localPath));
+    }
+
+    private boolean isGFileIdentical(File localFile, File cloudFile) throws IOException {
+        String localChecksum = gDriveClient.getHash(localFile);
+        String cloudCheckusm = gDriveClient.getHash(cloudFile);
+        return localChecksum.equals(cloudCheckusm);
     }
 
     /**
@@ -148,12 +209,34 @@ public class CloudServiceController implements CloudSelectionViewController.View
             AnchorPane cloudPane = loader.load();
             CloudViewController controller = loader.getController();
             controller.setListener(this);
-            controller.show(dboxFiles, cloudPane);
+            List<String> files;
+            if (isDBox) {
+                files = dBoxToStrings(dboxFiles);
+            } else {
+                files = gDriveToStrings(gDriveFiles);
+            }
+            controller.show(files, cloudPane);
         } catch (IOException e) {
             // TODO Exception
         }
         // TODO Download Stage
 //        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
+    }
+
+    private List<String> gDriveToStrings(List<com.google.api.services.drive.model.File> gDriveFiles) {
+        List<String> res = new ArrayList<>();
+        for (com.google.api.services.drive.model.File entry : gDriveFiles) {
+            res.add(entry.getName());
+        }
+        return res;
+    }
+
+    private List<String> dBoxToStrings(List<Metadata> list) {
+        List<String> res = new ArrayList<>();
+        for (Metadata entry : list) {
+            res.add(entry.getPathDisplay());
+        }
+        return res;
     }
 
     public void showSelectionStage(boolean isDownload) {
@@ -173,7 +256,11 @@ public class CloudServiceController implements CloudSelectionViewController.View
 
     public void uploadProject(String fileName, String localFilePath) {
         try {
-            dbxClient.uploadFile(localFilePath, fileName);
+            if (isDBox) {
+                dbxClient.uploadFile(localFilePath, fileName);
+            } else {
+                gDriveClient.uploadFile(localFilePath, fileName.substring(1));
+            }
         } catch (IOException | DbxException e) {
             e.printStackTrace();
         }

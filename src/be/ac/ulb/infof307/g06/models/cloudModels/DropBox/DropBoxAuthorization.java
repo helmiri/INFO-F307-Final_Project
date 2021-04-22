@@ -7,6 +7,7 @@ import com.dropbox.core.oauth.DbxCredential;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +18,6 @@ import java.util.logging.Logger;
  * DbxCredential object
  */
 public class DropBoxAuthorization {
-    private final String argAppInfoFile = DropBoxAuthorization.class.getResource("creds.json").getFile();
     private DbxAppInfo appInfo;
     private String authorizationUrl = "";
     private DbxWebAuth webAuth;
@@ -27,16 +27,17 @@ public class DropBoxAuthorization {
         // Only display important log messages.
         Logger.getLogger("").setLevel(Level.WARNING);
         // Read app info file (contains app key and app secret)
+        String argAppInfoFile = Objects.requireNonNull(DropBoxAuthorization.class.getResource("credentials.json")).getFile();
         appInfo = DbxAppInfo.Reader.readFromFile(argAppInfoFile);
     }
 
     public DbxCredential getAuthorization() throws IOException, DbxException {
         // Run through Dropbox API authorization process
-        DbxAuthFinish authFinish = authorize(appInfo);
+        DbxAuthFinish authFinish = authorize();
 
         // Save auth information the new DbxCredential instance. It also contains app_key and
         // app_secret which is required to do refresh call.
-        return new DbxCredential(authFinish.getAccessToken(), authFinish
+        return new DbxCredential(Objects.requireNonNull(authFinish).getAccessToken(), authFinish
                 .getExpiresAt(), authFinish.getRefreshToken(), appInfo.getKey(), appInfo.getSecret());
     }
 
@@ -54,14 +55,13 @@ public class DropBoxAuthorization {
         return webAuth.authorize(webAuthRequest);
     }
 
-    private DbxAuthFinish authorize(DbxAppInfo appInfo) throws IOException, DbxException {
+    private DbxAuthFinish authorize() throws IOException, DbxException {
 
         String code = new BufferedReader(new InputStreamReader(System.in)).readLine();
         if (code == null) {
-            System.exit(1);
+            return null;
         }
         code = code.trim();
-
         return webAuth.finishFromCode(code);
 
     }

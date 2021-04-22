@@ -17,7 +17,7 @@ public class DropBoxAPI {
     private DbxClientV2 dboxClient;
 
     /**
-     * Initializes the connection with the dropboxaccount.
+     * Initializes the connection with the dropbox account.
      *
      * @param ACCESS_TOKEN
      * @param clientidentifier
@@ -29,7 +29,6 @@ public class DropBoxAPI {
         DbxRequestConfig config = new DbxRequestConfig(clientID, "en_US");
         dboxClient = new DbxClientV2(config, accessToken);
     }
-
 
     /**
      * Returns the list of all the files contained in the dropbox account
@@ -97,7 +96,7 @@ public class DropBoxAPI {
      * @param file
      * @return
      */
-    public String dropBoxHash(String file) {
+    public String getHash(String file) {
         MessageDigest hasher = new DropBoxContentHasher();
         byte[] buf = new byte[1024];
         try (InputStream in = new FileInputStream(file)) {
