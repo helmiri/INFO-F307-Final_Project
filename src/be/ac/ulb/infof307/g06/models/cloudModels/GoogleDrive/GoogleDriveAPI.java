@@ -14,51 +14,57 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GoogleDriveAPI {
-    private final String APPLICATION_NAME = "I(Should)PlanAll";
-    private Drive service;
+    private final Drive service;
 
     public GoogleDriveAPI(Credential credentials, NetHttpTransport HTTP_TRANSPORT) throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
         Logger.getLogger("").setLevel(Level.SEVERE);
         service = new Drive.Builder(HTTP_TRANSPORT, JacksonFactory.getDefaultInstance(), credentials)
-                .setApplicationName(APPLICATION_NAME)
+                .setApplicationName("I(Should)PlanAll")
                 .build();
     }
 
     public List<File> getFiles() throws IOException {
-        // Print the names and IDs of the files.
-        FileList result = service.files().list()
-                .setFields("nextPageToken, files(id, name)")
-                .execute();
+        FileList result = service.files().list().setFields("nextPageToken, files(id, name, appProperties)").execute();
         return result.getFiles();
     }
 
     public void downloadFile(String localFilePath, String fileID) throws IOException {
         OutputStream outputStream = new FileOutputStream(localFilePath);
-        service.files().get(fileID)
-                .executeMediaAndDownloadTo(outputStream);
+        service.files().get(fileID).executeMediaAndDownloadTo(outputStream);
         outputStream.close();
     }
 
 
     public void uploadFile(String localFilePath, String cloudFilePath) throws IOException {
         File fileMetadata = new File();
-        fileMetadata.setName(cloudFilePath);
-        java.io.File filePath = new java.io.File(localFilePath);
-        FileContent mediaContent = new FileContent("tar/gz", filePath);
-        service.files().create(fileMetadata, mediaContent)
-                .setFields("id")
-                .execute();
+        java.io.File localFile = new java.io.File(localFilePath);
+        FileContent mediaContent = new FileContent("tar/gz", localFile);
+        setHashCode(cloudFilePath, fileMetadata, localFile);
+        service.files().create(fileMetadata, mediaContent).setFields("id, appProperties").execute();
     }
 
+    private void setHashCode(String cloudFilePath, File fileMetadata, java.io.File localFile) throws IOException {
+        Map<String, String> properties = new HashMap<>();
+        fileMetadata.setName(cloudFilePath);
+        properties.put("hash", getHash(localFile));
+        fileMetadata.setAppProperties(properties);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
     public String getHash(java.io.File file) throws IOException {
-        HashCode hash = com.google.common.io.Files.hash(file, Hashing.md5());
+        HashCode hash = com.google.common.io.Files.hash(file, Hashing.sha256());
         return hash.toString().toUpperCase();
     }
 
+    public void updateFile(String fileID, String localPath) {
+
+    }
 }

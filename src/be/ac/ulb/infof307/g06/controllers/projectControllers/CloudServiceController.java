@@ -29,10 +29,10 @@ import java.util.List;
 public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener {
     private final ProjectController projectController;
     private final UserDB userDB;
-    private String accessToken;
-    private String clientID;
-    private DropBoxAPI dbxClient = null;
-    private GoogleDriveAPI gDriveClient = null;
+    private final String accessToken;
+    private final String clientID;
+    private DropBoxAPI dbxClient;
+    private GoogleDriveAPI gDriveClient;
     private boolean isDBox;
     private List<Metadata> dboxFiles;
     private List<com.google.api.services.drive.model.File> gDriveFiles;
@@ -109,43 +109,29 @@ public class CloudServiceController implements CloudSelectionViewController.View
         if (isDBox) {
             downloadDropBox(cloudPath, localPath);
         } else {
-            try {
-                downloadGoogleDrive(cloudPath, localPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            downloadGoogleDrive(cloudPath, localPath);
         }
     }
 
-    private void downloadGoogleDrive(String cloudPath, String localPath) throws IOException {
+    private void downloadGoogleDrive(String cloudPath, String localPath) {
         com.google.api.services.drive.model.File fileMeta = getGDriveFile(cloudPath);
-        String tempPath = localPath + "temp";
-        gDriveClient.downloadFile(tempPath, fileMeta.getId());
-        File localFile = new File(localPath);
-        File tempFile = new File(tempPath);
-        boolean download = false;
-        if (!localFile.exists()) {
-            download = true;
-        } else {
-            try {
-                if (isGFileIdentical(localFile, tempFile)) {
-                    new AlertWindow("Identical files", "The file already exists").informationWindow();
-                } else {
-                    download = true;
-                }
-                tempFile.delete();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         try {
-            if (download) {
-                gDriveClient.downloadFile(localPath, fileMeta.getId());
+            boolean download = false;
+            File localFile = new File(localPath);
+            if (!localFile.exists()) {
+                download = true;
+            } else if (isGFileIdentical(localFile, fileMeta)) {
+                new AlertWindow("Identical files", "The file already exists").informationWindow();
+            } else {
+                download = true;
             }
+            if (!download) {
+                return;
+            }
+            gDriveClient.downloadFile(localPath, fileMeta.getId());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private com.google.api.services.drive.model.File getGDriveFile(String cloudPath) {
@@ -163,19 +149,21 @@ public class CloudServiceController implements CloudSelectionViewController.View
         boolean download = false;
         if (!localFile.exists()) {
             download = true;
-        } else if (isFileIdentical(cloudPath, localPath, (FileMetadata) fileMeta)) {
+        } else if (isFileIdentical(localPath, (FileMetadata) fileMeta)) {
             new AlertWindow("Identical files", "The file already exists").informationWindow();
         } else {
             download = true;
         }
-        if (download) {
-            try {
-                dbxClient.downloadFile(localPath, cloudPath);
-            } catch (IOException | DbxException | NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+        if (!download) {
+            return;
         }
-//        projectController.importProject(localPath);
+        try {
+            dbxClient.downloadFile(localPath, cloudPath);
+        } catch (IOException | DbxException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        projectController.importProject(localPath);
     }
 
     private Metadata getFile(String cloudPath) {
@@ -189,14 +177,13 @@ public class CloudServiceController implements CloudSelectionViewController.View
         return fileMeta;
     }
 
-    private boolean isFileIdentical(String cloudPath, String localPath, FileMetadata fileMeta) {
+    private boolean isFileIdentical(String localPath, FileMetadata fileMeta) {
         return fileMeta.getContentHash().equals(dbxClient.getHash(localPath));
     }
 
-    private boolean isGFileIdentical(File localFile, File cloudFile) throws IOException {
+    private boolean isGFileIdentical(File localFile, com.google.api.services.drive.model.File cloudFile) throws IOException {
         String localChecksum = gDriveClient.getHash(localFile);
-        String cloudCheckusm = gDriveClient.getHash(cloudFile);
-        return localChecksum.equals(cloudCheckusm);
+        return localChecksum.equals(cloudFile.getAppProperties().get("hash"));
     }
 
     /**
