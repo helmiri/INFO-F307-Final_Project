@@ -43,7 +43,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
         ioController = new IOController(user_db, project_db, stage, scene);
-        ioController.setViewController(viewController);
+        //ioController.setViewController(viewController);
     }
 
 
@@ -65,6 +65,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
             new AlertWindow("Error", "" + e).errorWindow();
         }
         viewController = loader.getController();
+        ioController.setViewController(viewController);
+
         viewController.setListener(this);
         stage.setScene(scene);
         stage.sizeToScene();
