@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="googledrive">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/googledrive" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/googledrive" recursive="false" />
+  </library>
+</component>
