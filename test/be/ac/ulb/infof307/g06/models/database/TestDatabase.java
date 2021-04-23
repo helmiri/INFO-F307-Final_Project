@@ -18,6 +18,8 @@ public class TestDatabase {
     protected List<String> dbFields;
     protected UserDB userDB;
     protected ProjectDB projectDB;
+    protected CalendarDB calendarDB;
+
 
     public TestDatabase() throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
@@ -28,6 +30,7 @@ public class TestDatabase {
         db.close();
         userDB.disconnectDB();
         projectDB.disconnectDB();
+        calendarDB.disconnectDB();
         File dbFile = new File(DB_PATH);
         if (!dbFile.delete()) {
             System.out.println("Unable to delete testDB. Connection left open?");
@@ -57,6 +60,7 @@ public class TestDatabase {
         }
         userDB = new UserDB(DB_PATH);
         projectDB = new ProjectDB(DB_PATH);
+        calendarDB = new CalendarDB(DB_PATH);
     }
 
     @SuppressWarnings("SqlWithoutWhere")
@@ -73,6 +77,9 @@ public class TestDatabase {
         state.executeUpdate("DELETE FROM admin");
         state.executeUpdate("DELETE FROM Invitations");
         state.executeUpdate("DELETE FROM Collaborator");
+        state.executeUpdate("DELETE FROM Tag");
+        state.executeUpdate("DELETE FROM Tag_projects");
+        state.executeUpdate("DELETE FROM tasks_users");
         state.close();
     }
 
