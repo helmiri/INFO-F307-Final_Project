@@ -46,7 +46,7 @@ public abstract class Database {
     }
 
     public User getCurrentUser() {
-        return Database.currentUser;
+        return currentUser;
     }
 
     public void disconnectDB() throws SQLException {
