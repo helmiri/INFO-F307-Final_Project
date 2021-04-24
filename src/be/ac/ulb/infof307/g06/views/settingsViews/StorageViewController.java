@@ -16,8 +16,6 @@ import java.sql.SQLException;
 
 public class StorageViewController {
     @FXML
-    private Button backBtn;
-    @FXML
     private TextField accessTokenField;
     @FXML
     private TextField clientIDField;
@@ -45,19 +43,17 @@ public class StorageViewController {
      * @throws SQLException
      */
     public void events(ActionEvent actionEvent) throws SQLException {
-        if (actionEvent.getSource() == backBtn) {
-            listener.onBackButtonClicked();
-        } else if (actionEvent.getSource() == saveBtn) {
-            if (listener.saveSettings(clientIDField.getText(), accessTokenField.getText(), limitField.getText(), this)) {
-                new AlertWindow("Save", "Changes saved").informationWindow();
-            }
-        } else if (actionEvent.getSource() == helpBtn) {
-            try {
-                openLink();
-            } catch (IOException | URISyntaxException e) {
-                new AlertWindow("Error", "An error has occurred").errorWindow();
-            }
-        }
+         if (actionEvent.getSource() == saveBtn) {
+             if (listener.saveSettings(clientIDField.getText(), accessTokenField.getText(), limitField.getText(), this)) {
+                 new AlertWindow("Save", "Changes saved").informationWindow();
+             }
+         } else if (actionEvent.getSource() == helpBtn) {
+             try {
+                 openLink();
+             } catch (IOException | URISyntaxException e) {
+                 new AlertWindow("Error", "An error has occurred").errorWindow();
+             }
+         }
     }
 
     /**
@@ -93,7 +89,7 @@ public class StorageViewController {
         if (isAdmin) {
             limitField.clear();
             UnitValue limit = refreshStorageUse(diskLimit, diskUsage);
-            limitField.setPromptText(Long.toString(limit.getValue()) + limit.getUnit());
+            limitField.setPromptText(limit.getValue() + limit.getUnit());
         }
     }
 
@@ -124,8 +120,6 @@ public class StorageViewController {
     //--------------- LISTENER ----------------
 
     public interface ViewListener {
-        void onBackButtonClicked();
-
         boolean saveSettings(String clientID, String accessToken, String limit, StorageViewController storageViewController) throws SQLException;
     }
 

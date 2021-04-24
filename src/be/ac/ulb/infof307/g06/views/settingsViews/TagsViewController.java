@@ -15,8 +15,6 @@ import java.util.List;
 public class TagsViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
-    private Button backBtn;
-    @FXML
     private Button addBtn;
     @FXML
     private Button updateBtn;
@@ -53,9 +51,6 @@ public class TagsViewController {
      */
     @FXML
     private void events(ActionEvent event) throws Exception {
-        if (event.getSource() == backBtn) {
-            listener.onBackButtonClicked();
-        }
         if (event.getSource() == addBtn) {
             listener.onAddButtonClicked(defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
         }
@@ -155,7 +150,6 @@ public class TagsViewController {
         this.listener = listener; }
 
     public interface ViewListener {
-        void onBackButtonClicked();
 
         void onAddButtonClicked(String text, String toRGBCode);
 
