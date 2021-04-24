@@ -128,7 +128,9 @@ public class UserDB extends Database {
 
     public boolean isAdmin(int id) throws SQLException {
         ResultSet res = sqlQuery("SELECT id from admin where id='" + id + "'");
-        boolean bool = res.isClosed();
+
+        boolean bool = !res.isClosed();
+
         if (!bool) {
             res.close();
         }
@@ -195,8 +197,11 @@ public class UserDB extends Database {
         if (usrInfo.isClosed()) {
             return null;
         }
-        User user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"),
-                usrInfo.getString("lName"), usrInfo.getString("email"), isAdmin(usrInfo.getInt("id")));
+        User user = new User(usrInfo.getString("userName"),
+                usrInfo.getString("fName"),
+                usrInfo.getString("lName"),
+                usrInfo.getString("email"),
+                isAdmin(usrInfo.getInt("id")));
         setCloudCredentials(usrInfo, user);
         user.setId(usrInfo.getInt("id"));
         usrInfo.close();
