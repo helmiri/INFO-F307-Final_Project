@@ -136,7 +136,11 @@ public class IOController extends Controller {
             String directory = file.getAbsoluteFile().getParent();
             String jsonFile = directory + "/file.json";
             unzip(archivePath, directory);
-            if (isProjectInDb(jsonFile)) return;
+            if (isProjectInDb(jsonFile)) {
+                deleteFile(jsonFile);
+                new AlertWindow("Failure", "Failure to import project : already in the database.").errorWindow();
+                return;
+            }
             BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
             int count = 0, parentID = 0 ,id = 0;
             String line = reader.readLine();
