@@ -1,8 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
-import be.ac.ulb.infof307.g06.controllers.settingsControllers.StorageController;
-import be.ac.ulb.infof307.g06.controllers.settingsControllers.TagsController;
+import be.ac.ulb.infof307.g06.controllers.settingsControllers.SettingsController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.Project;
@@ -93,8 +92,8 @@ public class MainMenuController extends Controller implements MenuViewController
 
     @Override
     public void showSettings() {
-        String fxmlFileName = "SettingsMenu.fxml";
-        loadMenu(fxmlFileName);
+        SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
+        controller.show();
     }
 
     private void loadMenu(String fxmlFileName) {
@@ -122,17 +121,6 @@ public class MainMenuController extends Controller implements MenuViewController
         controller.show();
     }
 
-    @Override
-    public void showStorage() {
-        StorageController controller = new StorageController(user_db, project_db, stage, scene);
-        controller.show();
-    }
-
-    @Override
-    public void showTags() {
-        TagsController controller = new TagsController(user_db, project_db, stage, scene);
-        controller.show();
-    }
 
     @Override
     public void showCalendar() {

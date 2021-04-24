@@ -14,12 +14,6 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    User(String userName, String firstName, String lastName, String email, boolean isAdmin, String accessToken, String clientID) {
-        this(userName, firstName, lastName, email, isAdmin);
-        this.accessToken = accessToken;
-        this.clientID = clientID;
-    }
-
     public boolean isAdmin() {
         return isAdmin;
     }

@@ -6,44 +6,34 @@ import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.settingsViews.StorageViewController;
-import be.ac.ulb.infof307.g06.views.settingsViews.TagsViewController;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class StorageController extends Controller implements StorageViewController.ViewListener {
     User currentUser;
+    StorageViewController storageViewController;
 
     //--------------- METHODS ----------------
-    public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+    public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, StorageViewController storageViewController) {
         super(user_db, project_db, stage, scene);
+        this.storageViewController = storageViewController;
     }
 
     @Override
     public void show() {
-        StorageViewController storageViewController;
         currentUser = user_db.getCurrentUser();
         try {
-            storageViewController = getStorageViewController();
             storageViewController.setListener(this);
-            stage.setScene(scene);
-            stage.sizeToScene();
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin(),
+            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin(),
                     currentUser.getAccessToken(), currentUser.getClientID());
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private StorageViewController getStorageViewController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(TagsViewController.class.getResource("StorageView.fxml"));
-        scene = new Scene(loader.load());
-        return loader.getController();
-    }
 
     @Override
     public boolean saveSettings(String clientID, String accessToken, String limit, StorageViewController storageViewController) throws SQLException {
@@ -59,7 +49,7 @@ public class StorageController extends Controller implements StorageViewControll
                 }
             }
         }
-        storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.isAdmin(),
+        storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin(),
                 currentUser.getAccessToken(), currentUser.getClientID());
         return res;
     }
@@ -90,9 +80,4 @@ public class StorageController extends Controller implements StorageViewControll
         return res;
     }
 
-    @Override
-    public void onBackButtonClicked() {
-        stage.setScene(prevScene);
-        stage.sizeToScene();
-    }
 }
