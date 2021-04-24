@@ -12,6 +12,8 @@ import javafx.scene.layout.Pane;
 
 
 public class SettingsViewController {
+    private final String hoverColor = "#95dbfa";
+    private final String defaultColor = "#4fc3f7";
     @FXML
     private AnchorPane newAnchor;
     @FXML
@@ -79,17 +81,17 @@ public class SettingsViewController {
     public void hover(MouseEvent mouseEvent) {
         Object source = mouseEvent.getSource();
         if (languageBtn.equals(source)) {
-            setButtonStyle(languageBtn, "#95dbfa");
+            setButtonStyle(languageBtn, hoverColor);
         } else if (storageBtn.equals(source)) {
-            setButtonStyle(storageBtn, "#95dbfa");
+            setButtonStyle(storageBtn, hoverColor);
         } else if (aboutBtn.equals(source)) {
-            setButtonStyle(aboutBtn, "#95dbfa");
+            setButtonStyle(aboutBtn, hoverColor);
         } else if (helpBtn.equals(source)) {
-            setButtonStyle(helpBtn, "#95dbfa");
+            setButtonStyle(helpBtn, hoverColor);
         } else if (tagsBtn.equals(source)) {
-            setButtonStyle(tagsBtn, "#95dbfa");
+            setButtonStyle(tagsBtn, hoverColor);
         } else if (backBtn.equals(source)) {
-            setButtonStyle(backBtn, "#95dbfa");
+            setButtonStyle(backBtn, hoverColor);
         }
     }
 
@@ -101,12 +103,15 @@ public class SettingsViewController {
     }
 
     private void swapButtonStyles(Button current) {
-        setButtonStyle(current, "#95dbfa");
-        setButtonStyle(previousClicked, "#4fc3f7");
+        if (current == previousClicked) {
+            return;
+        }
+        setButtonStyle(current, hoverColor);
+        setButtonStyle(previousClicked, defaultColor);
         previousClicked = current;
     }
 
-    public void unHover(MouseEvent mouseEvent) {
+    public void exitHover(MouseEvent mouseEvent) {
         Object source = mouseEvent.getSource();
         if (languageBtn.equals(source)) {
             setIfNotClicked(languageBtn);
@@ -127,7 +132,11 @@ public class SettingsViewController {
         if (previousClicked == source) {
             return;
         }
-        setButtonStyle(source, "#4fc3f7");
+        setButtonStyle(source, defaultColor);
+    }
+
+    public void setDefaultScene() {
+        tagsBtn.fire();
     }
 
     public interface ViewListener {

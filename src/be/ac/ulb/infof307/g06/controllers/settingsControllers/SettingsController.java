@@ -27,6 +27,7 @@ public class SettingsController extends Controller implements SettingsViewContro
         }
         SettingsViewController controller = loader.getController();
         controller.setListener(this);
+        controller.setDefaultScene();
         stage.setScene(new Scene(pane));
         stage.sizeToScene();
     }
