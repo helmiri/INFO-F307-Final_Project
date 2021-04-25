@@ -104,6 +104,24 @@
             </ScrollPane>
          </children>
       </VBox>
+      <Line endX="1394.0" layoutX="104.0" layoutY="78.0" startX="-100.0" stroke="WHITE" />
+      <Polygon fill="#4ec8f50d" layoutX="-158.0" layoutY="383.0" points="156.59999084472656, 516.0, 158.59999084472656, 29.0, 685.5999755859375, 516.0" stroke="TRANSPARENT" strokeType="INSIDE">
+         <effect>
+            <Bloom />
+         </effect>
+      </Polygon>
+      <Polygon fill="#4ec8f50d" layoutX="-197.0" layoutY="383.0" points="196.00001525878906, 516.0, 195.59999084472656, 32.0, 653.5999755859375, 516.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="359.0" points="216.00001525878906, 539.2000122070312, 205.59999084472656, 33.0, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="-163.0" layoutY="323.0" points="162.00001525878906, 576.0, 161.59999084472656, 93.0, 483.5999755859375, 576.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4ec8f50d" layoutX="-157.0" layoutY="-30.0" points="156.59999084472656, 516.0, 158.59999084472656, 29.0, 550.5999755859375, 29.0" stroke="TRANSPARENT" strokeType="INSIDE">
+         <effect>
+            <Bloom />
+         </effect>
+      </Polygon>
+      <Polygon fill="#4ec8f50d" layoutX="-195.0" layoutY="-47.0" points="196.00001525878906, 516.0, 195.59999084472656, 32.0, 534.5999755859375, 32.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4ec8f50d" layoutX="-204.0" layoutY="-30.0" points="205.59999084472656, 517.0, 205.59999084472656, 33.0, 456.5999755859375, 33.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Polygon fill="#4fc3f70d" layoutX="-161.0" layoutY="-37.0" points="161.59999084472656, 522.0, 161.59999084472656, 26.0, 357.5999755859375, 26.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e1e1" height="77.0" stroke="#e1e1e1" strokeType="INSIDE" width="1500.0" />
       <Pane layoutX="119.0" layoutY="107.0" prefHeight="704.0" prefWidth="380.0" styleClass="container" stylesheets="@styles.css">
          <children>
             <Button fx:id="overallViewBtn" layoutX="89.0" layoutY="61.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@styles.css" text="OVERALL VIEW" textFill="WHITE">
@@ -130,24 +148,6 @@
             </Button>
          </children>
       </Pane>
-      <Line endX="1394.0" layoutX="104.0" layoutY="78.0" startX="-100.0" stroke="WHITE" />
-      <Polygon fill="#4ec8f50d" layoutX="-158.0" layoutY="383.0" points="156.59999084472656, 516.0, 158.59999084472656, 29.0, 685.5999755859375, 516.0" stroke="TRANSPARENT" strokeType="INSIDE">
-         <effect>
-            <Bloom />
-         </effect>
-      </Polygon>
-      <Polygon fill="#4ec8f50d" layoutX="-197.0" layoutY="383.0" points="196.00001525878906, 516.0, 195.59999084472656, 32.0, 653.5999755859375, 516.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="359.0" points="216.00001525878906, 539.2000122070312, 205.59999084472656, 33.0, 598.5999755859375, 540.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4fc3f70d" layoutX="-163.0" layoutY="323.0" points="162.00001525878906, 576.0, 161.59999084472656, 93.0, 483.5999755859375, 576.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4ec8f50d" layoutX="-157.0" layoutY="-30.0" points="156.59999084472656, 516.0, 158.59999084472656, 29.0, 550.5999755859375, 29.0" stroke="TRANSPARENT" strokeType="INSIDE">
-         <effect>
-            <Bloom />
-         </effect>
-      </Polygon>
-      <Polygon fill="#4ec8f50d" layoutX="-195.0" layoutY="-47.0" points="196.00001525878906, 516.0, 195.59999084472656, 32.0, 534.5999755859375, 32.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4ec8f50d" layoutX="-204.0" layoutY="-30.0" points="205.59999084472656, 517.0, 205.59999084472656, 33.0, 456.5999755859375, 33.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Polygon fill="#4fc3f70d" layoutX="-161.0" layoutY="-37.0" points="161.59999084472656, 522.0, 161.59999084472656, 26.0, 357.5999755859375, 26.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e1e1" height="77.0" stroke="#e1e1e1" strokeType="INSIDE" width="1500.0" />
       <Label layoutX="33.0" layoutY="3.0" prefHeight="70.0" prefWidth="283.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics " textFill="WHITE">
          <font>
             <Font size="48.0" />
