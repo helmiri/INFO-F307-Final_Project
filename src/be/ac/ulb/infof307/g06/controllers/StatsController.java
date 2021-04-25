@@ -11,7 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,7 +63,7 @@ public class StatsController extends Controller implements StatsViewController.V
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
-            new AlertWindow("Error", "An error has occured. Try to restart the application." +e).errorWindow();
+            new AlertWindow("Error", "An error has occurred. Try to restart the application." +e).errorWindow();
         }
         statsView = loader.getController();
         statsView.setListener(this);
@@ -118,7 +121,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * Displays projects on the tree table view
      *
      * @param projects List<Integer>
-     * @param root TreeItem<Statistics>
+     * @param root TreeItem<Project>
      * @throws DatabaseException e
      */
     @Override
@@ -223,7 +226,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * Transforms the tree table view into strings and writes it down in a file.
      *
      * @param fileName String
-     * @param root     TreeItem<Statistics>
+     * @param root     TreeItem<Project>
      */
     @Override
     public void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) {
@@ -296,7 +299,7 @@ public class StatsController extends Controller implements StatsViewController.V
      *
      * @param fileName String : name given to the file
      * @param path     String : path given for the destination of the file exported
-     * @param root     TreeItem<Statistics> : root of the TreeTableView
+     * @param root     TreeItem<Project> : root of the TreeTableView
      */
     @Override
     public void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root) {
@@ -325,7 +328,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param currentProjectID Integer : ID of the current object statistics
      * @param currentProject   Statistics : the information to add in the content
      * @param content          String : CSV format
-     * @param root              TreeItem<Statistics> : root of the TreeTableView
+     * @param root              TreeItem<Project> : root of the TreeTableView
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
@@ -368,7 +371,7 @@ public class StatsController extends Controller implements StatsViewController.V
     }
 
     /**
-     * Writes informations in a file for a json format.
+     * Writes information in a file for a json format.
      *
      * @param chosenString String
      * @param fileName     String
@@ -392,7 +395,7 @@ public class StatsController extends Controller implements StatsViewController.V
      */
     public void emptyStats(List<Integer> counts){
         for(int i=0;i<3;i++)
-            counts.set(i, 0);
+            counts.add(0);
     }
 
     /**

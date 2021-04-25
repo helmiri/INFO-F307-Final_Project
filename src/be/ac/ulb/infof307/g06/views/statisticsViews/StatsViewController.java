@@ -223,15 +223,15 @@ public class StatsViewController{
     /**
      * Shows root in the tree table view.
      *
-     * @param root TreeItem<Statistics>
+     * @param root TreeItem<Project>
      */
     public void expandRoot(TreeItem<Project> root){root.setExpanded(true);}
 
     /**
      * Adds a child to the related parent in the TreeTableView.
      *
-     * @param parent TreeItem<Statistics>
-     * @param child TreeItem<Statistics>
+     * @param parent TreeItem<Project>
+     * @param child TreeItem<Project>
      */
     public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
         parent.getChildren().add(child);
