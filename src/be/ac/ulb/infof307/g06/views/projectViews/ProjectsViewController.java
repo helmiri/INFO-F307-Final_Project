@@ -144,8 +144,12 @@ public class ProjectsViewController {
             listener.uploadProject(selectedProject);
         } else if (event.getSource() == addTaskbtn) {
             if (selectedProject != null) {
-                listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
-                displayTask();
+                if (startDateTask.getValue() != null && endDateTask.getValue() != null) {
+                    listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
+                    displayTask();
+                } else {
+                    new AlertWindow("Warning", "Task needs a start and end date.").warningWindow();
+                }
             } else {
                 new AlertWindow("Warning", "Please select a project before adding a tag.").warningWindow();
             }
