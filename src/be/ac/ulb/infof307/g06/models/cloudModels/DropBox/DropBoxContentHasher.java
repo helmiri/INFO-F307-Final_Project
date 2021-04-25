@@ -128,7 +128,7 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
         }
     }
 
-    public static String hex(byte[] data) {
+    public String hex(byte[] data) {
         char[] hex_digits = new char[]{
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'a', 'b', 'c', 'd', 'e', 'f'};

@@ -73,6 +73,7 @@ public class StorageController extends Controller implements StorageViewControll
         GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(user_db.getCurrentUser().getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
+            System.out.println(authorization.getUrl());
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }

@@ -108,7 +108,8 @@ public class DropBoxAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return DropBoxContentHasher.hex(hasher.digest());
+        DropBoxContentHasher dropBoxContentHasher = new DropBoxContentHasher();
+        return dropBoxContentHasher.hex(hasher.digest());
     }
 
 }

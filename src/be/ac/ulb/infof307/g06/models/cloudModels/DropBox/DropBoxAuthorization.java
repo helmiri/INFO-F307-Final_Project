@@ -23,7 +23,7 @@ public class DropBoxAuthorization {
 
     public DropBoxAuthorization() throws JsonReader.FileLoadException {
         // Only display important log messages.
-        Logger.getLogger("").setLevel(Level.WARNING);
+        Logger.getLogger("").setLevel(Level.SEVERE);
         // Read app info file (contains app key and app secret)
         String argAppInfoFile = Objects.requireNonNull(DropBoxAuthorization.class.getResource("credentials.json")).getFile();
         appInfo = DbxAppInfo.Reader.readFromFile(argAppInfoFile);
@@ -47,13 +47,13 @@ public class DropBoxAuthorization {
         DbxRequestConfig requestConfig = new DbxRequestConfig("I(Should)PlanAll");
         webAuth = new DbxWebAuth(requestConfig, appInfo);
 
-        // TokenAccessType.OFFLINE means refresh_token + access_token. ONLINE means access_token only.
+        // TokenAccessType.OFFLINE means refresh_token + access_token
         DbxWebAuth.Request webAuthRequest = DbxWebAuth.newRequestBuilder().withNoRedirect()
                 .withTokenAccessType(TokenAccessType.OFFLINE).build();
         return webAuth.authorize(webAuthRequest);
     }
 
-    public DbxAuthFinish authorize(String code) throws IOException, DbxException {
+    public DbxAuthFinish authorize(String code) throws DbxException {
         code = code.trim();
         return webAuth.finishFromCode(code);
     }

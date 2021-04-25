@@ -16,11 +16,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GoogleDriveAuthorization {
-    private final String TOKENS_DIRECTORY_PATH = "tokens";
     private final String userName;
-
+    private AuthorizationCodeInstalledApp authorization;
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
@@ -40,6 +41,7 @@ public class GoogleDriveAuthorization {
      * @throws IOException If the credentials.json file cannot be found.
      */
     public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT) throws IOException {
+        Logger.getLogger("").setLevel(Level.SEVERE);
         // Load client secrets.
         InputStream in = GoogleDriveAuthorization.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
@@ -48,13 +50,18 @@ public class GoogleDriveAuthorization {
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JacksonFactory.getDefaultInstance(), new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
+        String TOKENS_DIRECTORY_PATH = "tokens";
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JacksonFactory.getDefaultInstance(), clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize(userName);
+        authorization = new AuthorizationCodeInstalledApp(flow, receiver);
+        return authorization.authorize(userName);
     }
 
+    public String getUrl() {
+        return authorization.getUrl();
+    }
 }
