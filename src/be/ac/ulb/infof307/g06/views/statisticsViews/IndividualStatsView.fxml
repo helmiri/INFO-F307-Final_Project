@@ -15,13 +15,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="900.0" prefWidth="1500.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController">
+<AnchorPane prefHeight="900.0" prefWidth="1500.0" stylesheets="@StatsView.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController">
    <children>
       <VBox layoutX="873.0" layoutY="107.0" prefHeight="704.0" prefWidth="258.0" spacing="50.0">
          <children>
-            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Collaborators" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@StatsView.css" text="Collaborators" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -33,9 +33,9 @@
                   </Label>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Tasks" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@StatsView.css" text="Tasks" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -47,9 +47,9 @@
                   </Label>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Sub projects" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@StatsView.css" text="Sub projects" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -66,9 +66,9 @@
       <Line endX="1394.0" layoutX="104.0" layoutY="77.0" startX="-100.0" stroke="WHITE" />
       <VBox layoutX="1161.0" layoutY="107.0" prefHeight="704.0" prefWidth="258.0" spacing="50.0">
          <children>
-            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Starter date" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@StatsView.css" text="Starter date" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -80,9 +80,9 @@
                   </Label>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Estimated date" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@StatsView.css" text="Estimated date" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -94,9 +94,9 @@
                   </Label>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@styles.css">
+            <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@styles.css" text="Finish date" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@StatsView.css" text="Finish date" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
@@ -132,9 +132,9 @@
       <Polygon fill="#4ec8f50d" layoutX="-205.0" layoutY="-27.0" points="205.59999084472656, 517.0, 205.59999084472656, 33.0, 456.5999755859375, 33.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Polygon fill="#4fc3f70d" layoutX="-162.0" layoutY="-34.0" points="161.59999084472656, 522.0, 161.59999084472656, 26.0, 357.5999755859375, 26.0" stroke="TRANSPARENT" strokeType="INSIDE" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e1e1" height="77.0" stroke="#e1e1e1" strokeType="INSIDE" width="1500.0" />
-      <Pane layoutX="119.0" layoutY="107.0" prefHeight="704.0" prefWidth="380.0" styleClass="container" stylesheets="@styles.css">
+      <Pane layoutX="119.0" layoutY="107.0" prefHeight="704.0" prefWidth="380.0" styleClass="container" stylesheets="@StatsView.css">
          <children>
-            <Button fx:id="overallViewBtn" layoutX="89.0" layoutY="61.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@styles.css" text="OVERALL VIEW" textFill="WHITE">
+            <Button fx:id="overallViewBtn" layoutX="89.0" layoutY="61.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@StatsView.css" text="OVERALL VIEW" textFill="WHITE">
                <font>
                   <Font name="Cambria" size="18.0" />
                </font>
@@ -151,24 +151,24 @@
                </font>
             </Button>
             <Text fx:id="msgExportText" fill="#407a4b" layoutX="45.0" layoutY="675.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="289.99999999999994" />
-            <Button fx:id="projectViewBtn" layoutX="89.0" layoutY="273.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@styles.css" text="PROJECT VIEW" textFill="WHITE">
+            <Button fx:id="projectViewBtn" layoutX="89.0" layoutY="273.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="158.0" prefWidth="202.0" styleClass="stats-choice" stylesheets="@StatsView.css" text="PROJECT VIEW" textFill="WHITE">
                <font>
                   <Font name="Cambria" size="18.0" />
                </font>
             </Button>
          </children>
       </Pane>
-      <Label layoutX="33.0" layoutY="3.0" prefHeight="70.0" prefWidth="283.0" styleClass="shadow" stylesheets="@styles.css" text="Statistics " textFill="WHITE">
+      <Label layoutX="33.0" layoutY="3.0" prefHeight="70.0" prefWidth="283.0" styleClass="shadow" stylesheets="@StatsView.css" text="Statistics " textFill="WHITE">
          <font>
             <Font size="48.0" />
          </font>
       </Label>
-      <Label layoutX="44.0" layoutY="59.0" prefHeight="17.0" prefWidth="151.0" styleClass="shadow" stylesheets="@styles.css" text="Individual project view" textFill="WHITE">
+      <Label layoutX="44.0" layoutY="59.0" prefHeight="17.0" prefWidth="151.0" styleClass="shadow" stylesheets="@StatsView.css" text="Individual project view" textFill="WHITE">
          <font>
             <Font name="DejaVu Sans Condensed Bold" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="backToProjectMenu" layoutX="1254.0" layoutY="817.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" styleClass="container" stylesheets="@styles.css" text="BACK" textFill="WHITE">
+      <Button fx:id="backToProjectMenu" layoutX="1254.0" layoutY="817.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" styleClass="container" stylesheets="@StatsView.css" text="BACK" textFill="WHITE">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>

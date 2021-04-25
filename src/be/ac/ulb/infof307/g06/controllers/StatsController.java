@@ -386,13 +386,13 @@ public class StatsController extends Controller implements StatsViewController.V
     }
 
     /**
-     * ??
+     * Puts value in the List at "0".
      *
-     * @param counts
+     * @param counts List<Integer>
      */
     public void emptyStats(List<Integer> counts){
-        for(int k=0;k<3;k++)
-            counts.add(0);
+        for(int i=0;i<3;i++)
+            counts.set(i, 0);
     }
 
     /**
