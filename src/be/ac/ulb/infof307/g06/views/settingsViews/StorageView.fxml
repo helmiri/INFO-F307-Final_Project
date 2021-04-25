@@ -44,36 +44,39 @@
             <Cursor fx:constant="HAND"/>
          </cursor>
       </Button>
-      <Text fill="#070707" layoutX="389.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disk usage">
+      <Text fill="#070707" layoutX="75.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disk usage">
          <font>
             <Font size="24.0"/>
          </font>
       </Text>
-      <ProgressBar fx:id="diskBar" layoutX="397.0" layoutY="157.0" prefHeight="18.0" prefWidth="480.0" progress="0.0"/>
-      <Text fx:id="usageText" layoutX="215.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0"
+      <ProgressBar fx:id="diskBar" layoutX="293.0" layoutY="157.0" prefHeight="18.0" prefWidth="584.0" progress="0.0"/>
+      <Text fx:id="usageText" layoutX="106.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0"
             wrappingWidth="165.18308448791504">
          <font>
             <Font size="18.0"/>
          </font>
       </Text>
-      <Text layoutX="355.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DropBox Credentials">
+      <Text layoutX="75.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cloud service integration">
          <font>
             <Font size="24.0"/>
          </font>
       </Text>
-      <Text fx:id="adminText" layoutX="423.0" layoutY="558.0" strokeType="OUTSIDE" strokeWidth="0.0"
+      <Text fx:id="adminText" layoutX="75.0" layoutY="560.0" strokeType="OUTSIDE" strokeWidth="0.0"
             text="Admin settings" visible="false">
          <font>
             <Font size="24.0"/>
          </font>
       </Text>
       <TextField fx:id="limitField" alignment="CENTER" layoutX="454.0" layoutY="630.0" prefHeight="26.0"
-                 prefWidth="480.0" visible="false"/>
+                 prefWidth="452.0" visible="false"/>
       <Text fx:id="limitText" layoutX="198.0" layoutY="650.0" strokeType="OUTSIDE" strokeWidth="0.0"
             text="Disk usage limit (in MB)" visible="false">
          <font>
             <Font size="18.0"/>
          </font>
       </Text>
+      <Separator layoutX="75.0" layoutY="91.0" prefHeight="18.0" prefWidth="855.0"/>
+      <Separator layoutX="75.0" layoutY="263.0" prefHeight="18.0" prefWidth="855.0"/>
+      <Separator fx:id="separator" layoutX="75.0" layoutY="557.0" prefHeight="18.0" prefWidth="855.0" visible="false"/>
    </children>
 </AnchorPane>

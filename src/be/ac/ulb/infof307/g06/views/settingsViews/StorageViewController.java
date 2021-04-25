@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
@@ -15,6 +16,8 @@ import java.net.URL;
 import java.sql.SQLException;
 
 public class StorageViewController {
+    @FXML
+    private Separator separator;
     @FXML
     private TextField accessTokenField;
     @FXML
@@ -86,9 +89,9 @@ public class StorageViewController {
         clientIDField.clear();
         clientIDField.setPromptText(clientID);
 
+        UnitValue limit = refreshStorageUse(diskLimit, diskUsage);
         if (isAdmin) {
             limitField.clear();
-            UnitValue limit = refreshStorageUse(diskLimit, diskUsage);
             limitField.setPromptText(limit.getValue() + limit.getUnit());
         }
     }
@@ -109,6 +112,7 @@ public class StorageViewController {
         adminText.setVisible(true);
         limitText.setVisible(true);
         limitField.setVisible(true);
+        separator.setVisible(true);
 
     }
 
