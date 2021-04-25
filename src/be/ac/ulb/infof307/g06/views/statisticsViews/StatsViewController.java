@@ -248,7 +248,6 @@ public class StatsViewController{
         directoryChooser.setInitialDirectory(new File("src"));
         File selectedDirectory = directoryChooser.showDialog(new Stage());
         if (selectedDirectory != null) {
-            System.out.println(isOverallView);
             if (event.getSource() == exportJSONBtn && !isOverallView) {
                 if (fileName.equals("")) { listener.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
                 else { listener.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }

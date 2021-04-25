@@ -311,7 +311,7 @@ public class StatsController extends Controller implements StatsViewController.V
             }
             csv.write(content);
             csv.close();
-            new AlertWindow("Success", "The export succeeded !").informationWindow();
+            new AlertWindow("Success", "Success in exporting statistics.").informationWindow();
         }catch(FileNotFoundException e){
             new AlertWindow("Error", "Couldn't find or access to this file: "+e).errorWindow();
         }catch (SQLException e) {
@@ -354,7 +354,7 @@ public class StatsController extends Controller implements StatsViewController.V
             content += user_db.getCurrentUser().getUserName()+","+counts.get(2) +","+ counts.get(1)+","+counts.get(0);
             csv.write(content);
             csv.close();
-            new AlertWindow("Success", "The export succeeded !").informationWindow();
+            new AlertWindow("Success", "Success in exporting statistics.").informationWindow();
         }catch(FileNotFoundException e){
             new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
         }
@@ -379,7 +379,7 @@ public class StatsController extends Controller implements StatsViewController.V
             FileWriter fw = new FileWriter(path + fileName, false);
             fw.write(chosenString + "\n");
             fw.close();
-            new AlertWindow("Success", "The exportation succeeded !").informationWindow();
+            new AlertWindow("Success", "Success in exporting statistics.").informationWindow();
         } catch (IOException e) {
             new AlertWindow("Error", "Couldn't write in this file (" +path + fileName+") : "+ e).errorWindow();
         }
