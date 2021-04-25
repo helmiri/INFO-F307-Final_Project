@@ -225,7 +225,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             controller.show(files, cloudPane);
         } catch (IOException e) {
-            // TODO Exception
+            new AlertWindow("Error", "An error has occurred : " +e).errorWindow();
         }
         // TODO Download Stage
 //        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);

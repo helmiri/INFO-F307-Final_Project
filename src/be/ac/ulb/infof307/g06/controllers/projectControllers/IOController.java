@@ -57,7 +57,7 @@ public class IOController extends Controller {
             }
             //inputView.addProjectTitle(projectsTitleList);//i
         } catch (SQLException e) {
-            // TODO Exception
+            new AlertWindow("Error", "An error has occurred with the database : "+e).errorWindow();
         }
     }
 

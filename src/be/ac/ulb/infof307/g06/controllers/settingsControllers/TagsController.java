@@ -26,8 +26,7 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             viewController.initialize(project_db.getAllTags());
         } catch (SQLException e) {
-            e.printStackTrace();
-            // TODO EXCEPTION
+            new AlertWindow("Error", "An error has occurred with the database while getting the tags: "+e).errorWindow();
         }
     }
 

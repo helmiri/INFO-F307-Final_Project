@@ -121,7 +121,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * Displays projects on the tree table view
      *
      * @param projects List<Integer>
-     * @param root TreeItem<Statistics>
+     * @param root TreeItem<Project>
      * @throws DatabaseException e
      */
     @Override
@@ -226,7 +226,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * Transforms the tree table view into strings and writes it down in a file.
      *
      * @param fileName String
-     * @param root     TreeItem<Statistics>
+     * @param root     TreeItem<Project>
      */
     @Override
     public void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) {
@@ -299,7 +299,7 @@ public class StatsController extends Controller implements StatsViewController.V
      *
      * @param fileName String : name given to the file
      * @param path     String : path given for the destination of the file exported
-     * @param root     TreeItem<Statistics> : root of the TreeTableView
+     * @param root     TreeItem<Project> : root of the TreeTableView
      */
     @Override
     public void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root) {
@@ -328,7 +328,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param currentProjectID Integer : ID of the current object statistics
      * @param currentProject   Statistics : the information to add in the content
      * @param content          String : CSV format
-     * @param root              TreeItem<Statistics> : root of the TreeTableView
+     * @param root              TreeItem<Project> : root of the TreeTableView
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
