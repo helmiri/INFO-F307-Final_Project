@@ -11,7 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,7 +63,7 @@ public class StatsController extends Controller implements StatsViewController.V
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
-            new AlertWindow("Error", "An error has occured. Try to restart the application." +e).errorWindow();
+            new AlertWindow("Error", "An error has occurred. Try to restart the application." +e).errorWindow();
         }
         statsView = loader.getController();
         statsView.setListener(this);
@@ -368,7 +371,7 @@ public class StatsController extends Controller implements StatsViewController.V
     }
 
     /**
-     * Writes informations in a file for a json format.
+     * Writes information in a file for a json format.
      *
      * @param chosenString String
      * @param fileName     String
@@ -392,7 +395,7 @@ public class StatsController extends Controller implements StatsViewController.V
      */
     public void emptyStats(List<Integer> counts){
         for(int i=0;i<3;i++)
-            counts.set(i, 0);
+            counts.add(0);
     }
 
     /**
