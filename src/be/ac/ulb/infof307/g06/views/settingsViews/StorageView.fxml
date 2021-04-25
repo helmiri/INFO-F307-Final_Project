@@ -10,33 +10,9 @@
             fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.StorageViewController">
    <children>
       <HBox layoutX="232.0" layoutY="299.0" spacing="40.0"/>
-      <TextField fx:id="accessTokenField" alignment="CENTER" layoutX="410.0" layoutY="359.0" prefHeight="26.0"
-                 prefWidth="480.0"/>
-      <Text layoutX="189.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Access Token:"
-            wrappingWidth="165.18308448791504">
-         <font>
-            <Font size="18.0"/>
-         </font>
-      </Text>
-      <Text layoutX="189.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Client Identifier"
-            wrappingWidth="165.18308448791504">
-         <font>
-            <Font size="18.0"/>
-         </font>
-      </Text>
-      <TextField fx:id="clientIDField" alignment="CENTER" layoutX="410.0" layoutY="436.0" prefHeight="26.0"
-                 prefWidth="480.0"/>
       <Button fx:id="saveBtn" layoutX="515.0" layoutY="745.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="SAVE" textFill="WHITE">
-         <font>
-            <Font name="Calibri" size="24.0"/>
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <Button fx:id="helpBtn" layoutX="873.0" layoutY="32.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="68.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="WHITE">
+              prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="SAVE" textFill="WHITE"
+              visible="false">
          <font>
             <Font name="Calibri" size="24.0"/>
          </font>
@@ -78,5 +54,25 @@
       <Separator layoutX="75.0" layoutY="91.0" prefHeight="18.0" prefWidth="855.0"/>
       <Separator layoutX="75.0" layoutY="263.0" prefHeight="18.0" prefWidth="855.0"/>
       <Separator fx:id="separator" layoutX="75.0" layoutY="557.0" prefHeight="18.0" prefWidth="855.0" visible="false"/>
+      <Button fx:id="dBoxButton" layoutX="515.0" layoutY="375.0" mnemonicParsing="false" onAction="#events"
+              prefHeight="54.0" prefWidth="256.0" style="-fx-background-color: #4fc3f7;" text="Connect DropBox"
+              textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="24.0"/>
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND"/>
+         </cursor>
+      </Button>
+      <Button fx:id="gDriveButton" layoutX="191.0" layoutY="375.0" mnemonicParsing="false" onAction="#events"
+              prefHeight="54.0" prefWidth="252.0" style="-fx-background-color: #4fc3f7;" text="Connect GoogleDrive"
+              textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="24.0"/>
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND"/>
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

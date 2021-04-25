@@ -27,12 +27,12 @@ public class CloudSelectionViewController {
     }
 
     public void serviceSelect(ActionEvent actionEvent) {
+        stage.close();
         if (actionEvent.getSource() == GDriveButton) {
             listener.selectGoogleDrive();
         } else {
             listener.selectDropBox();
         }
-        stage.close();
     }
 
     public interface ViewListener {

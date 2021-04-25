@@ -14,11 +14,11 @@
     <orderEntry type="library" name="sqlite" level="project" />
     <orderEntry type="library" name="windows" level="project" />
     <orderEntry type="library" name="gson-2.8.6" level="project" />
-    <orderEntry type="library" name="dropbox" level="project" />
     <orderEntry type="library" name="view-11.8.3" level="project" />
     <orderEntry type="library" name="api" level="application" />
     <orderEntry type="library" name="gson" level="project" />
     <orderEntry type="library" name="googledrive" level="project" />
     <orderEntry type="library" name="calendarfx" level="project" />
+    <orderEntry type="library" name="dropbox" level="project" />
   </component>
 </module>

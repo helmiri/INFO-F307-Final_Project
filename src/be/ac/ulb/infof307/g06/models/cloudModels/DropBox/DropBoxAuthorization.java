@@ -4,9 +4,7 @@ import com.dropbox.core.*;
 import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.oauth.DbxCredential;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,14 +29,14 @@ public class DropBoxAuthorization {
         appInfo = DbxAppInfo.Reader.readFromFile(argAppInfoFile);
     }
 
-    public DbxCredential getAuthorization() throws IOException, DbxException {
+    public DbxCredential getAuthorization(String code) throws IOException, DbxException {
         // Run through Dropbox API authorization process
-        DbxAuthFinish authFinish = authorize();
+        DbxAuthFinish authFinish = authorize(code);
 
         // Save auth information the new DbxCredential instance. It also contains app_key and
         // app_secret which is required to do refresh call.
-        return new DbxCredential(Objects.requireNonNull(authFinish).getAccessToken(), authFinish
-                .getExpiresAt(), authFinish.getRefreshToken(), appInfo.getKey(), appInfo.getSecret());
+        return new DbxCredential(Objects.requireNonNull(authFinish).getAccessToken(),
+                authFinish.getExpiresAt(), authFinish.getRefreshToken(), appInfo.getKey(), appInfo.getSecret());
     }
 
     public String getUrl() {
@@ -55,14 +53,8 @@ public class DropBoxAuthorization {
         return webAuth.authorize(webAuthRequest);
     }
 
-    private DbxAuthFinish authorize() throws IOException, DbxException {
-
-        String code = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        if (code == null) {
-            return null;
-        }
+    public DbxAuthFinish authorize(String code) throws IOException, DbxException {
         code = code.trim();
         return webAuth.finishFromCode(code);
-
     }
 }

@@ -2,17 +2,23 @@ package be.ac.ulb.infof307.g06.controllers.projectControllers;
 
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAPI;
+import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAuthorization;
 import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAPI;
 import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAuthorization;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudSelectionViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudViewController;
+import be.ac.ulb.infof307.g06.views.projectViews.CodePromptViewController;
 import com.dropbox.core.DbxException;
+import com.dropbox.core.json.JsonReader;
+import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,11 +28,12 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener {
+public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener, CodePromptViewController.ViewListener {
     private final ProjectController projectController;
     private final UserDB userDB;
     private final String accessToken;
@@ -36,6 +43,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private boolean isDBox;
     private List<Metadata> dboxFiles;
     private List<com.google.api.services.drive.model.File> gDriveFiles;
+    private DropBoxAuthorization authorization;
 
     public CloudServiceController(ProjectController projectController, UserDB userDB) throws SQLException {
         this.projectController = projectController;
@@ -89,12 +97,27 @@ public class CloudServiceController implements CloudSelectionViewController.View
     @Override
     public void selectDropBox() {
         isDBox = true;
+        String url;
+        boolean expired = true;
         try {
-            if (dbxClient == null) {
-                dbxClient = new DropBoxAPI(accessToken, clientID);
+            DbxCredential credential = userDB.getDropBoxCredentials();
+            if (credential != null) {
+                Long expiration = credential.getExpiresAt();
+                expired = Instant.now().getEpochSecond() * 1000 > expiration;
+            }
+            if (dbxClient == null && expired) {
+                authorization = new DropBoxAuthorization();
+                url = authorization.getUrl();
+                FXMLLoader loader = new FXMLLoader(CodePromptViewController.class.getResource("CodePromptView.fxml"));
+                AnchorPane pane = loader.load();
+                CodePromptViewController controller = loader.getController();
+                controller.setListener(this);
+                controller.initialize(url, pane);
+            } else {
+                dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
             }
             dboxFiles = dbxClient.getFiles();
-        } catch (DbxException e) {
+        } catch (JsonReader.FileLoadException | IOException | DbxException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -105,7 +128,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
         if (localPath.isBlank()) {
             return;
         }
-
         if (isDBox) {
             downloadDropBox(cloudPath, localPath);
         } else {
@@ -190,7 +212,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
      * Sets the loader to show the stage to edit a project.
      */
     public void showCloudDownloadStage() {
-
         try {
             FXMLLoader loader = new FXMLLoader(CloudViewController.class.getResource("CloudView.fxml"));
             AnchorPane cloudPane = loader.load();
@@ -252,6 +273,27 @@ public class CloudServiceController implements CloudSelectionViewController.View
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onOKClicked(String code) {
+        try {
+            DbxCredential credential = userDB.getDropBoxCredentials();
+            if (credential == null) {
+                credential = authorization.getAuthorization(code);
+            }
+            dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
+        } catch (IOException | DbxException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onHyperlinkClicked(String url) {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(url);
+        clipboard.setContent(content);
     }
 }
 

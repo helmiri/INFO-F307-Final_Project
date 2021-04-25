@@ -3,6 +3,7 @@ package be.ac.ulb.infof307.g06.models.database;
 
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.User;
+import com.dropbox.core.oauth.DbxCredential;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +47,25 @@ public class UserDB extends Database {
         sqlUpdate("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
                 "email varchar(40), password varchar(20), status boolean, accessToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
         sqlUpdate("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit long)");
-        sqlUpdate("CREATE TABLE IF NOT EXISTS DropBoxCredentials(id integer, userID varchar(256), accountID varchar(256), accessToken varchar(256), expiration long, refreshToken varchar(256))");
+        sqlUpdate("CREATE TABLE IF NOT EXISTS DropBoxCredentials(id integer, accessToken varchar(256), expiration long, refreshToken varchar(256), appKey varchar(256), appSecret varchar(256))");
+    }
+
+    public void addDropBoxCredentials(DbxCredential credential) throws SQLException {
+        sqlUpdate("INSERT INTO DropBoxCredentials VALUES ('" + currentUser.getId() + "','"
+                + credential.getAccessToken() + "','" + credential.getExpiresAt() + "','" + credential.getRefreshToken() + "','"
+                + credential.getAppKey() + "','" + credential.getAppSecret() + "');");
+    }
+
+    public DbxCredential getDropBoxCredentials() throws SQLException {
+        ResultSet res;
+        res = sqlQuery("SELECT accessToken, expiration, refreshToken, appKey, appSecret from DropBoxCredentials where id='" + currentUser.getId() + "'");
+        if (res.isClosed()) {
+            return null;
+        }
+        DbxCredential credential = new DbxCredential(res.getString("accessToken"),
+                res.getLong("expiration"), res.getString("refreshToken"), res.getString("appKey"), res.getString("appSecret"));
+        res.close();
+        return credential;
     }
 
     public boolean isFirstBoot() throws SQLException {
