@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.models.database;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -57,4 +58,17 @@ class CalendarDBTest extends TestDatabase {
         assertEquals(expected, projects);
     }
 
+    @AfterEach
+    void tearDown() {
+    }
+
+    @Test
+    void replaceProject() throws SQLException {
+        calendarDB.addProject(project1, color1);
+        calendarDB.replaceProject(project1, "project1 edited");
+        Map<String, String> projects = calendarDB.getProjects();
+        Map<String, String> expected = new HashMap<>();
+        expected.put("project1 edited", color1);
+        assertEquals(expected, projects);
+    }
 }
