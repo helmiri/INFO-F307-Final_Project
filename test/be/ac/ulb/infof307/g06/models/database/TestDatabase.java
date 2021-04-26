@@ -42,6 +42,12 @@ public class TestDatabase {
 
     @BeforeAll
     void setup() throws SQLException, ClassNotFoundException {
+        File dbFile = new File(DB_PATH);
+        if (dbFile.exists()) {
+            if (!dbFile.delete()) {
+                System.out.println("ERROR: testDB.db file found and unable to be deleted.\nDelete the file to avoid test errors");
+            }
+        }
         db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
         dbFields = new ArrayList<>(5);
         dbFields.add("fName");
@@ -59,12 +65,7 @@ public class TestDatabase {
             }
             testData.add(i, userData);
         }
-        File dbFile = new File(DB_PATH);
-        if (dbFile.exists()) {
-            if (!dbFile.delete()) {
-                System.out.println("ERROR: testDB.db file found and unable to be deleted.\nDelete the file to avoid test errors");
-            }
-        }
+
         userDB = new UserDB(DB_PATH);
         projectDB = new ProjectDB(DB_PATH);
         calendarDB = new CalendarDB(DB_PATH);

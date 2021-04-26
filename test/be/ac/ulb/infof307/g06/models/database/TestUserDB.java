@@ -72,6 +72,7 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Get user info")
     public void testGetUserInfo() throws SQLException {
+        // queryUserInfo + getUserInfo test due to queryUserInfo being a private implementation method
         for (int i = 0; i < 10; i++) {
             User usrInfo = userDB.getUserInfo(i + 1);
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
@@ -98,25 +99,33 @@ public class TestUserDB extends TestDatabase {
     }
 
 
-//    @Test
-//    @DisplayName("Get user invitations")
-//    public void testGetInvitations() throws SQLException {
-//        userDB.sendInvitation(1, 1, 2);
-//        List<Invitation> invitations = userDB.getInvitations(projectDB);
-//        assertEquals(invitations.get(0).getProject().getId(), 1);
-//    }
-//
-//    @Test
-//    @DisplayName("Remove invitations")
-//    public void testRemoveInvitation() throws SQLException {
-//        UserDB.sendInvitation(1, 1, 2);
-//        UserDB.removeInvitation(1, 2);
-//        List<Invitation> invitations = UserDB.getInvitations(2);
-//        assertEquals(invitations.size(), 0);
-//    }
-//
-//
+    @Test
+    @DisplayName("Get user invitations")
+    public void testGetInvitations() throws SQLException {
+        userDB.sendInvitation(1, 1, 2);
+        userDB.sendInvitation(5, 3, 2);
+        assertTrue(userDB.validateData("User_2_userName", "User_2_password") > 0);
+        List<Invitation> invitations = userDB.getInvitations(projectDB);
+        assertTrue(invitations.size() == 2);
+        assertEquals(1, invitations.get(0).getInvitationID());
+        assertEquals(1, invitations.get(0).getSender().getId());
+        // Different invitation
+        assertEquals(2, invitations.get(1).getInvitationID());
+        assertEquals(3, invitations.get(1).getSender().getId());
 
+    }
+
+    @Test
+    @DisplayName("Remove invitations")
+    public void testRemoveInvitation() throws SQLException {
+        userDB.sendInvitation(1, 1, 2);
+        userDB.sendInvitation(5, 3, 2);
+        assertTrue(userDB.validateData("User_2_userName", "User_2_password") > 0);
+        userDB.removeInvitation(1);
+        assertEquals(1, userDB.getInvitations(projectDB).size());
+        userDB.removeInvitation(2);
+        assertEquals(0, userDB.getInvitations(projectDB).size());
+    }
 
     @Test
     @DisplayName("Set user info")
@@ -195,5 +204,13 @@ public class TestUserDB extends TestDatabase {
         assertEquals(testCredential.getExpiresAt(), credential.getExpiresAt());
         assertEquals(testCredential.getAppKey(), credential.getAppKey());
         assertEquals(testCredential.getAppSecret(), credential.getAppSecret());
+    }
+
+    @Test
+    @DisplayName("Disk limit setter")
+    public void testSetDiskLimit() throws SQLException {
+        userDB.setAdmin(99);
+        userDB.setLimit(1000);
+        assertEquals(1000, userDB.getDiskLimit());
     }
 }
