@@ -4,7 +4,6 @@ import com.dropbox.core.*;
 import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.oauth.DbxCredential;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
  * DbxCredential object
  */
 public class DropBoxAuthorization {
-    private DbxAppInfo appInfo;
+    private final DbxAppInfo appInfo;
     private String authorizationUrl = "";
     private DbxWebAuth webAuth;
 
@@ -29,7 +28,7 @@ public class DropBoxAuthorization {
         appInfo = DbxAppInfo.Reader.readFromFile(argAppInfoFile);
     }
 
-    public DbxCredential getAuthorization(String code) throws IOException, DbxException {
+    public DbxCredential getAuthorization(String code) throws DbxException {
         // Run through Dropbox API authorization process
         DbxAuthFinish authFinish = authorize(code);
 

@@ -285,7 +285,7 @@ public class ProjectsViewController {
     /**
      * Returns the selected item in the tree table.
      *
-     * @return TreeItem<Project>
+     * @return The selected project
      */
     public Project getSelectedProject() {
         TreeItem<Project> project = treeProjects.getSelectionModel().getSelectedItems().get(0);

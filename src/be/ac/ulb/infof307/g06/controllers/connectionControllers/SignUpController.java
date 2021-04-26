@@ -77,6 +77,13 @@ public class SignUpController {
 
     /**
      * Sets the loader to show the condition stage.
+     *
+     * @param firstName The user's first name
+     * @param lastName  The user's last name
+     * @param userName  The user's username
+     * @param email     The user's email
+     * @param password  The password
+     * @throws IOException on fail loading the fxml file
      */
     public void showConditionStage(String firstName, String lastName, String userName, String email, String password) throws IOException {
         FXMLLoader loader = new FXMLLoader(ConditionsViewController.class.getResource("Conditions.fxml"));

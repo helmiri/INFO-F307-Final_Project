@@ -6,8 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
-
 public class SignUpViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
@@ -38,7 +36,7 @@ public class SignUpViewController {
      * @param event ActionEvent
      */
     @FXML
-    private void signUpEvents(ActionEvent event) throws IOException {
+    private void signUpEvents(ActionEvent event) {
         if (event.getSource() == signUpBtn) {
             listener.signup(firstNameField.getText(), lastNameField.getText(), signUpUsernameField.getText(), emailField.getText(), signUpPasswordField.getText(), passwordConfirmationField.getText());
         } else if (event.getSource() == backBtn) {

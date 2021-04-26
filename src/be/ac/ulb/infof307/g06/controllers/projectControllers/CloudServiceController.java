@@ -41,7 +41,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private List<com.google.api.services.drive.model.File> gDriveFiles;
     private DropBoxAuthorization authorization;
 
-    public CloudServiceController(ProjectController projectController, UserDB userDB) throws SQLException {
+    public CloudServiceController(ProjectController projectController, UserDB userDB) {
         this.projectController = projectController;
         this.userDB = userDB;
     }
@@ -349,7 +349,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
                 credential = authorization.getAuthorization(code);
             }
             dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
-        } catch (IOException | DbxException | SQLException e) {
+        } catch (DbxException | SQLException e) {
             new AlertWindow("Error", "An error occurred: " + e.getMessage());
         }
     }
