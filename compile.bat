@@ -22,6 +22,8 @@ copy .\src\be\ac\ulb\infof307\g06\icons\* .\compile\build\be\ac\ulb\infof307\g06
 copy .\src\be\ac\ulb\infof307\g06\views\calendarViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\calendarViews\
 copy .\src\be\ac\ulb\infof307\g06\views\mainMenuViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\mainMenuViews\
 copy .\src\be\ac\ulb\infof307\g06\views\settingsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\settingsViews\
+copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json
+copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json
 
 
 
