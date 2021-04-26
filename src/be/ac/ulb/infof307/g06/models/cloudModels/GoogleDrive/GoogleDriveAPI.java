@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive;
 
-import com.dropbox.core.DbxException;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -67,8 +66,7 @@ public class GoogleDriveAPI {
      *
      * @param localFilePath Path to the file we want to upload to the Gcloud account.
      * @param cloudFilePath Path to the folder in the Gcloud account we want to upload the file in.
-     * @throws IOException
-     * @throws DbxException
+     * @throws IOException On file access error
      */
     public void uploadFile(String localFilePath, String cloudFilePath) throws IOException {
         File fileMetadata = new File();
