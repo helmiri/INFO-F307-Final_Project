@@ -161,7 +161,7 @@ public class ProjectsViewController {
         } else if (event.getSource() == assignTaskCollaboratorBtn) {
             listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
             } else if (event.getSource() == editBtn) {
-                if (!projectsTitle.getText().equals("")) {
+                if (selectedProject != null) {
                     listener.editProject(selectedProject);
                 }
         } else if (event.getSource() == exportProjectBtn) {
