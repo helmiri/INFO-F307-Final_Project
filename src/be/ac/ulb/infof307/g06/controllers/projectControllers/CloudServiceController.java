@@ -19,7 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -47,31 +47,23 @@ public class CloudServiceController implements CloudSelectionViewController.View
     }
 
     /**
-     * Save a file by choosing it's path with a filechooser.
+     * Save a file by choosing it's path with a file chooser.
      *
-     * @return
+     * @return The absolute path of the selected directory
      */
     public String saveFile() {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showSaveDialog(new Stage());
-        if (file == null) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        File selectedDirectory = directoryChooser.showDialog(new Stage());
+        if (selectedDirectory == null) {
             return "";
         }
-        return file.getAbsolutePath();
+        return selectedDirectory.getAbsolutePath();
     }
 
     /**
-     * Download a file from the cloud
-     *
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     * @throws DbxException
+     * Selects and initializes the Google Drive API as the service provider
      */
-    private void downloadFiles() throws NoSuchAlgorithmException, IOException, DbxException {
-
-
-    }
-
     @Override
     public void selectGoogleDrive() {
         isDBox = false;
@@ -87,6 +79,9 @@ public class CloudServiceController implements CloudSelectionViewController.View
         }
     }
 
+    /**
+     * Selects and initializes the DropBox API as the service provider
+     */
     @Override
     public void selectDropBox() {
         isDBox = true;
@@ -103,8 +98,13 @@ public class CloudServiceController implements CloudSelectionViewController.View
         }
     }
 
+    /**
+     * Downloads the files in the user's cloud storage using the appropriate API
+     *
+     * @param cloudPath The path to the file in the cloud storage
+     */
     @Override
-    public void downloadFile(String cloudPath) {
+    public void downloadFiles(List<String> cloudPath) {
         String localPath = saveFile();
         if (localPath.isBlank()) {
             return;
@@ -116,88 +116,138 @@ public class CloudServiceController implements CloudSelectionViewController.View
         }
     }
 
-    private void downloadGoogleDrive(String cloudPath, String localPath) {
-        com.google.api.services.drive.model.File fileMeta = getGDriveFile(cloudPath);
+    /**
+     * Downloads a file from the user's Google Drive account
+     *
+     * @param cloudPath The list of paths to the target files in the cloud storage
+     * @param localPath The directory where to save the files on disk
+     */
+    private void downloadGoogleDrive(List<String> cloudPath, String localPath) {
+        List<com.google.api.services.drive.model.File> fileMetas = getGoogleDriveFiles(cloudPath);
         try {
-            boolean download = false;
-            File localFile = new File(localPath);
-            if (!localFile.exists()) {
-                download = true;
-            } else if (isGFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
-                new AlertWindow("Identical files", "The file already exists").informationWindow();
-            } else {
-                download = true;
+            for (com.google.api.services.drive.model.File fileMeta : fileMetas) {
+                boolean download = false;
+                String localFilePath = localPath + "/" + fileMeta.getName();
+                File localFile = new File(localFilePath);
+                if (!localFile.exists()) {
+                    download = true;
+                } else if (isGoogleDriveFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
+                    new AlertWindow("Identical files", "The file " + fileMeta.getName() + " already exists").informationWindow();
+                } else {
+                    download = true;
+                }
+                if (!download) {
+                    continue;
+                }
+                gDriveClient.downloadFile(localFilePath, Objects.requireNonNull(fileMeta).getId());
+                projectController.importProject(localFilePath);
             }
-            if (!download) {
-                return;
-            }
-            gDriveClient.downloadFile(localPath, Objects.requireNonNull(fileMeta).getId());
         } catch (IOException e) {
             new AlertWindow("Error", "An error occurred: " + e.getMessage());
         }
         gDriveFiles = null;
-        projectController.importProject(localPath);
     }
 
-    private com.google.api.services.drive.model.File getGDriveFile(String cloudPath) {
-        for (com.google.api.services.drive.model.File file : gDriveFiles) {
-            if (file.getName().equals(cloudPath)) {
-                return file;
+    /**
+     * Retrieves the metadata of the selected files
+     *
+     * @param cloudPaths The list of paths to the target files in the cloud storage
+     * @return A list of the target files' metadata
+     */
+    private List<com.google.api.services.drive.model.File> getGoogleDriveFiles(List<String> cloudPaths) {
+        List<com.google.api.services.drive.model.File> files = new ArrayList<>();
+        for (String cloudPath : cloudPaths) {
+            for (com.google.api.services.drive.model.File file : gDriveFiles) {
+                if (file.getName().equals(cloudPath)) {
+                    files.add(file);
+                }
             }
         }
-        return null;
+        return files;
     }
 
-    private void downloadDropBox(String cloudPath, String localPath) {
-        Metadata fileMeta = getFile(cloudPath);
-        File localFile = new File(localPath);
-        boolean download = false;
-        if (!localFile.exists()) {
-            download = true;
-        } else if (isFileIdentical(localPath, (FileMetadata) fileMeta)) {
-            new AlertWindow("Identical files", "The file already exists").informationWindow();
-        } else {
-            download = true;
-        }
-        if (!download) {
-            return;
-        }
-        try {
-            dbxClient.downloadFile(localPath, cloudPath);
-        } catch (IOException | DbxException | NoSuchAlgorithmException e) {
-            new AlertWindow("Error", "An error occurred: " + e.getMessage());
+    /**
+     * Downloads a file from the user's DropBox account
+     *
+     * @param cloudPaths The list of paths to the target files in the cloud storage
+     * @param localPath  The directory where to save the files on disk
+     */
+    private void downloadDropBox(List<String> cloudPaths, String localPath) {
+        List<Metadata> fileMetas = getDropBoxFiles(cloudPaths);
+
+        for (Metadata fileMeta : fileMetas) {
+            String localFilePath = localPath + "/" + fileMeta.getName();
+            File localFile = new File(localFilePath);
+            boolean download = false;
+            if (!localFile.exists()) {
+                download = true;
+            } else if (isDropBoxFileIdentical(localFilePath, (FileMetadata) fileMeta)) {
+                new AlertWindow("Identical files", "The file " + fileMeta.getName() + " already exists").informationWindow();
+            } else {
+                download = true;
+            }
+            if (!download) {
+                continue;
+            }
+            try {
+                dbxClient.downloadFile(localFilePath, fileMeta.getPathDisplay());
+            } catch (IOException | DbxException | NoSuchAlgorithmException e) {
+                new AlertWindow("Error", "An error occurred: " + e.getMessage());
+            }
+            projectController.importProject(localFilePath);
         }
         dboxFiles = null;
-        projectController.importProject(localPath);
     }
 
-    private Metadata getFile(String cloudPath) {
-        Metadata fileMeta = null;
-        for (Metadata metadata : dboxFiles) {
-            if (metadata.getPathDisplay().equals(cloudPath)) {
-                fileMeta = metadata;
-                break;
+    /**
+     * Retrieves the metadata of the selected files
+     *
+     * @param cloudPaths The list of paths to the target files in the cloud storage
+     * @return A list of the target files' metadata
+     */
+    private List<Metadata> getDropBoxFiles(List<String> cloudPaths) {
+        List<Metadata> fileMetas = new ArrayList<>();
+        for (String cloudPath : cloudPaths) {
+            for (Metadata metadata : dboxFiles) {
+                if (metadata.getPathDisplay().equals(cloudPath)) {
+                    fileMetas.add(metadata);
+                    break;
+                }
             }
         }
-        return fileMeta;
+        return fileMetas;
     }
 
-    private boolean isFileIdentical(String localPath, FileMetadata fileMeta) {
+    /**
+     * Compares files using the Drop Box hashing algorithm
+     *
+     * @param localPath Path to the local file to be compared
+     * @param fileMeta  Metadata of the file in the cloud storage
+     * @return true if identical, false otherwise
+     */
+    private boolean isDropBoxFileIdentical(String localPath, FileMetadata fileMeta) {
         return fileMeta.getContentHash().equals(dbxClient.getHash(localPath));
     }
 
-    private boolean isGFileIdentical(File localFile, com.google.api.services.drive.model.File cloudFile) throws IOException {
+    /**
+     * Compares files using the Google Drive hashing algorithm
+     *
+     * @param localFile Path to the local file to be compared
+     * @param cloudFile Metadata of the file in the cloud storage
+     * @return true if identical, false otherwise
+     */
+    private boolean isGoogleDriveFileIdentical(File localFile, com.google.api.services.drive.model.File cloudFile) throws IOException {
         String localChecksum = gDriveClient.getHash(localFile);
         return localChecksum.equals(cloudFile.getAppProperties().get("hash"));
     }
 
     /**
-     * Sets the loader to show the stage to edit a project.
+     * Shows a table from which the user can select items
      */
     public void showCloudDownloadStage() {
         try {
             FXMLLoader loader = new FXMLLoader(CloudViewController.class.getResource("CloudView.fxml"));
-            AnchorPane cloudPane = loader.load();
+            loader.load();
             CloudViewController controller = loader.getController();
             controller.setListener(this);
             List<String> files;
@@ -212,12 +262,18 @@ public class CloudServiceController implements CloudSelectionViewController.View
                 }
                 files = gDriveToStrings(gDriveFiles);
             }
-            controller.show(files, cloudPane);
+            controller.show(files);
         } catch (IOException e) {
-            new AlertWindow("Error", "An error has occurred : " +e).errorWindow();
+            new AlertWindow("Error", "An error has occurred : " + e).errorWindow();
         }
     }
 
+    /**
+     * Extract the names of the files from the Google Drive metadata
+     *
+     * @param gDriveFiles The metadata of the files
+     * @return A list containing the names of the files
+     */
     private List<String> gDriveToStrings(List<com.google.api.services.drive.model.File> gDriveFiles) {
         List<String> res = new ArrayList<>();
         for (com.google.api.services.drive.model.File entry : gDriveFiles) {
@@ -226,14 +282,25 @@ public class CloudServiceController implements CloudSelectionViewController.View
         return res;
     }
 
-    private List<String> dBoxToStrings(List<Metadata> list) {
+    /**
+     * Extract the paths of the files from the DropBox metadata
+     *
+     * @param dboxFiles The metadata of the files
+     * @return A list containing the paths of the files
+     */
+    private List<String> dBoxToStrings(List<Metadata> dboxFiles) {
         List<String> res = new ArrayList<>();
-        for (Metadata entry : list) {
+        for (Metadata entry : dboxFiles) {
             res.add(entry.getPathDisplay());
         }
         return res;
     }
 
+    /**
+     * Prompts the user for their cloud service of choice
+     *
+     * @param isDownload true if the operation to be performed is a download to show the files contained in the cloud storage
+     */
     public void showSelectionStage(boolean isDownload) {
         FXMLLoader loader = new FXMLLoader(CloudSelectionViewController.class.getResource("CloudSelectionView.fxml"));
         try {
@@ -249,24 +316,31 @@ public class CloudServiceController implements CloudSelectionViewController.View
         }
     }
 
-    public void uploadProject(String fileName, String localFilePath) {
-        AlertWindow alert = new AlertWindow("File upload", "Uploading project...");
-        alert.temporaryWindow();
+    /**
+     * Uploads a project using the appropriate api
+     *
+     * @param fileName      The file name of the file to be stored in the cloud
+     * @param localFilePath The path to the file to be uploaded
+     * @return true on success, false otherwise
+     */
+    public boolean uploadProject(String fileName, String localFilePath) {
         try {
             if (isDBox) {
                 dbxClient.uploadFile(localFilePath, fileName);
             } else {
                 gDriveClient.uploadFile(localFilePath, fileName.substring(1));
             }
-            alert.closeWindow();
         } catch (IOException | DbxException e) {
-            alert.closeWindow();
-            new AlertWindow("Error", "Could not upload file").errorWindow();
-            return;
+            return false;
         }
-        new AlertWindow("Succes", "Upload successful").informationWindow();
+        return true;
     }
 
+    /**
+     * Submit authorization code to complete DropBox authentication
+     *
+     * @param code DropBox authorization code
+     */
     @Override
     public void onOKClicked(String code) {
         try {
@@ -280,6 +354,11 @@ public class CloudServiceController implements CloudSelectionViewController.View
         }
     }
 
+    /**
+     * Copy the authorization link to the clipboard in case the browser failed to automatically open
+     *
+     * @param url authorization url
+     */
     @Override
     public void onHyperlinkClicked(String url) {
         Clipboard clipboard = Clipboard.getSystemClipboard();

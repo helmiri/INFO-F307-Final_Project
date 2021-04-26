@@ -1,10 +1,11 @@
 package be.ac.ulb.infof307.g06.views.projectViews;
 
-import com.dropbox.core.v2.files.Metadata;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -15,12 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CloudViewController {
+    @FXML
+    private AnchorPane downloadAnchor;
     //--------------- ATTRIBUTES ----------------
     @FXML
     private TableView<String> cloudTable;
     @FXML
     private TableColumn<String, String> filesColumn;
-    private List<Metadata> files;
     private ViewListener listener;
     private Stage stage;
     //--------------- METHODS ----------------
@@ -29,20 +31,26 @@ public class CloudViewController {
         this.listener = listener;
     }
 
-    public void show(List<String> files, AnchorPane cloudPane) {
+    /**
+     * Shows a selection table
+     *
+     * @param files The list of names to be shown
+     */
+    public void show(List<String> files) {
         stage = new Stage();
-        stage.setScene(new Scene(cloudPane));
+        stage.setScene(new Scene(downloadAnchor));
         stage.setTitle("Dropbox Files");
         stage.show();
 
         filesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         filesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        cloudTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         try {
             for (String name : filterValidFiles(files)) {
                 cloudTable.getItems().add(name);
             }
         } finally {
-            cloudTable.setPlaceholder(new Label("Could not retrieve the content"));
+            cloudTable.setPlaceholder(new Label("No files to show"));
         }
     }
 
@@ -51,7 +59,7 @@ public class CloudViewController {
      * Returns the valid files contained in the dropbox.
      *
      * @param entries List of all the files contained in the cloud.
-     * @return
+     * @return a list containing the names of the files that have a .tar.gz extension
      */
     public List<String> filterValidFiles(List<String> entries) {
         List<String> lst = new ArrayList<>();
@@ -67,15 +75,21 @@ public class CloudViewController {
      * button handling
      **/
     public void events() {
-        listener.downloadFile(getSelectedItem());
+        listener.downloadFiles(getSelectedItems());
         stage.close();
     }
 
-    private String getSelectedItem() {
-        return cloudTable.getSelectionModel().getSelectedItem();
+    /**
+     * Table selection
+     *
+     * @return a list containing the selected items
+     */
+    private List<String> getSelectedItems() {
+        ObservableList<String> selected = cloudTable.getSelectionModel().getSelectedItems();
+        return new ArrayList<>(selected);
     }
 
     public interface ViewListener {
-        void downloadFile(String item);
+        void downloadFiles(List<String> item);
     }
 }

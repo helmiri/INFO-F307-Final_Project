@@ -4,22 +4,26 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.*?>
-<AnchorPane fx:id="downloadAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="downloadAnchor" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/16"
             fx:controller="be.ac.ulb.infof307.g06.views.projectViews.CloudViewController">
     <children>
         <TableView fx:id="cloudTable" layoutX="-1.0" prefHeight="303.0" prefWidth="600.0"
                    AnchorPane.bottomAnchor="96.80000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                    AnchorPane.topAnchor="0.0">
             <columns>
-                <TableColumn fx:id="filesColumn" maxWidth="599.2000122070312" minWidth="-1.0"
-                             prefWidth="583.1999999880791" resizable="false" text="Files"/>
+                <TableColumn fx:id="filesColumn" maxWidth="599.2000122070312" minWidth="-1.0" prefWidth="599.0"
+                             resizable="false" text="Files"/>
             </columns>
         </TableView>
         <Button fx:id="downloadBtn" layoutX="246.0" layoutY="337.0" maxHeight="-Infinity" maxWidth="-Infinity"
                 minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#events" prefHeight="32.0"
-                prefWidth="108.0" text="Download" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="246.0"
-                AnchorPane.rightAnchor="246.0" AnchorPane.topAnchor="337.0"/>
+                prefWidth="108.0" style="-fx-background-color: #4fc3f7;" text="Download" textFill="WHITE"
+                AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="246.0"
+                AnchorPane.topAnchor="337.0"/>
+        <Text layoutX="209.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Hold CTRL to select multiple items"/>
     </children>
 </AnchorPane>

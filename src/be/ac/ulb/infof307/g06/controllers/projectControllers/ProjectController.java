@@ -456,9 +456,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
         if (storageLimitReached()) {
             return;
         }
-        if (ioController.onImportProject(path)) {
+        int res = ioController.onImportProject(path);
+        if (res == 1) {
             new AlertWindow("Success", "The project has been imported").informationWindow();
-        } else {
+        } else if (res == -1) {
             new AlertWindow("Error", "An error occurred").errorWindow();
         }
     }
@@ -474,14 +475,19 @@ public class ProjectController extends Controller implements ProjectsViewControl
     }
 
     @Override
-    public void uploadProject(Project project) {
+    public void uploadProject(List<Project> projects) {
         if (setServiceProvider()) return;
-        String localFilePath = System.getProperty("user.dir");
-        ioController.onExportProject(project, localFilePath);
-        String fileName = "/" + project.getTitle() + ".tar.gz";
-
         cloudServiceController.showSelectionStage(false);
-        cloudServiceController.uploadProject(fileName, localFilePath + fileName);
+        for (Project project : projects) {
+            String localFilePath = System.getProperty("user.dir");
+            ioController.onExportProject(project, localFilePath);
+            String fileName = "/" + project.getTitle() + ".tar.gz";
+            if (cloudServiceController.uploadProject(fileName, localFilePath + fileName)) {
+                new AlertWindow("Success", "Upload successful").informationWindow();
+            } else {
+                new AlertWindow("Error", "Could not upload project: " + project.getTitle()).errorWindow();
+            }
+        }
     }
 
     @Override

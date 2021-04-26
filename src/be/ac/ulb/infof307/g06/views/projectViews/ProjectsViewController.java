@@ -23,6 +23,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,7 @@ public class ProjectsViewController {
             listener.back();
         } else if (event.getSource() == cloudUploadBtn) {
             if (selectedProject != null) {
-                listener.uploadProject(selectedProject);
+                listener.uploadProject(getMultipleSelectedProjects());
             }
         } else if (event.getSource() == addTaskbtn) {
             if (selectedProject != null) {
@@ -163,14 +164,23 @@ public class ProjectsViewController {
                 if (!projectsTitle.getText().equals("")) {
                     listener.editProject(selectedProject);
                 }
-            } else if (event.getSource() == exportProjectBtn) {
-                exportProject();
-            } else if (event.getSource() == importProjectBtn) {
-                importProject();
-            } else if (event.getSource() == cloudDownloadBtn) {
-                listener.downloadProject();
-            }
+        } else if (event.getSource() == exportProjectBtn) {
+            exportProject();
+        } else if (event.getSource() == importProjectBtn) {
+            importProject();
+        } else if (event.getSource() == cloudDownloadBtn) {
+            listener.downloadProject();
         }
+    }
+
+    private List<Project> getMultipleSelectedProjects() {
+        List<Project> projectsList = new ArrayList<>();
+        ObservableList<TreeItem<Project>> selectedProjects = treeProjects.getSelectionModel().getSelectedItems();
+        for (TreeItem<Project> selected : selectedProjects) {
+            projectsList.add(selected.getValue());
+        }
+        return projectsList;
+    }
 
     /**
      * Deletes a project in the Database and in the tree table view.
@@ -278,8 +288,9 @@ public class ProjectsViewController {
      * @return TreeItem<Project>
      */
     public Project getSelectedProject() {
-        if (treeProjects.getSelectionModel().getSelectedItem() != null) {
-            return treeProjects.getSelectionModel().getSelectedItem().getValue();
+        TreeItem<Project> project = treeProjects.getSelectionModel().getSelectedItems().get(0);
+        if (project != null) {
+            return project.getValue();
         }
         return null;
     }
@@ -291,7 +302,7 @@ public class ProjectsViewController {
     public void initTree(){
         treeProjects.setRoot(root);
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
-
+        treeProjects.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         collaboratorsTable.setEditable(false);
         collaboratorsTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
         collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
@@ -472,7 +483,7 @@ public class ProjectsViewController {
 
         void exportProject(Project project, String path);
 
-        void uploadProject(Project project);
+        void uploadProject(List<Project> project);
 
         void downloadProject();
 

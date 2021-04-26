@@ -134,7 +134,7 @@ public class IOController extends Controller {
      *
      * @param archivePath String
      */
-    public boolean onImportProject(String archivePath) {
+    public int onImportProject(String archivePath) {
         try {
             File file = new File(archivePath);
             String directory = file.getAbsoluteFile().getParent();
@@ -142,8 +142,8 @@ public class IOController extends Controller {
             unzip(archivePath, directory);
             if (isProjectInDb(jsonFile)) {
                 deleteFile(jsonFile);
-                new AlertWindow("Failure", "Failure to import project : already in the database.").errorWindow();
-                return false;
+                new AlertWindow("Failure", "Failure to import project :\n" + archivePath + "\nalready in the database.").errorWindow();
+                return 0;
             }
             BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
             int count = 0, parentID = 0 ,id = 0;
@@ -175,9 +175,9 @@ public class IOController extends Controller {
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             reader.close();
             deleteFile(jsonFile);
-            return true;
+            return 1;
         } catch (IOException | SQLException e) {
-            return false;
+            return -1;
         }
     }
 
