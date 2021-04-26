@@ -226,7 +226,11 @@ public class CloudServiceController implements CloudSelectionViewController.View
      * @return true if identical, false otherwise
      */
     private boolean isDropBoxFileIdentical(String localPath, FileMetadata fileMeta) {
-        return fileMeta.getContentHash().equals(dbxClient.getHash(localPath));
+        String hash = dbxClient.getHash(localPath);
+        if (hash == null){
+            return false;
+        }
+        return fileMeta.getContentHash().equals(hash);
     }
 
     /**
@@ -312,7 +316,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
                 showCloudDownloadStage();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "Unable to load window").errorWindow();
         }
     }
 

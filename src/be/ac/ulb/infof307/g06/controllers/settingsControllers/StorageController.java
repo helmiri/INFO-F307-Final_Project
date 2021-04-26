@@ -45,7 +45,7 @@ public class StorageController extends Controller implements StorageViewControll
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
         } catch (SQLException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "An error occurred " + e.getMessage()).errorWindow();
         }
     }
 
@@ -148,8 +148,10 @@ public class StorageController extends Controller implements StorageViewControll
             }
             user_db.addDropBoxCredentials(credential);
         } catch (DbxException | SQLException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "Could not complete the request");
+            return;
         }
+        new AlertWindow("Credentials saved", "Settings saved").informationWindow();
     }
 
     @Override
