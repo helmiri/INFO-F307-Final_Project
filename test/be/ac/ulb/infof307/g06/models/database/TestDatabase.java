@@ -80,6 +80,7 @@ public class TestDatabase {
         Statement state = db.createStatement();
         state.executeUpdate("DELETE FROM users");
         state.executeUpdate("DELETE FROM Project");
+        state.executeUpdate("DELETE FROM Projects");
         state.executeUpdate("DELETE FROM Collaborator");
         state.executeUpdate("DELETE FROM Task");
         state.executeUpdate("DELETE FROM admin");
