@@ -202,7 +202,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
             viewController.displayProject(project_db.getProject(projectID), newTags);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            // TODO SQLEXception getColor resultset closed
             e.printStackTrace();
             new AlertWindow("Error", "" + e).errorWindow();
         }

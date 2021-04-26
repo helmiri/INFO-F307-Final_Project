@@ -52,7 +52,7 @@ public class CalendarDB extends Database {
         return res;
     }
 
-    public boolean isInDB(String title) throws SQLException {
+    private boolean isInDB(String title) throws SQLException {
         int res;
         ResultSet rs = sqlQuery("SELECT COUNT(*) FROM Projects WHERE title ='" + title + "';");
         res = rs.getInt("COUNT(*)");
