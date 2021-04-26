@@ -1,7 +1,5 @@
 package be.ac.ulb.infof307.g06.models;
 
-import java.time.Instant;
-
 public class Task {
     //-------------- ATTRIBUTES ----------------
     int id;

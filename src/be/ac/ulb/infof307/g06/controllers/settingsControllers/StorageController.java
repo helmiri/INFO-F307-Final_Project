@@ -50,6 +50,13 @@ public class StorageController extends Controller implements StorageViewControll
     }
 
 
+    /**
+     * Saves the storage limit to the database. (only available to admin users).
+     *
+     * @param limit                 the storage limit.
+     * @param storageViewController
+     * @return boolean
+     */
     @Override
     public boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException {
         boolean res = false;
@@ -68,6 +75,9 @@ public class StorageController extends Controller implements StorageViewControll
         return res;
     }
 
+    /**
+     * Establishes the connection with the GoogleDrive account.
+     */
     @Override
     public void authenticateGoogleDrive() {
         AlertWindow alert = new AlertWindow("Authorization request", "Requesting authorization...\nDo not close the app. Click 'OK' to continue");
@@ -81,6 +91,9 @@ public class StorageController extends Controller implements StorageViewControll
         }
     }
 
+    /**
+     * Establishes the connection with the Dropbox account.
+     */
     @Override
     public void authenticateDropBox() {
         try {
@@ -98,6 +111,9 @@ public class StorageController extends Controller implements StorageViewControll
 
     }
 
+    /**
+     * Saves the storage limit on the disk on the database.
+     */
     private void setLimit(String limit) throws SQLException {
         int newLimit = Integer.parseInt(limit);
         if (newLimit == 0) {
@@ -106,6 +122,11 @@ public class StorageController extends Controller implements StorageViewControll
         user_db.setLimit(Integer.parseInt(limit) * 1000L * 1000L);
     }
 
+    /**
+     * Opens the browser to establish the connection to the cloud services.
+     *
+     * @param url Url to the cloud service website.
+     */
     private void openBrowser(String url) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
         Desktop desktop;
@@ -126,7 +147,7 @@ public class StorageController extends Controller implements StorageViewControll
                 credential = authorization.getAuthorization(code);
             }
             user_db.addDropBoxCredentials(credential);
-        } catch (IOException | DbxException | SQLException e) {
+        } catch (DbxException | SQLException e) {
             e.printStackTrace();
         }
     }

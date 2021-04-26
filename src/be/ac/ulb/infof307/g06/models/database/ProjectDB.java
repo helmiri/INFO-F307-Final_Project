@@ -315,7 +315,7 @@ public class ProjectDB extends Database {
 
     public int createTag(String description, String color) throws SQLException {
         ResultSet rs = null;
-        int id = 0;
+        int id;
         if (getTagID(description) == 0) {
             try {   // Generate id
                 rs = sqlQuery("SELECT id, MAX(id) FROM Tag;");
@@ -406,13 +406,13 @@ public class ProjectDB extends Database {
     }
 
     public int getTagID(String title) throws SQLException {
-        ResultSet rs = null;
-        int id = 0;
+        ResultSet rs;
+        int id;
         try {
             rs = sqlQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
             id = rs.getInt("id");
         } catch (Exception e) {
-           return 0;
+            return 0;
         }
         rs.close();
         rs.close();

@@ -499,13 +499,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     private boolean setServiceProvider() {
         if (cloudServiceController == null) {
-            try {
-                cloudServiceController = new CloudServiceController(this, user_db);
-            } catch (SQLException throwables) {
-                new AlertWindow("Error", "A database error has occurred").errorWindow();
-                cloudServiceController = null;
-                return true;
-            }
+            cloudServiceController = new CloudServiceController(this, user_db);
         }
         return false;
     }

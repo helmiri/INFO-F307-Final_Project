@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 
+import be.ac.ulb.infof307.g06.models.User;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestDatabase {
@@ -39,6 +42,12 @@ public class TestDatabase {
 
     @BeforeAll
     void setup() throws SQLException, ClassNotFoundException {
+        File dbFile = new File(DB_PATH);
+        if (dbFile.exists()) {
+            if (!dbFile.delete()) {
+                System.out.println("ERROR: testDB.db file found and unable to be deleted.\nDelete the file to avoid test errors");
+            }
+        }
         db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
         dbFields = new ArrayList<>(5);
         dbFields.add("fName");
@@ -56,6 +65,7 @@ public class TestDatabase {
             }
             testData.add(i, userData);
         }
+
         userDB = new UserDB(DB_PATH);
         projectDB = new ProjectDB(DB_PATH);
         calendarDB = new CalendarDB(DB_PATH);
@@ -95,5 +105,13 @@ public class TestDatabase {
             state.execute();
             state.close();
         }
+    }
+
+    @Test
+    @DisplayName("User getter")
+    public void testGetCurrentUser() throws SQLException {
+        userDB.validateData("User_1_userName", "User_1_password");
+        User user = userDB.getCurrentUser();
+        assertEquals("User_1_userName", user.getUserName());
     }
 }

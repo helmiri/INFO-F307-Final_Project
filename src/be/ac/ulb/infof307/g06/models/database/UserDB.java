@@ -135,7 +135,7 @@ public class UserDB extends Database {
      *
      * @param userName input username
      * @param password input password
-     * @return The unique identifier of the user if the password matches, 0 if the data is invalid
+     * @return The unique identifier of the user if the password matches, 0 if the user does not exist, -1 if the data is invalid
      * @throws SQLException When a database access error occurs
      */
     public int validateData(String userName, String password) throws SQLException {
@@ -184,7 +184,7 @@ public class UserDB extends Database {
      * Queries the database for the user's information
      *
      * @param id The user's id
-     * @return Map<String, String> where the key is the field's name containing fName, lName, email, uName
+     * @return The user's informatione the key is the field's name containing fName, lName, email, uName
      * @throws SQLException If a database access error occurs
      */
 
@@ -196,7 +196,8 @@ public class UserDB extends Database {
     /**
      * Queries the database for the user's information
      *
-     * @return Map<String, String> where the key is the field's name containing fName, lName, email, accessToken, clientID
+     * @param userName The user's username
+     * @return The user's information
      * @throws SQLException If a database access error occurs
      */
     @SuppressWarnings("SqlResolve")

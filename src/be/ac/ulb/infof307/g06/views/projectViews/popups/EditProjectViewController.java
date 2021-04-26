@@ -6,6 +6,8 @@ import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.text.DateFormat;
@@ -27,11 +29,19 @@ public class EditProjectViewController extends ProjectInputViewController{
      * @param event ActionEvent
      */
     @Override
-    protected void events(ActionEvent event){
+    protected void events(ActionEvent event) {
         if (event.getSource() == editProjectBtn) {
             listener.onEditProject(project, nameProject.getText(), descriptionProject.getText(), dateProject.getValue(), endDateProject.getValue(), tagsProject.getCheckModel().getCheckedItems());
             close();
         }
+    }
+
+    static void setDescriptionTest(TextField descriptionProject, String description, DatePicker dateProject, Long startDate, DatePicker endDateProject, Long endDate) {
+        descriptionProject.setText(description);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * 86400000L), formatter));
+        endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * 86400000L), formatter));
     }
 
     /**
@@ -40,11 +50,7 @@ public class EditProjectViewController extends ProjectInputViewController{
     @FXML
     public void initFields(List<Tag> tags) {
         nameProject.setText(project.getTitle());
-        descriptionProject.setText(project.getDescription());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateProject.setValue(LocalDate.parse(dateFormat.format(project.getStartDate() * 86400000L), formatter));
-        endDateProject.setValue(LocalDate.parse(dateFormat.format(project.getEndDate() * 86400000L), formatter));
+        setDescriptionTest(descriptionProject, project.getDescription(), dateProject, project.getStartDate(), endDateProject, project.getEndDate());
         for (Tag tag : tags) {
             tagsProject.getCheckModel().check(tag.getDescription());
         }

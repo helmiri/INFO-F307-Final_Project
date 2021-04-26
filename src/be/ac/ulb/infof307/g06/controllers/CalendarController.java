@@ -7,7 +7,6 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.CalendarDB;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-
 import be.ac.ulb.infof307.g06.views.calendarViews.CalendarViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
@@ -22,7 +21,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
     CalendarColor colorObject = new CalendarColor();
@@ -104,7 +106,7 @@ public class CalendarController extends Controller implements CalendarViewContro
     }
 
     @Override
-    public void show() throws IOException, SQLException {
+    public void show() throws SQLException {
         projectSource = new CalendarSource("projects");
         taskSource = new CalendarSource("tasks");
         FXMLLoader loader = new FXMLLoader(CalendarViewController.class.getResource("CalendarView.fxml"));

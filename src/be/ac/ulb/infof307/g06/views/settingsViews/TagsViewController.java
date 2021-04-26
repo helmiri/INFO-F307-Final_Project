@@ -9,7 +9,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class TagsViewController {
@@ -50,7 +49,7 @@ public class TagsViewController {
      * @param event ActionEvent
      */
     @FXML
-    private void events(ActionEvent event) throws Exception {
+    private void events(ActionEvent event) {
         if (event.getSource() == addBtn) {
             listener.onAddButtonClicked(defaultTagNameTextField.getText(), toRGBCode(tagsColorPicker.getValue()));
         }
@@ -75,7 +74,7 @@ public class TagsViewController {
 
 
     public void initialize(List<Tag> tags) {
-        defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
+        defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         defaultTagsTableView.setStyle("-fx-selection-bar: gray; -fx-selection-bar-non-focused: gray; -fx-fill: black; -fx-control-inner-background-alt: -fx-control-inner-background ;");
         defaultTagsTableView.setRowFactory(tv -> new TableRow<>() {
@@ -97,7 +96,7 @@ public class TagsViewController {
      * Shows the Tags Table View
      */
     public void refresh(List<Tag> tags) {
-        defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<Tag, String>("description"));
+        defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         defaultTagsTableView.setRowFactory(tv -> new TableRow<>() {
             @Override
@@ -140,7 +139,7 @@ public class TagsViewController {
      */
 
     @FXML
-    public void deleteTag() throws SQLException {
+    public void deleteTag() {
         listener.deleteSelectedTag(getSelectedTag());
     }
 

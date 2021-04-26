@@ -12,7 +12,6 @@ public class LoginController {
     //--------------- ATTRIBUTES ----------------
     private final Stage stage;
     private final Listener listener;
-    private AnchorPane mainLayout;
 
     //--------------- METHODS ----------------
     public LoginController(Stage stage, Listener listener) {
@@ -26,7 +25,7 @@ public class LoginController {
     public void show() throws IOException {
         // Load the fxml
         FXMLLoader loader = new FXMLLoader(LoginViewController.class.getResource("LoginView.fxml"));
-        mainLayout = loader.load();
+        AnchorPane mainLayout = loader.load();
         Scene scene = new Scene(mainLayout);
         stage.setScene(scene);
         LoginViewController controller = loader.getController();

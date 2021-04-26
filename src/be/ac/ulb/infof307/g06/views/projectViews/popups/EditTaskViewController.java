@@ -9,11 +9,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class EditTaskViewController {
     //--------------- ATTRIBUTES ----------------
     @FXML
@@ -41,10 +36,6 @@ public class EditTaskViewController {
         this.task = task;
         this.listener = listener;
         this.stage = stage;
-        taskName.setText(task.getDescription());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        newStartDateTask.setValue(LocalDate.parse(dateFormat.format(task.getStartDate() * 86400000L), formatter));
-        newEndDateTask.setValue(LocalDate.parse(dateFormat.format(task.getEndDate() * 86400000L), formatter));
+        EditProjectViewController.setDescriptionTest(taskName, task.getDescription(), newStartDateTask, task.getStartDate(), newEndDateTask, task.getEndDate());
     }
 }

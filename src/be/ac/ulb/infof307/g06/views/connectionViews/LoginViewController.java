@@ -51,24 +51,6 @@ public class LoginViewController implements Initializable {
         }
     }
 
-
-    /**
-     * Gets the log in informations and see if the user already exists.
-     */
-    /*
-    @FXML
-    private void logInConditions() {
-        String passwd = getTextField(logInPasswordField);
-        String user = getTextField(logInUsernameField);
-        Global.userID = controller.validateUserID(passwd,user);
-        switch (Global.userID) {
-            case 0 -> loginErrMsg.setText("This user does not exist or the password/username is wrong");
-            case -1 -> loginErrMsg.setText("This user is already connected");
-            default -> MainController.showMainMenu();
-        }
-    }
-    */
-
     /**
      * Returns the text inside a text field.
      *

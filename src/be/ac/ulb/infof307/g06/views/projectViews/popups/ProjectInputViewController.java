@@ -6,12 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
-import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 
+@SuppressWarnings("rawtypes")
 public class ProjectInputViewController {
     //---------- ATTRIBUTES ----------------
     @FXML

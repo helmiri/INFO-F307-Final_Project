@@ -74,7 +74,7 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Returns a projects list of the actual user.
      *
-     * @return List<Integer>
+     * @return The IDs of the current user's projects
      * @throws DatabaseException e
      */
     @Override
@@ -120,8 +120,8 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Displays projects on the tree table view
      *
-     * @param projects List<Integer>
-     * @param root TreeItem<Project>
+     * @param projects The IDs of the projects
+     * @param root     The Project item from the table tree
      * @throws DatabaseException e
      */
     @Override
@@ -148,7 +148,7 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Counts the global statistics.
      *
-     * @return List<Integer>
+     * @return A list containing the number of projects,, tasks and collaborators accross all projects
      */
     @Override
     public List<Integer> countOverallStats() {
@@ -183,7 +183,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * Counts the statistics of a specific project.
      *
      * @param selectedProject Project
-     * @return List<Integer>
+     * @return a list with the number of sub-projects, tasks and collaborators of selectedProject
      */
     @Override
     public List<Integer> countIndividualProjectStats(Project selectedProject){
@@ -226,12 +226,12 @@ public class StatsController extends Controller implements StatsViewController.V
      * Transforms the tree table view into strings and writes it down in a file.
      *
      * @param fileName String
-     * @param root     TreeItem<Project>
+     * @param root     The project item from tree table
      */
     @Override
     public void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) {
         try {
-            String finalString = "{\n";
+            StringBuilder finalString = new StringBuilder("{\n");
 
             for (int i = 0; i < root.getChildren().size(); i++) {
                 Project child = root.getChildren().get(i).getValue();
@@ -242,7 +242,7 @@ public class StatsController extends Controller implements StatsViewController.V
                 String informationRelatedToStats = generateJSONFormat(child);
                 String gotChild = "{" + informationRelatedToStats.replaceAll("(^\\{|}$)", "");
                 treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
-                finalString += treeBranchString;
+                finalString.append(treeBranchString);
             }
             write(finalString + "}", fileName, path);
         }catch(SQLException e ){
@@ -255,7 +255,7 @@ public class StatsController extends Controller implements StatsViewController.V
      *
      * @param id Integer
      * @param treeBranchString String
-     * @param root TreeItem<Statistics>
+     * @param root the project item from tree table
      * @return String
      */
     public String statToJsonString(Integer id,String treeBranchString,TreeItem<Project> root) throws SQLException {
@@ -297,9 +297,9 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Exports the statistics in CSV file.
      *
-     * @param fileName String : name given to the file
-     * @param path     String : path given for the destination of the file exported
-     * @param root     TreeItem<Project> : root of the TreeTableView
+     * @param fileName name given to the file
+     * @param path     path given for the destination of the file exported
+     * @param root     root of the TreeTableView
      */
     @Override
     public void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root) {
@@ -325,10 +325,10 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Returns CSV format.
      *
-     * @param currentProjectID Integer : ID of the current object statistics
-     * @param currentProject   Statistics : the information to add in the content
-     * @param content          String : CSV format
-     * @param root              TreeItem<Project> : root of the TreeTableView
+     * @param currentProjectID ID of the current object statistics
+     * @param currentProject   the information to add in the content
+     * @param content          CSV format
+     * @param root             root of the TreeTableView
      * @return the content of the file with CSV format
      * @throws SQLException throws SQL exceptions
      */
@@ -391,7 +391,7 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Puts value in the List at "0".
      *
-     * @param counts List<Integer>
+     * @param counts List of values
      */
     public void emptyStats(List<Integer> counts){
         for(int i=0;i<3;i++)
