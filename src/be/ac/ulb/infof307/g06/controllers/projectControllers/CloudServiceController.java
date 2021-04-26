@@ -8,7 +8,6 @@ import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAuthoriz
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudSelectionViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudViewController;
-import be.ac.ulb.infof307.g06.views.projectViews.CodePromptViewController;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.files.FileMetadata;
@@ -16,8 +15,6 @@ import com.dropbox.core.v2.files.Metadata;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -31,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener, CodePromptViewController.ViewListener {
+public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener {
     private final ProjectController projectController;
     private final UserDB userDB;
     private DropBoxAPI dbxClient;
@@ -340,36 +337,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
         return true;
     }
 
-    /**
-     * Submit authorization code to complete DropBox authentication
-     *
-     * @param code DropBox authorization code
-     */
-    @Override
-    public void onOKClicked(String code) {
-        try {
-            DbxCredential credential = userDB.getDropBoxCredentials();
-            if (credential == null) {
-                credential = authorization.getAuthorization(code);
-            }
-            dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
-        } catch (DbxException | SQLException e) {
-            new AlertWindow("Error", "An error occurred: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Copy the authorization link to the clipboard in case the browser failed to automatically open
-     *
-     * @param url authorization url
-     */
-    @Override
-    public void onHyperlinkClicked(String url) {
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        ClipboardContent content = new ClipboardContent();
-        content.putString(url);
-        clipboard.setContent(content);
-    }
 }
 
 
