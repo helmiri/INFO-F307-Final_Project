@@ -71,6 +71,9 @@ Pour l'itération 3, on a perfectionné la structure MVC du projet en ajoutant d
 ![projets](https://user-images.githubusercontent.com/33431271/116112919-537fa680-a6b8-11eb-90cb-7ac83e89539a.PNG)
 ![settings](https://user-images.githubusercontent.com/33431271/116112561-f552c380-a6b7-11eb-830e-90c832cd3114.PNG)
 ![cloud](https://user-images.githubusercontent.com/33431271/116112587-fb48a480-a6b7-11eb-955f-aec80cc15d7f.PNG)
-![statistics](https://user-images.githubusercontent.com/33431271/112816728-fb865d80-9081-11eb-90f7-d6db66110d52.PNG)
+![overall](https://user-images.githubusercontent.com/33431271/116116367-5def6f80-a6bb-11eb-9ce8-3a549d6d766c.PNG)
+
+![projectstats](https://user-images.githubusercontent.com/33431271/116116335-562fcb00-a6bb-11eb-85bf-ab53ffdf73e0.PNG)
+
 
 ## License
