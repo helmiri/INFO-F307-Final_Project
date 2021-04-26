@@ -145,40 +145,51 @@ public class IOController extends Controller {
                 new AlertWindow("Failure", "Failure to import project : already in the database.").errorWindow();
                 return false;
             }
-            BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
-            int count = 0, parentID = 0 ,id = 0;
-            String line = reader.readLine();
-            Map<Integer, Integer> hm = new HashMap();
-            while ((line = reader.readLine()) != null) {
-                ++count;
-                count %= 6;
-                switch (count) {
-                    case 2:
-                        int[] listIdparentID=  parseProject(parentID, hm, line);
-                        id = listIdparentID[0];
-                        parentID = listIdparentID[1];
-                        break;
-                    case 3:
-                        parseTasks(id, line);
-                        break;
-                    case 4:
-                        parseTags(id, line);
-                        // update la view
-                        TreeItem<Project> child = new TreeItem<>(project_db.getProject(id));
-                        setViewController(viewController);
-                        viewController.insertProject(id, child, parentID);
-                        break;
-                    default:
-                        if (line.equals("[")) {count = 1;}
-                }
-            }
+            parseJsonFile(jsonFile);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-            reader.close();
             deleteFile(jsonFile);
             return true;
         } catch (IOException | SQLException e) {
             return false;
         }
+    }
+
+    /**
+     * Parse a project json file and import the project into the database
+     * @param jsonFile String
+     * @throws IOException file is missing
+     * @throws SQLException error with the database
+     */
+    private void parseJsonFile(String jsonFile) throws IOException, SQLException {
+        BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
+        int count = 0, parentID = 0 , id = 0;
+        String line = reader.readLine();
+        Map<Integer, Integer> hm = new HashMap();
+        while ((line = reader.readLine()) != null) {
+            count = ++count % 6;
+            if (count == 2) {
+                int[] listIdparentID = parseProject(parentID, hm, line);
+                id = listIdparentID[0];
+                parentID = listIdparentID[1];
+            }
+            else if  (count == 3) {parseTasks(id, line);}
+            else if  (count == 4) {
+                parseTags(id, line);
+                addProjectToTreeView(project_db.getProject(id));
+            }
+            else {if (line.equals("[")) count = 1;}
+        }
+        reader.close();
+    }
+
+    /**
+     * Add the project to the tree view, update the view.
+     * @param project Project
+     */
+    private void addProjectToTreeView(Project project) {
+        TreeItem<Project> child = new TreeItem<>(project);
+        setViewController(viewController);
+        viewController.insertProject(project.getId(), child, project.getParent_id());
     }
 
     /**
@@ -301,7 +312,7 @@ public class IOController extends Controller {
             return false;
         }
     }
-    
+
     /**
      * Delete a file.
      *
