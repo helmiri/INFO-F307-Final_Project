@@ -135,7 +135,7 @@ public class UserDB extends Database {
      *
      * @param userName input username
      * @param password input password
-     * @return The unique identifier of the user if the password matches, 0 if the data is invalid
+     * @return The unique identifier of the user if the password matches, 0 if the user does not exist, -1 if the data is invalid
      * @throws SQLException When a database access error occurs
      */
     public int validateData(String userName, String password) throws SQLException {
