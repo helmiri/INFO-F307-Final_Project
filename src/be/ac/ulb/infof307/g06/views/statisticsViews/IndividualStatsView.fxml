@@ -163,7 +163,7 @@
             <Font size="48.0" />
          </font>
       </Label>
-      <Label layoutX="44.0" layoutY="59.0" prefHeight="17.0" prefWidth="151.0" styleClass="shadow" stylesheets="@StatsView.css" text="Individual project view" textFill="WHITE">
+      <Label layoutX="44.0" layoutY="59.0" prefHeight="17.0" prefWidth="151.0" text="Individual project view" textFill="WHITE">
          <font>
             <Font name="DejaVu Sans Condensed Bold" size="12.0" />
          </font>

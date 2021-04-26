@@ -1,5 +1,5 @@
 .gradient-background{
-    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%,#a1ddf8,#e2f3f7);
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #a1ddf8,#e2f3f7);
 }
 
 .shadow{
@@ -7,11 +7,11 @@
 }
 
 .container{
-    -fx-background-color: rgba(200, 210, 217, 0.38);
+    -fx-background-color: rgb(217, 238, 243);
     -fx-background-radius:10;
 }
 
 .stats-choice{
-    -fx-background-color: rgba(115, 220, 247, 0.459);
+    -fx-background-color: rgb(75, 186, 235);
     -fx-background-radius:10;
 }
