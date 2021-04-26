@@ -191,9 +191,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                         startDate.toEpochDay(),
                         endDate.toEpochDay()
                 );
-                String color = calendar_db.getColor(project.getTitle());
-                calendar_db.removeProject(project.getTitle());
-                calendar_db.addProject(title, color);
+                calendar_db.replaceProject(project.getTitle(), title);
                 List<Integer> tags = new ArrayList<>();
                 for (String newTag : newTags) {
                     tags.add(project_db.getTagID(newTag));

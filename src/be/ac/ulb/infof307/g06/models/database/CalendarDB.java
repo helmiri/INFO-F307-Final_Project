@@ -51,4 +51,20 @@ public class CalendarDB extends Database {
         rs.close();
         return res;
     }
+
+    public boolean isInDB(String title) throws SQLException {
+        int res;
+        ResultSet rs = sqlQuery("SELECT COUNT(*) FROM Projects WHERE title ='" + title + "';");
+        res = rs.getInt("COUNT(*)");
+        rs.close();
+        return !(res == 0);
+    }
+
+    public void replaceProject(String prevName, String newName) throws SQLException {
+        if (isInDB(prevName)) {
+            String color = getColor(prevName);
+            removeProject(prevName);
+            addProject(newName, color);
+        }
+    }
 }
