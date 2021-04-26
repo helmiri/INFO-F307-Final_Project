@@ -302,7 +302,10 @@ public class IOController extends Controller {
                 if (count == 2) {
                     Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
                     int id = project_db.getProjectID(project.getTitle());
-                    if (id != 0) return true;
+                    if (id != 0) {
+                        reader.close();
+                        return true;
+                    }
                 }
                 else { if (line.equals("[")) count = 1; }
             }
