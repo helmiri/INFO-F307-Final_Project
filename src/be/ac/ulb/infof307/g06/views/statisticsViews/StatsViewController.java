@@ -62,7 +62,7 @@ public class StatsViewController{
     @FXML
     private PieChart projectsChart;
     @FXML
-    private BarChart<?, ?> tasksChart;
+    private BarChart<String, Integer> tasksChart;
     private Project selectedProject;
     private boolean isOverallView=true;
     private final TreeItem<Project> root = new TreeItem<>();
@@ -108,7 +108,7 @@ public class StatsViewController{
         List<Integer> infos = listener.countOverallStats();
         displayBasicStats(infos);
         isOverallView = true;
-        tasksChart.setLegendVisible(false);
+        tasksChart.setLegendVisible(true);
         pieChartInitializer();
         barChartInitializer();
         overallViewBtn.setDisable(true);
@@ -141,7 +141,7 @@ public class StatsViewController{
      * Initializes the bar chart that shows the number of tasks of projects.
      */
     public void barChartInitializer(){
-        XYChart.Series series = new XYChart.Series<>();
+        XYChart.Series<String,Integer> series = new XYChart.Series<>();
         try{
             List<Integer> projects = listener.getProjects();
             int numberOfProjects=0;
@@ -150,13 +150,13 @@ public class StatsViewController{
                 Integer tasksCount = listener.countTasksOfAProject(project.getId());
                 if (tasksCount != 0) {
                     numberOfProjects++;
-                    tasksChart.setPrefWidth(513 + (numberOfProjects * 20));
+                    tasksChart.setPrefWidth(513 + (numberOfProjects * 30));
                     barChartAnchorPane.setPrefWidth(513 + (numberOfProjects * 30));
                     barChartPane.setPrefWidth(513 + (numberOfProjects * 30));
-                    series.getData().add(new XYChart.Data(project.getTitle(), tasksCount));
+                    series.getData().add(new XYChart.Data<>(project.getTitle(), tasksCount));
                 }
             }
-            tasksChart.getData().addAll(series);
+            tasksChart.getData().add(series);
         }
         catch(DatabaseException e){
             new AlertWindow("Error", "An error has occurred with the database while loading the bar chart: "+e).errorWindow();
