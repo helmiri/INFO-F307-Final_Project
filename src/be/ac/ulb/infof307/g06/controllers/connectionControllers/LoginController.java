@@ -41,7 +41,7 @@ public class LoginController {
                 listener.onSignup();
             }
         });
-        stage.setTitle("Projet génie logiciel");
+        stage.setTitle("I(Should)PlanAll");
 
         stage.setResizable(true);
         stage.setHeight(465);
