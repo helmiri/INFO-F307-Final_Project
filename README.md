@@ -34,7 +34,7 @@ Windows:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
 
-`.\exec.bat PATH_TO_JDK_JAVAC.EXE`
+`.\exec.bat PATH_TO_JDK_JAVA.EXE`
 
 où PATH_TO_JDK_JAVA.EXE vers java.exe
 
