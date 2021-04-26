@@ -56,16 +56,16 @@ public class StorageViewController {
     /**
      * Initializing the cloud parameters.
      */
-    public void initialize(long diskLimit, int diskUsage, boolean isAdmin, String accessToken, String clientID) {
+    public void initialize(long diskLimit, int diskUsage, boolean isAdmin) {
         try {
-            refresh(diskLimit, diskUsage, isAdmin, accessToken, clientID);
+            refresh(diskLimit, diskUsage, isAdmin);
             showAdminSettings(isAdmin);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    public void refresh(long diskLimit, long diskUsage, boolean isAdmin, String accessToken, String clientID) {
+    public void refresh(long diskLimit, long diskUsage, boolean isAdmin) {
         UnitValue limit = refreshStorageUse(diskLimit, diskUsage);
         if (isAdmin) {
             limitField.clear();

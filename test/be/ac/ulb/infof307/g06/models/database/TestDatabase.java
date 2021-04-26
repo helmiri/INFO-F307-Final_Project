@@ -46,8 +46,6 @@ public class TestDatabase {
         dbFields.add("userName");
         dbFields.add("email");
         dbFields.add("password");
-        dbFields.add("accToken");
-        dbFields.add("clientID");
 
         testData = new ArrayList<>(10);
         Map<String, String> userData;
@@ -90,8 +88,8 @@ public class TestDatabase {
          */
         PreparedStatement state;
         for (int i = 0; i < 10; i++) {
-            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, accessToken, clientID) VALUES (?,?,?,?,?,?,?)");
-            for (int j = 0; j < 7; j++) {
+            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)");
+            for (int j = 0; j < 5; j++) {
                 state.setString(j + 1, testData.get(i).get(dbFields.get(j)));
             }
             state.execute();

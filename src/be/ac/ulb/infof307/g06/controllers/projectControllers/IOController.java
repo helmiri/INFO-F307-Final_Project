@@ -7,19 +7,20 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.projectViews.popups.ProjectInputViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
+import be.ac.ulb.infof307.g06.views.projectViews.popups.ProjectInputViewController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
-import org.rauschig.jarchivelib.*;
+import org.rauschig.jarchivelib.ArchiveFormat;
+import org.rauschig.jarchivelib.Archiver;
+import org.rauschig.jarchivelib.ArchiverFactory;
+import org.rauschig.jarchivelib.CompressionType;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -86,7 +87,8 @@ public class IOController extends Controller {
      * @param project     Project
      * @param archivePath String
      */
-    public void onExportProject(Project project, String archivePath) {
+    public boolean onExportProject(Project project, String archivePath) {
+        boolean ret;
         try {
             String jsonFile = archivePath + "/file.json";
             deleteFile(jsonFile);
@@ -97,10 +99,12 @@ public class IOController extends Controller {
             fw.close();
             zip(project.getTitle(), jsonFile, archivePath);
             deleteFile(jsonFile);
-            new AlertWindow("Success", "Success in project export." ).informationWindow();
+            ret = true;
         } catch (Exception e) {
-            new AlertWindow("Failure", "Failure to export project : " + e).errorWindow();
+            e.printStackTrace();
+            ret = false;
         }
+        return ret;
     }
 
     /**
@@ -130,7 +134,7 @@ public class IOController extends Controller {
      *
      * @param archivePath String
      */
-    public void onImportProject(String archivePath) {
+    public boolean onImportProject(String archivePath) {
         try {
             File file = new File(archivePath);
             String directory = file.getAbsoluteFile().getParent();
@@ -139,7 +143,7 @@ public class IOController extends Controller {
             if (isProjectInDb(jsonFile)) {
                 deleteFile(jsonFile);
                 new AlertWindow("Failure", "Failure to import project : already in the database.").errorWindow();
-                return;
+                return false;
             }
             BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
             int count = 0, parentID = 0 ,id = 0;
@@ -171,10 +175,9 @@ public class IOController extends Controller {
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             reader.close();
             deleteFile(jsonFile);
-            new AlertWindow("Success", "Success in project import." ).informationWindow();
+            return true;
         } catch (IOException | SQLException e) {
-            new AlertWindow("Failure", "Failure to import project : "+ e ).errorWindow();
-            e.printStackTrace();
+            return false;
         }
     }
 
@@ -249,7 +252,6 @@ public class IOController extends Controller {
             Archiver archiver =
                     ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
             archiver.create(archiveName, dest, src);
-            System.out.println("zip");
         } catch (Exception ignored) {
         }
     }
@@ -266,9 +268,7 @@ public class IOController extends Controller {
                     ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
             File archive = new File(source);
             File dest = new File(destination);
-            System.out.println("WARNINGS are normal");
             archiver.extract(archive, dest); // WARNING OK
-            System.out.println("unzip");
         } catch (Exception ignored) {
         }
     }
@@ -289,7 +289,6 @@ public class IOController extends Controller {
                 ++count;
                 count %= 6;
                 if (count == 2) {
-                    System.out.println("projet " + line);
                     Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
                     int id = project_db.getProjectID(project.getTitle());
                     if (id != 0) return true;

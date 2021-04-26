@@ -8,10 +8,10 @@ import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.CalendarDB;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.popups.AddProjectViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.popups.EditProjectViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.popups.EditTaskViewController;
-import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,7 +22,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -205,6 +204,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
             viewController.displayProject(project_db.getProject(projectID), newTags);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
+            // TODO SQLEXception getColor resultset closed
+            e.printStackTrace();
             new AlertWindow("Error", "" + e).errorWindow();
         }
     }
@@ -455,24 +456,32 @@ public class ProjectController extends Controller implements ProjectsViewControl
         if (storageLimitReached()) {
             return;
         }
-        ioController.onImportProject(path);
+        if (ioController.onImportProject(path)) {
+            new AlertWindow("Success", "The project has been imported").informationWindow();
+        } else {
+            new AlertWindow("Error", "An error occurred").errorWindow();
+        }
     }
 
     @Override
     public void exportProject(Project project, String path) {
-        ioController.onExportProject(project, path);
+        boolean res = ioController.onExportProject(project, path);
+        if (res) {
+            new AlertWindow("Success", "Exportation successful").informationWindow();
+        } else {
+            new AlertWindow("Error", "An error occurred while exporting").errorWindow();
+        }
     }
 
     @Override
     public void uploadProject(Project project) {
         if (setServiceProvider()) return;
-        File selectedDirectory = new File("");
-        exportProject(project, selectedDirectory.getAbsolutePath());
+        String localFilePath = System.getProperty("user.dir");
+        ioController.onExportProject(project, localFilePath);
         String fileName = "/" + project.getTitle() + ".tar.gz";
-        String localFilePath = selectedDirectory.getAbsolutePath() + fileName;
 
         cloudServiceController.showSelectionStage(false);
-        cloudServiceController.uploadProject(fileName, localFilePath);
+        cloudServiceController.uploadProject(fileName, localFilePath + fileName);
     }
 
     @Override
@@ -489,7 +498,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             try {
                 cloudServiceController = new CloudServiceController(this, user_db);
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                new AlertWindow("Error", "A database error has occurred").errorWindow();
                 cloudServiceController = null;
                 return true;
             }

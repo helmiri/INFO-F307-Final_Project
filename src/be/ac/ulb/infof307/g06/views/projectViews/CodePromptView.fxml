@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.TextField?>
@@ -18,11 +17,11 @@
             <Cursor fx:constant="TEXT"/>
          </cursor>
       </TextField>
-      <Hyperlink fx:id="link" layoutX="96.0" layoutY="113.0" onAction="#events" prefHeight="34.0" prefWidth="426.0"
+      <Hyperlink fx:id="link" layoutX="87.0" layoutY="113.0" onAction="#events" prefHeight="58.0" prefWidth="426.0"
                  textAlignment="CENTER"/>
       <Button fx:id="okButton" layoutX="452.0" layoutY="289.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="34.0" prefWidth="121.0" text="OK"/>
-      <Text layoutX="156.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Visit link and grant access"
+              prefHeight="34.0" prefWidth="121.0" style="-fx-background-color: #4fc3f7;" text="OK" textFill="WHITE"/>
+      <Text layoutX="156.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Access request"
             textAlignment="CENTER" wrappingWidth="288.13671875">
          <font>
             <Font size="18.0"/>
@@ -30,5 +29,7 @@
       </Text>
       <Text fx:id="copyNotification" layoutX="236.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0"
             text="Link copied to clipboard" visible="false"/>
+      <Text layoutX="177.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0"
+            text="Visit the following link if your browser didn't open"/>
    </children>
 </AnchorPane>

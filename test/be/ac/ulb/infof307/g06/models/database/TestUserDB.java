@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,8 +76,6 @@ public class TestUserDB extends TestDatabase {
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
             assertEquals(testData.get(i).get("lName"), usrInfo.getLastName());
             assertEquals(testData.get(i).get("email"), usrInfo.getEmail());
-            assertEquals(testData.get(i).get("accToken"), usrInfo.getAccessToken());
-            assertEquals(testData.get(i).get("clientID"), usrInfo.getClientID());
             assertEquals(i + 1, usrInfo.getId());
         }
     }
@@ -118,31 +115,31 @@ public class TestUserDB extends TestDatabase {
 //    }
 //
 //
-    @Test
-    @DisplayName("Add access token")
-    public void testAddAccessToken() throws SQLException {
-        assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
-        userDB.addCloudCredentials("Random_Token_String", "CLIENTID");
-        Statement state = db.createStatement();
-        ResultSet res = state.executeQuery("SELECT accessToken from users where userName='User_1_userName'");
-        String token = res.getString("accessToken");
-        assertEquals("Random_Token_String", token);
-        state.close();
-        res.close();
-    }
+//    @Test
+//    @DisplayName("Add access token")
+//    public void testAddAccessToken() throws SQLException {
+//        assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
+//        userDB.addCloudCredentials("Random_Token_String", "CLIENTID");
+//        Statement state = db.createStatement();
+//        ResultSet res = state.executeQuery("SELECT accessToken from users where userName='User_1_userName'");
+//        String token = res.getString("accessToken");
+//        assertEquals("Random_Token_String", token);
+//        state.close();
+//        res.close();
+//    }
 
-    @Test
-    @DisplayName("Get access token")
-    public void testGetToken() throws SQLException {
-        Statement state = db.createStatement();
-        assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
-        state.executeUpdate("UPDATE users SET accessToken='RANDOM_TOKEN' where id='1'");
-        state.executeUpdate("UPDATE users SET clientID='RANDOM_CLIENTID' where id='1'");
-        state.close();
-        Map<String, String> res = userDB.getCloudCredentials();
-        assertEquals("RANDOM_TOKEN", res.get("accessToken"));
-        assertEquals("RANDOM_CLIENTID", res.get("clientID"));
-    }
+//    @Test
+//    @DisplayName("Get access token")
+//    public void testGetToken() throws SQLException {
+//        Statement state = db.createStatement();
+//        assertTrue(userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password")) > 0);
+//        state.executeUpdate("UPDATE users SET accessToken='RANDOM_TOKEN' where id='1'");
+//        state.executeUpdate("UPDATE users SET clientID='RANDOM_CLIENTID' where id='1'");
+//        state.close();
+//        Map<String, String> res = userDB.getCloudCredentials();
+//        assertEquals("RANDOM_TOKEN", res.get("accessToken"));
+//        assertEquals("RANDOM_CLIENTID", res.get("clientID"));
+//    }
 //
 //    @Test
 //    @DisplayName("Set user info")

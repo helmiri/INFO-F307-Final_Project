@@ -156,6 +156,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
             User current = userDB.getUserInfo(userDB.addUser(firstName, lastName, userName, email, password));
         } catch (SQLException e) {
             new AlertWindow("Error", "An error has occurred when adding the user to the database: " + e).errorWindow();
+            e.printStackTrace();
         }
     }
 

@@ -43,6 +43,16 @@ public class AlertWindow {
         alert.showAndWait();
     }
 
+    public void temporaryWindow() {
+        alert = new Alert(Alert.AlertType.INFORMATION);
+        setAttributes();
+        alert.show();
+    }
+
+    public void closeWindow() {
+        alert.close();
+    }
+
     public boolean confirmationWindow() {
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         setAttributes();

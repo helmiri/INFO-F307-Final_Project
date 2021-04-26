@@ -5,7 +5,7 @@ import be.ac.ulb.infof307.g06.models.User;
 import java.sql.*;
 
 public abstract class Database {
-    protected Connection db;
+    protected static Connection db;
     protected String dbURL;
     private Statement state;
     protected static User currentUser;
@@ -19,8 +19,10 @@ public abstract class Database {
      */
     public Database(String dbName) throws ClassNotFoundException, SQLException {
         dbURL = dbName;
-        db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
-        Class.forName("org.sqlite.JDBC");
+        if (db == null) {
+            db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
+            Class.forName("org.sqlite.JDBC");
+        }
         createTables();
     }
 

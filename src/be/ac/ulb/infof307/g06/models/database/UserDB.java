@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -31,7 +30,7 @@ public class UserDB extends Database {
      * It should be used to set the first user to sign up as the system's administrator
      *
      * @param diskLimit (Only parameter for now) Memory usage limit to be applied to all users in bytes
-     * @throws SQLException
+     * @throws SQLException When a database access error occurs
      */
     public void setAdmin(int diskLimit) throws SQLException {
         sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + 1 + "," + diskLimit + ")");
@@ -45,7 +44,7 @@ public class UserDB extends Database {
     @Override
     protected void createTables() throws SQLException {
         sqlUpdate("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
-                "email varchar(40), password varchar(20), status boolean, accessToken varchar(64), clientID varchar(64), diskUsage integer, primary key (id));");
+                "email varchar(40), password varchar(20), status boolean, diskUsage integer, primary key (id));");
         sqlUpdate("CREATE TABLE IF NOT EXISTS admin(id integer, diskLimit long)");
         sqlUpdate("CREATE TABLE IF NOT EXISTS DropBoxCredentials(id integer, accessToken varchar(256), expiration long, refreshToken varchar(256), appKey varchar(256), appSecret varchar(256))");
     }
@@ -88,21 +87,33 @@ public class UserDB extends Database {
      */
     public int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         String[] key = {"id"};
-        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, diskUsage) VALUES (?,?,?,?,?,?)", key);
+        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, status, diskUsage) VALUES (?,?,?,?,?,?,?)", key);
         state.setString(1, fName);
         state.setString(2, lName);
         state.setString(3, userName);
         state.setString(4, email);
         state.setString(5, password);
-        state.setInt(6, 0);
+        state.setBoolean(6, true);
+        state.setInt(7, 0);
         state.execute();
         ResultSet rs = state.getGeneratedKeys();
         int res = rs.getInt(1);
         rs.close();
         state.close();
+        setCurrentUser(fName, lName, userName, email, res);
+        return res;
+    }
+
+    private void setCurrentUser(String fName, String lName, String userName, String email, int res) {
         Database.currentUser = new User(userName, fName, lName, email, false);
         Database.currentUser.setId(res);
-        return res;
+        boolean isAdmin;
+        try {
+            isAdmin = isAdmin();
+        } catch (SQLException throwables) {
+            isAdmin = true;
+        }
+        Database.currentUser.setAdmin(isAdmin);
     }
 
     /**
@@ -110,7 +121,7 @@ public class UserDB extends Database {
      *
      * @param userName userName to be searched
      * @return true if found, false if not
-     * @throws SQLException
+     * @throws SQLException When a database access error occurs
      */
     public boolean userExists(String userName) throws SQLException {
         ResultSet res = sqlQuery("SELECT userName FROM users WHERE userName='" + userName + "'");
@@ -125,7 +136,7 @@ public class UserDB extends Database {
      * @param userName input username
      * @param password input password
      * @return The unique identifier of the user if the password matches, 0 if the data is invalid
-     * @throws SQLException
+     * @throws SQLException When a database access error occurs
      */
     public int validateData(String userName, String password) throws SQLException {
         if (!userExists(userName)) {
@@ -154,19 +165,6 @@ public class UserDB extends Database {
             res.close();
         }
         return bool;
-    }
-
-    private void setCloudCredentials(ResultSet usrInfo, User user) throws SQLException {
-        if (usrInfo.getString("accessToken") != null) {
-            user.setAccessToken(usrInfo.getString("accessToken"));
-        } else {
-            user.setAccessToken("");
-        }
-        if (usrInfo.getString("clientID") != null) {
-            user.setClientID(usrInfo.getString("clientID"));
-        } else {
-            user.setClientID("");
-        }
     }
 
     private Integer validate(String password, ResultSet res) throws SQLException {
@@ -212,7 +210,7 @@ public class UserDB extends Database {
 
     @SuppressWarnings("SqlResolve")
     private User queryUserInfo(String idField) throws SQLException {
-        ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email, accessToken, clientID " + idField);
+        ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email " + idField);
         if (usrInfo.isClosed()) {
             return null;
         }
@@ -221,7 +219,6 @@ public class UserDB extends Database {
                 usrInfo.getString("lName"),
                 usrInfo.getString("email"),
                 isAdmin(usrInfo.getInt("id")));
-        setCloudCredentials(usrInfo, user);
         user.setId(usrInfo.getInt("id"));
         usrInfo.close();
         return user;
@@ -263,52 +260,6 @@ public class UserDB extends Database {
         }
         rs.close();
         return invitations;
-    }
-
-//    public Invitation getInvitation() throws SQLException {
-//        Invitation invitation;
-//        ResultSet rs = sqlQuery("SELECT id, project_id, user1_id, user2_id FROM Invitations WHERE id = '" + currentUser.getId() + "';");
-//        invitation = new Invitation(rs.getInt("id"), rs.getInt("project_id"), rs.getInt("user1_id"), rs.getInt("user2_id"));
-//        rs.close();
-//        return invitation;
-//    }
-
-    /**
-     * Queries the access token and clientID of the user's cloud service
-     *
-     * @return A HashMap containing accessToken and clientID
-     * @throws SQLException
-     */
-    public HashMap<String, String> getCloudCredentials() throws SQLException {
-        ResultSet res = sqlQuery("SELECT accessToken, clientID from users where id='" + currentUser.getId() + "'");
-        HashMap<String, String> credentials = new HashMap<>();
-        credentials.put("accessToken", res.getString("accessToken"));
-        credentials.put("clientID", res.getString("clientID"));
-        res.close();
-        return credentials;
-    }
-
-    /**
-     * Sets the user's cloud credentials
-     *
-     * @param token    The access token
-     * @param clientID The cloud service's client ID
-     * @throws SQLException When a database access error occurs
-     */
-    public void addCloudCredentials(String token, String clientID) throws SQLException {
-        sqlUpdate("UPDATE users SET accessToken='" + token + "', clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
-        currentUser.setAccessToken(token);
-        currentUser.setClientID(clientID);
-    }
-
-    public void addAccessToken(String token) throws SQLException {
-        sqlUpdate("UPDATE users SET accessToken='" + token + "' where id='" + currentUser.getId() + "'");
-        currentUser.setAccessToken(token);
-    }
-
-    public void addClientID(String clientID) throws SQLException {
-        sqlUpdate("UPDATE users SET clientID='" + clientID + "' where id='" + currentUser.getId() + "'");
-        currentUser.setClientID(clientID);
     }
 
     /**
@@ -358,7 +309,7 @@ public class UserDB extends Database {
      * Queries disk space available
      *
      * @return Available disk space in bytes
-     * @throws SQLException
+     * @throws SQLException When a database access error occurs
      */
     public long availableDisk() throws SQLException {
         return getDiskLimit() - getDiskUsage();
@@ -386,6 +337,4 @@ public class UserDB extends Database {
         res.close();
         return limit;
     }
-
-
 }

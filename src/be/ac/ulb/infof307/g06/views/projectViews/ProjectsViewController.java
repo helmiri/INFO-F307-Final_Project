@@ -141,7 +141,9 @@ public class ProjectsViewController {
         if (event.getSource() == backBtn) {
             listener.back();
         } else if (event.getSource() == cloudUploadBtn) {
-            listener.uploadProject(selectedProject);
+            if (selectedProject != null) {
+                listener.uploadProject(selectedProject);
+            }
         } else if (event.getSource() == addTaskbtn) {
             if (selectedProject != null) {
                 if (startDateTask.getValue() != null && endDateTask.getValue() != null) {

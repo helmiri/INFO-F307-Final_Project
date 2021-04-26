@@ -10,7 +10,6 @@ import be.ac.ulb.infof307.g06.views.projectViews.CloudSelectionViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.CodePromptViewController;
 import com.dropbox.core.DbxException;
-import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
@@ -28,16 +27,13 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener, CodePromptViewController.ViewListener {
     private final ProjectController projectController;
     private final UserDB userDB;
-    private final String accessToken;
-    private final String clientID;
     private DropBoxAPI dbxClient;
     private GoogleDriveAPI gDriveClient;
     private boolean isDBox;
@@ -48,9 +44,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
     public CloudServiceController(ProjectController projectController, UserDB userDB) throws SQLException {
         this.projectController = projectController;
         this.userDB = userDB;
-        HashMap<String, String> credentials = userDB.getCloudCredentials();
-        accessToken = credentials.get("accessToken");
-        clientID = credentials.get("clientID");
     }
 
     /**
@@ -90,35 +83,23 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             gDriveFiles = gDriveClient.getFiles();
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "Access denied").errorWindow();
         }
     }
 
     @Override
     public void selectDropBox() {
         isDBox = true;
-        String url;
-        boolean expired = true;
         try {
             DbxCredential credential = userDB.getDropBoxCredentials();
-            if (credential != null) {
-                Long expiration = credential.getExpiresAt();
-                expired = Instant.now().getEpochSecond() * 1000 > expiration;
-            }
-            if (dbxClient == null && expired) {
-                authorization = new DropBoxAuthorization();
-                url = authorization.getUrl();
-                FXMLLoader loader = new FXMLLoader(CodePromptViewController.class.getResource("CodePromptView.fxml"));
-                AnchorPane pane = loader.load();
-                CodePromptViewController controller = loader.getController();
-                controller.setListener(this);
-                controller.initialize(url, pane);
-            } else {
+            if (credential == null) {
+                throw new DbxException("Credentials not found. Make sure that you granted access in settings");
+            } else if (dbxClient == null) {
                 dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
             }
             dboxFiles = dbxClient.getFiles();
-        } catch (JsonReader.FileLoadException | IOException | DbxException | SQLException e) {
-            e.printStackTrace();
+        } catch (DbxException | SQLException e) {
+            new AlertWindow("Credential error", e.getMessage()).errorWindow();
         }
     }
 
@@ -142,7 +123,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             File localFile = new File(localPath);
             if (!localFile.exists()) {
                 download = true;
-            } else if (isGFileIdentical(localFile, fileMeta)) {
+            } else if (isGFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
                 new AlertWindow("Identical files", "The file already exists").informationWindow();
             } else {
                 download = true;
@@ -150,10 +131,12 @@ public class CloudServiceController implements CloudSelectionViewController.View
             if (!download) {
                 return;
             }
-            gDriveClient.downloadFile(localPath, fileMeta.getId());
+            gDriveClient.downloadFile(localPath, Objects.requireNonNull(fileMeta).getId());
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "An error occurred: " + e.getMessage());
         }
+        gDriveFiles = null;
+        projectController.importProject(localPath);
     }
 
     private com.google.api.services.drive.model.File getGDriveFile(String cloudPath) {
@@ -182,9 +165,9 @@ public class CloudServiceController implements CloudSelectionViewController.View
         try {
             dbxClient.downloadFile(localPath, cloudPath);
         } catch (IOException | DbxException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "An error occurred: " + e.getMessage());
         }
-
+        dboxFiles = null;
         projectController.importProject(localPath);
     }
 
@@ -219,16 +202,20 @@ public class CloudServiceController implements CloudSelectionViewController.View
             controller.setListener(this);
             List<String> files;
             if (isDBox) {
+                if (dboxFiles == null) {
+                    return;
+                }
                 files = dBoxToStrings(dboxFiles);
             } else {
+                if (gDriveFiles == null) {
+                    return;
+                }
                 files = gDriveToStrings(gDriveFiles);
             }
             controller.show(files, cloudPane);
         } catch (IOException e) {
             new AlertWindow("Error", "An error has occurred : " +e).errorWindow();
         }
-        // TODO Download Stage
-//        MainController.showStage("Add project", 750, 400, Modality.APPLICATION_MODAL, loader);
     }
 
     private List<String> gDriveToStrings(List<com.google.api.services.drive.model.File> gDriveFiles) {
@@ -263,16 +250,21 @@ public class CloudServiceController implements CloudSelectionViewController.View
     }
 
     public void uploadProject(String fileName, String localFilePath) {
+        AlertWindow alert = new AlertWindow("File upload", "Uploading project...");
+        alert.temporaryWindow();
         try {
             if (isDBox) {
                 dbxClient.uploadFile(localFilePath, fileName);
             } else {
                 gDriveClient.uploadFile(localFilePath, fileName.substring(1));
             }
+            alert.closeWindow();
         } catch (IOException | DbxException e) {
-            e.printStackTrace();
+            alert.closeWindow();
+            new AlertWindow("Error", "Could not upload file").errorWindow();
+            return;
         }
-
+        new AlertWindow("Succes", "Upload successful").informationWindow();
     }
 
     @Override
@@ -284,7 +276,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
         } catch (IOException | DbxException | SQLException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "An error occurred: " + e.getMessage());
         }
     }
 

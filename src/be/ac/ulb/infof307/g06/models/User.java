@@ -4,7 +4,6 @@ public class User {
     int id;
     boolean isAdmin;
     private String userName, firstName, lastName, email;
-    private String accessToken, clientID;
 
     public User(String userName, String firstName, String lastName, String email, boolean isAdmin) {
         this.userName = userName;
@@ -16,10 +15,6 @@ public class User {
 
     public boolean isAdmin() {
         return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     public int getId() {
@@ -62,19 +57,7 @@ public class User {
         this.email = email;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getClientID() {
-        return clientID;
-    }
-
-    public void setClientID(String clientID) {
-        this.clientID = clientID;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

@@ -20,7 +20,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 
@@ -41,8 +43,7 @@ public class StorageController extends Controller implements StorageViewControll
         try {
             storageViewController.setListener(this);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin(),
-                    currentUser.getAccessToken(), currentUser.getClientID());
+            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -52,7 +53,6 @@ public class StorageController extends Controller implements StorageViewControll
     @Override
     public boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException {
         boolean res = false;
-//        res = saveCredentials(clientID, accessToken);
         if (user_db.isAdmin()) {
             if (!limit.isBlank()) {
                 try {
@@ -63,19 +63,21 @@ public class StorageController extends Controller implements StorageViewControll
                 }
             }
         }
-        storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin(),
-                currentUser.getAccessToken(), currentUser.getClientID());
+        storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin()
+        );
         return res;
     }
 
     @Override
     public void authenticateGoogleDrive() {
+        AlertWindow alert = new AlertWindow("Authorization request", "Requesting authorization...\nDo not close the app. Click 'OK' to continue");
+        alert.informationWindow();
         GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(user_db.getCurrentUser().getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
             System.out.println(authorization.getUrl());
         } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
+            new AlertWindow("Authorization request", "Access denied").errorWindow();
         }
     }
 
@@ -88,9 +90,10 @@ public class StorageController extends Controller implements StorageViewControll
             AnchorPane pane = loader.load();
             CodePromptViewController controller = loader.getController();
             controller.setListener(this);
+            openBrowser(url);
             controller.initialize(url, pane);
         } catch (JsonReader.FileLoadException | IOException e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "An error occurred").errorWindow();
         }
 
     }
@@ -101,6 +104,18 @@ public class StorageController extends Controller implements StorageViewControll
             throw new NumberFormatException("Invalid number");
         }
         user_db.setLimit(Integer.parseInt(limit) * 1000L * 1000L);
+    }
+
+    private void openBrowser(String url) throws IOException {
+        String os = System.getProperty("os.name").toLowerCase();
+        Desktop desktop;
+        if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.BROWSE)) {
+            desktop.browse(URI.create(url));
+        } else if (os.contains("mac")) {
+            Runtime.getRuntime().exec("open " + url);
+        } else if (os.contains("linux")) {
+            Runtime.getRuntime().exec("xdg-open " + url);
+        }
     }
 
     @Override
@@ -123,23 +138,4 @@ public class StorageController extends Controller implements StorageViewControll
         content.putString(url);
         clipboard.setContent(content);
     }
-
-//    private boolean saveCredentials(String clientID, String accessToken) throws SQLException {
-//        boolean res = false;
-//        if (!clientID.isBlank() && !accessToken.isBlank()) {
-//            user_db.addCloudCredentials(accessToken, clientID);
-//            res = true;
-//        } else {
-//            if (!accessToken.isBlank()) {
-//                user_db.addAccessToken(accessToken);
-//                res = true;
-//            }
-//            if (!clientID.isBlank()) {
-//                user_db.addClientID(clientID);
-//                res = true;
-//            }
-//        }
-//        return res;
-//    }
-
 }

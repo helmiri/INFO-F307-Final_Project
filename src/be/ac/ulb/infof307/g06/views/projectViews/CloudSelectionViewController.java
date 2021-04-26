@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views.projectViews;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,6 +24,7 @@ public class CloudSelectionViewController {
         stage = new Stage();
         stage.setScene(new Scene(pane));
         stage.setTitle("Cloud service selection");
+        stage.setOnCloseRequest(Event::consume);
         stage.showAndWait();
     }
 

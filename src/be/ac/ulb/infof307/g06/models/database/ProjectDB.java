@@ -46,7 +46,7 @@ public class ProjectDB extends Database {
             System.out.println(e.getMessage());
             id = 1;
         }
-
+        Objects.requireNonNull(rs).close();
         sqlUpdate("INSERT INTO Project (id, title, description, startDate, endDate, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + startDate + "','" + endDate + "','" + parent_id + "');");
         if (parent_id != 0) {    // Add the parent tags to the current tags
@@ -55,7 +55,7 @@ public class ProjectDB extends Database {
                 addTag(parent_tag.getId(), id);
             }
         }
-        Objects.requireNonNull(rs).close();
+
         return id;
     }
 
@@ -322,7 +322,6 @@ public class ProjectDB extends Database {
                 id = rs.getInt("id");
                 id++;
             } catch (Exception e) {
-                System.out.println(e.getMessage());
                 id = 1;
             }
             sqlUpdate("INSERT INTO Tag (id, description, color) VALUES('" +
@@ -351,7 +350,6 @@ public class ProjectDB extends Database {
 
         } catch (Exception e) {
             res = null;
-            //TODO Exception
         }
         assert rs != null;
         rs.close();
@@ -416,7 +414,7 @@ public class ProjectDB extends Database {
         } catch (Exception e) {
            return 0;
         }
-        assert rs != null;
+        rs.close();
         rs.close();
         return id;
     }
