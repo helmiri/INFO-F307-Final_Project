@@ -42,7 +42,7 @@ Fichier .jar:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec_jar.bat réside et exécutez la commande suivante
 
-`.\compile.bat PATH_TO_JDK_JAVA.EXE`
+`.\exec_jar.bat PATH_TO_JDK_JAVA.EXE`
 
 # Configuration :
 
