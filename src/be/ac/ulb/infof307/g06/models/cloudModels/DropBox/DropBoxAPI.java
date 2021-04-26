@@ -19,10 +19,8 @@ public class DropBoxAPI {
     /**
      * Initializes the connection with the dropbox account.
      *
-     * @param ACCESS_TOKEN
-     * @param clientidentifier
-     * @throws DbxException
-     * @throws IOException
+     * @param accessToken The user's access token
+     * @param clientID    The appID
      */
     public DropBoxAPI(String accessToken, String clientID) {
         // Create Dropbox client

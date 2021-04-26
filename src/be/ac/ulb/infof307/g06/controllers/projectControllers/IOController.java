@@ -164,7 +164,7 @@ public class IOController extends Controller {
         BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
         int count = 0, parentID = 0 , id = 0;
         String line = reader.readLine();
-        Map<Integer, Integer> hm = new HashMap();
+        Map<Integer, Integer> hm = new HashMap<>();
         while ((line = reader.readLine()) != null) {
             count = ++count % 6;
             if (count == 2) {

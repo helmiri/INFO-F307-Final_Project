@@ -126,7 +126,7 @@ public class StorageController extends Controller implements StorageViewControll
                 credential = authorization.getAuthorization(code);
             }
             user_db.addDropBoxCredentials(credential);
-        } catch (IOException | DbxException | SQLException e) {
+        } catch (DbxException | SQLException e) {
             e.printStackTrace();
         }
     }

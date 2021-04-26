@@ -5,7 +5,6 @@ import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public abstract class Controller {
@@ -29,5 +28,5 @@ public abstract class Controller {
         stage.sizeToScene();
     }
 
-    public abstract void show() throws IOException, SQLException;
+    public abstract void show() throws SQLException;
 }

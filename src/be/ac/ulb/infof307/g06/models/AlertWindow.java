@@ -11,7 +11,6 @@ public class AlertWindow {
     String title;
     String headerText;
     DialogPane dialogPane;
-    String contentText;
     String message;
 
     public AlertWindow(String title, String message) {
@@ -20,15 +19,10 @@ public class AlertWindow {
         headerText = null;
     }
 
-    AlertWindow(String title, String message, String headerText) {
-        this(title, message);
-        this.headerText = headerText;
-    }
-
     public void setAttributes() {
-        alert.setTitle(this.title);
+        alert.setTitle(title);
         alert.setHeaderText(headerText);
-        alert.setContentText(this.message);
+        alert.setContentText(message);
         dialogPane = alert.getDialogPane();
     }
 
@@ -41,16 +35,6 @@ public class AlertWindow {
         alert = new Alert(Alert.AlertType.INFORMATION);
         setAttributes();
         alert.showAndWait();
-    }
-
-    public void temporaryWindow() {
-        alert = new Alert(Alert.AlertType.INFORMATION);
-        setAttributes();
-        alert.show();
-    }
-
-    public void closeWindow() {
-        alert.close();
     }
 
     public boolean confirmationWindow() {

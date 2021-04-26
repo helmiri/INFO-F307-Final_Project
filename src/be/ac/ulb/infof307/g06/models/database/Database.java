@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g06.models.User;
 
 import java.sql.*;
 
+@SuppressWarnings("ALL")
 public abstract class Database {
     protected static Connection db;
     protected String dbURL;

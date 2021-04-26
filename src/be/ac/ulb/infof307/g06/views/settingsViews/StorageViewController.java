@@ -57,12 +57,8 @@ public class StorageViewController {
      * Initializing the cloud parameters.
      */
     public void initialize(long diskLimit, int diskUsage, boolean isAdmin) {
-        try {
-            refresh(diskLimit, diskUsage, isAdmin);
-            showAdminSettings(isAdmin);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        refresh(diskLimit, diskUsage, isAdmin);
+        showAdminSettings(isAdmin);
     }
 
     public void refresh(long diskLimit, long diskUsage, boolean isAdmin) {
@@ -82,7 +78,7 @@ public class StorageViewController {
         return limit;
     }
 
-    private void showAdminSettings(boolean isAdmin) throws SQLException {
+    private void showAdminSettings(boolean isAdmin) {
         if (!isAdmin) {
             return;
         }

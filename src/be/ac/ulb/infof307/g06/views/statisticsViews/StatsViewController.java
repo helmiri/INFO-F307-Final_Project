@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.util.List;
 
@@ -223,15 +224,15 @@ public class StatsViewController{
     /**
      * Shows root in the tree table view.
      *
-     * @param root TreeItem<Project>
+     * @param root selected root
      */
     public void expandRoot(TreeItem<Project> root){root.setExpanded(true);}
 
     /**
      * Adds a child to the related parent in the TreeTableView.
      *
-     * @param parent TreeItem<Project>
-     * @param child TreeItem<Project>
+     * @param parent The project's parent
+     * @param child  The project's child
      */
     public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
         parent.getChildren().add(child);

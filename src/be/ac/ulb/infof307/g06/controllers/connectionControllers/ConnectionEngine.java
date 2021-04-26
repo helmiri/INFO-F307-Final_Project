@@ -5,7 +5,6 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import com.dropbox.core.json.JsonReader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -20,7 +19,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
     private Stage stage;
     private boolean isFirstBoot;
 
-    public ConnectionEngine() throws JsonReader.FileLoadException {
+    public ConnectionEngine() {
     }
 
 
@@ -39,10 +38,9 @@ public class ConnectionEngine extends Application implements SignUpController.Li
      * Starts the main stage
      *
      * @param stage Stage
-     * @throws IOException
      */
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         // Set main stage
         this.stage = stage;
 
@@ -52,7 +50,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
             projectDB = new ProjectDB(DB_PATH);
             isFirstBoot = userDB.isFirstBoot();
         } catch (SQLException | ClassNotFoundException throwables) {
-            //alertWindow(Alert.AlertType.ERROR, "Database error", "Could not access the database");
+            new AlertWindow("Database error", "Could not access the database").errorWindow();
             return;
         }
         showLogin();
@@ -90,7 +88,7 @@ public class ConnectionEngine extends Application implements SignUpController.Li
             case -1 -> new AlertWindow("Login Error", "This user is already connected").errorWindow();
             default -> {
                 try {
-                    User current = userDB.getUserInfo(res);
+                    userDB.getUserInfo(res);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -145,10 +143,10 @@ public class ConnectionEngine extends Application implements SignUpController.Li
      * Creates a user in the database.
      *
      * @param firstName String
-     * @param lastName String
-     * @param userName String
-     * @param email String
-     * @param password String
+     * @param lastName  String
+     * @param userName  String
+     * @param email     String
+     * @param password  String
      */
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {

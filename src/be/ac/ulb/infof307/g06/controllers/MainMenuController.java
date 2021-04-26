@@ -52,7 +52,7 @@ public class MainMenuController extends Controller implements MenuViewController
     /**
      * Sets the loader to show the stage with an invitation to join a project.
      */
-    public void showInvitationStage(Invitation invitation) throws IOException, SQLException {
+    public void showInvitationStage(Invitation invitation) throws IOException {
         FXMLLoader loader = new FXMLLoader(InvitationViewController.class.getResource("InvitationView.fxml"));
         AnchorPane invitationPane = loader.load();
         InvitationViewController controller = loader.getController();
@@ -127,7 +127,7 @@ public class MainMenuController extends Controller implements MenuViewController
         CalendarController controller = new CalendarController(user_db, project_db, stage, scene);
         try {
             controller.show();
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             new AlertWindow("Error", "" + e).errorWindow();
         }
     }
