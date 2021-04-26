@@ -288,7 +288,13 @@ public class ProjectsViewController {
      * @return The selected project
      */
     public Project getSelectedProject() {
-        TreeItem<Project> project = treeProjects.getSelectionModel().getSelectedItems().get(0);
+        TreeItem<Project> project;
+        try{
+             project = treeProjects.getSelectionModel().getSelectedItems().get(0);
+        } catch (IndexOutOfBoundsException e){
+            // Occurs when somehow nothing is selected
+            return null;
+        }
         if (project != null) {
             return project.getValue();
         }
