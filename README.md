@@ -10,6 +10,7 @@ Dépendances:
 
 - JavaFX 16
 - DropBox API v2
+- GoogleDrive API v3
 - GSon 2.8.6
 - Jarchive 0.7.1
 - JUnit 5.4.2
