@@ -104,7 +104,7 @@ public class DropBoxAPI {
                 hasher.update(buf, 0, n);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
         DropBoxContentHasher dropBoxContentHasher = new DropBoxContentHasher();
         return dropBoxContentHasher.hex(hasher.digest());
