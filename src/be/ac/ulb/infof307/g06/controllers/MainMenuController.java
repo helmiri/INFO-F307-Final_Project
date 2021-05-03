@@ -69,12 +69,9 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     public void load(Integer height, Integer width) {
         // Set main stage
-        //stage.setResizable(true);
         stage.setHeight(height);
         stage.setWidth(width);
         stage.centerOnScreen();
-        //stage.setResizable(false);
-
     }
 
     //--------------- STAGES ----------------

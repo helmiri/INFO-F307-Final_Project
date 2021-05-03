@@ -36,7 +36,6 @@ public class UserDB extends Database {
         sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + 1 + "," + diskLimit + ")");
     }
 
-    @SuppressWarnings("SqlWithoutWhere")
     public void setLimit(long value) throws SQLException {
         sqlUpdate("UPDATE admin SET diskLimit='" + value + "'");
     }
@@ -200,7 +199,6 @@ public class UserDB extends Database {
      * @return The user's information
      * @throws SQLException If a database access error occurs
      */
-    @SuppressWarnings("SqlResolve")
     public User getUserInfo(String userName) throws SQLException {
         if (!userExists(userName)) {
             return null;
@@ -209,7 +207,6 @@ public class UserDB extends Database {
         return queryUserInfo(usernameField);
     }
 
-    @SuppressWarnings("SqlResolve")
     private User queryUserInfo(String idField) throws SQLException {
         ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email " + idField);
         if (usrInfo.isClosed()) {

@@ -31,6 +31,8 @@ import java.util.Map;
 public class ProjectsViewController {
     //----------ATTRIBUTES---------
     @FXML
+    public Button addCollaboratorsBtn;
+    @FXML
     private Button exportProjectBtn;
     @FXML
     private Button importProjectBtn;
@@ -138,38 +140,31 @@ public class ProjectsViewController {
      */
     @FXML
     private void events(ActionEvent event) {
-
         if (event.getSource() == backBtn) {
             listener.back();
-        } else if (event.getSource() == cloudUploadBtn) {
-            if (selectedProject != null) {
-                listener.uploadProject(getMultipleSelectedProjects());
-            }
-        } else if (event.getSource() == addTaskbtn) {
-            if (selectedProject != null) {
-                if (startDateTask.getValue() != null && endDateTask.getValue() != null) {
-                    listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
-                    displayTask();
-                } else {
-                    new AlertWindow("Warning", "Task needs a start and end date.").warningWindow();
-                }
-            } else {
-                new AlertWindow("Warning", "Please select a project before adding a tag.").warningWindow();
-            }
+        } else if (event.getSource() == cloudUploadBtn && selectedProject != null) {
+            listener.uploadProject(getMultipleSelectedProjects());
         } else if (event.getSource() == addBtn) {
             listener.addProject();
         } else if (event.getSource() == assignTaskCollaboratorBtn) {
             listener.assignTaskCollaborator(collabComboBox.getCheckModel().getCheckedItems(), getSelectedTask());
-            } else if (event.getSource() == editBtn) {
-                if (selectedProject != null) {
-                    listener.editProject(selectedProject);
-                }
+        } else if (event.getSource() == editBtn && selectedProject != null) {
+            listener.editProject(selectedProject);
         } else if (event.getSource() == exportProjectBtn) {
             exportProject();
         } else if (event.getSource() == importProjectBtn) {
             importProject();
         } else if (event.getSource() == cloudDownloadBtn) {
             listener.downloadProject();
+        } else if (event.getSource() == addCollaboratorsBtn && selectedProject != null) {
+            listener.addCollaborator(collaboratorsName.getText(), selectedProject.getId());
+        } else if (event.getSource() == addTaskbtn && selectedProject != null) {
+            if (startDateTask.getValue() != null && endDateTask.getValue() != null) {
+                listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
+                displayTask();
+            } else {
+                new AlertWindow("Warning", "Task needs a start and end date.").warningWindow();
+            }
         }
     }
 
@@ -185,7 +180,6 @@ public class ProjectsViewController {
     /**
      * Deletes a project in the Database and in the tree table view.
      */
-    @SuppressWarnings("unchecked")
     @FXML
     private void deleteProject() {
         if (treeProjects.getSelectionModel().getSelectedItem() != null && treeProjects.getSelectionModel().getSelectedItem().getValue() != null) {
@@ -193,9 +187,9 @@ public class ProjectsViewController {
             listener.deleteProject(child.getTitle());
             int parentID = child.getParent_id();
             if (parentID == 0) {
-                root.getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+                root.getChildren().remove(treeProjects.getSelectionModel().getSelectedItem());
             } else {
-                TreeMap.get(parentID).getChildren().removeAll(treeProjects.getSelectionModel().getSelectedItem());
+                TreeMap.get(parentID).getChildren().remove(treeProjects.getSelectionModel().getSelectedItem());
             }
         }
     }
@@ -217,14 +211,6 @@ public class ProjectsViewController {
         Task task = getSelectedTask();
         listener.editTask(task);
         displayTask();
-    }
-
-    public void addCollaborator() {
-        if (selectedProject != null) {
-            listener.addCollaborator(collaboratorsName.getText(), selectedProject.getId());
-        } else {
-            new AlertWindow("Warning", "Please select a project before adding a collaborator.").warningWindow();
-        }
     }
 
     /**
@@ -309,8 +295,6 @@ public class ProjectsViewController {
         treeProjects.setRoot(root);
         treeProjectColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
         treeProjects.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        collaboratorsTable.setEditable(false);
-        collaboratorsTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
         collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -340,16 +324,15 @@ public class ProjectsViewController {
         taskColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         taskTime.setCellValueFactory(new PropertyValueFactory<>("time"));
         taskTime.setCellFactory(TextFieldTableCell.forTableColumn());
-        taskTable.setEditable(false);
-        taskTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
         taskTable.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Task task, boolean empty) {
                 super.updateItem(task, empty);
-                if (task == null)
+                if (task == null) {
                     setStyle("");
-                else if (listener.isCollaboratorInTask(task))
+                } else if (listener.isCollaboratorInTask(task)) {
                     setStyle("-fx-background-color: #8fbc8f;");
+                }
             }
         });
     }
@@ -413,18 +396,15 @@ public class ProjectsViewController {
         projectTags.setItems(tagsName);
     }
 
-
     /**
      * Displays tasks on the table.
      */
     @FXML
     public void displayTask() {
         if (selectedProject != null) {
-            ObservableList<Task> oTaskList = listener.getTasks(selectedProject);
-            taskTable.setItems(oTaskList);
+            taskTable.setItems(listener.getTasks(selectedProject));
         }
     }
-
 
     @FXML
     public Task getSelectedTask(){

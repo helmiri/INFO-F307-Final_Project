@@ -48,7 +48,7 @@ public class SignUpController {
                         try {
                             showConditionStage(firstName, lastName, userName, email, password);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            new AlertWindow("error", "" + e).errorWindow();
                         }
                     } else {
                         new AlertWindow("Error", "This user already exists").informationWindow();

@@ -95,8 +95,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
-
-
     public void showEditProjectStage(Project project, ProjectsViewController.ViewListener listener) {
         try {
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("popups/EditProjectView.fxml"));

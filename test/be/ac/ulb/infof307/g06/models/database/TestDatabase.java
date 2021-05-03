@@ -71,7 +71,6 @@ public class TestDatabase {
         calendarDB = new CalendarDB(DB_PATH);
     }
 
-    @SuppressWarnings("SqlWithoutWhere")
     @AfterEach
     public void clear() throws SQLException {
         /*

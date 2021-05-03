@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class ProjectInputViewController {
     //---------- ATTRIBUTES ----------------
     @FXML
-    protected CheckComboBox tagsProject;
+    protected CheckComboBox<String> tagsProject;
     @FXML
     protected DatePicker dateProject;
     @FXML
@@ -38,15 +38,6 @@ public class ProjectInputViewController {
         this.listener = listener;
         ObservableList<String> tags = listener.getAllTags();
         tagsProject.getItems().addAll(tags);
-    }
-
-    /**
-     * The main method for button's events.
-     *
-     * @param event ActionEvent
-     */
-    @FXML
-    protected void events(ActionEvent event) {
     }
 
     @FXML

@@ -118,11 +118,6 @@ public class CalendarViewController {
         projects.setOnMouseClicked(null);
         projects.getCalendarSources().setAll(projectSource);
         tasks.getCalendarSources().setAll(taskSource);
-        projects.setRowHeight(50);
-        projects.setShowToday(false);
-        tasks.setShowToday(false);
-        projects.setAdjustToFirstDayOfWeek(true);
-        tasks.setAdjustToFirstDayOfWeek(true);
     }
 
     @FXML

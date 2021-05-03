@@ -39,9 +39,10 @@
                         <VBox layoutX="-2.0" prefHeight="710.0" prefWidth="1500.0" spacing="40">
                             <children>
                                 <AllDayView fx:id="projects" minHeight="0.0" prefHeight="723" prefWidth="0.0"
-                                            rowHeight="50.0"/>
+                                            rowHeight="50.0" showToday="false" adjustToFirstDayOfWeek="true"/>
                                 <AllDayView fx:id="tasks" disable="true" minHeight="0.0" prefHeight="29.0"
-                                            prefWidth="1485.0" rowHeight="20.0"/>
+                                            prefWidth="1485.0" rowHeight="20.0" showToday="false"
+                                            adjustToFirstDayOfWeek="true"/>
                             </children>
                         </VBox>
                         <Line fx:id="line1" endX="210.5" opacity="0.2" startX="210.5" startY="9.9999999999999E13"/>

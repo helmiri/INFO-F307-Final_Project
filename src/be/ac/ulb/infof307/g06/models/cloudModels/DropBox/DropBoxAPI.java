@@ -12,9 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@SuppressWarnings("ALL")
 public class DropBoxAPI {
-    private DbxClientV2 dboxClient;
+    private final DbxClientV2 dboxClient;
 
     /**
      * Initializes the connection with the dropbox account.
@@ -79,8 +78,7 @@ public class DropBoxAPI {
      * @throws NoSuchAlgorithmException
      */
     public void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
-        String tempPath = localFilePath;
-        OutputStream outputStream = new FileOutputStream(tempPath);
+        OutputStream outputStream = new FileOutputStream(localFilePath);
         FileMetadata metadata = dboxClient.files()
                 .downloadBuilder(cloudFilePath)
                 .download(outputStream);

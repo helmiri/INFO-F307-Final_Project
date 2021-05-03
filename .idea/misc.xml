@@ -4,10 +4,11 @@
     <option name="lastSelectedFile" value="$PROJECT_DIR$/../Desktop/view-11.8.3/com/calendarfx/model/Calendar.class" />
   </component>
   <component name="EntryPointsManager">
-    <list size="3">
-      <item index="0" class="java.lang.String" itemvalue="org.junit.jupiter.api.AfterAll" />
-      <item index="1" class="java.lang.String" itemvalue="org.junit.jupiter.api.BeforeAll" />
-      <item index="2" class="java.lang.String" itemvalue="org.junit.jupiter.api.BeforeEach" />
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="javafx.fxml.FXML" />
+      <item index="1" class="java.lang.String" itemvalue="org.junit.jupiter.api.AfterAll" />
+      <item index="2" class="java.lang.String" itemvalue="org.junit.jupiter.api.BeforeAll" />
+      <item index="3" class="java.lang.String" itemvalue="org.junit.jupiter.api.BeforeEach" />
     </list>
   </component>
   <component name="JavadocGenerationManager">

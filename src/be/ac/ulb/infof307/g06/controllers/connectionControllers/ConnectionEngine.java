@@ -2,10 +2,8 @@ package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -38,7 +36,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
         try {
             controller.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("error", "" + e).errorWindow();
         }
     }
 
@@ -53,8 +51,8 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
         int res = 0;
         try {
             res = userDB.validateData(username, password);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("error", "" + e).errorWindow();
         }
         switch (res) {
             case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").errorWindow();
@@ -62,8 +60,8 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
             default -> {
                 try {
                     userDB.getUserInfo(res);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException e) {
+                    new AlertWindow("error", "" + e).errorWindow();
                 }
                 showMainMenu();
             }
@@ -79,7 +77,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
         try {
             controller.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            new AlertWindow("error", "" + e).errorWindow();
         }
     }
 
@@ -124,7 +122,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
         try {
-            User current = userDB.getUserInfo(userDB.addUser(firstName, lastName, userName, email, password));
+            userDB.getUserInfo(userDB.addUser(firstName, lastName, userName, email, password));
         } catch (SQLException e) {
             new AlertWindow("Error", "An error has occurred when adding the user to the database: " + e).errorWindow();
             e.printStackTrace();

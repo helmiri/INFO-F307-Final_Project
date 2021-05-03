@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class main extends Application {
+public class Main extends Application {
     /**
      * Lauchs the main application
      *
