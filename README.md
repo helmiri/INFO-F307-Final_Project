@@ -42,7 +42,9 @@ Fichier .jar:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec_jar.bat réside et exécutez la commande suivante
 
-`.\exec_jar.bat PATH_TO_JDK_JAVA.EXE`
+`.\exec.bat PATH_TO_JDK_JAVA.EXE jar iteration-x`
+
+où x est le numéro de l'itération
 
 # Configuration :
 
@@ -55,7 +57,25 @@ dû diviser notre projet en packages tout en respectant le MVC (model view contr
 
 # Tests
 
-Pour le moment vu que nous utilisons intellIJ les tests s'effectuent simplement avec un run.
+## Compilation
+
+Windows:
+
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
+
+`.\compile.bat PATH_TO_JDK_JAVAC.EXE test`
+
+où PATH_TO_JDK_JAVAC.EXE est le chemin vers javac.exe
+
+## Démarrage
+
+Windows:
+
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
+
+`.\exec.bat PATH_TO_JDK_JAVA.EXE test`
+
+où PATH_TO_JDK_JAVA.EXE vers java.exe
 
 # Misc
 
