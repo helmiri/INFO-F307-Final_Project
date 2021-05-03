@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class Main extends Application {
     /**
-     * Lauchs the main application
+     * Launchs the main application
      *
      * @param args String[] Arguments
      */

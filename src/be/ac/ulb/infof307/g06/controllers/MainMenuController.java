@@ -64,8 +64,8 @@ public class MainMenuController extends Controller implements MenuViewController
     /**
      * Loads stage.
      *
-     * @param height Integer
-     * @param width Integer
+     * @param height Integer, height of the window.
+     * @param width  Integer, width of the window.
      */
     public void load(Integer height, Integer width) {
         // Set main stage

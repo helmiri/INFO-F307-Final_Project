@@ -12,7 +12,7 @@ import org.controlsfx.control.CheckComboBox;
 
 import java.time.LocalDate;
 
-@SuppressWarnings("rawtypes")
+
 public class ProjectInputViewController {
     //---------- ATTRIBUTES ----------------
     @FXML

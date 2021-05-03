@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g06.views.connectionViews.SignUpViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.util.regex.Matcher;

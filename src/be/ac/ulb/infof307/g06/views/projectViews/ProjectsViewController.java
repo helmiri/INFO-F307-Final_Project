@@ -298,7 +298,6 @@ public class ProjectsViewController {
         collaboratorsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         collaboratorsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        taskCollaboratorTable.setStyle("-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;");
         taskCollaboratorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         taskCollaboratorColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         projectTags.setCellFactory(new Callback<>() {
@@ -337,7 +336,6 @@ public class ProjectsViewController {
         });
     }
 
-
     /**
      * Shows a new directory chooser stage to choose where we want to save our selected project then exports it.
      */
@@ -363,7 +361,6 @@ public class ProjectsViewController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("archive","*.tar.gz"));
         File selectedArchive = fileChooser.showOpenDialog(new Stage());
         if (selectedArchive != null) {
-            System.out.println(selectedArchive.getAbsolutePath());
             listener.importProject(selectedArchive.getAbsolutePath());
         }
     }

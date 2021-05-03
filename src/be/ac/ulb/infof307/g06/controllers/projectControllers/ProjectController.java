@@ -171,7 +171,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
             new AlertWindow("Error", "" + e).errorWindow();
         }
     }
-
     @Override
     public void onEditProject(Project project, String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> newTags) {
         if (storageLimitReached()) {
