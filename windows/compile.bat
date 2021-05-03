@@ -1,4 +1,7 @@
 @echo off
+
+cd ..
+
 rmdir .\compile\build\be
 mkdir compile
 mkdir .\compile\build
