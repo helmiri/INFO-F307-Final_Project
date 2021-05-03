@@ -9,21 +9,21 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Pondération
 
-| Priorité/3 | N° | Description | Difficulté/3 | Risque/3 | Heures/? | Points |
-| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| 1 | [1](#Histoire-1) | Histoire 1 |  | 2 | 30 | / |
-| 2 | 2 | Histoire 2 |  | 2 | 38 | / |
-|   | 3 | Histoire 3 |  | 3 | 19 |  |
-|   | 4 | Histoire 4 |  | 1 | 35 |  |
-|   | 5 | Histoire 5 |  | 1 | 35 |  |
-|   | 6 | Histoire 6 |  | 1 | 24 |  |
-|   | 7 | Histoire 7 |  | 3 | 8 |  |
-|   | 8 | Histoire 8 |  | 3 | 10 |  |
-|   | 9 | Histoire 9 |  | 1 | 25 |  |
-| 3 | 10 | Histoire 10 |  | 2 | 25 | / |
-|   | 11 | Histoire 11 |  | 3 | 12 |  |
-|   | 12 | Histoire 12 |  | 2 | 25 |  |
-|   | 13 | Histoire 13 |  | 1 | 25 |  |
+| Priorité/3 | N° | Description | Risque/3 | Heures/? | Points |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| 1 | [1](#Histoire-1) | Histoire 1 | 2 | 26 | 30|
+| 2 | 2 | Histoire 2 | 2 | 43 | 38 |
+|   | 3 | Histoire 3 | 3 | 8 | 19 |
+|   | 4 | Histoire 4 | 1 | 37 | 35 |
+|   | 5 | Histoire 5 | 1 | / | 35 |
+|   | 6 | Histoire 6 | 1 | 14 | 19 |
+|   | 7 | Histoire 7 | 3 | 24 | 8 |
+|   | 8 | Histoire 8 | 3 | 32 | 14 |
+|   | 9 | Histoire 9 | 1 | 25 | 25 |
+| 3 | 10 | Histoire 10 | 2 | / | 25 |
+|   | 11 | Histoire 11 | 3 | / | 12 |
+|   | 12 | Histoire 12 | 2 | / | 25 |
+|   | 13 | Histoire 13 | 1 | / | 25 |
 
 ----------------------
 
@@ -36,6 +36,16 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | 2 | 4-5-6-9 | 2 | 3-7-8 |
 | 3 | 13 | 10-12 | 11 |
 
+----------------------
+
+## Itérations
+
+| It| Dates | Histoires choisies |
+| ------ | ------ | ------ |
+| 1 | 23.02 - 9.03 | 1-2-8 |
+| 2 | 9.03 - 30.03 | 6-7-8-9 |
+| 3 | 30.03 - 27.04 | 3-4-8-9 |
+| 4 | 27.04 - 11.05 | 4-8-11-12-13 |
 
 ----------------------
 
@@ -44,9 +54,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ### Histoire 1
 **Instructions originales:**
+- Interface de connexion. 10h
 - Présence de conditions d'utilisateurs, qui doivent être acceptés pour pouvoir accéder à l'application. 3h
 - BDD utilisateurs (mot de passe, nom d'utilisateur, nom de famille,prénom, adresse email). 15h
-- Interface de connexion. 10h
 - Validitée des données des l'utilisateurs. 2h
 
 **Tâches en plus:** 
@@ -65,7 +75,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Possibilité de supprimer un projet. 2h
 
 **Tâches en plus:** 
-- Tags colorés. 5h
+- Tags colorés. 5h (ajoutée it2)
 
 :question: **Question:**  
 - Qu'est-ce qu'une tâche concrètement? Réponse : Une simple chose à faire, sans date ni heure, ni échéance.
@@ -96,8 +106,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Faire en sorte de voir le début et la fin d'une tâche. 5h
 
 **Tâches en plus:** 
-- Penser à tout type d'utilisateur (handicape, daltonisme,..) 1h
-- Créer potentiellement 3 types d'affichage (par jour,par semaine et par mois). 3h
+- Penser à tout type d'utilisateur (handicape, daltonisme,..) 1h 
+- Créer potentiellement 3 types d'affichage (par semaine et par mois). 3h
 
 :question: **Question:** 
 - Quel type de calendrier( une fenêtre entière ou bien juste dans un coin comme sous windows)?
@@ -158,7 +168,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Possibilité d'exporter les statistiques en ".csv", ".json". 2h
 
 **Tâches en plus:** 
-- /
+- Design "dashboard" 3h  (ajoutée it3)
+- Ajuster la barre de "scrolling" 1h  (ajoutée it4)
 
 :question: **Question:** 
 - /
@@ -182,7 +193,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 ### Histoire 10
 **Instructions originales:**
 - Intégration d'un système de rappels pour les projets et les tâches avec une date d'échéance.(via l'application ou par l'intégration d'une application calendrier externe). 20h
-- Si les rappels se font via l'application, ceux ci doivent être présentés à l'utilisateur lors du démarrage du logiciel, avec la possibilité de soit validé les rappels, soit de les reporter à une date ultérieure. 5h
+- Présenter les rappels à l'utilisateur lors dudémarrage de l'application. 2h
+- Possibilité de valider les rappels ou de les reporter. 3h
 
 **Tâches en plus:** 
 - /
