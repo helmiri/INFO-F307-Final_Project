@@ -9,21 +9,21 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Pondération
 
-| Priorité/3 | N° | Description | Difficulté/3 | Risque/3 | Heures/? | Points |
+| Priorité/3 | N° | Description | Risque/3 | Heures/? | Points |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
 | 1 | [1](#Histoire-1) | Histoire 1 |  | 2 | 26 | 30|
-| 2 | 2 | Histoire 2 |  | 2 | 43 | 38 |
-|   | 3 | Histoire 3 |  | 3 | 8 | 19 |
-|   | 4 | Histoire 4 |  | 1 | 37 | 35 |
-|   | 5 | Histoire 5 |  | 1 | / | 35 |
-|   | 6 | Histoire 6 |  | 1 | 14 | 19 |
-|   | 7 | Histoire 7 |  | 3 | 24 | 8 |
-|   | 8 | Histoire 8 |  | 3 | 32 | 14 |
-|   | 9 | Histoire 9 |  | 1 | 25 | 25 |
-| 3 | 10 | Histoire 10 |  | 2 | / | 25 |
-|   | 11 | Histoire 11 |  | 3 | / | 12 |
-|   | 12 | Histoire 12 |  | 2 | / | 25 |
-|   | 13 | Histoire 13 |  | 1 | / | 25 |
+| 2 | 2 | Histoire 2 | 2 | 43 | 38 |
+|   | 3 | Histoire 3 | 3 | 8 | 19 |
+|   | 4 | Histoire 4 | 1 | 37 | 35 |
+|   | 5 | Histoire 5 | 1 | / | 35 |
+|   | 6 | Histoire 6 | 1 | 14 | 19 |
+|   | 7 | Histoire 7 | 3 | 24 | 8 |
+|   | 8 | Histoire 8 | 3 | 32 | 14 |
+|   | 9 | Histoire 9 | 1 | 25 | 25 |
+| 3 | 10 | Histoire 10 | 2 | / | 25 |
+|   | 11 | Histoire 11 | 3 | / | 12 |
+|   | 12 | Histoire 12 | 2 | / | 25 |
+|   | 13 | Histoire 13 | 1 | / | 25 |
 
 ----------------------
 
@@ -40,7 +40,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Itérations
 
-| It| Dates | N° | Histoires choisies |
+| It| Dates | Histoires choisies |
 | ------ | ------ | ------ | ------ |
 | 1 | 23.02 - 9.03 | 1-2-8 |
 | 2 | 9.03 - 30.03 | 6-7-8-9 |
