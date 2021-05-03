@@ -10,8 +10,8 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 ## Pondération
 
 | Priorité/3 | N° | Description | Risque/3 | Heures/? | Points |
-| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| 1 | [1](#Histoire-1) | Histoire 1 |  | 2 | 26 | 30|
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| 1 | [1](#Histoire-1) | Histoire 1 | 2 | 26 | 30|
 | 2 | 2 | Histoire 2 | 2 | 43 | 38 |
 |   | 3 | Histoire 3 | 3 | 8 | 19 |
 |   | 4 | Histoire 4 | 1 | 37 | 35 |
@@ -41,7 +41,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 ## Itérations
 
 | It| Dates | Histoires choisies |
-| ------ | ------ | ------ | ------ |
+| ------ | ------ | ------ |
 | 1 | 23.02 - 9.03 | 1-2-8 |
 | 2 | 9.03 - 30.03 | 6-7-8-9 |
 | 3 | 30.03 - 27.04 | 3-4-8-9 |
