@@ -1,30 +1,78 @@
 @echo off
-rmdir .\compile\build\be
-mkdir compile
+
+set classpath=".\lib\sqlite\*;.\lib\calendarfx\*;.\lib\googledrive\*;.\lib\dropbox\*;.\lib\gson\*;.\lib\jarchivelib\*;.\lib\controlsfx\*;.\lib\junit\*;.\lib\junit\console\*"
+
+if "%2" == "test" (
+    goto COMPILE_TEST
+) else if "%1" == "clean" (
+    goto CLEAN
+)
+
+:COMPILE_BUILD
+@REM Clean target directory
+
+call :rem_dir build
+
 mkdir .\compile\build
-mkdir .\compile\tests
 
-cd .\src
+@REM Find .java files
 
-dir /s/b *.java > ..\compile\build\sources.txt
-cd ..
+dir /s/b .\src\*.java > .\compile\build\sources.txt
+
+@REM Setup directory structure
+
 xcopy .\src .\compile\build /t/e
 
-%1 -cp ".\lib\calendarfx\view-11.8.3.jar;.\lib\googledrive\*;.\lib\dropbox\dropbox-core-sdk-3.1.5.jar;.\lib\dropbox\jackson-core-2.7.4.jar;.\lib\gson\gson-2.8.6.jar;.\lib\jarchivelib\jarchivelib-0.7.1-jar-with-dependencies.jar;.\lib\controlsfx\controlsfx-11.1.0.jar" --module-path lib\javafx\windows\lib --add-modules javafx.controls,javafx.fxml @.\compile\build\sources.txt .\src\be\ac\ulb\infof307\g06\controllers\connectionControllers\ConnectionEngine.java -d .\compile\build
+@REM Compile 
 
-copy .\src\be\ac\ulb\infof307\g06\views\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\
-copy .\src\be\ac\ulb\infof307\g06\views\connectionViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\connectionViews\
-copy .\src\be\ac\ulb\infof307\g06\views\projectViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\
-copy .\src\be\ac\ulb\infof307\g06\views\projectViews\*.css .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\
-copy .\src\be\ac\ulb\infof307\g06\views\projectViews\popups\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\popups\
-copy .\src\be\ac\ulb\infof307\g06\views\statisticsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\statisticsViews\
-copy .\src\be\ac\ulb\infof307\g06\icons\* .\compile\build\be\ac\ulb\infof307\g06\icons\
-copy .\src\be\ac\ulb\infof307\g06\views\calendarViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\calendarViews\
-copy .\src\be\ac\ulb\infof307\g06\views\mainMenuViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\mainMenuViews\
-copy .\src\be\ac\ulb\infof307\g06\views\settingsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\settingsViews\
-copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json
-copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json
+%1 -cp %classpath% --module-path lib\javafx\windows\lib --add-modules javafx.controls,javafx.fxml @.\compile\build\sources.txt .\src\be\ac\ulb\infof307\g06\Main.java -d .\compile\build
 
+@REM Copy resources (icons, fxml, json)
 
+copy .\src\be\ac\ulb\infof307\g06\views\connectionViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\connectionViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\projectViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\projectViews\*.css .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\projectViews\popups\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\popups\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\statisticsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\statisticsViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\icons\* .\compile\build\be\ac\ulb\infof307\g06\icons\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\calendarViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\calendarViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\mainMenuViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\mainMenuViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\settingsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\settingsViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json > Nul
+copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json > Nul
 
+exit /b 0
 
+@REM Tests compilation
+
+:COMPILE_TEST
+
+@REM Clean target directory
+call :rem_dir test
+
+mkdir .\compile\test
+
+@REM Find .java files
+dir /s/b .\test\*.java > .\compile\test\sources.txt
+dir /s/b .\src\be\ac\ulb\infof307\g06\models\*.java >> .\compile\test\sources.txt
+
+@REM Compile 
+%1 -cp %classpath% --module-path lib\javafx\windows\lib --add-modules javafx.controls,javafx.fxml @.\compile\test\sources.txt -d .\compile\test
+
+exit /b 0
+
+:CLEAN
+
+call :rem_dir test
+call :rem_dir build
+if exist .\compile rmdir /q .\compile
+
+exit /b %ERRORLEVEL%
+
+:rem_dir
+    if exist .\compile (
+        if exist .\compile\%~1 (
+            del /q/s .\compile\%~1 > NUL
+            rmdir /q/s .\compile\%~1 > NUL
+        )
+    )
