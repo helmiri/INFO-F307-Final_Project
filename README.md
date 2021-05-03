@@ -34,7 +34,7 @@ Windows:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
 
-`.\exec.bat PATH_TO_JDK_JAVA.EXE`
+`.\windows\exec.bat PATH_TO_JDK_JAVA.EXE`
 
 où PATH_TO_JDK_JAVA.EXE vers java.exe
 
@@ -42,7 +42,7 @@ Fichier .jar:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec_jar.bat réside et exécutez la commande suivante
 
-`.\exec.bat PATH_TO_JDK_JAVA.EXE jar iteration-x`
+`.\windows\exec.bat PATH_TO_JDK_JAVA.EXE jar iteration-x`
 
 où x est le numéro de l'itération
 
@@ -63,7 +63,7 @@ Windows:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
 
-`.\compile.bat PATH_TO_JDK_JAVAC.EXE test`
+`.\windows\compile.bat PATH_TO_JDK_JAVAC.EXE test`
 
 où PATH_TO_JDK_JAVAC.EXE est le chemin vers javac.exe
 
@@ -73,7 +73,7 @@ Windows:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
 
-`.\exec.bat PATH_TO_JDK_JAVA.EXE test`
+`.\windows\exec.bat PATH_TO_JDK_JAVA.EXE test`
 
 où PATH_TO_JDK_JAVA.EXE vers java.exe
 
