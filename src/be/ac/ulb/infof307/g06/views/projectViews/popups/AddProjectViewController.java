@@ -17,7 +17,6 @@ public class AddProjectViewController extends ProjectInputViewController {
      *
      * @param event ActionEvent
      */
-    @Override
     protected void events(ActionEvent event) {
         if (event.getSource() == addProjectBtn) {
             listener.onAddProject(getNameProject(), getDescriptionProject(), getDateProject(), getEndDateProject(), getSelectedTags(), getParentProjectName());
