@@ -12,49 +12,22 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class ConnectionEngine extends Application implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
+public class ConnectionEngine implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
     //-------------- ATTRIBUTES ----------------
-    private UserDB userDB;
-    private ProjectDB projectDB;
-    private Stage stage;
-    private boolean isFirstBoot;
+    private final UserDB userDB;
+    private final ProjectDB projectDB;
+    private final Stage stage;
+    private final boolean isFirstBoot;
 
-    public ConnectionEngine() {
+    public ConnectionEngine(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot) {
+        this.userDB = userDB;
+        this.projectDB = projectDB;
+        this.stage = stage;
+        this.isFirstBoot = isFirstBoot;
     }
-
 
     //-------------- METHODS ----------------
 
-    /**
-     * Lauchs the main application
-     *
-     * @param args String[] Arguments
-     */
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-
-    /**
-     * Starts the main stage
-     *
-     * @param stage Stage
-     */
-    @Override
-    public void start(Stage stage) {
-        // Set main stage
-        this.stage = stage;
-
-        try {
-            String DB_PATH = "Database.db";
-            userDB = new UserDB(DB_PATH);
-            projectDB = new ProjectDB(DB_PATH);
-            isFirstBoot = userDB.isFirstBoot();
-        } catch (SQLException | ClassNotFoundException throwables) {
-            new AlertWindow("Database error", "Could not access the database").errorWindow();
-            return;
-        }
-        showLogin();
-    }
 
     /**
      * Manages the display of the log in window.
