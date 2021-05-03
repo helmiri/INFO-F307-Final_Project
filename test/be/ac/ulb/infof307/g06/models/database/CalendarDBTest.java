@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.models.database;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -9,13 +10,15 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CalendarDBTest extends TestDatabase {
     String project1 = "project1";
     String color1 = "color1";
     String project2 = "project2";
     String color2 = "color2";
 
-    public CalendarDBTest() throws ClassNotFoundException {
+    public CalendarDBTest() throws ClassNotFoundException, SQLException {
+        super();
     }
 
 
@@ -56,10 +59,6 @@ class CalendarDBTest extends TestDatabase {
         Map<String, String> projects = calendarDB.getProjects();
         Map<String, String> expected = new HashMap<>();
         assertEquals(expected, projects);
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test

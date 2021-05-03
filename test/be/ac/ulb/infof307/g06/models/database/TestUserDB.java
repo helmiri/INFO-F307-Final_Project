@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUserDB extends TestDatabase {
 
 
-    public TestUserDB() throws ClassNotFoundException {
+    public TestUserDB() throws ClassNotFoundException, SQLException {
+        super();
     }
 
     @Test

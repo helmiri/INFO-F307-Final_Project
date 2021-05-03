@@ -21,11 +21,8 @@ class TestProjectDB extends TestDatabase {
     String taskDescription = "task1";
     String taskDescription2 = "task2";
 
-    public TestProjectDB() throws ClassNotFoundException {
-    }
-
-    @AfterAll
-    static void tearDown(){
+    public TestProjectDB() throws ClassNotFoundException, SQLException {
+        super();
     }
 
     @Test
