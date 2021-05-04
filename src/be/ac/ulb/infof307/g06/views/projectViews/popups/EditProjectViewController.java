@@ -28,6 +28,7 @@ public class EditProjectViewController extends ProjectInputViewController{
      *
      * @param event ActionEvent
      */
+    @FXML
     protected void events(ActionEvent event) {
         if (event.getSource() == editProjectBtn) {
             listener.onEditProject(project, nameProject.getText(), descriptionProject.getText(), dateProject.getValue(), endDateProject.getValue(), tagsProject.getCheckModel().getCheckedItems());

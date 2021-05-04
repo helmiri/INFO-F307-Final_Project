@@ -14,7 +14,7 @@
             prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController">
    <stylesheets>
-      <URL value="@ProjectsView.css"/>
+      <URL value="@../../resources/stylesheets/ProjectsView.css"/>
    </stylesheets>
    <cursor>
       <Cursor fx:constant="DEFAULT"/>
@@ -43,7 +43,7 @@
    <Accordion layoutX="467.0" layoutY="755.0"/>
    <Pane layoutX="331.0" layoutY="-14.0" prefHeight="900.0" prefWidth="1176.0">
       <Button fx:id="backBtn" layoutX="1056.0" layoutY="833.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="43.0" prefWidth="78.0" style="-fx-background-color: #4fc3f7;" text="Back"
+              prefHeight="43.0" prefWidth="78.0" stylesheets="@../../resources/stylesheets/Button.css" text="Back"
               textFill="WHITE"/>
       <Pane layoutX="89.0" layoutY="31.0" prefHeight="394.0" prefWidth="546.0">
          <children>
@@ -62,20 +62,25 @@
             <TextArea fx:id="projectsDescription" disable="true" layoutX="39.0" layoutY="138.0" prefHeight="118.0"
                       prefWidth="450.0" promptText="DESCRIPTION"/>
             <Button fx:id="exportProjectBtn" layoutX="391.0" layoutY="336.0" mnemonicParsing="false"
-                    onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;"
-                    text="Export"/>
+                    onAction="#events" prefHeight="37.0" prefWidth="60.0"
+                    stylesheets="@../../resources/stylesheets/Button.css"
+                    text="Export" textFill="white"/>
             <Button fx:id="editBtn" layoutX="459.0" layoutY="336.0" mnemonicParsing="false" onAction="#events"
-                    prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;" text="Edit"/>
+                    prefHeight="37.0" prefWidth="60.0" stylesheets="@../../resources/stylesheets/Button.css" text="Edit"
+                    textFill="white"/>
             <ListView fx:id="projectTags" layoutX="37.0" layoutY="85.0" orientation="HORIZONTAL" prefHeight="43.0"
                       prefWidth="450.0"/>
             <Button fx:id="importProjectBtn" layoutX="324.0" layoutY="336.0" mnemonicParsing="false"
-                    onAction="#events" prefHeight="37.0" prefWidth="60.0" style="-fx-background-color: #4fc3f7;"
-                    text="Import"/>
+                    onAction="#events" prefHeight="37.0" prefWidth="60.0"
+                    stylesheets="@../../resources/stylesheets/Button.css"
+                    text="Import" textFill="white"/>
             <Button fx:id="cloudDownloadBtn" layoutX="234.0" layoutY="336.0" mnemonicParsing="false"
-                    onAction="#events" prefHeight="37.0" prefWidth="80.0" style="-fx-background-color: #4fc3f7;"
-                    text="Download"/>
+                    onAction="#events" prefHeight="37.0" prefWidth="80.0"
+                    stylesheets="@../../resources/stylesheets/Button.css"
+                    text="Download" textFill="white"/>
             <Button fx:id="cloudUploadBtn" layoutX="144.0" layoutY="336.0" mnemonicParsing="false"
-                    onAction="#events" prefHeight="37.0" prefWidth="80.0" style="-fx-background-color: #4fc3f7;"
+                    onAction="#events" prefHeight="37.0" prefWidth="80.0"
+                    stylesheets="@../../resources/stylesheets/Button.css" textFill="white"
                     text="Upload"/>
          </children>
       </Pane>
@@ -97,7 +102,8 @@
             </contextMenu>
          </TableView>
          <Button fx:id="addTaskbtn" layoutX="442.0" layoutY="399.0" mnemonicParsing="false" onAction="#events"
-                 prefHeight="37.0" prefWidth="90.0" style="-fx-background-color: #4fc3f7;" text="ADD"/>
+                 prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD"
+                 textFill="white"/>
          <TextArea fx:id="descriptionTask" layoutX="17.0" layoutY="398.0" prefHeight="37.0" prefWidth="413.0"/>
          <DatePicker fx:id="startDateTask" layoutX="17.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0"
                      promptText="Start date"/>
@@ -121,7 +127,8 @@
             </contextMenu>
          </TableView>
          <Button fx:id="addCollaboratorsBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false"
-                 prefHeight="37.0" prefWidth="210.0" text="ADD"/>
+                 prefHeight="37.0" prefWidth="210.0" stylesheets="@../../resources/stylesheets/Button.css"
+                 textFill="white" text="ADD"/>
          <TextArea fx:id="collaboratorsName" layoutX="60.0" layoutY="340.0" prefHeight="12.0"
                    prefWidth="210.0"/>
       </Pane>
@@ -142,11 +149,12 @@
             </contextMenu>
          </TableView>
          <Button fx:id="assignTaskCollaboratorBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false"
-                 onAction="#events" prefHeight="37.0" prefWidth="210.0" text="ADD"/>
+                 onAction="#events" prefHeight="37.0" prefWidth="210.0"
+                 stylesheets="@../../resources/stylesheets/Button.css" text="ADD" textFill="white"/>
          <CheckComboBox fx:id="collabComboBox" layoutX="60.0" layoutY="338.0" prefHeight="37.0"
                         prefWidth="210.0"/>
       </Pane>
    </Pane>
    <Button fx:id="addBtn" layoutY="850.0" mnemonicParsing="false" onAction="#events" prefHeight="48.0"
-           prefWidth="322.0" style="-fx-background-color: #4fc3f7;" text="ADD"/>
+           prefWidth="322.0" stylesheets="@../../resources/stylesheets/Button.css" textFill="white" text="ADD"/>
 </AnchorPane>

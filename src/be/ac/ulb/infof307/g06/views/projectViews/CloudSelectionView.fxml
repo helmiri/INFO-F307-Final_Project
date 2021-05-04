@@ -15,7 +15,7 @@
                     style="-fx-background-color: transparent;">
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/Google_Drive.png"/>
+                     <Image url="@../../resources/icons/Google_Drive.png"/>
                   </ImageView>
                </graphic>
             </Button>
@@ -23,7 +23,7 @@
                     style="-fx-background-color: transparent;">
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/Dropbox_Icon.png"/>
+                     <Image url="@../../resources/icons/Dropbox_Icon.png"/>
                   </ImageView>
                </graphic>
             </Button>

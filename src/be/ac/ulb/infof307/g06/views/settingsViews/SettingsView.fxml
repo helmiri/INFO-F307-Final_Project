@@ -89,19 +89,19 @@
       <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="-52.0" layoutY="247.0" pickOnBounds="true"
                  preserveRatio="true" x="100.0">
          <image>
-            <Image url="@../../icons/TAGS_ICON.png"/>
+            <Image url="@../../resources/icons/TAGS_ICON.png"/>
          </image>
       </ImageView>
       <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="326.0" pickOnBounds="true"
                  preserveRatio="true">
          <image>
-            <Image url="@../../icons/LANGUAGE_ICON.png"/>
+            <Image url="@../../resources/icons/LANGUAGE_ICON.png"/>
          </image>
       </ImageView>
       <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="402.0" pickOnBounds="true"
                  preserveRatio="true">
          <image>
-            <Image url="@../../icons/STORAGE_ICON.png"/>
+            <Image url="@../../resources/icons/STORAGE_ICON.png"/>
          </image>
       </ImageView>
       <Button fx:id="aboutBtn" layoutY="538.0" mnemonicParsing="false" onAction="#events" onMouseEntered="#hover"
@@ -127,13 +127,13 @@
       <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="480.0" pickOnBounds="true"
                  preserveRatio="true">
          <image>
-            <Image url="@../../icons/HELP_ICON.png"/>
+            <Image url="@../../resources/icons/HELP_ICON.png"/>
          </image>
       </ImageView>
       <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="559.0" pickOnBounds="true"
                  preserveRatio="true">
          <image>
-            <Image url="@../../icons/ABOUT_ICON.png"/>
+            <Image url="@../../resources/icons/ABOUT_ICON.png"/>
          </image>
       </ImageView>
    </children>

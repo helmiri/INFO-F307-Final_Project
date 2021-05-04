@@ -16,14 +16,15 @@
       <HBox layoutX="259.0" layoutY="350.0" spacing="40.0">
          <children>
             <Button fx:id="profileAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#events"
-                    prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+                    prefHeight="201.0" prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css"
+                    textFill="#f2f1f0">
                <font>
                   <Font size="36.0"/>
                </font>
                <graphic>
                   <ImageView fitHeight="102.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/USER_ICON.png"/>
+                        <Image url="@../../resources/icons/USER_ICON.png"/>
                      </image>
                      <effect>
                         <Blend/>
@@ -34,7 +35,8 @@
                   <Cursor fx:constant="HAND"/>
                </cursor>
             </Button>
-            <Button fx:id="projectAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="projectAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0"
+                    prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css" textFill="#f2f1f0">
                <font>
                   <Font size="36.0"/>
                </font>
@@ -42,7 +44,7 @@
                   <ImageView blendMode="HARD_LIGHT" fitHeight="90.0" fitWidth="219.0" pickOnBounds="true"
                              preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/PROJECT_ICON.png"/>
+                        <Image url="@../../resources/icons/PROJECT_ICON.png"/>
                      </image>
                   </ImageView>
                </graphic>
@@ -50,14 +52,15 @@
                   <Cursor fx:constant="HAND"/>
                </cursor>
             </Button>
-            <Button fx:id="calendarAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="calendarAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0"
+                    prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css" textFill="#f2f1f0">
                <font>
                   <Font size="36.0"/>
                </font>
                <graphic>
                   <ImageView fitHeight="83.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/CALENDAR_INCON.png"/>
+                        <Image url="@../../resources/icons/CALENDAR_INCON.png"/>
                      </image>
                   </ImageView>
                </graphic>
@@ -65,14 +68,15 @@
                   <Cursor fx:constant="HAND"/>
                </cursor>
             </Button>
-            <Button fx:id="settingsAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0" prefWidth="223.0" style="-fx-background-color: #4fc3f7;" textFill="#f2f1f0">
+            <Button fx:id="settingsAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0"
+                    prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css" textFill="#f2f1f0">
                <font>
                   <Font size="36.0"/>
                </font>
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/PARAMETER_SYMBOL.png"/>
+                        <Image url="@../../resources/icons/PARAMETER_SYMBOL.png"/>
                      </image>
                   </ImageView>
                </graphic>
@@ -83,7 +87,8 @@
          </children>
       </HBox>
       <Button fx:id="helpBtn" layoutX="1407.0" layoutY="821.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="50.0" style="-fx-background-color: #4fc3f7;" text="?" textFill="WHITE">
+              prefHeight="54.0" prefWidth="50.0" stylesheets="@../../resources/stylesheets/Button.css" text="?"
+              textFill="WHITE">
          <font>
             <Font name="Calibri Bold" size="24.0"/>
          </font>
@@ -92,7 +97,7 @@
          </cursor>
       </Button>
       <Button fx:id="logOutBtn" layoutX="1187.0" layoutY="821.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="201.0" style="-fx-background-color: #4fc3f7;" text="LOG OUT"
+              prefHeight="54.0" prefWidth="201.0" stylesheets="@../../resources/stylesheets/Button.css" text="LOG OUT"
               textFill="WHITE">
          <font>
             <Font name="Calibri" size="24.0"/>

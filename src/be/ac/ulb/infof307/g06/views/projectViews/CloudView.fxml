@@ -20,7 +20,7 @@
         </TableView>
         <Button fx:id="downloadBtn" layoutX="246.0" layoutY="337.0" maxHeight="-Infinity" maxWidth="-Infinity"
                 minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#events" prefHeight="32.0"
-                prefWidth="108.0" style="-fx-background-color: #4fc3f7;" text="Download" textFill="WHITE"
+                prefWidth="108.0" stylesheets="@../../resources/stylesheets/Button.css" text="Download" textFill="WHITE"
                 AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="246.0"
                 AnchorPane.topAnchor="337.0"/>
         <Text layoutX="209.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0"

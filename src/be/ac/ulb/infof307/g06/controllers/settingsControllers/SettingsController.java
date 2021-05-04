@@ -21,7 +21,7 @@ public class SettingsController extends Controller implements SettingsViewContro
 
     @Override
     public void show() {
-        AnchorPane pane = loadScene("SettingsV2.fxml");
+        AnchorPane pane = loadScene("SettingsView.fxml");
         if (pane == null) {
             return;
         }

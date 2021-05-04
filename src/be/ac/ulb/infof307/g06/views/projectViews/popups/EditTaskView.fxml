@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="256.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/15.0.1"
             fx:controller="be.ac.ulb.infof307.g06.views.projectViews.popups.EditTaskViewController">
@@ -22,9 +21,10 @@
       <Text fx:id="errorText" fill="RED" layoutX="11.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0"
             wrappingWidth="519.0">
          <font>
-            <Font name="Calibri" size="12.0" />
+            <Font name="Calibri" size="12.0"/>
          </font>
       </Text>
-      <Button fx:id="editTaskBtn" layoutX="154.0" layoutY="201.0" mnemonicParsing="false" onAction="#taskEvents" prefHeight="41.0" prefWidth="131.0" style="-fx-background-color: #4fc3f7;" text="EDIT" />
+      <Button fx:id="editTaskBtn" layoutX="154.0" layoutY="201.0" mnemonicParsing="false" onAction="#taskEvents"
+              prefHeight="41.0" prefWidth="131.0" stylesheets="@../../../resources/stylesheets/Button.css" text="EDIT"/>
    </children>
 </AnchorPane>

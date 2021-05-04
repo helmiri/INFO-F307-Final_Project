@@ -20,7 +20,8 @@
       <Hyperlink fx:id="link" layoutX="87.0" layoutY="113.0" onAction="#events" prefHeight="58.0" prefWidth="426.0"
                  textAlignment="CENTER"/>
       <Button fx:id="okButton" layoutX="452.0" layoutY="289.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="34.0" prefWidth="121.0" style="-fx-background-color: #4fc3f7;" text="OK" textFill="WHITE"/>
+              prefHeight="34.0" prefWidth="121.0" stylesheets="@../../resources/stylesheets/Button.css" text="OK"
+              textFill="WHITE"/>
       <Text layoutX="156.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Access request"
             textAlignment="CENTER" wrappingWidth="288.13671875">
          <font>

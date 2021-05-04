@@ -35,7 +35,8 @@ public class SettingsViewController {
 
     private ObservableList<Node> currentChildren;
 
-    public void events(ActionEvent actionEvent) {
+    @FXML
+    private void events(ActionEvent actionEvent) {
         Object source = actionEvent.getSource();
         if (languageBtn.equals(source)) {
             swapButtonStyles(languageBtn);
@@ -78,21 +79,9 @@ public class SettingsViewController {
         currentChildren = children;
     }
 
-    public void hover(MouseEvent mouseEvent) {
-        Object source = mouseEvent.getSource();
-        if (languageBtn.equals(source)) {
-            setButtonStyle(languageBtn, hoverColor);
-        } else if (storageBtn.equals(source)) {
-            setButtonStyle(storageBtn, hoverColor);
-        } else if (aboutBtn.equals(source)) {
-            setButtonStyle(aboutBtn, hoverColor);
-        } else if (helpBtn.equals(source)) {
-            setButtonStyle(helpBtn, hoverColor);
-        } else if (tagsBtn.equals(source)) {
-            setButtonStyle(tagsBtn, hoverColor);
-        } else if (backBtn.equals(source)) {
-            setButtonStyle(backBtn, hoverColor);
-        }
+    @FXML
+    private void hover(MouseEvent mouseEvent) {
+        setButtonStyle((Button) mouseEvent.getSource(), hoverColor);
     }
 
     private void setButtonStyle(Button button, String hex) {
@@ -111,21 +100,9 @@ public class SettingsViewController {
         previousClicked = current;
     }
 
-    public void exitHover(MouseEvent mouseEvent) {
-        Object source = mouseEvent.getSource();
-        if (languageBtn.equals(source)) {
-            setIfNotClicked(languageBtn);
-        } else if (storageBtn.equals(source)) {
-            setIfNotClicked(storageBtn);
-        } else if (aboutBtn.equals(source)) {
-            setIfNotClicked(aboutBtn);
-        } else if (helpBtn.equals(source)) {
-            setIfNotClicked(helpBtn);
-        } else if (tagsBtn.equals(source)) {
-            setIfNotClicked(tagsBtn);
-        } else if (backBtn.equals(source)) {
-            setIfNotClicked(backBtn);
-        }
+    @FXML
+    private void exitHover(MouseEvent mouseEvent) {
+        setIfNotClicked((Button) mouseEvent.getSource());
     }
 
     private void setIfNotClicked(Button source) {

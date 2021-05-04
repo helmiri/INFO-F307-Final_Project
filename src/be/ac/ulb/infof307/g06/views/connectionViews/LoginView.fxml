@@ -37,14 +37,16 @@
                </GridPane.margin>
             </PasswordField>
             <Button id="connectionBtn" fx:id="connectionBtn" mnemonicParsing="false" onAction="#logInEvents"
-                    prefHeight="45.0" prefWidth="204.0" style="-fx-background-color: #4fc3f7;" text="LOG IN"
+                    prefHeight="45.0" prefWidth="204.0" stylesheets="@../../resources/stylesheets/Button.css"
+                    text="LOG IN"
                     textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <font>
                   <Font name="Calibri Bold" size="24.0"/>
                </font>
             </Button>
             <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#logInEvents"
-                    prefHeight="45.0" prefWidth="226.0" style="-fx-background-color: #4fc3f7;" text="SIGN UP"
+                    prefHeight="45.0" prefWidth="226.0" stylesheets="@../../resources/stylesheets/Button.css"
+                    text="SIGN UP"
                     textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
                   <Font name="Calibri Bold" size="24.0"/>
