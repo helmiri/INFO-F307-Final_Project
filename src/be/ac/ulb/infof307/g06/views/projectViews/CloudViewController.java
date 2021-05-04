@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CloudViewController {
+    //--------------- ATTRIBUTES ----------------
     @FXML
     private AnchorPane downloadAnchor;
-    //--------------- ATTRIBUTES ----------------
     @FXML
     private TableView<String> cloudTable;
     @FXML
@@ -26,10 +26,6 @@ public class CloudViewController {
     private ViewListener listener;
     private Stage stage;
     //--------------- METHODS ----------------
-
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
-    }
 
     /**
      * Shows a selection table
@@ -87,6 +83,16 @@ public class CloudViewController {
     private List<String> getSelectedItems() {
         ObservableList<String> selected = cloudTable.getSelectionModel().getSelectedItems();
         return new ArrayList<>(selected);
+    }
+
+    //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
     }
 
     public interface ViewListener {

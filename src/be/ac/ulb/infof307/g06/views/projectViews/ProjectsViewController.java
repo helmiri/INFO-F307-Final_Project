@@ -31,7 +31,7 @@ import java.util.Map;
 public class ProjectsViewController {
     //----------ATTRIBUTES---------
     @FXML
-    public Button addCollaboratorsBtn;
+    private Button addCollaboratorsBtn;
     @FXML
     private Button exportProjectBtn;
     @FXML
@@ -112,31 +112,9 @@ public class ProjectsViewController {
     }
 
     /**
-     * Hides the tree table root.
-     */
-    @FXML
-    public void hideRoot(){
-        treeProjects.setShowRoot(false);
-    }
-
-    /**
-     * Shows the tree table root.
-     */
-    @FXML
-    public void refresh() {
-        treeProjects.setShowRoot(true);
-    }
-
-    public void refreshTree(Project selected) {
-        selectedProject = selected;
-        init();
-    }
-    // --------------------------------------- EVENTS -----------------------------------
-
-    /**
      * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     private void events(ActionEvent event) {
@@ -166,6 +144,32 @@ public class ProjectsViewController {
                 new AlertWindow("Warning", "Task needs a start and end date.").warningWindow();
             }
         }
+    }
+
+    /**
+     * Hides the tree table root.
+     */
+    @FXML
+    public void hideRoot(){
+        treeProjects.setShowRoot(false);
+    }
+
+    /**
+     * Shows the tree table root.
+     */
+    @FXML
+    public void refresh() {
+        treeProjects.setShowRoot(true);
+    }
+
+    /**
+     * Refresh the projects tree.
+     *
+     * @param selected Project, the selected project.
+     */
+    public void refreshTree(Project selected) {
+        selectedProject = selected;
+        init();
     }
 
     private List<Project> getMultipleSelectedProjects() {
@@ -203,7 +207,6 @@ public class ProjectsViewController {
         taskTable.getItems().removeAll(task);
     }
 
-
     /**
      * Shows the edit task stage for the selected task.
      */
@@ -227,10 +230,16 @@ public class ProjectsViewController {
 
     }
 
+    /**
+     * Deletes a task to a collaborator.
+     */
     public void deleteTaskCollaborator() {
         listener.deleteTaskCollaborator(getSelectedTaskCollaborator(), selectedTask);
     }
 
+    /**
+     * The event when a task is selected
+     */
     @FXML
     public void onTaskSelected() {
         if (getSelectedTask() != null) {
@@ -248,6 +257,9 @@ public class ProjectsViewController {
         }
     }
 
+    /**
+     * The event when a project is selected.
+     */
     @FXML
     public void onProjectSelected() {
         selectedProject = getSelectedProject();
@@ -256,9 +268,14 @@ public class ProjectsViewController {
         }
         displayProject(selectedProject, listener.getProjectTags(selectedProject));
     }
-    // --------------------------------- CODE ------------------------------------
 
-
+    /**
+     * Inserts a project in a map to keep them updated.
+     *
+     * @param newProjectID int, ID of the current project.
+     * @param project TreeItem, the tree item of the project.
+     * @param parentID int, the parent ID of the current project.
+     */
     public void insertProject(int newProjectID, TreeItem<Project> project, int parentID) {
         TreeMap.put(newProjectID, project);
         if (parentID == 0) {
@@ -403,22 +420,36 @@ public class ProjectsViewController {
         }
     }
 
+    /**
+     * @return the selected task
+     */
     @FXML
     public Task getSelectedTask(){
         return taskTable.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * @return the selected task of a collaborator.
+     */
     @FXML
     public String getSelectedTaskCollaborator() {
         return taskCollaboratorTable.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * @return the selected collaborator.
+     */
     @FXML
     public String getSelectedUser() {
         return collaboratorsTable.getSelectionModel().getSelectedItem();
     }
 
     //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

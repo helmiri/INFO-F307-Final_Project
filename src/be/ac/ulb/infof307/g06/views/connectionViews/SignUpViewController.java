@@ -31,9 +31,9 @@ public class SignUpViewController {
     //---------------- METHODS ----------------
 
     /**
-     * Button's events.
+     * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     private void signUpEvents(ActionEvent event) {
@@ -45,6 +45,11 @@ public class SignUpViewController {
     }
 
     //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

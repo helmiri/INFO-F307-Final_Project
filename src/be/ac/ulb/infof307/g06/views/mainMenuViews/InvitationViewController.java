@@ -44,6 +44,11 @@ public class InvitationViewController {
         showStage(invitationPane);
     }
 
+    /**
+     * Shows the "invitation" stage.
+     *
+     * @param invitationPane AnchorPane, the pane for a collaborator invitation.
+     */
     private void showStage(AnchorPane invitationPane) {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Invitation");
@@ -56,7 +61,7 @@ public class InvitationViewController {
     /**
      * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     public void events(ActionEvent event) {
@@ -68,7 +73,11 @@ public class InvitationViewController {
     }
 
     //-------------- LISTENER ----------------
-
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

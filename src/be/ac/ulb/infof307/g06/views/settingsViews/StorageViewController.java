@@ -12,13 +12,14 @@ import javafx.scene.text.Text;
 import java.sql.SQLException;
 
 public class StorageViewController {
+    //-------------- ATTRIBUTES ----------------
+
     @FXML
     private Button dBoxButton;
     @FXML
     private Button gDriveButton;
     @FXML
     private Separator separator;
-
     @FXML
     private Button saveBtn;
     @FXML
@@ -34,11 +35,12 @@ public class StorageViewController {
 
     private ViewListener listener;
 
+    //--------------- METHODS ----------------
     /**
-     * Button handling
+     * The main method for button's events.
      *
-     * @param actionEvent
-     * @throws SQLException
+     * @param actionEvent ActionEvent, the event.
+     * throws SQLException
      */
     public void events(ActionEvent actionEvent) throws SQLException {
         if (actionEvent.getSource() == saveBtn) {
@@ -61,6 +63,13 @@ public class StorageViewController {
         showAdminSettings(isAdmin);
     }
 
+    /**
+     * Refresh disk usage and limit fields.
+     *
+     * @param diskLimit Long, the disk limit.
+     * @param diskUsage Long, the disk usage.
+     * @param isAdmin boolean, checks if it's the admin or a collaborator.
+     */
     public void refresh(long diskLimit, long diskUsage, boolean isAdmin) {
         UnitValue limit = refreshStorageUse(diskLimit, diskUsage);
         if (isAdmin) {
@@ -69,6 +78,13 @@ public class StorageViewController {
         }
     }
 
+    /**
+     * Refresh the storage use.
+     *
+     * @param diskLimit long
+     * @param diskUsage long
+     * @return the disk limit value
+     */
     public UnitValue refreshStorageUse(long diskLimit, long diskUsage) {
         UnitValue usage = new UnitValue(diskUsage);
         UnitValue limit = new UnitValue(diskLimit);
@@ -78,6 +94,11 @@ public class StorageViewController {
         return limit;
     }
 
+    /**
+     * Sets text fields with the admin informations.
+     *
+     * @param isAdmin boolean, to checks if it's the admin of not.
+     */
     private void showAdminSettings(boolean isAdmin) {
         if (!isAdmin) {
             return;
@@ -89,12 +110,12 @@ public class StorageViewController {
         saveBtn.setVisible(true);
     }
 
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
-    }
 
 
     //--------------- LISTENER ----------------
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
 
     public interface ViewListener {
         boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException;
@@ -121,6 +142,9 @@ public class StorageViewController {
             return unit;
         }
 
+        /**
+         * Converts the storage value.
+         */
         public void convert() {
             long KILOBYTE = 1000L;
             long MEGABYTE = 1000L * 1000L;

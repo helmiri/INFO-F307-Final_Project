@@ -44,9 +44,9 @@ public class TagsViewController {
     }
 
     /**
-     * The main method for button's events
+     * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     private void events(ActionEvent event) {
@@ -72,7 +72,11 @@ public class TagsViewController {
     }
 
 
-
+    /**
+     * Initializes the table columns.
+     *
+     * @param tags List of tags
+     */
     public void initialize(List<Tag> tags) {
         defaultTagsColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         defaultTagsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -135,7 +139,6 @@ public class TagsViewController {
 
     /**
      * Deletes selected tag
-     * throws SQLException
      */
 
     @FXML

@@ -269,6 +269,11 @@ public class StatsViewController{
     }
 
     //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the view.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

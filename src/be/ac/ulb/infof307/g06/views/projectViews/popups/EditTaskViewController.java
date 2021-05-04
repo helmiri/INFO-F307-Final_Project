@@ -24,6 +24,11 @@ public class EditTaskViewController {
     private Stage stage;
     //--------------- METHODS ----------------
 
+    /**
+     * The main method for button's events.
+     *
+     * @param event ActionEvent, the event.
+     */
     @FXML
     private void taskEvents(ActionEvent event) {
         if (event.getSource() == editTaskBtn) {
@@ -32,6 +37,13 @@ public class EditTaskViewController {
         }
     }
 
+    /**
+     * Initializes the task edition.
+     *
+     * @param task Task, the selected task.
+     * @param listener ViewListener, listener to the view.
+     * @param stage Stage, the edit task stage.
+     */
     public void init(Task task, ProjectsViewController.ViewListener listener, Stage stage) {
         this.task = task;
         this.listener = listener;

@@ -16,12 +16,12 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
-
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.Map;
 
 public class CalendarViewController {
+    //-------------- ATTRIBUTES -------------
     @FXML
     private Line line1;
     @FXML
@@ -57,6 +57,14 @@ public class CalendarViewController {
 
     private CalendarViewController.ViewListener listener;
 
+    //-------------- METHODS -------------
+
+    /**
+     * Inits the combo box with all the projects.
+     *
+     * @param projects ObservableList that contains projects titles.
+     * @param allProjects Map that contains selected projects and their color in the calendar.
+     */
     public void initComboBox(ObservableList<String> projects, Map<String, String> allProjects) {
         projectComboBox.getItems().addAll(projects);
         for (String project : allProjects.keySet()) {
@@ -65,12 +73,22 @@ public class CalendarViewController {
         projectComboBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) change -> addProject(change.getList()));
     }
 
+    /**
+     * Adds selected projects in the calendar view.
+     *
+     * @param list ObservableList which contains the selected projects
+     */
     public void addProject(ObservableList<? extends String> list) {
         listener.addProject(list);
         projects.refreshData();
         tasks.refreshData();
     }
 
+    /**
+     * Set the colors combo box with the color of the selected project.
+     *
+     * @param selectedColor String, color of the selected project.
+     */
     public void setColor(String selectedColor) {
         for (int i = 0; i < colorsComboBox.getItems().size(); i++) {
             if (colorsComboBox.getItems().get(i).equals(selectedColor)) {
@@ -79,6 +97,11 @@ public class CalendarViewController {
         }
     }
 
+    /**
+     * Fills colors in the colors combo box.
+     *
+     * @param colorObject CalendarColor, colros of the calendar
+     */
     public void fillColors(CalendarColor colorObject) {
         colorsComboBox.setCellFactory(new Callback<>() {
             @Override
@@ -107,6 +130,12 @@ public class CalendarViewController {
 
     }
 
+    /**
+     * Initializes the calendar.
+     *
+     * @param projectSource CalendarSource, calendar object for projects
+     * @param taskSource CalendarSource, calendar object for tasks
+     */
     public void init(CalendarSource projectSource, CalendarSource taskSource) {
         projects.setEntryFactory(param -> null);
         projects.setEntryContextMenuCallback(entryContextMenuParameter -> null);
@@ -120,6 +149,9 @@ public class CalendarViewController {
         tasks.getCalendarSources().setAll(taskSource);
     }
 
+    /**
+     * When a color is selected to change the color of a project in the calendar view.
+     */
     @FXML
     public void onColorSelected() {
         listener.changeColor(colorsComboBox.getSelectionModel().getSelectedItem(), projects.getSelections());
@@ -127,6 +159,12 @@ public class CalendarViewController {
         projects.refreshData();
     }
 
+    /**
+     * Settles a new week when we move in the calendar.
+     *
+     * @param date LocalDate, the current date.
+     * @param isCurrent boolean, to check if it's the current date or not.
+     */
     public void setNewDate(LocalDate date, boolean isCurrent) {
         monthLabel.setText(date.getMonth() + " " + date.getYear());
         weekDays.setDate(date);
@@ -166,9 +204,13 @@ public class CalendarViewController {
         }
     }
 
+    /**
+     * The main method for button's events.
+     *
+     * @param event ActionEvent, the event.
+     */
     @FXML
     private void calendarEvents(ActionEvent event) {
-
         if (event.getSource() == previousWeekBtn) {
             listener.prevWeek();
         } else if (event.getSource() == todayBtn) {
@@ -177,10 +219,16 @@ public class CalendarViewController {
             listener.nextWeek();
         } else if (event.getSource() == backBtn) {
             listener.back();
-
         }
     }
 
+    //--------------- LISTENER ----------------
+
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

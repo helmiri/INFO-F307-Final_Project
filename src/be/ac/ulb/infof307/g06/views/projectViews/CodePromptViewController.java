@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class CodePromptViewController {
+    //--------------- ATTRIBUTES ----------------
     @FXML
     private Text copyNotification;
     @FXML
@@ -22,7 +23,14 @@ public class CodePromptViewController {
     private ViewListener listener;
     private Stage stage;
 
+    //--------------- METHODS ----------------
 
+    /**
+     * Initializes the stage
+     *
+     * @param newLink String, to set the text of the new link.
+     * @param pane AnchorPane, the code prompt pane.
+     */
     public void initialize(String newLink, AnchorPane pane) {
         Scene newScene = new Scene(pane);
         stage = new Stage();
@@ -31,10 +39,11 @@ public class CodePromptViewController {
         stage.showAndWait();
     }
 
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
-    }
-
+    /**
+     * The main method for button's events.
+     *
+     * @param actionEvent ActionEvent, the event.
+     */
     public void events(ActionEvent actionEvent) {
         Object source = actionEvent.getSource();
         if (source.equals(okButton)) {
@@ -45,6 +54,16 @@ public class CodePromptViewController {
             link.setVisited(true);
             copyNotification.setVisible(true);
         }
+    }
+
+    //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
     }
 
     public interface ViewListener {

@@ -2,16 +2,12 @@ package be.ac.ulb.infof307.g06.views.connectionViews;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class LoginViewController implements Initializable {
+public class LoginViewController{
     //-------------- ATTRIBUTES ----------------
     @FXML
     private Button connectionBtn;
@@ -28,19 +24,9 @@ public class LoginViewController implements Initializable {
     //--------------- METHODS ----------------
 
     /**
-     * Initializes the database for the projects and users.
+     * The main method for button's events.
      *
-     * @param url            URL
-     * @param resourceBundle ResourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-    }
-
-    /**
-     * The main method for button's events
-     *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     private void logInEvents(ActionEvent event) {
@@ -63,6 +49,11 @@ public class LoginViewController implements Initializable {
     }
 
     //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }

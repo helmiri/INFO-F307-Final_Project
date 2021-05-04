@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 public class MenuViewController {
     //-------------- ATTRIBUTES ----------------
 
-    //* MAIN MENU *
     @FXML
     private Button logOutBtn;
     @FXML
@@ -20,29 +19,19 @@ public class MenuViewController {
     private Button calendarAccessBtn;
     @FXML
     private Button helpBtn;
-    //* PROJECTS MENU *
     @FXML
     private Button projectManagementBtn;
     @FXML
     private Button statsAccessBtn;
     @FXML
     private Button mainMenuBtn;
-
-    //* SETTINGS MENU *
-    @FXML
-    private Button languageBtn;
-    @FXML
-    private Button backBtn;
-
     private ViewListener listener;
 
     //--------------- METHODS ----------------
-
-
     /**
      * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     private void events(ActionEvent event) {
@@ -58,17 +47,16 @@ public class MenuViewController {
             listener.showSettings();
         } else if (event.getSource() == projectManagementBtn) {
             listener.showProjects();
-        } else if (event.getSource() == languageBtn) {
-            System.out.println("test language button");
-        } else if (event.getSource() == backBtn) {
-            listener.showMainMenu();
         } else if (event.getSource() == calendarAccessBtn) {
             listener.showCalendar();
         }
     }
-
-
     //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) { this.listener = listener; }
 
     public interface ViewListener {

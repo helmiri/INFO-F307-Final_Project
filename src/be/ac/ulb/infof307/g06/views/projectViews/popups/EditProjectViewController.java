@@ -26,7 +26,7 @@ public class EditProjectViewController extends ProjectInputViewController{
     /**
      * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     protected void events(ActionEvent event) {
@@ -36,6 +36,16 @@ public class EditProjectViewController extends ProjectInputViewController{
         }
     }
 
+    /**
+     * Sets values in  date fields and description field when editing a project.
+     *
+     * @param descriptionProject TextField where we put the description.
+     * @param description String of the selected project description.
+     * @param dateProject DatePicker where we put the start date.
+     * @param startDate Long, the start date of the selected project.
+     * @param endDateProject DatePicker where we put the end date.
+     * @param endDate Long, the end date of the selected project.
+     */
     static void setDescriptionTest(TextField descriptionProject, String description, DatePicker dateProject, Long startDate, DatePicker endDateProject, Long endDate) {
         descriptionProject.setText(description);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -45,7 +55,9 @@ public class EditProjectViewController extends ProjectInputViewController{
     }
 
     /**
-     * Initializes the fields related to the edition of a project.
+     * Initializes fields(name of the project and tags) related to the edition of a project.
+     *
+     * @param tags List of the selected project tags.
      */
     @FXML
     public void initFields(List<Tag> tags) {
@@ -56,6 +68,14 @@ public class EditProjectViewController extends ProjectInputViewController{
         }
     }
 
+    /**
+     * Inits the edit stage.
+     *
+     * @param project Project, the selected project
+     * @param listener ViewListener, the listener to the view.
+     * @param stage Stage, the edit stage.
+     * @param tags List of the selected project tags.
+     */
     public void init(Project project, ProjectsViewController.ViewListener listener, Stage stage, List<Tag> tags) {
         init(listener, stage);
         this.project = project;

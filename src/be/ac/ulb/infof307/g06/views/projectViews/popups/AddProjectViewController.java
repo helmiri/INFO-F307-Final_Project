@@ -13,9 +13,9 @@ public class AddProjectViewController extends ProjectInputViewController {
     //--------------- METHODS ----------------
 
     /**
-     * The main method for button's events
+     * The main method for button's events.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     protected void events(ActionEvent event) {

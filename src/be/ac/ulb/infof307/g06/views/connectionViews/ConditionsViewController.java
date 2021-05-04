@@ -16,9 +16,9 @@ public class ConditionsViewController {
     //-------------- METHODS -------------
 
     /**
-     * When the 'accept' button is pressed, checks set the user in the database and close the stage.
+     * When the 'accept' button is pressed, set the user in the database and close the stage.
      *
-     * @param event ActionEvent
+     * @param event ActionEvent, the event.
      */
     @FXML
     private void conditionsEvents(ActionEvent event) {
@@ -32,6 +32,11 @@ public class ConditionsViewController {
     }
 
     //--------------- LISTENER ----------------
+    /**
+     * Sets the listener.
+     *
+     * @param listener ViewListener, the listener to the controller.
+     */
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
