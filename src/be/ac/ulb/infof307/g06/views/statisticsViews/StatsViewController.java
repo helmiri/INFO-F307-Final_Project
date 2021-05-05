@@ -25,6 +25,23 @@ public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
 
     @FXML
+    private Tooltip collabortorsToolTip;
+    @FXML
+    private Tooltip tasksToolTip;
+    @FXML
+    private Tooltip projectsToolTip;
+    @FXML
+    private Tooltip barChartToolTip;
+    @FXML
+    private Tooltip pieChartToolTip;
+    @FXML
+    private Tooltip exportToolTip;
+    @FXML
+    private Label pieChartLabel;
+    @FXML
+    private Label barChartLabel;
+
+    @FXML
     private Button backToProjectMenu;
     @FXML
     private Button projectViewBtn;
