@@ -1,5 +1,6 @@
-package be.ac.ulb.infof307.g06.controllers;
+package be.ac.ulb.infof307.g06.controllers.calendarControllers;
 
+import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.CalendarColor;
 import be.ac.ulb.infof307.g06.models.Project;
@@ -122,7 +123,7 @@ public class CalendarController extends Controller implements CalendarViewContro
         stage.sizeToScene();
         viewController.init(projectSource, taskSource);
         viewController.fillColors(colorObject);
-        viewController.setNewDate(currentDate, true);
+        viewController.setNewDate(currentDate);
 
         initCalendar();
     }
@@ -166,16 +167,21 @@ public class CalendarController extends Controller implements CalendarViewContro
     }
 
     @Override
-    public void nextWeek() {
-        currentDate = currentDate.plusDays(7);
-        viewController.setNewDate(currentDate, LocalDate.now().equals(currentDate));
-
+    public void changeDate(boolean today, boolean month, boolean forward) {
+        if (month) {
+            currentDate = currentDate.plusMonths(forward ? 1 : -1);
+        } else {
+            currentDate = currentDate.plusWeeks(forward ? 1 : -1);
+        }
+        if (today) {
+            currentDate = LocalDate.now();
+        }
+        viewController.setNewDate(currentDate);
     }
 
     @Override
-    public void prevWeek() {
-        currentDate = currentDate.minusDays(7);
-        viewController.setNewDate(currentDate, LocalDate.now().equals(currentDate));
+    public LocalDate getCurrentDate() {
+        return currentDate;
     }
 
     @Override
@@ -217,15 +223,9 @@ public class CalendarController extends Controller implements CalendarViewContro
 
     }
 
+
     @Override
     public void back() {
         super.back();
-    }
-
-    @Override
-    public void goToday() {
-        currentDate = LocalDate.now();
-        viewController.setNewDate(currentDate, LocalDate.now().equals(currentDate));
-
     }
 }

@@ -5,6 +5,7 @@ import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.AllDayView;
 import com.calendarfx.view.WeekDayHeaderView;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -16,8 +17,12 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
+
 import java.awt.*;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class CalendarViewController {
@@ -56,13 +61,15 @@ public class CalendarViewController {
     private Label monthLabel;
 
     private CalendarViewController.ViewListener listener;
-
+    private ArrayList<WeekDayHeaderView> monthHeaders;
+    private ArrayList<AllDayView> monthDayViews;
+    private ArrayList<Line> weekDaysSeparators;
     //-------------- METHODS -------------
 
     /**
      * Inits the combo box with all the projects.
      *
-     * @param projects ObservableList that contains projects titles.
+     * @param projects    ObservableList that contains projects titles.
      * @param allProjects Map that contains selected projects and their color in the calendar.
      */
     public void initComboBox(ObservableList<String> projects, Map<String, String> allProjects) {
@@ -137,16 +144,32 @@ public class CalendarViewController {
      * @param taskSource CalendarSource, calendar object for tasks
      */
     public void init(CalendarSource projectSource, CalendarSource taskSource) {
+        isMonthView = false;
+        monthHeaders = new ArrayList<>(Arrays.asList(monthHeader1, monthHeader2, monthHeader3, monthHeader4, monthHeader5));
+        monthDayViews = new ArrayList<>(Arrays.asList(monthWeek1, monthWeek2, monthWeek3, monthWeek4, monthWeek5));
+        weekDaysSeparators = new ArrayList<>(Arrays.asList(line1, line2, line3, line4, line5, line6));
         projects.setEntryFactory(param -> null);
         projects.setEntryContextMenuCallback(entryContextMenuParameter -> null);
         projects.setEntryDetailsCallback(entryDetailsParameter -> {
             listener.onProjectSelected(projects.getSelections());
             return null;
         });
+        for (AllDayView view : monthDayViews) {
+            view.setEntryDetailsCallback(entryDetailsParameter -> {
+                listener.onProjectSelected(view.getSelections());
+                return null;
+            });
+        }
         projects.setContextMenuCallback(null);
         projects.setOnMouseClicked(null);
         projects.getCalendarSources().setAll(projectSource);
         tasks.getCalendarSources().setAll(taskSource);
+        for (AllDayView view : monthDayViews) {
+            view.getCalendarSources().setAll(projectSource);
+        }
+        monthViewBox.setVisible(false);
+        weekViewBox.setVisible(true);
+        weekDays.setVisible(true);
     }
 
     /**
@@ -154,18 +177,28 @@ public class CalendarViewController {
      */
     @FXML
     public void onColorSelected() {
-        listener.changeColor(colorsComboBox.getSelectionModel().getSelectedItem(), projects.getSelections());
+        ObservableSet<Entry<?>> selections = FXCollections.observableSet();
+        if (isMonthView) {
+            for (AllDayView view : monthDayViews) {
+                selections.addAll(view.getSelections());
+            }
+        } else {
+            selections = projects.getSelections();
+        }
+        listener.changeColor(colorsComboBox.getSelectionModel().getSelectedItem(), selections);
         tasks.refreshData();
         projects.refreshData();
+        for (AllDayView view : monthDayViews) {
+            view.refreshData();
+        }
     }
 
     /**
      * Settles a new week when we move in the calendar.
      *
      * @param date LocalDate, the current date.
-     * @param isCurrent boolean, to check if it's the current date or not.
      */
-    public void setNewDate(LocalDate date, boolean isCurrent) {
+    public void setNewDate(LocalDate date) {
         monthLabel.setText(date.getMonth() + " " + date.getYear());
         weekDays.setDate(date);
         projects.setDate(date);
@@ -212,14 +245,28 @@ public class CalendarViewController {
     @FXML
     private void calendarEvents(ActionEvent event) {
         if (event.getSource() == previousWeekBtn) {
-            listener.prevWeek();
+            listener.changeDate(false, isMonthView, false);
         } else if (event.getSource() == todayBtn) {
-            listener.goToday();
+            listener.changeDate(true, isMonthView, false);
         } else if (event.getSource() == nextWeekBtn) {
-            listener.nextWeek();
+            listener.changeDate(false, isMonthView, true);
         } else if (event.getSource() == backBtn) {
             listener.back();
+        } else if (event.getSource() == viewBtn) {
+            switchView();
         }
+    }
+
+    /**
+     * Switches between WeekView and MonthView
+     */
+    private void switchView() {
+        monthViewBox.setVisible(!isMonthView);
+        weekViewBox.setVisible(isMonthView);
+        weekDays.setVisible(isMonthView);
+        isMonthView = !isMonthView;
+        listener.changeDate(true, false, false);
+        setLinesStyle(listener.getCurrentDate());
     }
 
     //--------------- LISTENER ----------------
@@ -236,15 +283,14 @@ public class CalendarViewController {
     public interface ViewListener {
         void back();
 
-        void nextWeek();
 
         void onProjectSelected(ObservableSet<Entry<?>> selections);
 
-        void prevWeek();
+        void changeDate(boolean today, boolean month, boolean forward);
 
         void addProject(ObservableList<? extends String> projects);
 
-        void goToday();
+        LocalDate getCurrentDate();
 
         void changeColor(String color, ObservableSet<Entry<?>> selections);
     }
