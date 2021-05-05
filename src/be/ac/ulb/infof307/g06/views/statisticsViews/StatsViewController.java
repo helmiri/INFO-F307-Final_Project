@@ -117,6 +117,31 @@ public class StatsViewController{
         isOverallView=false;
         overallViewBtn.setDisable(false);
         projectViewBtn.setDisable(true);
+        setTooltips();
+    }
+
+    /**
+     * Sets the tool tips on the interface.
+     */
+    public void setTooltips(){
+        collabortorsToolTip.setText("Number of collaborators.");
+        collaboratorsNumber.setTooltip(collabortorsToolTip);
+
+        tasksToolTip.setText("Number of tasks.");
+        tasksNumber.setTooltip(tasksToolTip);
+
+        projectsToolTip.setText("Number of projects.");
+        projectsNumber.setTooltip(projectsToolTip);
+
+        barChartToolTip.setText("Chart of tasks/projects.");
+        barChartLabel.setTooltip(barChartToolTip);
+
+        pieChartToolTip.setText("Pie chart of duration\n of a project.");
+        pieChartLabel.setTooltip(pieChartToolTip);
+
+        exportToolTip.setText("Export.");
+        fileNameTextField.setTooltip(exportToolTip);
+
     }
 
     /**
@@ -131,6 +156,7 @@ public class StatsViewController{
         barChartInitializer();
         overallViewBtn.setDisable(true);
         projectViewBtn.setDisable(false);
+        setTooltips();
     }
 
     /**
