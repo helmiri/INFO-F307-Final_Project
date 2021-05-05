@@ -17,7 +17,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 |   | 4 | Histoire 4 | 1 | 37 | 35 |
 |   | 5 | Histoire 5 | 1 | / | 35 |
 |   | 6 | Histoire 6 | 1 | 14 | 19 |
-|   | 7 | Histoire 7 | 3 | 24 | 8 |
+|   | 7 | Histoire 7 | 3 | 24 | 18 |
 |   | 8 | Histoire 8 | 3 | 32 | 14 |
 |   | 9 | Histoire 9 | 1 | 25 | 25 |
 | 3 | 10 | Histoire 10 | 2 | / | 25 |
@@ -184,7 +184,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur. 1h
 
 **Tâches en plus:** 
-- /
+- GoogleDrive
 
 :question: **Question:** 
 - Qui est l'administrateur ?
