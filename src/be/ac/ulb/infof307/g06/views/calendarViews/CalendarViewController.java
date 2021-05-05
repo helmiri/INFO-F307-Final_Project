@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
@@ -50,6 +51,8 @@ public class CalendarViewController {
     @FXML
     private Button nextWeekBtn;
     @FXML
+    private Button viewBtn;
+    @FXML
     private WeekDayHeaderView weekDays;
     @FXML
     private AllDayView projects;
@@ -59,7 +62,31 @@ public class CalendarViewController {
     private ComboBox<String> colorsComboBox;
     @FXML
     private Label monthLabel;
-
+    @FXML
+    private VBox monthViewBox;
+    @FXML
+    private VBox weekViewBox;
+    @FXML
+    private WeekDayHeaderView monthHeader1;
+    @FXML
+    private AllDayView monthWeek1;
+    @FXML
+    private WeekDayHeaderView monthHeader2;
+    @FXML
+    private AllDayView monthWeek2;
+    @FXML
+    private WeekDayHeaderView monthHeader3;
+    @FXML
+    private AllDayView monthWeek3;
+    @FXML
+    private WeekDayHeaderView monthHeader4;
+    @FXML
+    private AllDayView monthWeek4;
+    @FXML
+    private WeekDayHeaderView monthHeader5;
+    @FXML
+    private AllDayView monthWeek5;
+    private boolean isMonthView;
     private CalendarViewController.ViewListener listener;
     private ArrayList<WeekDayHeaderView> monthHeaders;
     private ArrayList<AllDayView> monthDayViews;
@@ -67,7 +94,7 @@ public class CalendarViewController {
     //-------------- METHODS -------------
 
     /**
-     * Inits the combo box with all the projects.
+     * Initializes the combo box with all the projects.
      *
      * @param projects    ObservableList that contains projects titles.
      * @param allProjects Map that contains selected projects and their color in the calendar.
@@ -202,14 +229,23 @@ public class CalendarViewController {
         monthLabel.setText(date.getMonth() + " " + date.getYear());
         weekDays.setDate(date);
         projects.setDate(date);
+        initMonthDays(date);
         tasks.setDate(date);
-        line1.setStyle("-fx-stroke: BLACK;");
-        line2.setStyle("-fx-stroke: BLACK;");
-        line3.setStyle("-fx-stroke: BLACK;");
-        line4.setStyle("-fx-stroke: BLACK;");
-        line5.setStyle("-fx-stroke: BLACK;");
-        line6.setStyle("-fx-stroke: BLACK;");
-        if (isCurrent) {
+        setLinesStyle(date);
+    }
+
+    /**
+     * Sets lines color if it's the current date or not.
+     *
+     * @param date LocalDate, the current date to set lines.
+     */
+    public void setLinesStyle(LocalDate date) {
+        boolean isCurrent = date.equals(LocalDate.now());
+        System.out.println(date);
+        for (Line weekDaysSeparator : weekDaysSeparators) {
+            weekDaysSeparator.setStyle("-fx-stroke: BLACK;");
+        }
+        if (isCurrent && !isMonthView) {
             switch (date.getDayOfWeek()) {
                 case MONDAY -> line1.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
                 case TUESDAY -> {
@@ -234,6 +270,29 @@ public class CalendarViewController {
                 }
                 case SUNDAY -> line6.setStyle("-fx-stroke: red; -fx-stroke-width: 3px");
             }
+        }
+    }
+
+    /**
+     * Sets dates for the month view.
+     *
+     * @param date LocalDate, the current date to set days
+     */
+    public void initMonthDays(LocalDate date) {
+        LocalDate firstMonday = date.withDayOfMonth(1).with(DayOfWeek.MONDAY);
+        for (int i = 0; i < 5; i++) {
+            LocalDate workingDate = firstMonday.plusDays(7 * i);
+            if (
+                    workingDate.toEpochDay() <= LocalDate.now().toEpochDay() ||
+                            LocalDate.now().toEpochDay() <= workingDate.plusDays(7).toEpochDay()) {
+                monthHeaders.get(i).setShowToday(true);
+                monthDayViews.get(i).setShowToday(true);
+            } else {
+                monthHeaders.get(i).setShowToday(false);
+                monthDayViews.get(i).setShowToday(false);
+            }
+            monthHeaders.get(i).setDate(workingDate);
+            monthDayViews.get(i).setDate(workingDate);
         }
     }
 
