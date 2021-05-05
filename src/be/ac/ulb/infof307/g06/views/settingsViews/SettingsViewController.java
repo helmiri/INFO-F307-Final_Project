@@ -12,8 +12,8 @@ import javafx.scene.layout.Pane;
 
 public class SettingsViewController {
     //-------------- ATTRIBUTES ----------------
-    private final String hoverColor = "#95dbfa";
-    private final String defaultColor = "#4fc3f7";
+    private static final String hoverColor = "#95dbfa";
+    private static final String defaultColor = "#4fc3f7";
     @FXML
     private Button languageBtn;
     @FXML
@@ -113,7 +113,7 @@ public class SettingsViewController {
      * @param current Button, the current button.
      */
     private void swapButtonStyles(Button current) {
-        if (current == previousClicked) {
+        if (current.equals(previousClicked)) {
             return;
         }
         setButtonStyle(current, hoverColor);
@@ -137,7 +137,7 @@ public class SettingsViewController {
      * @param source Button, the button "selected"
      */
     private void setIfNotClicked(Button source) {
-        if (previousClicked == source) {
+        if (previousClicked.equals(source)) {
             return;
         }
         setButtonStyle(source, defaultColor);

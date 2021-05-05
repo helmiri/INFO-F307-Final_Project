@@ -222,10 +222,4 @@ public class CalendarController extends Controller implements CalendarViewContro
         }
 
     }
-
-
-    @Override
-    public void back() {
-        super.back();
-    }
 }

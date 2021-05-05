@@ -287,7 +287,7 @@ public class StatsViewController{
 
         List<Integer> getProjects() throws DatabaseException;
 
-        Integer countTasksOfAProject(int project_id) throws DatabaseException;
+        Integer countTasksOfAProject(int projectId) throws DatabaseException;
 
         Project getProjectsFromID(int id) throws DatabaseException;
 

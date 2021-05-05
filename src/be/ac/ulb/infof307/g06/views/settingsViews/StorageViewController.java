@@ -126,10 +126,10 @@ public class StorageViewController {
     }
 
     private class UnitValue {
-        String unit;
+        private String unit;
         private long value;
 
-        public UnitValue(long newValue) {
+        UnitValue(long newValue) {
             value = newValue;
             convert();
         }

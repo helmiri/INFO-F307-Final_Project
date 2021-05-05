@@ -27,8 +27,7 @@ import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 
 public class StorageController extends Controller implements StorageViewController.ViewListener, CodePromptViewController.ViewListener {
-    User currentUser;
-    StorageViewController storageViewController;
+    private final StorageViewController storageViewController;
     private DropBoxAuthorization authorization;
 
     //--------------- METHODS ----------------
@@ -39,7 +38,7 @@ public class StorageController extends Controller implements StorageViewControll
 
     @Override
     public void show() {
-        currentUser = user_db.getCurrentUser();
+        User currentUser = user_db.getCurrentUser();
         try {
             storageViewController.setListener(this);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
@@ -60,16 +59,15 @@ public class StorageController extends Controller implements StorageViewControll
     @Override
     public boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException {
         boolean res = false;
-        if (user_db.isAdmin()) {
-            if (!limit.isBlank()) {
-                try {
-                    setLimit(limit);
-                    res = true;
-                } catch (NumberFormatException e) {
-                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").errorWindow();
-                }
+        if (user_db.isAdmin() && !limit.isBlank()) {
+            try {
+                setLimit(limit);
+                res = true;
+            } catch (NumberFormatException e) {
+                new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").errorWindow();
             }
         }
+
         storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin()
         );
         return res;
@@ -85,7 +83,6 @@ public class StorageController extends Controller implements StorageViewControll
         GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(user_db.getCurrentUser().getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
-            System.out.println(authorization.getUrl());
         } catch (IOException | GeneralSecurityException e) {
             new AlertWindow("Authorization request", "Access denied").errorWindow();
         }

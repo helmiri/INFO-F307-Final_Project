@@ -231,7 +231,7 @@ public class UserDB extends Database {
         sqlUpdate("UPDATE users SET status=false WHERE id='" + currentUser.getId() + "'");
     }
 
-    public void sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
+    public void sendInvitation(int projectId, int senderId, int receiverId) throws SQLException {
         ResultSet rs = null;
         int id;
         try {   // Generate id
@@ -241,7 +241,7 @@ public class UserDB extends Database {
         } catch (Exception e) {
             id = 1;
         }
-        sqlUpdate("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + project_id + "', '" + sender_id + "','" + receiver_id + "');");
+        sqlUpdate("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + projectId + "', '" + senderId + "','" + receiverId + "');");
         assert rs != null;
         rs.close();
     }

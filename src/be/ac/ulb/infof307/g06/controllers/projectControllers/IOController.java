@@ -101,7 +101,7 @@ public class IOController extends Controller {
             deleteFile(jsonFile);
             ret = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            new AlertWindow("Error", "An error has occurred with the database : " + e).errorWindow();
             ret = false;
         }
         return ret;
@@ -125,7 +125,8 @@ public class IOController extends Controller {
             fw.write(",\n");
             gson.toJson(tags, fw);
             fw.write("\n]");
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
     }
 
@@ -173,11 +174,14 @@ public class IOController extends Controller {
                 parentID = listIdparentID[1];
             }
             else if  (count == 3) {parseTasks(id, line);}
-            else if  (count == 4) {
+            else if (count == 4) {
                 parseTags(id, line);
                 addProjectToTreeView(project_db.getProject(id));
+            } else {
+                if (line.equals("[")) {
+                    count = 1;
+                }
             }
-            else {if (line.equals("[")) count = 1;}
         }
         reader.close();
     }
@@ -189,7 +193,7 @@ public class IOController extends Controller {
     private void addProjectToTreeView(Project project) {
         TreeItem<Project> child = new TreeItem<>(project);
         setViewController(viewController);
-        viewController.insertProject(project.getId(), child, project.getParent_id());
+        viewController.insertProject(project.getId(), child, project.getParentId());
     }
 
     /**
@@ -239,10 +243,10 @@ public class IOController extends Controller {
         int id;
         if (hm.size() == 0) {
             id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), 0);
-            hm.put(project.getParent_id(), 0);
+            hm.put(project.getParentId(), 0);
         } else {
-            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), hm.get(project.getParent_id()));
-            parentID = hm.get(project.getParent_id());
+            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), hm.get(project.getParentId()));
+            parentID = hm.get(project.getParentId());
         }
         hm.put(project.getId(), id);
         project_db.addCollaborator(id, user_db.getCurrentUser().getId());
@@ -280,7 +284,8 @@ public class IOController extends Controller {
             File archive = new File(source);
             File dest = new File(destination);
             archiver.extract(archive, dest); // WARNING OK
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
     }
 
@@ -306,8 +311,11 @@ public class IOController extends Controller {
                         reader.close();
                         return true;
                     }
+                } else {
+                    if (line.equals("[")) {
+                        count = 1;
+                    }
                 }
-                else { if (line.equals("[")) count = 1; }
             }
             reader.close();
             return false;
@@ -325,7 +333,8 @@ public class IOController extends Controller {
         try {
             File myObj = new File(fileName);
             myObj.delete();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
     }
 }

@@ -1,13 +1,13 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class Tag {
-    int id;
-    String description;
-    String color;
+    private final int id;
+    private final String description;
+    private final String color;
 
-    public Tag(int id, String description, String color){
+    public Tag(int id, String description, String color) {
         this.id = id;
-        this.description =description;
+        this.description = description;
         this.color = color;
     }
 

@@ -102,10 +102,10 @@ public class ProjectsViewController {
         for (Project project : projectsArray) {
             TreeItem<Project> child = new TreeItem<>(project);
             TreeMap.put(project.getId(), child);
-            if (project.getParent_id() == 0) {
+            if (project.getParentId() == 0) {
                 root.getChildren().add(child);
             } else {
-                TreeMap.get(project.getParent_id()).getChildren().add(child);
+                TreeMap.get(project.getParentId()).getChildren().add(child);
             }
         }
         refresh();
@@ -189,7 +189,7 @@ public class ProjectsViewController {
         if (treeProjects.getSelectionModel().getSelectedItem() != null && treeProjects.getSelectionModel().getSelectedItem().getValue() != null) {
             Project child = treeProjects.getSelectionModel().getSelectedItem().getValue();
             listener.deleteProject(child.getTitle());
-            int parentID = child.getParent_id();
+            int parentID = child.getParentId();
             if (parentID == 0) {
                 root.getChildren().remove(treeProjects.getSelectionModel().getSelectedItem());
             } else {

@@ -124,7 +124,7 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
         try {
             return MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
-            throw new AssertionError("Couldn't create SHA-256 hasher");
+            throw new AssertionError("Couldn't create SHA-256 hasher " + ex);
         }
     }
 
