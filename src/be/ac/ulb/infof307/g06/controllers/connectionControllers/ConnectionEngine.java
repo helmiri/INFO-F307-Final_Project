@@ -98,7 +98,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
     }
 
     /**
-     * Sets
+     * Sets admin to first boot
      */
     private void setAdminIfFirstBoot() {
         if (isFirstBoot) {

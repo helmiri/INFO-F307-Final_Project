@@ -20,17 +20,26 @@ public class TagsController extends Controller implements TagsViewController.Vie
         this.viewController = viewController;
     }
 
+    /**
+     * Shows tags menu
+     */
     @Override
     public void show() {
         viewController.setListener(this);
         try {
             viewController.initialize(project_db.getAllTags());
         } catch (SQLException e) {
-            new AlertWindow("Error", "An error has occurred with the database while getting the tags: "+e).errorWindow();
+            new AlertWindow("Error", "An error has occurred with the database while getting the tags: " + e).errorWindow();
         }
     }
 
 
+    /**
+     * Adds a tag
+     *
+     * @param text      tag title
+     * @param toRGBCode tag color
+     */
     @Override
     public void onAddButtonClicked(String text, String toRGBCode) {
         try {
@@ -41,6 +50,13 @@ public class TagsController extends Controller implements TagsViewController.Vie
         }
     }
 
+    /**
+     * Updates a tag
+     *
+     * @param selectedTag selected tag
+     * @param text        tag title
+     * @param toRGBCode   tag color
+     */
     @Override
     public void onUpdateButtonClicked(Tag selectedTag, String text, String toRGBCode) {
         try {
@@ -52,6 +68,11 @@ public class TagsController extends Controller implements TagsViewController.Vie
 
     }
 
+    /**
+     * Deletes a tag
+     *
+     * @param selectedTag selected tag
+     */
     @Override
     public void deleteSelectedTag(Tag selectedTag) {
         try {

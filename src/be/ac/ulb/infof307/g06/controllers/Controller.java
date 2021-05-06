@@ -23,6 +23,9 @@ public abstract class Controller {
         prevScene = scene;
     }
 
+    /**
+     * Returns to previous stage
+     */
     public void back() {
         stage.setScene(prevScene);
         stage.sizeToScene();

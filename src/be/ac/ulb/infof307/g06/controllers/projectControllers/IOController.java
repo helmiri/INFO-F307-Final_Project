@@ -47,22 +47,6 @@ public class IOController extends Controller {
     public void show() {}
 
     /**
-     * @param inputView ProjectInputViewController
-     */
-    public void initProjectExport(ProjectInputViewController inputView) {
-        try {
-            ObservableList<String> projectsTitleList = FXCollections.observableArrayList();
-            List<Integer> ProjectIDList = project_db.getUserProjects(user_db.getCurrentUser().getId());
-            for (Integer projectID : ProjectIDList) {
-                projectsTitleList.add(project_db.getProject(projectID).getTitle());
-            }
-            //inputView.addProjectTitle(projectsTitleList);//i
-        } catch (SQLException e) {
-            new AlertWindow("Error", "An error has occurred with the database : "+e).errorWindow();
-        }
-    }
-
-    /**
      * Write a project and his children in a json file.
      *
      * @param project Project
@@ -163,8 +147,8 @@ public class IOController extends Controller {
      */
     private void parseJsonFile(String jsonFile) throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
-        int count = 0, parentID = 0 , id = 0;
-        String line = reader.readLine();
+        int count = 0, parentID = 0, id = 0;
+        String line;
         Map<Integer, Integer> hm = new HashMap<>();
         while ((line = reader.readLine()) != null) {
             count = ++count % 6;
@@ -197,11 +181,12 @@ public class IOController extends Controller {
     }
 
     /**
-     *  Parse a line of json file containing a list of tags.
-     *  Create the tags and add them to the project.
-     * @param id int
+     * Parse a line of json file containing a list of tags.
+     * Create the tags and add them to the project.
+     *
+     * @param id   int
      * @param line String
-     * @throws SQLException
+     * @throws SQLException exception
      */
     private void parseTags(int id, String line) throws SQLException {
         int tagID;
@@ -218,7 +203,7 @@ public class IOController extends Controller {
      * Create the tasks and add them to the project.
      * @param id int
      * @param line String
-     * @throws SQLException
+     * @throws SQLException exception
      */
     private void parseTasks(int id, String line) throws SQLException {
         Type listType = new TypeToken<ArrayList<Task>>() {}.getType();
@@ -236,7 +221,7 @@ public class IOController extends Controller {
      * @param line String
      * @return A list with of 2 integers, first one is the project id and
      *         second one is his parent's project id
-     * @throws SQLException
+     * @throws SQLException exception
      */
     private int[] parseProject(int parentID , Map<Integer,Integer> hm,String line) throws SQLException {
         Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
@@ -299,7 +284,7 @@ public class IOController extends Controller {
     public boolean isProjectInDb(String jsonFile) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
-            String line = reader.readLine();
+            String line;
             int count = 0;
             while ((line = reader.readLine()) != null) {
                 ++count;

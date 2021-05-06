@@ -355,19 +355,25 @@ public class StatsController extends Controller implements StatsViewController.V
             // Name of columns
             String content = "User"+","+"Collaborators" + "," + "Tasks" + "," + "projects" + ","+"\r\n";
             List<Integer> counts = countOverallStats();
-            content += user_db.getCurrentUser().getUserName()+","+counts.get(2) +","+ counts.get(1)+","+counts.get(0);
+            content += user_db.getCurrentUser().getUserName() + "," + counts.get(2) + "," + counts.get(1) + "," + counts.get(0);
             csv.write(content);
             csv.close();
             new AlertWindow("Success", "Success in exporting statistics.").informationWindow();
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             new AlertWindow("Error", "Couldn't find or access to this file.").errorWindow();
         }
     }
 
+    /**
+     * Exports file as json
+     *
+     * @param fileName File name
+     * @param path     path to export
+     */
     @Override
-    public void exportAsJSONOverallView(String fileName, String path){
+    public void exportAsJSONOverallView(String fileName, String path) {
         List<Integer> counts = countOverallStats();
-        String json= "{\n"+user_db.getCurrentUser().getUserName()+":{"+"'Collaborators':"+ counts.get(2) + ",'Tasks':"+counts.get(1)+",'Projects':"+counts.get(0)+"}\n}";
+        String json = "{\n" + user_db.getCurrentUser().getUserName() + ":{" + "'Collaborators':" + counts.get(2) + ",'Tasks':" + counts.get(1) + ",'Projects':" + counts.get(0) + "}\n}";
         write(json, fileName, path);
     }
 

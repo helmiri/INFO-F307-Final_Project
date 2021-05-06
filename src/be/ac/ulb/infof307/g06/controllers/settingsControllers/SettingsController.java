@@ -45,6 +45,12 @@ public class SettingsController extends Controller implements SettingsViewContro
         return loadScene("TagsView.fxml");
     }
 
+    /**
+     * loads a scene
+     *
+     * @param view view
+     * @return AnchorPane
+     */
     private AnchorPane loadScene(String view) {
         loader = new FXMLLoader(SettingsViewController.class.getResource(view));
         try {
@@ -108,13 +114,10 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showHelp() {
-
     }
 
     @Override
-    public void showAbout() {
-
-    }
+    public void showAbout() { }
 
     /**
      * Loads the profile scene controller

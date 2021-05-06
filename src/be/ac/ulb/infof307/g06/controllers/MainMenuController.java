@@ -75,13 +75,21 @@ public class MainMenuController extends Controller implements MenuViewController
         stage.centerOnScreen();
     }
 
+
     //--------------- STAGES ----------------
+
+    /**
+     * Shows Main Menu
+     */
     @Override
     public void showMainMenu() {
         show();
     }
 
 
+    /**
+     * Shows settings menu
+     */
     @Override
     public void showSettings() {
         SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
@@ -94,6 +102,9 @@ public class MainMenuController extends Controller implements MenuViewController
         controller.show();
     }
 
+    /**
+     * Shows stats menu
+     */
     @Override
     public void showStats() {
         StatsController controller = new StatsController(user_db, project_db, stage, scene);
@@ -101,6 +112,9 @@ public class MainMenuController extends Controller implements MenuViewController
     }
 
 
+    /**
+     * Shows calendar menu
+     */
     @Override
     public void showCalendar() {
         CalendarController controller = new CalendarController(user_db, project_db, stage, scene);
@@ -112,12 +126,21 @@ public class MainMenuController extends Controller implements MenuViewController
     }
 
 
+    /**
+     * Logs user out
+     */
     @Override
     public void logout() {
         listener.logout();
         listener.showLogin();
     }
 
+    /**
+     * Accepts an invitation and adds collaborator to project
+     *
+     * @param invitation      Invitation object
+     * @param invitationStage Invitation Stage
+     */
     @Override
     public void acceptInvitation(Invitation invitation, Stage invitationStage) {
         Project project = invitation.getProject();
@@ -131,6 +154,12 @@ public class MainMenuController extends Controller implements MenuViewController
         }
     }
 
+    /**
+     * Declines invitation to project
+     *
+     * @param invitation      Invitation object
+     * @param invitationStage Invitation Stage
+     */
     @Override
     public void declineInvitation(Invitation invitation, Stage invitationStage) {
         try {
@@ -141,7 +170,14 @@ public class MainMenuController extends Controller implements MenuViewController
         }
     }
 
+
     //--------------- LISTENER ----------------
+
+    /**
+     * Sets listener
+     *
+     * @param listener Listener
+     */
     public void setListener(Listener listener) {
         this.listener = listener;
     }

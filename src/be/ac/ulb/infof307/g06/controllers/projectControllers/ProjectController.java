@@ -42,7 +42,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
         super(user_db, project_db, stage, scene);
         ioController = new IOController(user_db, project_db, stage, scene);
-        //ioController.setViewController(viewController);
     }
 
 
@@ -75,7 +74,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
     // ----------------------------- STAGES -----------------------------------
 
     /**
-     * Sets the loader to show the stage to add a project.
+     * Shows the project add stage
+     *
+     * @param listener listener
      */
     public void showAddProjectStage(ProjectsViewController.ViewListener listener) {
         try {
@@ -95,6 +96,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * Shows the project edition stage
+     *
+     * @param project  project to edit
+     * @param listener listener
+     */
     public void showEditProjectStage(Project project, ProjectsViewController.ViewListener listener) {
         try {
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("popups/EditProjectView.fxml"));
@@ -113,8 +120,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+
     /**
-     * Sets the loader to show the stage to edit a task.
+     *  Shows the task edition stage
+     * @param task task to edit
+     * @param listener listener
      */
     public void showEditTaskStage(Task task, ProjectsViewController.ViewListener listener) {
         try {
@@ -134,6 +144,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * shows if storage limit has been reached
+     *
+     * @return boolean
+     */
     public boolean storageLimitReached() {
         try {
             if (user_db.availableDisk() <= 0) {
@@ -147,6 +162,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
     }
     // ------------------------------------- CODE --------------------------------------
 
+    /**
+     * on add project button pressed
+     */
     @Override
     public void addProject() {
         if (storageLimitReached()) {
@@ -155,6 +173,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         showAddProjectStage(this);
     }
 
+    /**
+     * deletes a project
+     *
+     * @param name title of project to delete
+     */
     @Override
     public void deleteProject(String name) {
         try {
@@ -166,6 +189,17 @@ public class ProjectController extends Controller implements ProjectsViewControl
             new AlertWindow("Error", "" + e).errorWindow();
         }
     }
+
+    /**
+     * Edits a project
+     *
+     * @param project     project
+     * @param title       project title
+     * @param description project description
+     * @param startDate   project start date
+     * @param endDate     project end date
+     * @param newTags     project's new tags
+     */
     @Override
     public void onEditProject(Project project, String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> newTags) {
         if (storageLimitReached()) {
@@ -198,6 +232,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * on edit project button pressed
+     *
+     * @param project project to edit
+     */
     @Override
     public void editProject(Project project) {
         if (storageLimitReached()) {
@@ -206,6 +245,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         showEditProjectStage(project, this);
     }
 
+    /**
+     * returns all projects
+     *
+     * @return list of projects
+     */
     @Override
     public List<Project> getProjects() {
         List<Project> res = new ArrayList<>();
@@ -220,6 +264,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return res;
     }
 
+    /**
+     * returns tags of a project
+     *
+     * @param project project to get tags
+     * @return tags of project
+     */
     @Override
     public ObservableList<String> getProjectTags(Project project) {
         ObservableList<String> tagsName = FXCollections.observableArrayList();
@@ -234,6 +284,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return tagsName;
     }
 
+    /**
+     * returns all the existing tags
+     *
+     * @return all tags
+     */
     @Override
     public ObservableList<String> getAllTags() {
         ObservableList<String> tagsName = FXCollections.observableArrayList();
@@ -248,6 +303,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return tagsName;
     }
 
+    /**
+     * returns a tag from the database
+     *
+     * @param name tag naùe
+     * @return tag
+     */
     @Override
     public Tag getTag(String name) {
         Tag res = null;
@@ -259,6 +320,14 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return res;
     }
 
+    /**
+     * Adds task to project
+     *
+     * @param description task description
+     * @param project_id  project id
+     * @param startDate   task start date
+     * @param endDate     task end date
+     */
     @Override
     public void addTask(String description, int project_id, Long startDate, Long endDate) {
         if (storageLimitReached()) {
@@ -267,6 +336,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         onAddTask(description, project_id, startDate, endDate);
     }
 
+    /**
+     * On task edit button clicked
+     *
+     * @param task task to edit
+     */
     @Override
     public void editTask(Task task) {
         if (storageLimitReached()) {
@@ -275,6 +349,15 @@ public class ProjectController extends Controller implements ProjectsViewControl
         showEditTaskStage(task, this);
     }
 
+    /**
+     * Edits a task
+     *
+     * @param prev_description previous task description
+     * @param new_description  new task description
+     * @param startDate        new task start date
+     * @param endDate          new task end date
+     * @param task             task
+     */
     @Override
     public void onEditTask(String prev_description, String new_description, Long startDate, Long endDate, Task task) {
         if (storageLimitReached()) {
@@ -303,6 +386,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * Deletes a task
+     *
+     * @param task task to delete
+     */
     @Override
     public void deleteTask(Task task) {
         try {
@@ -313,6 +401,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * returns all tasks assigned to a project
+     *
+     * @param project project to get tasks
+     * @return all tasks assigned to a project
+     */
     @Override
     public ObservableList<Task> getTasks(Project project) {
         try {
@@ -328,18 +422,23 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return FXCollections.observableArrayList();
     }
 
+    /**
+     * Assigns collaborators to a task
+     *
+     * @param collaborators collaborators to assign to task
+     * @param task          task to assign collaborators to
+     */
     @Override
     public void assignTaskCollaborator(ObservableList<String> collaborators, Task task) {
         if (storageLimitReached()) {
             return;
         }
         try {
-            if (task != null){
+            if (task != null) {
                 for (String collaborator : collaborators) {
                     project_db.addTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
                 }
-            }
-            else{
+            } else {
                 new AlertWindow("Warning", "Please select a task before assigning a collaborator.").warningWindow();
             }
 
@@ -348,6 +447,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * Returns all collaborators assigned to a task
+     *
+     * @param task task to get collaborators
+     * @return all collaborators of a task
+     */
     @Override
     public ObservableList<String> getTaskCollaborators(Task task) {
         ObservableList<String> names = FXCollections.observableArrayList();
@@ -357,8 +462,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 for (Integer collaborator : collaborators) {
                     names.add((user_db.getUserInfo(collaborator).getUserName()));
                 }
-            }
-            else{
+            } else {
                 new AlertWindow("Warning", "Please select a task.").warningWindow();
             }
         } catch (SQLException e) {
@@ -367,6 +471,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return names;
     }
 
+    /**
+     * deletes a collaborator from a task
+     *
+     * @param collaborator collaborator to delete
+     * @param task         task assigned to collaborator
+     */
     @Override
     public void deleteTaskCollaborator(String collaborator, Task task) {
         try {
@@ -376,11 +486,23 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * Returns true if collaborator is in task
+     *
+     * @param task task to check
+     * @return true if collaborator is in task
+     */
     @Override
     public boolean isCollaboratorInTask(Task task) {
         return getTaskCollaborators(task).contains(user_db.getCurrentUser().getId());
     }
 
+    /**
+     * Adds a collaborator to a project
+     *
+     * @param username   collaborator's username
+     * @param project_id project to add collaborator to
+     */
     @Override
     public void addCollaborator(String username, int project_id) {
         if (storageLimitReached()) {
@@ -404,6 +526,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * Deletes a collaborator from a project
+     *
+     * @param collaboratorName Name of collaborator to delete
+     * @param project_id       project
+     */
     @Override
     public void deleteCollaborator(String collaboratorName, int project_id) {
         try {
@@ -414,6 +542,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * Returns all collaborators on a project
+     *
+     * @param project project to get collaborators
+     * @return List of collaborators
+     */
     @Override
     public ObservableList<String> getCollaborators(Project project) {
         ObservableList<String> names = FXCollections.observableArrayList();
@@ -429,6 +563,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return names;
     }
 
+    /**
+     * Returns true if user is in task
+     *
+     * @param user user
+     * @param task task
+     * @return true if user is in task
+     */
     @Override
     public boolean isUserInTask(String user, Task task) {
         try {
@@ -439,6 +580,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         return false;
     }
 
+    /**
+     * on import button pressed
+     *
+     * @param path file path
+     */
     @Override
     public void importProject(String path) {
         if (storageLimitReached()) {
@@ -452,6 +598,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * On export button pressed
+     *
+     * @param project project to export
+     * @param path    path to save
+     */
     @Override
     public void exportProject(Project project, String path) {
         boolean res = ioController.onExportProject(project, path);
@@ -462,6 +614,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * On upload project button pressed
+     *
+     * @param projects projects to upload
+     */
     @Override
     public void uploadProject(List<Project> projects) {
         if (setServiceProvider()) {
@@ -480,6 +637,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
     }
 
+    /**
+     * On download project button pressed
+     */
     @Override
     public void downloadProject() {
         if (setServiceProvider()) {
@@ -491,6 +651,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
         cloudServiceController.showSelectionStage(true);
     }
 
+    /**
+     * @return Sets service provider
+     */
     private boolean setServiceProvider() {
         if (cloudServiceController == null) {
             cloudServiceController = new CloudServiceController(this, user_db);
@@ -500,7 +663,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
 
     /**
-     * Adds a project to the tree, the map and the database.
+     * Adds a project to the database
+     * @param title project title
+     * @param description project description
+     * @param startDate project start date
+     * @param endDate project end date
+     * @param tags project tags
+     * @param parent project parent
      */
     public void onAddProject(String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> tags, String parent) {
         if (storageLimitReached()) {
@@ -540,8 +709,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     /**
      * Adds a task to the parent project, adds it to the database.
-     *
-     * @param taskDescription String
+     * @param taskDescription task description
+     * @param project_id project id
+     * @param startDate task start date
+     * @param endDate task end date
      */
     public void onAddTask(String taskDescription, int project_id, Long startDate, Long endDate) {
         if (storageLimitReached()) {
