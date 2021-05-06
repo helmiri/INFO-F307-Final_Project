@@ -19,6 +19,9 @@ public class SettingsController extends Controller implements SettingsViewContro
         super(user_db, project_db, stage, scene);
     }
 
+    /**
+     * Loads and displays the settings scene
+     */
     @Override
     public void show() {
         AnchorPane pane = loadScene("SettingsView.fxml");
@@ -32,6 +35,11 @@ public class SettingsController extends Controller implements SettingsViewContro
         stage.sizeToScene();
     }
 
+    /**
+     * Loads the layout of the tags scene
+     *
+     * @return The layout of the scene
+     */
     @Override
     public AnchorPane getTagsScene() {
         return loadScene("TagsView.fxml");
@@ -47,38 +55,57 @@ public class SettingsController extends Controller implements SettingsViewContro
         return null;
     }
 
+    /**
+     * Loads the layout of the storage scene
+     *
+     * @return The layout of the scene
+     */
     @Override
     public AnchorPane getStorageScene() {
         return loadScene("StorageView.fxml");
     }
 
-    @Override
-    public AnchorPane getLanguageScene() {
-        return null;
-    }
-
+    /**
+     * Loads the layout of the help scene
+     *
+     * @return The layout of the scene
+     */
     @Override
     public AnchorPane getHelpScene() {
         return null;
     }
 
+    /**
+     * Loads the layout of the about scene
+     *
+     * @return The layout of the scene
+     */
     @Override
     public AnchorPane getAboutScene() {
         return null;
     }
 
+    /**
+     * Loads the storage scene controller
+     */
     @Override
     public void showStorage() {
         StorageController controller = new StorageController(user_db, project_db, stage, scene, loader.getController());
         controller.show();
     }
 
+    /**
+     * Loads the tag scene controller
+     */
     @Override
     public void showTags() {
         TagsController controller = new TagsController(user_db, project_db, stage, scene, loader.getController());
         controller.show();
     }
 
+    /**
+     * Loads the help scene controller
+     */
     @Override
     public void showHelp() {
 
@@ -89,8 +116,30 @@ public class SettingsController extends Controller implements SettingsViewContro
 
     }
 
+    /**
+     * Loads the profile scene controller
+     */
+    @Override
+    public void showProfile() {
+        ProfileController controller = new ProfileController(user_db, project_db, stage, scene, loader.getController());
+        controller.show();
+    }
+
+    /**
+     * Return to the last scene
+     */
     @Override
     public void onBackButtonPressed() {
         back();
+    }
+
+    /**
+     * Loads the layout of the profile scene
+     *
+     * @return The layout of the scene
+     */
+    @Override
+    public AnchorPane getProfileScene() {
+        return loadScene("ProfileView.fxml");
     }
 }
