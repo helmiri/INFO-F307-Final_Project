@@ -40,7 +40,7 @@ Windows:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante :
 
-`.\windows\exec.bat PATH_TO_JDK_JAVA.EXE`
+`.\exec.bat PATH_TO_JDK_JAVA.EXE`
 
 où PATH_TO_JDK_JAVA.EXE vers java.exe
 
@@ -56,7 +56,7 @@ Windows:
 
 - Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec.bat réside et exécutez la commande suivante :
 
-`.\windows\exec.bat PATH_TO_JDK_JAVA.EXE jar iteration-x`
+`.\exec.bat PATH_TO_JDK_JAVA.EXE jar iteration-x`
 
 où x est le numéro de l'itération
 
