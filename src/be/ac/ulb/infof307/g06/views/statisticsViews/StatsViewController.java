@@ -117,30 +117,43 @@ public class StatsViewController{
         isOverallView=false;
         overallViewBtn.setDisable(false);
         projectViewBtn.setDisable(true);
-        setTooltips();
+        setToolTips();
+    }
+
+
+    /**
+     * Creates the tooltips.
+     *
+     * @param tooltip      Tooltip
+     * @param textTooltip  String
+     * @param relatedLabel Object
+     */
+    public void createToolTips(Tooltip tooltip, String textTooltip, Object relatedLabel) {
+        tooltip.setText(textTooltip);
+        if (relatedLabel instanceof Label){
+            ((Label)relatedLabel).setTooltip(tooltip);
+        }
+        else{
+            ((TextField)relatedLabel).setTooltip(tooltip);
+        }
     }
 
     /**
      * Sets the tool tips on the interface.
      */
-    public void setTooltips(){
-        collabortorsToolTip.setText("Number of collaborators.");
-        collaboratorsNumber.setTooltip(collabortorsToolTip);
-
-        tasksToolTip.setText("Number of tasks.");
-        tasksNumber.setTooltip(tasksToolTip);
-
-        projectsToolTip.setText("Number of projects.");
-        projectsNumber.setTooltip(projectsToolTip);
-
-        barChartToolTip.setText("Chart of tasks/projects.");
-        barChartLabel.setTooltip(barChartToolTip);
-
-        pieChartToolTip.setText("Pie chart of duration\n of a project.");
-        pieChartLabel.setTooltip(pieChartToolTip);
-
-        exportToolTip.setText("Export.");
-        fileNameTextField.setTooltip(exportToolTip);
+    public void setToolTips(){
+        String textCollaboratorsToolTip =  "Number of collaborators.",
+                textTasksToolTip        = "Number of tasks.",
+                textProjectsToolTip     = "Number of projects.",
+                textBarChartToolTip     = "Chart of tasks/projects.",
+                textPieChartToolTip     = "Pie chart of duration of a project.",
+                textExportToolTip       = "Export.";
+        createToolTips(collabortorsToolTip, textCollaboratorsToolTip, collaboratorsNumber);
+        createToolTips(tasksToolTip, textTasksToolTip, tasksNumber);
+        createToolTips(projectsToolTip, textProjectsToolTip, projectsNumber);
+        createToolTips(barChartToolTip, textBarChartToolTip, barChartLabel);
+        createToolTips(pieChartToolTip, textPieChartToolTip, pieChartLabel);
+        createToolTips(exportToolTip, textExportToolTip, fileNameTextField);
 
     }
 
@@ -156,7 +169,7 @@ public class StatsViewController{
         barChartInitializer();
         overallViewBtn.setDisable(true);
         projectViewBtn.setDisable(false);
-        setTooltips();
+        setToolTips();
     }
 
     /**
