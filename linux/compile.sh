@@ -38,16 +38,15 @@ javac -cp "./lib/calendarfx/view-11.8.3.jar:./lib/googledrive/*:./lib/dropbox/dr
 
 cp ./src/be/ac/ulb/infof307/g06/views/connectionViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/connectionViews/
 cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/
-cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.css ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/
+cp ./src/be/ac/ulb/infof307/g06/resources/stylesheets/*.css ./compile/build/be/ac/ulb/infof307/g06/resources/stylesheets/
 cp ./src/be/ac/ulb/infof307/g06/views/projectViews/popups/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/popups/
 cp ./src/be/ac/ulb/infof307/g06/views/statisticsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/statisticsViews/
-cp ./src/be/ac/ulb/infof307/g06/icons/* ./compile/build/be/ac/ulb/infof307/g06/icons/
+cp ./src/be/ac/ulb/infof307/g06/resources/icons/*.png ./compile/build/be/ac/ulb/infof307/g06/resources/icons/
 cp ./src/be/ac/ulb/infof307/g06/views/calendarViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/calendarViews/
 cp ./src/be/ac/ulb/infof307/g06/views/mainMenuViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/mainMenuViews/
 cp ./src/be/ac/ulb/infof307/g06/views/settingsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/settingsViews/
 cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json
 cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json
-
 
 
 
