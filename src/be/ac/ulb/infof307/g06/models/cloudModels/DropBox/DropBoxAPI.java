@@ -64,7 +64,7 @@ public class DropBoxAPI {
         InputStream in = new FileInputStream(localFilePath);
         UploadBuilder uploadBuilder = dboxClient.files().uploadBuilder(cloudFilePath);
         uploadBuilder.withMode(WriteMode.OVERWRITE);
-        FileMetadata metadata = uploadBuilder.uploadAndFinish(in);
+        uploadBuilder.uploadAndFinish(in);
         in.close();
     }
 
@@ -79,7 +79,7 @@ public class DropBoxAPI {
      */
     public void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException, NoSuchAlgorithmException {
         OutputStream outputStream = new FileOutputStream(localFilePath);
-        FileMetadata metadata = dboxClient.files()
+        dboxClient.files()
                 .downloadBuilder(cloudFilePath)
                 .download(outputStream);
 

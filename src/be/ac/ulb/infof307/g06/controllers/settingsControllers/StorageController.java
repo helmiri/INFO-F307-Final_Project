@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAuthorization;
 import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAuthorization;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -38,7 +37,6 @@ public class StorageController extends Controller implements StorageViewControll
 
     @Override
     public void show() {
-        User currentUser = user_db.getCurrentUser();
         try {
             storageViewController.setListener(this);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
@@ -136,6 +134,11 @@ public class StorageController extends Controller implements StorageViewControll
         }
     }
 
+    /**
+     * On ok button clicked
+     *
+     * @param code code
+     */
     @Override
     public void onOKClicked(String code) {
         try {
@@ -151,6 +154,11 @@ public class StorageController extends Controller implements StorageViewControll
         new AlertWindow("Credentials saved", "Settings saved").informationWindow();
     }
 
+    /**
+     * On link clicked
+     *
+     * @param url link
+     */
     @Override
     public void onHyperlinkClicked(String url) {
         Clipboard clipboard = Clipboard.getSystemClipboard();
