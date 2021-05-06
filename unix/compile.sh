@@ -10,6 +10,7 @@ cd ..
 
 CLASS_PATH="./lib/sqlite/sqlite-jdbc-3.34.0.jar:./lib/calendarfx/*:./lib/googledrive/*:./lib/dropbox/*:./lib/gson/*:./lib/jarchivelib/*:./lib/controlsfx/*:./lib/junit/*:./lib/junit/console/*"
 
+
 function get_files(){
   for file in "$1"/* ;do
     if [ -f "${file}" ] ;then
