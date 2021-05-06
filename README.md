@@ -52,9 +52,19 @@ MacOS et Linux:
 
 Fichier .jar:
 
-- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec_jar.bat réside et exécutez la commande suivante
+Windows:
+
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec.bat réside et exécutez la commande suivante :
 
 `.\windows\exec.bat PATH_TO_JDK_JAVA.EXE jar iteration-x`
+
+où x est le numéro de l'itération
+
+MacOS et Linux:
+ 
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec.bat réside et exécutez la commande suivante :
+
+`./exec.sh jar iteration-x`
 
 où x est le numéro de l'itération
 
