@@ -86,15 +86,6 @@ public class MainMenuController extends Controller implements MenuViewController
         show();
     }
 
-    /**
-     * Shows projects menu
-     */
-    @Override
-    public void showProjectsMenu() {
-        String fxmlFileName = "ProjectMenu.fxml";
-        loadMenu(fxmlFileName);
-
-    }
 
     /**
      * Shows settings menu
@@ -105,27 +96,6 @@ public class MainMenuController extends Controller implements MenuViewController
         controller.show();
     }
 
-    /**
-     * Loads a fxml file
-     *
-     * @param fxmlFileName file name
-     */
-    private void loadMenu(String fxmlFileName) {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource(fxmlFileName));
-        try {
-            scene = new Scene(loader.load());
-            MenuViewController controller = loader.getController();
-            controller.setListener(this);
-            stage.setScene(scene);
-            stage.sizeToScene();
-        } catch (IOException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
-        }
-    }
-
-    /**
-     * Shows projects menu
-     */
     @Override
     public void showProjects() {
         ProjectController controller = new ProjectController(user_db, project_db, stage, scene);

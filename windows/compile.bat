@@ -31,10 +31,10 @@ xcopy .\src .\compile\build /t/e
 
 copy .\src\be\ac\ulb\infof307\g06\views\connectionViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\connectionViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\projectViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\ > Nul
-copy .\src\be\ac\ulb\infof307\g06\views\projectViews\*.css .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\projectViews\popups\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\projectViews\popups\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\statisticsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\statisticsViews\ > Nul
-copy .\src\be\ac\ulb\infof307\g06\icons\* .\compile\build\be\ac\ulb\infof307\g06\icons\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\resources\icons\* .\compile\build\be\ac\ulb\infof307\g06\resources\icons\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\resources\stylesheets\*.css .\compile\build\be\ac\ulb\infof307\g06\resources\stylesheets\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\calendarViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\calendarViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\mainMenuViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\mainMenuViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\settingsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\settingsViews\ > Nul

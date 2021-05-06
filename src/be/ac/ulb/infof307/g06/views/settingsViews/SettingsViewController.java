@@ -15,7 +15,7 @@ public class SettingsViewController {
     private static final String hoverColor = "#95dbfa";
     private static final String defaultColor = "#4fc3f7";
     @FXML
-    private Button languageBtn;
+    private Button profileBtn;
     @FXML
     private Button storageBtn;
     @FXML
@@ -42,9 +42,10 @@ public class SettingsViewController {
     @FXML
     private void events(ActionEvent actionEvent) {
         Object source = actionEvent.getSource();
-        if (languageBtn.equals(source)) {
-            swapButtonStyles(languageBtn);
-            setSubPaneScene(listener.getLanguageScene());
+        if (profileBtn.equals(source)) {
+            swapButtonStyles(profileBtn);
+            setSubPaneScene(listener.getProfileScene());
+            listener.showProfile();
         } else if (storageBtn.equals(source)) {
             swapButtonStyles(storageBtn);
             setSubPaneScene(listener.getStorageScene());
@@ -147,7 +148,7 @@ public class SettingsViewController {
      * Sets the default scene to the tags settings.
      */
     public void setDefaultScene() {
-        tagsBtn.fire();
+        profileBtn.fire();
     }
 
     //--------------- LISTENER ----------------
@@ -165,8 +166,6 @@ public class SettingsViewController {
 
         AnchorPane getStorageScene();
 
-        AnchorPane getLanguageScene();
-
         AnchorPane getHelpScene();
 
         AnchorPane getAboutScene();
@@ -179,6 +178,10 @@ public class SettingsViewController {
 
         void showAbout();
 
+        void showProfile();
+
         void onBackButtonPressed();
+
+        AnchorPane getProfileScene();
     }
 }

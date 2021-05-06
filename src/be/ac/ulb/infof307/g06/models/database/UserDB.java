@@ -278,7 +278,9 @@ public class UserDB extends Database {
         setField(fName, "fName");
         setField(lName, "lName");
         setField(email, "email");
-        setField(newPassword, "password");
+        if (!newPassword.isBlank()) {
+            setField(newPassword, "password");
+        }
     }
 
     /**
@@ -339,5 +341,15 @@ public class UserDB extends Database {
         long limit = res.getLong("diskLimit");
         res.close();
         return limit;
+    }
+
+    public void userSettingsSync(User newUser, String newPassword) throws SQLException {
+        if (newUser != null) {
+            currentUser = newUser;
+            setUserInfo(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), "");
+            return;
+        }
+        String hashPassword = hash.hashPassword(newPassword, currentUser.getUserName()); // change salt
+        sqlUpdate("UPDATE users set password='" + hashPassword + "' where id='" + currentUser.getId() + "'");
     }
 }

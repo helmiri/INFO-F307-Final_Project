@@ -10,11 +10,7 @@ public class MenuViewController {
     @FXML
     private Button logOutBtn;
     @FXML
-    private Button projectAccessBtn;
-    @FXML
     private Button settingsAccessBtn;
-    @FXML
-    private Button profileAccessBtn;
     @FXML
     private Button calendarAccessBtn;
     @FXML
@@ -35,9 +31,7 @@ public class MenuViewController {
      */
     @FXML
     private void events(ActionEvent event) {
-        if (event.getSource() == projectAccessBtn) {
-            listener.showProjectsMenu();
-        } else if (event.getSource() == logOutBtn) {
+        if (event.getSource() == logOutBtn) {
             listener.logout();
         } else if (event.getSource() == mainMenuBtn) {
             listener.showMainMenu();
@@ -61,8 +55,6 @@ public class MenuViewController {
 
     public interface ViewListener {
         void showMainMenu();
-
-        void showProjectsMenu();
 
         void showProjects();
 

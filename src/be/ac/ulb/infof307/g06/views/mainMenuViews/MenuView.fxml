@@ -15,27 +15,7 @@
    <children>
       <HBox layoutX="259.0" layoutY="350.0" spacing="40.0">
          <children>
-            <Button fx:id="profileAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#events"
-                    prefHeight="201.0" prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css"
-                    textFill="#f2f1f0">
-               <font>
-                  <Font size="36.0"/>
-               </font>
-               <graphic>
-                  <ImageView fitHeight="102.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../resources/icons/USER_ICON.png"/>
-                     </image>
-                     <effect>
-                        <Blend/>
-                     </effect>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND"/>
-               </cursor>
-            </Button>
-            <Button fx:id="projectAccessBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0"
+            <Button fx:id="projectManagementBtn" mnemonicParsing="false" onAction="#events" prefHeight="201.0"
                     prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css" textFill="#f2f1f0">
                <font>
                   <Font size="36.0"/>
@@ -46,6 +26,26 @@
                      <image>
                         <Image url="@../../resources/icons/PROJECT_ICON.png"/>
                      </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND"/>
+               </cursor>
+            </Button>
+            <Button fx:id="statsAccessBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" onAction="#events"
+                    prefHeight="201.0" prefWidth="223.0" stylesheets="@../../resources/stylesheets/Button.css"
+                    textFill="#f2f1f0">
+               <font>
+                  <Font size="36.0"/>
+               </font>
+               <graphic>
+                  <ImageView fitHeight="102.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../resources/icons/STATS_ICON.png"/>
+                     </image>
+                     <effect>
+                        <Blend/>
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>

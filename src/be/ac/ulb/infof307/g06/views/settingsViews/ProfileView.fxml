@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="823.0" prefWidth="971.0"
+            xmlns="http://javafx.com/javafx/16"
+            fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.ProfileViewController">
+    <children>
+        <HBox layoutX="259.0" layoutY="392.0" spacing="40.0"/>
+        <GridPane alignment="CENTER" layoutX="81.0" layoutY="213.0" prefHeight="397.0" prefWidth="808.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="372.0" minWidth="10.0"
+                                   prefWidth="282.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="96.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="430.0" minWidth="10.0" prefWidth="430.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <TextField fx:id="firstNameField" alignment="CENTER" GridPane.columnIndex="2"/>
+                <TextField fx:id="lastNameField" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <TextField fx:id="emailField" alignment="CENTER" prefHeight="25.0" prefWidth="356.0"
+                           GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                <PasswordField fx:id="newPasswordField" alignment="CENTER" GridPane.columnIndex="2"
+                               GridPane.rowIndex="3"/>
+                <PasswordField fx:id="confirmationField" alignment="CENTER" layoutX="499.0" layoutY="236.0"
+                               GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="First Name:" wrappingWidth="144.6240234375">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Text>
+                <Text layoutX="98.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name:"
+                      wrappingWidth="145.2431640625" GridPane.rowIndex="1">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Text>
+                <Text layoutX="98.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:"
+                      wrappingWidth="146.080078125" GridPane.rowIndex="2">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Text>
+                <Text layoutX="86.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New password:"
+                      wrappingWidth="147.447265625" GridPane.rowIndex="3">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Text>
+                <Text layoutX="86.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="Password confirmation:" GridPane.rowIndex="4">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Text>
+            </children>
+        </GridPane>
+        <Text layoutX="303.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connected as:">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
+        <Text fx:id="userName" fill="#2b96e8" layoutX="519.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="user">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
+        <Separator layoutX="199.0" layoutY="154.0" prefHeight="20.0" prefWidth="626.0"/>
+        <Button fx:id="saveButton" layoutX="515.0" layoutY="745.0" mnemonicParsing="false" onAction="#save"
+                prefHeight="54.0" prefWidth="201.0" stylesheets="@../../resources/stylesheets/Button.css" text="SAVE">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+    </children>
+</AnchorPane>
