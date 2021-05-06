@@ -14,7 +14,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestDatabase {
     protected static final String DB_PATH = "test/be/ac/ulb/infof307/g06/models/database/testDB.db";
     protected  Connection db;
@@ -24,15 +23,15 @@ public class TestDatabase {
     protected  ProjectDB projectDB;
     protected  CalendarDB calendarDB;
 
+    @BeforeAll
+    public static void setup(){
+        File dbFile = new File(DB_PATH);
+        dbFile.deleteOnExit();
+    }
 
     public TestDatabase() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
-        File dbFile = new File(DB_PATH);
-        if (dbFile.exists()) {
-            if (!dbFile.delete()) {
-                System.out.println("ERROR: testDB.db file found and unable to be deleted.\nDelete the file to avoid test errors");
-            }
-        }
+
         db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
 
         dbFields = new ArrayList<>(5);

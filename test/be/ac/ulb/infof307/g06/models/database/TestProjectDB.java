@@ -13,7 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestProjectDB extends TestDatabase {
     String projectName = "test1";
     String projectDescription = "desc1";
