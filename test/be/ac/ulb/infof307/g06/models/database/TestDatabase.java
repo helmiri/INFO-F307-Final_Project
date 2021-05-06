@@ -105,4 +105,15 @@ public class TestDatabase {
         User user = userDB.getCurrentUser();
         assertEquals("User_1_userName", user.getUserName());
     }
+
+    @AfterAll
+    public void tearDown() throws SQLException {
+        projectDB.disconnectDB();
+        userDB.disconnectDB();
+        calendarDB.disconnectDB();
+        db.close();
+
+        File f = new File(DB_PATH);
+        f.deleteOnExit();
+    }
 }
