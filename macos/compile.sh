@@ -4,10 +4,7 @@
 
 cd ..
 
-SOURCE_FILE_LOCAL_PATH="compile/build/sources.txt"
-SOURCE_FILE="$PWD/$SOURCE_FILE_LOCAL_PATH"
-
-> "$SOURCE_FILE"
+CLASS_PATH="./lib/sqlite/sqlite-jdbc-3.34.0.jar:./lib/calendarfx/*:./lib/googledrive/*:./lib/dropbox/*:./lib/gson/*:./lib/jarchivelib/*:./lib/controlsfx/*:./lib/junit/*:./lib/junit/console/*"
 
 function get_files(){
   for file in "$1"/* ;do
@@ -15,38 +12,81 @@ function get_files(){
       local name=$(basename "$file")
       local extension="${name##*.}"
       if [ "$extension" == "java" ];then
-        echo "$file" >> "$SOURCE_FILE"
+        echo "$file" >> "$2"
       fi
     fi
-    [ -d "${file}" ] && get_files "$file"
+    [ -d "${file}" ] && get_files "$file" "$2"
   done
 }
 
-rm -rf ./compile/build/be
+function make_tests(){
 
-mkdir -p compile
-mkdir -p ./compile/build
-mkdir -p ./compile/tests
+  local SOURCE_FILE_LOCAL_PATH="compile/test/sources.txt"
+  local SOURCE_FILE="$PWD/$SOURCE_FILE_LOCAL_PATH"
 
-cd ./src
-get_files "$PWD"
-cd ..
-rsync -a -f"+ */" -f"- *" src/ compile/build/
+  > "$SOURCE_FILE"
+
+  local MAIN_LOCATION="$PWD"
+  rm -rf ./compile/test
+  mkdir -p ./compile/test
+
+  cd ./test
+  get_files "$PWD" "$SOURCE_FILE"
+
+  cd ..
 
 
-javac -cp "./lib/calendarfx/view-11.8.3.jar:./lib/googledrive/*:./lib/dropbox/dropbox-core-sdk-3.1.5.jar:./lib/dropbox/jackson-core-2.7.4.jar:./lib/gson/gson-2.8.6.jar:./lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar:./lib/controlsfx/controlsfx-11.1.0.jar:" --module-path lib/javafx/mac --add-modules javafx.controls,javafx.fxml @./compile/build/sources.txt ./src/be/ac/ulb/infof307/g06/Main.java -d ./compile/build
+  cd ./src/be/ac/ulb/infof307/g06/models
 
-cp ./src/be/ac/ulb/infof307/g06/views/connectionViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/connectionViews/
-cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/
-cp ./src/be/ac/ulb/infof307/g06/resources/stylesheets/*.css ./compile/build/be/ac/ulb/infof307/g06/resources/stylesheets/
-cp ./src/be/ac/ulb/infof307/g06/views/projectViews/popups/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/popups/
-cp ./src/be/ac/ulb/infof307/g06/views/statisticsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/statisticsViews/
-cp ./src/be/ac/ulb/infof307/g06/resources/icons/*.png ./compile/build/be/ac/ulb/infof307/g06/resources/icons/
-cp ./src/be/ac/ulb/infof307/g06/views/calendarViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/calendarViews/
-cp ./src/be/ac/ulb/infof307/g06/views/mainMenuViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/mainMenuViews/
-cp ./src/be/ac/ulb/infof307/g06/views/settingsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/settingsViews/
-cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json
-cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json
+  get_files "$PWD" "$SOURCE_FILE"
+
+  cd "$MAIN_LOCATION"
+
+
+  javac -cp "$CLASS_PATH" --module-path lib/javafx/mac --add-modules javafx.controls,javafx.fxml @./compile/test/sources.txt -d ./compile/test
+
+}
+
+function compile_program(){
+
+  local SOURCE_FILE_LOCAL_PATH="compile/build/sources.txt"
+  local SOURCE_FILE="$PWD/$SOURCE_FILE_LOCAL_PATH"
+
+  > "$SOURCE_FILE"
+
+  rm -rf ./compile/build/be
+
+  mkdir -p ./compile/build
+
+
+  cd ./src
+  get_files "$PWD" "$SOURCE_FILE"
+  cd ..
+  rsync -a -f"+ */" -f"- *" src/ compile/build/
+
+
+
+  javac -cp "$CLASS_PATH" --module-path lib/javafx/mac --add-modules javafx.controls,javafx.fxml @./compile/build/sources.txt ./src/be/ac/ulb/infof307/g06/Main.java -d ./compile/build
+
+  cp ./src/be/ac/ulb/infof307/g06/views/connectionViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/connectionViews/
+  cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/
+  cp ./src/be/ac/ulb/infof307/g06/resources/stylesheets/*.css ./compile/build/be/ac/ulb/infof307/g06/resources/stylesheets/
+  cp ./src/be/ac/ulb/infof307/g06/views/projectViews/popups/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/popups/
+  cp ./src/be/ac/ulb/infof307/g06/views/statisticsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/statisticsViews/
+  cp ./src/be/ac/ulb/infof307/g06/resources/icons/*.png ./compile/build/be/ac/ulb/infof307/g06/resources/icons/
+  cp ./src/be/ac/ulb/infof307/g06/views/calendarViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/calendarViews/
+  cp ./src/be/ac/ulb/infof307/g06/views/mainMenuViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/mainMenuViews/
+  cp ./src/be/ac/ulb/infof307/g06/views/settingsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/settingsViews/
+  cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json
+  cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json
+
+}
+
+if [ "$1" == "test" ]; then
+  make_tests
+else
+  compile_program
+fi
 
 
 
