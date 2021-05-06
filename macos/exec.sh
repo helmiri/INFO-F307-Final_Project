@@ -1,3 +1,11 @@
 #! /bin/bash
 cd ..
-java --module-path lib/javafx/mac --add-modules javafx.controls,javafx.fxml -cp "./compile/build/:./lib/calendarfx/view-11.8.3.jar:./lib/googledrive/*:./lib/dropbox/dropbox-core-sdk-3.1.5.jar:./lib/dropbox/jackson-core-2.7.4.jar:./lib/gson/gson-2.8.6.jar:./lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar:./lib/controlsfx/controlsfx-11.1.0.jar:./lib/sqlite/sqlite-jdbc-3.34.0.jar" be.ac.ulb.infof307.g06.Main
+
+CLASS_PATH="/lib/sqlite/*:./lib/calendarfx/*:./lib/googledrive/*:./lib/dropbox/*:./lib/gson/*:./lib/jarchivelib/*:./lib/controlsfx/*:./lib/junit/*:./lib/junit/console/*"
+if [ "$1" == "test" ]; then
+  java -cp "$CLASS_PATH:./compile/test" org.junit.platform.console.ConsoleLauncher --scan-class-path --details verbose --details-theme ascii --reports-dir ./compile/test --exclude-engine junit-vintage
+elif [ "$1" == "jar" ]; then
+  java --module-path lib/javafx/mac --add-modules javafx.controls,javafx.fxml -jar ./dist/"$2"/g06-"$2".jar
+else
+  java --module-path lib/javafx/mac --add-modules javafx.controls,javafx.fxml -cp "$CLASS_PATH:./compile/build" be.ac.ulb.infof307.g06.Main
+fi
