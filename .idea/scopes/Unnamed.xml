@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Unnamed" pattern="(file[2021-groupe-6]:src/*||file[2021-groupe-6]:src//*)&amp;&amp;!file:src/of.tar.gz&amp;&amp;!file:src/TOFILL.md&amp;&amp;!file:src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/DropBoxContentHasher.java&amp;&amp;!file:src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json&amp;&amp;!file:src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json" />
+  <scope name="Unnamed" pattern="file[2021-groupe-6]:src//*&amp;&amp;!file:src/of.tar.gz&amp;&amp;!file:src/TOFILL.md&amp;&amp;!file:src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/DropBoxContentHasher.java&amp;&amp;!file:src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json&amp;&amp;!file:src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json&amp;&amp;!file[2021-groupe-6]:*||file[2021-groupe-6]:src/*" />
 </component>
