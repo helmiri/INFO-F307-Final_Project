@@ -81,30 +81,11 @@ public class MainMenuController extends Controller implements MenuViewController
         show();
     }
 
-    @Override
-    public void showProjectsMenu() {
-        String fxmlFileName = "ProjectMenu.fxml";
-        loadMenu(fxmlFileName);
-
-    }
 
     @Override
     public void showSettings() {
         SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
         controller.show();
-    }
-
-    private void loadMenu(String fxmlFileName) {
-        FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource(fxmlFileName));
-        try {
-            scene = new Scene(loader.load());
-            MenuViewController controller = loader.getController();
-            controller.setListener(this);
-            stage.setScene(scene);
-            stage.sizeToScene();
-        } catch (IOException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
-        }
     }
 
     @Override
