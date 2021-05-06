@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 
+import be.ac.ulb.infof307.g06.models.Hash;
 import be.ac.ulb.infof307.g06.models.User;
 import org.junit.jupiter.api.*;
 
@@ -84,11 +85,14 @@ public class TestDatabase {
          */
 
         PreparedStatement state;
+        Hash hash = new Hash();
         for (int i = 0; i < 10; i++) {
             state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)");
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < dbFields.size() - 1; j++) {
                 state.setString(j + 1, testData.get(i).get(dbFields.get(j)));
             }
+            String hashPassword = hash.hashPassword(testData.get(i).get("password"), testData.get(i).get("userName")); // change salt
+            state.setString(dbFields.size(), hashPassword);
             state.execute();
             state.close();
         }
