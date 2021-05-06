@@ -1,7 +1,7 @@
 #! /bin/bash
 cd ..
 
-CLASS_PATH="/lib/sqlite/*:./lib/calendarfx/*:./lib/googledrive/*:./lib/dropbox/*:./lib/gson/*:./lib/jarchivelib/*:./lib/controlsfx/*:./lib/junit/*:./lib/junit/console/*"
+CLASS_PATH="./lib/sqlite/*:./lib/calendarfx/*:./lib/googledrive/*:./lib/dropbox/*:./lib/gson/*:./lib/jarchivelib/*:./lib/controlsfx/*:./lib/junit/*:./lib/junit/console/*"
 if [ "$1" == "test" ]; then
   java -cp "$CLASS_PATH:./compile/test" org.junit.platform.console.ConsoleLauncher --scan-class-path --details verbose --details-theme ascii --reports-dir ./compile/test --exclude-engine junit-vintage
 elif [ "$1" == "jar" ]; then
