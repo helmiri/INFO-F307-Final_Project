@@ -22,21 +22,33 @@ Dépendances:
 
 Windows:
 
-- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside (dans le dossier windows) et exécutez la commande suivante :
 
 `.\compile.bat PATH_TO_JDK_JAVAC.EXE`
 
 où PATH_TO_JDK_JAVAC.EXE est le chemin vers javac.exe
 
+MacOS et Linux:
+
+-Ouvrez un terminal dans le dossier ou le script compile.sh réside (dans le dossier unix) et exécutez la commande suivante :
+
+`./compile.sh`
+
 ## Démarrage
 
 Windows:
 
-- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script compile.bat réside et exécutez la commande suivante :
 
 `.\windows\exec.bat PATH_TO_JDK_JAVA.EXE`
 
 où PATH_TO_JDK_JAVA.EXE vers java.exe
+
+MacOS et Linux:
+
+- Ouvrez un terminal dans le dossier ou le script exec.sh réside et exécutez la commande suivante :
+
+`./exec.sh`
 
 Fichier .jar:
 
