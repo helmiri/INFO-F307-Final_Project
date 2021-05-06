@@ -26,6 +26,7 @@ import java.util.Map;
 public class StatsController extends Controller implements StatsViewController.ViewListener  {
     //--------------- ATTRIBUTE ----------------
     private StatsViewController statsView;
+    private final Long TO_DAY = 86400000L;
 
     //--------------- METHODS ----------------
     public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
@@ -114,7 +115,7 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public String dateToString(Long date){
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(date * 86400000L);
+        return dateFormat.format(date * TO_DAY);
     }
 
     /**
@@ -130,7 +131,7 @@ public class StatsController extends Controller implements StatsViewController.V
             Map<Integer, TreeItem<Project>> statsTreeMap = new HashMap<>();
             for(Integer project : projects){
                 Project childProject = project_db.getProject(project);
-                int parentID = childProject.getParent_id();
+                int parentID = childProject.getParentId();
                 String title = childProject.getTitle();
                 int childID = project_db.getProjectID(title);
                 TreeItem<Project> projectTreeItem = new TreeItem<>(childProject);
@@ -208,16 +209,16 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Counts the tasks of a project.
      *
-     * @param project_id int
+     * @param projectId int
      * @return Integer
      * @throws DatabaseException e
      */
     @Override
-    public Integer countTasksOfAProject(int project_id) throws DatabaseException {
-        try{
-            return project_db.countTasks(project_id);
-        }catch(SQLException e){
-            new AlertWindow("Error", "An error has occurred with the database while trying to load counts: "+e).errorWindow();
+    public Integer countTasksOfAProject(int projectId) throws DatabaseException {
+        try {
+            return project_db.countTasks(projectId);
+        } catch (SQLException e) {
+            new AlertWindow("Error", "An error has occurred with the database while trying to load counts: " + e).errorWindow();
             throw new DatabaseException(e);
         }
     }
@@ -337,9 +338,9 @@ public class StatsController extends Controller implements StatsViewController.V
         int numberOfCollaborators = counter.get(2), numberOfTasks = counter.get(1), numberOfSubProjects = counter.get(0);
         String startDate = dateToString(currentProject.getStartDate()), endDate = dateToString(currentProject.getEndDate());
         if (project_db.getSubProjects(currentProjectID).size() == 0) {
-            content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators+ '"' + "," + '"' + numberOfTasks+ '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParent_id() + "," + startDate+"," +  endDate + "\r\n";
+            content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators + '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParentId() + "," + startDate + "," + endDate + "\r\n";
         } else {
-            content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators+ '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParent_id() + "," + startDate+"," +  endDate + "\r\n";
+            content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators + '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParentId() + "," + startDate + "," + endDate + "\r\n";
             for (int k = 0; k < project_db.getSubProjects(currentProjectID).size(); k++) {
                 content = statsToCSVString(project_db.getSubProjects(currentProjectID).get(k), root.getChildren().get(k).getValue(), content, root.getChildren().get(k));
             }
@@ -394,8 +395,9 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param counts List of values
      */
     public void emptyStats(List<Integer> counts){
-        for(int i=0;i<3;i++)
+        for (int i = 0; i < 3; i++) {
             counts.add(0);
+        }
     }
 
     /**

@@ -2,22 +2,26 @@
 
 <?import com.calendarfx.view.AllDayView?>
 <?import com.calendarfx.view.WeekDayHeaderView?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
+
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1"
             fx:controller="be.ac.ulb.infof307.g06.views.calendarViews.CalendarViewController">
     <children>
-        <ComboBox fx:id="colorsComboBox" layoutX="632.0" layoutY="27.0" onAction="#onColorSelected" prefWidth="150.0"/>
+        <ComboBox fx:id="colorsComboBox" layoutX="827.0" layoutY="27.0" onAction="#onColorSelected" prefWidth="150.0"/>
         <Button fx:id="backBtn" layoutX="1387.0" layoutY="846.0" mnemonicParsing="false" onAction="#calendarEvents"
                 prefHeight="40.0" prefWidth="88.0" stylesheets="@../../resources/stylesheets/Button.css" text="BACK"
                 textFill="white"/>
-        <HBox layoutX="20.0" layoutY="19.0" prefHeight="40.0" prefWidth="187.0" spacing="20.0">
+        <HBox layoutX="198.0" layoutY="19.0" prefHeight="40.0" prefWidth="187.0" spacing="20.0">
             <children>
                 <Button fx:id="previousWeekBtn" mnemonicParsing="false" onAction="#calendarEvents" prefHeight="40.0"
                         prefWidth="45.0" text="&lt;"/>
@@ -27,19 +31,32 @@
                         prefWidth="45.0" text="&gt;"/>
             </children>
         </HBox>
-        <WeekDayHeaderView fx:id="weekDays" layoutY="82.0" prefHeight="29.0" prefWidth="1500.0"/>
         <ScrollPane layoutY="128.0" prefHeight="710.0" prefWidth="1500.0">
             <content>
                 <AnchorPane fx:id="anchorPaneDayView" minHeight="0.0" minWidth="0.0" prefHeight="710.0"
                             prefWidth="1485.0">
                     <children>
-                        <VBox layoutX="-2.0" prefHeight="710.0" prefWidth="1500.0" spacing="40">
+                        <VBox fx:id="weekViewBox" layoutX="-4.0" prefHeight="710.0" prefWidth="1500.0" spacing="40">
                             <children>
-                                <AllDayView fx:id="projects" minHeight="0.0" prefHeight="723" prefWidth="0.0"
-                                            rowHeight="50.0" showToday="false" adjustToFirstDayOfWeek="true"/>
-                                <AllDayView fx:id="tasks" disable="true" minHeight="0.0" prefHeight="29.0"
-                                            prefWidth="1485.0" rowHeight="20.0" showToday="false"
-                                            adjustToFirstDayOfWeek="true"/>
+                                <WeekDayHeaderView fx:id="weekDays" prefHeight="29.0" prefWidth="1500.0"/>
+                                <AllDayView fx:id="projects" adjustToFirstDayOfWeek="true" minHeight="0.0"
+                                            prefHeight="723" prefWidth="0.0" rowHeight="50.0" showToday="false"/>
+                                <AllDayView fx:id="tasks" adjustToFirstDayOfWeek="true" disable="true" minHeight="0.0"
+                                            prefHeight="29.0" prefWidth="1485.0" rowHeight="20.0" showToday="false"/>
+                            </children>
+                        </VBox>
+                        <VBox fx:id="monthViewBox" layoutX="-4.0" prefHeight="710.0" prefWidth="1500.0">
+                            <children>
+                                <WeekDayHeaderView fx:id="monthHeader1" prefHeight="29.0" prefWidth="1500.0"/>
+                                <AllDayView fx:id="monthWeek1" prefHeight="128.0" prefWidth="1485.0"/>
+                                <WeekDayHeaderView fx:id="monthHeader2" prefHeight="25.0" prefWidth="1493.0"/>
+                                <AllDayView fx:id="monthWeek2" prefHeight="128.0" prefWidth="1485.0"/>
+                                <WeekDayHeaderView fx:id="monthHeader3" prefHeight="25.0" prefWidth="1493.0"/>
+                                <AllDayView fx:id="monthWeek3" prefHeight="128.0" prefWidth="1485.0"/>
+                                <WeekDayHeaderView fx:id="monthHeader4" prefHeight="25.0" prefWidth="1493.0"/>
+                                <AllDayView fx:id="monthWeek4" prefHeight="128.0" prefWidth="1485.0"/>
+                                <WeekDayHeaderView fx:id="monthHeader5" prefHeight="25.0" prefWidth="1493.0"/>
+                                <AllDayView fx:id="monthWeek5" prefHeight="128.0" prefWidth="1485.0"/>
                             </children>
                         </VBox>
                         <Line fx:id="line1" endX="210.5" opacity="0.2" startX="210.5" startY="9.9999999999999E13"/>
@@ -57,22 +74,24 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <CheckComboBox fx:id="projectComboBox" layoutX="374.0" layoutY="27.0" prefHeight="25.0" prefWidth="160"/>
+        <CheckComboBox fx:id="projectComboBox" layoutX="569.0" layoutY="27.0" prefHeight="25.0" prefWidth="160"/>
         <Label fx:id="monthLabel" alignment="CENTER_RIGHT" layoutX="1094.0" layoutY="-4.0" prefHeight="93.0"
                prefWidth="381.0" text="December  2021">
             <font>
                 <Font size="48.0"/>
             </font>
         </Label>
-        <Label layoutX="254.0" layoutY="29.0" prefHeight="20.0" prefWidth="120.0" text="Projects to show:">
+        <Label layoutX="449.0" layoutY="29.0" prefHeight="20.0" prefWidth="120.0" text="Projects to show:">
             <font>
                 <Font size="14.0"/>
             </font>
         </Label>
-        <Label layoutX="580.0" layoutY="29.0" text="Colors:">
+        <Label layoutX="775.0" layoutY="29.0" text="Colors:">
             <font>
                 <Font size="14.0"/>
             </font>
         </Label>
+        <Button fx:id="viewBtn" layoutX="59.0" layoutY="19.0" mnemonicParsing="false" onAction="#calendarEvents"
+                prefHeight="40.0" prefWidth="109.0" text="View"/>
     </children>
 </AnchorPane>

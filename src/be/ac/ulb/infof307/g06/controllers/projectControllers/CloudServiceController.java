@@ -72,7 +72,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             gDriveFiles = gDriveClient.getFiles();
         } catch (GeneralSecurityException | IOException e) {
-            new AlertWindow("Error", "Access denied").errorWindow();
+            new AlertWindow("Error", "Access denied " + e).errorWindow();
         }
     }
 

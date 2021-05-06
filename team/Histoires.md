@@ -9,21 +9,22 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Pondération
 
-| Priorité/3 | N° | Description | Risque/3 | Heures/? | Points |
-| ------ | ------ | ------ | ------ | ------ | ------ |
-| 1 | [1](#Histoire-1) | Histoire 1 | 2 | 26 | 30|
-| 2 | 2 | Histoire 2 | 2 | 43 | 38 |
-|   | 3 | Histoire 3 | 3 | 8 | 19 |
-|   | 4 | Histoire 4 | 1 | 37 | 35 |
-|   | 5 | Histoire 5 | 1 | / | 35 |
-|   | 6 | Histoire 6 | 1 | 14 | 19 |
-|   | 7 | Histoire 7 | 3 | 24 | 8 |
-|   | 8 | Histoire 8 | 3 | 32 | 14 |
-|   | 9 | Histoire 9 | 1 | 25 | 25 |
-| 3 | 10 | Histoire 10 | 2 | / | 25 |
-|   | 11 | Histoire 11 | 3 | / | 12 |
-|   | 12 | Histoire 12 | 2 | / | 25 |
-|   | 13 | Histoire 13 | 1 | / | 25 |
+| Priorité/3 | N° | Description | Risque/3 | Heures/? | Points | IT1    | IT2    | IT3    | IT4    |
+| ------ | ------ | ------ | ------ | ------ | ------          | ------ | ------ | ------ | ------ |
+| 1 | [1](#Histoire-1) | Histoire 1 | 2 | 26 | 30              | X (30) |        |        |        |
+| 2 | 2 | Histoire 2 | 2 | 43 | 38                             | X (33) | X (5)  |        |        |
+|   | 3 | Histoire 3 | 3 | 8 | 19                              |        |        | X (19) |        |
+|   | 4 | Histoire 4 | 1 | 37 | 35                             |        |        | X (35) |        |
+|   | 5 | Histoire 5 | 1 | / | 35                              |        |        |        |        |
+|   | 6 | Histoire 6 | 1 | 14 | 19                             |        | X (19) |        |        |
+|   | 7 | Histoire 7 | 3 | 24 | 18                             |        | X (18) |        |        |
+|   | 8 | Histoire 8 | 3 | 32 | 24                             | X (10) | X (10) | X (3)  | X (1)  |
+|   | 9 | Histoire 9 | 1 | 25 | 25                             |        | X (20) | X (9)  |        |
+| 3 | 10 | Histoire 10 | 2 | / | 25                            |        |        |        |        |
+|   | 11 | Histoire 11 | 3 | / | 12                            |        |        |        | X (12) |
+|   | 12 | Histoire 12 | 2 | / | 25                            |        |        |        | X (25) |
+|   | 13 | Histoire 13 | 1 | / | 25                            |        |        |        | X (25) |
+| / | /  | Refactoring | / | / | /                             |        |        |  X (7) |        |
 
 ----------------------
 
@@ -184,7 +185,7 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - Le système doit signaler si un fichier déjà présent dans le système est en train d'être téléchargé par l'utilisateur. 1h
 
 **Tâches en plus:** 
-- /
+- GoogleDrive 
 
 :question: **Question:** 
 - Qui est l'administrateur ?

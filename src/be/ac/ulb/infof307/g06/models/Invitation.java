@@ -4,8 +4,8 @@ public class Invitation {
     private final int invitationID;
     private final Project project;
     //-------------- ATTRIBUTES ----------------
-    User receiver;
-    User sender;
+    private final User receiver;
+    private final User sender;
 
     public Invitation(int id, Project project, User receiver, User sender) {
         this.project = project;

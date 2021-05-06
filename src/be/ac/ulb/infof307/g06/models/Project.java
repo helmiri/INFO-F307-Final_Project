@@ -76,7 +76,7 @@ public class Project {
         return endDate;
     }
 
-    public int getParent_id() {
+    public int getParentId() {
         return projectId;
     }
 

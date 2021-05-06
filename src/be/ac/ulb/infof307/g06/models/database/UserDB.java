@@ -1,6 +1,7 @@
 
 package be.ac.ulb.infof307.g06.models.database;
 
+import be.ac.ulb.infof307.g06.models.Hash;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.User;
 import com.dropbox.core.oauth.DbxCredential;
@@ -13,9 +14,11 @@ import java.util.List;
 
 
 public class UserDB extends Database {
+    private Hash hash;
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
+        this.hash = new Hash();
     }
 
     public boolean isAdmin() throws SQLException {
@@ -91,7 +94,8 @@ public class UserDB extends Database {
         state.setString(2, lName);
         state.setString(3, userName);
         state.setString(4, email);
-        state.setString(5, password);
+        String hashPassword = hash.hashPassword(password, userName); // change salt
+        state.setString(5, hashPassword);
         state.setBoolean(6, true);
         state.setInt(7, 0);
         state.execute();
@@ -142,7 +146,8 @@ public class UserDB extends Database {
             return 0;
         }
         ResultSet res = sqlQuery("SELECT id, password, status FROM main.users WHERE userName='" + userName + "'");
-        Integer key = validate(password, res);
+        String hashPassword = hash.hashPassword(password, userName); // change salt
+        Integer key = validate(hashPassword, res);
         res.close();
         if (key == null) {
             return -1;
@@ -231,7 +236,7 @@ public class UserDB extends Database {
         sqlUpdate("UPDATE users SET status=false WHERE id='" + currentUser.getId() + "'");
     }
 
-    public void sendInvitation(int project_id, int sender_id, int receiver_id) throws SQLException {
+    public void sendInvitation(int projectId, int senderId, int receiverId) throws SQLException {
         ResultSet rs = null;
         int id;
         try {   // Generate id
@@ -241,7 +246,7 @@ public class UserDB extends Database {
         } catch (Exception e) {
             id = 1;
         }
-        sqlUpdate("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + project_id + "', '" + sender_id + "','" + receiver_id + "');");
+        sqlUpdate("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + projectId + "', '" + senderId + "','" + receiverId + "');");
         assert rs != null;
         rs.close();
     }

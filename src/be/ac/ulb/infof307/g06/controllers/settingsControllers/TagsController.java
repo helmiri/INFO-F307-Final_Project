@@ -36,9 +36,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             project_db.createTag(text, toRGBCode);
             viewController.refresh(project_db.getAllTags());
-        } catch (SQLException throwables) {
-            new AlertWindow("Error", "Can't add the tag.").errorWindow();
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("Error", "Can't add the tag. " + e).errorWindow();
         }
     }
 
@@ -47,8 +46,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             project_db.editTag(selectedTag.getId(), text, toRGBCode);
             viewController.refresh(project_db.getAllTags());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
 
     }
@@ -58,8 +57,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             project_db.deleteTag(selectedTag.getId());
             viewController.refresh(project_db.getAllTags());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
     }
 

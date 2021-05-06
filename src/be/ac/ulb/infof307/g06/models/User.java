@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.models;
 
 public class User {
-    int id;
-    boolean isAdmin;
+    private int id;
+    private boolean isAdmin;
     private String userName, firstName, lastName, email;
 
     public User(String userName, String firstName, String lastName, String email, boolean isAdmin) {

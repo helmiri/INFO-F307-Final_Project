@@ -25,6 +25,23 @@ public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
 
     @FXML
+    private Tooltip collabortorsToolTip;
+    @FXML
+    private Tooltip tasksToolTip;
+    @FXML
+    private Tooltip projectsToolTip;
+    @FXML
+    private Tooltip barChartToolTip;
+    @FXML
+    private Tooltip pieChartToolTip;
+    @FXML
+    private Tooltip exportToolTip;
+    @FXML
+    private Label pieChartLabel;
+    @FXML
+    private Label barChartLabel;
+
+    @FXML
     private Button backToProjectMenu;
     @FXML
     private Button projectViewBtn;
@@ -100,6 +117,31 @@ public class StatsViewController{
         isOverallView=false;
         overallViewBtn.setDisable(false);
         projectViewBtn.setDisable(true);
+        setTooltips();
+    }
+
+    /**
+     * Sets the tool tips on the interface.
+     */
+    public void setTooltips(){
+        collabortorsToolTip.setText("Number of collaborators.");
+        collaboratorsNumber.setTooltip(collabortorsToolTip);
+
+        tasksToolTip.setText("Number of tasks.");
+        tasksNumber.setTooltip(tasksToolTip);
+
+        projectsToolTip.setText("Number of projects.");
+        projectsNumber.setTooltip(projectsToolTip);
+
+        barChartToolTip.setText("Chart of tasks/projects.");
+        barChartLabel.setTooltip(barChartToolTip);
+
+        pieChartToolTip.setText("Pie chart of duration\n of a project.");
+        pieChartLabel.setTooltip(pieChartToolTip);
+
+        exportToolTip.setText("Export.");
+        fileNameTextField.setTooltip(exportToolTip);
+
     }
 
     /**
@@ -114,6 +156,7 @@ public class StatsViewController{
         barChartInitializer();
         overallViewBtn.setDisable(true);
         projectViewBtn.setDisable(false);
+        setTooltips();
     }
 
     /**
@@ -287,7 +330,7 @@ public class StatsViewController{
 
         List<Integer> getProjects() throws DatabaseException;
 
-        Integer countTasksOfAProject(int project_id) throws DatabaseException;
+        Integer countTasksOfAProject(int projectId) throws DatabaseException;
 
         Project getProjectsFromID(int id) throws DatabaseException;
 

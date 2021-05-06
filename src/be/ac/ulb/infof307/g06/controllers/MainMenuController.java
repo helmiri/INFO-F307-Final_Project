@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers;
 
+import be.ac.ulb.infof307.g06.controllers.calendarControllers.CalendarController;
 import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
 import be.ac.ulb.infof307.g06.controllers.settingsControllers.SettingsController;
 import be.ac.ulb.infof307.g06.models.AlertWindow;

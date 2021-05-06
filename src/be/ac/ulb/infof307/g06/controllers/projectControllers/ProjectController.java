@@ -54,8 +54,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             calendar_db = new CalendarDB("database.db");
             project_db.createTag("tag1", "#ff55ff");
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException | ClassNotFoundException e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsView.fxml"));
         try {
@@ -148,11 +148,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
     // ------------------------------------- CODE --------------------------------------
 
     @Override
-    public void back() {
-        super.back();
-    }
-
-    @Override
     public void addProject() {
         if (storageLimitReached()) {
             return;
@@ -199,7 +194,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
             viewController.displayProject(project_db.getProject(projectID), newTags);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException e) {
-            e.printStackTrace();
             new AlertWindow("Error", "" + e).errorWindow();
         }
     }
@@ -259,8 +253,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
         Tag res = null;
         try {
             res = project_db.getTag(project_db.getTagID(name));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new AlertWindow("Error", " " + e).errorWindow();
         }
         return res;
     }
@@ -470,7 +464,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void uploadProject(List<Project> projects) {
-        if (setServiceProvider()) return;
+        if (setServiceProvider()) {
+            return;
+        }
         cloudServiceController.showSelectionStage(false);
         for (Project project : projects) {
             String localFilePath = System.getProperty("user.dir");
@@ -486,7 +482,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
     @Override
     public void downloadProject() {
-        if (setServiceProvider()) return;
+        if (setServiceProvider()) {
+            return;
+        }
         if (storageLimitReached()) {
             return;
         }

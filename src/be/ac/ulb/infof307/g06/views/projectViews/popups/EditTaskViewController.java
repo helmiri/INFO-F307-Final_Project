@@ -9,6 +9,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class EditTaskViewController {
     //--------------- ATTRIBUTES ----------------
     @FXML
@@ -22,6 +27,8 @@ public class EditTaskViewController {
     private Task task;
     private ProjectsViewController.ViewListener listener;
     private Stage stage;
+    private final Long TO_DAY = 86400000L;
+
     //--------------- METHODS ----------------
 
     /**
@@ -48,6 +55,24 @@ public class EditTaskViewController {
         this.task = task;
         this.listener = listener;
         this.stage = stage;
-        EditProjectViewController.setDescriptionTest(taskName, task.getDescription(), newStartDateTask, task.getStartDate(), newEndDateTask, task.getEndDate());
+        setDescriptionTest(taskName, task.getDescription(), newStartDateTask, task.getStartDate(), newEndDateTask, task.getEndDate());
+    }
+
+    /**
+     * Sets values in  date fields and description field when editing a project.
+     *
+     * @param descriptionProject TextField where we put the description.
+     * @param description        String of the selected project description.
+     * @param dateProject        DatePicker where we put the start date.
+     * @param startDate          Long, the start date of the selected project.
+     * @param endDateProject     DatePicker where we put the end date.
+     * @param endDate            Long, the end date of the selected project.
+     */
+    private void setDescriptionTest(TextField descriptionProject, String description, DatePicker dateProject, Long startDate, DatePicker endDateProject, Long endDate) {
+        descriptionProject.setText(description);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * TO_DAY), formatter));
+        endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * TO_DAY), formatter));
     }
 }

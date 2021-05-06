@@ -43,7 +43,6 @@ public class ProjectDB extends Database {
             id = rs.getInt("id");
             id++;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             id = 1;
         }
         Objects.requireNonNull(rs).close();
@@ -226,7 +225,6 @@ public class ProjectDB extends Database {
             id = rs.getInt("id");
             id++;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             id = 1;
         }
         sqlUpdate("INSERT INTO Task (id, description, project_id, startDate, endDate) VALUES('" +
@@ -386,7 +384,6 @@ public class ProjectDB extends Database {
         List<Tag> oldTags = getTags(project_id);
 
         for (Tag oldTag : oldTags) {
-            System.out.println(oldTag.getId());
             removeTag(oldTag.getId(), project_id);
         }
 
