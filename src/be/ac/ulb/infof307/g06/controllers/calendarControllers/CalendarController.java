@@ -43,6 +43,9 @@ public class CalendarController extends Controller implements CalendarViewContro
         super(user_db, project_db, stage, scene);
     }
 
+    /**
+     * Initialises calendar
+     */
     public void initCalendar() {
         try {
             List<Integer> userProjects = project_db.getUserProjects(user_db.getCurrentUser().getId());
@@ -53,59 +56,73 @@ public class CalendarController extends Controller implements CalendarViewContro
 
             Map<String, String> allProjects = database.getProjects();
             viewController.initComboBox(projects, allProjects);
-            for (String project : allProjects.keySet()) {
-                Project currentProject = project_db.getProject(project_db.getProjectID(project));
-                createEntry(projectSource,
-                        project,
-                        LocalDate.ofEpochDay(currentProject.getStartDate()),
-                        LocalDate.ofEpochDay(currentProject.getEndDate()),
-                        allProjects.get(project),
-                        project
-                );
-                projectsColor.put(project, allProjects.get(project));
-                for (Task task : project_db.getTasks(currentProject.getId())) {
-                    createEntry(taskSource,
-                            task.getDescription(),
-                            LocalDate.ofEpochDay(task.getStartDate()),
-                            LocalDate.ofEpochDay(task.getEndDate()),
-                            allProjects.get(project),
-                            currentProject.getTitle()
-                    );
-                }
-            }
+            loadProjects(allProjects);
         } catch (SQLException e) {
             new AlertWindow("Error", "" + e).errorWindow();
         }
     }
 
+    /**
+     * Adds all projects and tasks to calendar
+     *
+     * @param allProjects projects to insert in calendar
+     * @throws SQLException exception
+     */
+    private void loadProjects(Map<String, String> allProjects) throws SQLException {
+        for (String project : allProjects.keySet()) {
+            projectsColor.put(project, allProjects.get(project));
+            Project currentProject = project_db.getProject(project_db.getProjectID(project));
+            insertProjectInCalendar(currentProject, allProjects.get(project));
+        }
+    }
+
+    /**
+     * Inserts entry in calendar
+     *
+     * @param source      Calendar source
+     * @param name        Entry name
+     * @param start       Entry start time
+     * @param end         Entry end time
+     * @param color       Entry color string
+     * @param projectName Project's name
+     */
     public void createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color, String projectName) {
+        if (source.getName().equals("projects")) {
+            finaliseEntryCreation(source, name, start, end, color, projectsMap);
+        } else {
+            finaliseEntryCreation(source, projectName, start, end, color, tasksMap);
+        }
+    }
+
+    /**
+     * @param source Calendar source
+     * @param name   Entry name
+     * @param start  Entry start time
+     * @param end    Entry end time
+     * @param color  Entry color string
+     * @param map    Map to insert entry
+     */
+    private void finaliseEntryCreation(CalendarSource source, String name, LocalDate start, LocalDate end, String color, Map<String, Calendar> map) {
         Entry<String> testEntry = new Entry<>(name);
         testEntry.changeStartDate(start);
         testEntry.changeEndDate(end);
         testEntry.setFullDay(true);
         Calendar newCalendar = new Calendar(name);
-        if (source.getName().equals("projects")) {
-            if (projectsMap.containsKey(name)) {
-                projectsMap.get(name).addEntry(testEntry);
-            } else {
-
-                newCalendar.setStyle(color);
-                source.getCalendars().add(newCalendar);
-                newCalendar.addEntry(testEntry);
-                projectsMap.put(name, newCalendar);
-            }
+        if (map.containsKey(name)) {
+            map.get(name).addEntry(testEntry);
         } else {
-            if (tasksMap.containsKey(projectName)) {
-                tasksMap.get(projectName).addEntry(testEntry);
-            } else {
-                newCalendar.setStyle(color);
-                source.getCalendars().add(newCalendar);
-                newCalendar.addEntry(testEntry);
-                tasksMap.put(projectName, newCalendar);
-            }
+            newCalendar.setStyle(color);
+            source.getCalendars().add(newCalendar);
+            newCalendar.addEntry(testEntry);
+            map.put(name, newCalendar);
         }
     }
 
+    /**
+     * Shows calendar menu
+     *
+     * @throws SQLException exception
+     */
     @Override
     public void show() throws SQLException {
         projectSource = new CalendarSource("projects");
@@ -124,16 +141,23 @@ public class CalendarController extends Controller implements CalendarViewContro
         viewController.init(projectSource, taskSource);
         viewController.fillColors(colorObject);
         viewController.setNewDate(currentDate);
-
         initCalendar();
     }
 
+    /**
+     * Sets combobox color on project selected
+     *
+     * @param projects list of selected projects
+     */
     public void onProjectSelected(ObservableSet<Entry<?>> projects) {
         ObservableList<Entry<?>> entry = FXCollections.observableArrayList(projects);
         selectedProject = entry.get(0);
         viewController.setColor(entry.get(0).getCalendar().getStyle());
     }
 
+    /**
+     * Clears all entries in calendars
+     */
     public void clearCalendarEvents() {
         for (int i = 0; i < projectSource.getCalendars().size(); i++) {
             projectSource.getCalendars().get(i).clear();
@@ -143,6 +167,12 @@ public class CalendarController extends Controller implements CalendarViewContro
         }
     }
 
+    /**
+     * Changes the color of an entry
+     *
+     * @param color      color string
+     * @param selections entry to change color
+     */
     @Override
     public void changeColor(String color, ObservableSet<Entry<?>> selections) {
         ObservableList<Entry<?>> entry = FXCollections.observableArrayList(selections);
@@ -166,6 +196,13 @@ public class CalendarController extends Controller implements CalendarViewContro
         }
     }
 
+    /**
+     * Moves view to next/previous week/month or today
+     *
+     * @param today   go to today
+     * @param month   is current monthview
+     * @param forward forward or backwards
+     */
     @Override
     public void changeDate(boolean today, boolean month, boolean forward) {
         if (month) {
@@ -179,11 +216,21 @@ public class CalendarController extends Controller implements CalendarViewContro
         viewController.setNewDate(currentDate);
     }
 
+    /**
+     * returns current date
+     *
+     * @return current date
+     */
     @Override
     public LocalDate getCurrentDate() {
         return currentDate;
     }
 
+    /**
+     * adds selected project(s) to calendars
+     *
+     * @param projectsList List of selected projects in checkcombobox
+     */
     @Override
     public void addProject(ObservableList<? extends String> projectsList) {
         try {
@@ -199,27 +246,36 @@ public class CalendarController extends Controller implements CalendarViewContro
                     projectsColor.put(project, color);
                 }
                 Project currentProject = project_db.getProject(project_db.getProjectID(project));
-                createEntry(projectSource,
-                        currentProject.getTitle(),
-                        LocalDate.ofEpochDay(currentProject.getStartDate()),
-                        LocalDate.ofEpochDay(currentProject.getEndDate()),
-                        color,
-                        currentProject.getTitle()
-                );
                 database.addProject(currentProject.getTitle(), color);
-                for (Task task : project_db.getTasks(currentProject.getId())) {
-                    createEntry(taskSource,
-                            task.getDescription(),
-                            LocalDate.ofEpochDay(task.getStartDate()),
-                            LocalDate.ofEpochDay(task.getEndDate()),
-                            color,
-                            currentProject.getTitle()
-                    );
-                }
+                insertProjectInCalendar(currentProject, color);
             }
         } catch (SQLException e) {
             new AlertWindow("Error", "" + e).errorWindow();
         }
 
+    }
+
+    /**
+     * @param currentProject Project to insert in calendar
+     * @param color          Project Color string
+     * @throws SQLException exception
+     */
+    private void insertProjectInCalendar(Project currentProject, String color) throws SQLException {
+        createEntry(projectSource,
+                currentProject.getTitle(),
+                LocalDate.ofEpochDay(currentProject.getStartDate()),
+                LocalDate.ofEpochDay(currentProject.getEndDate()),
+                color,
+                currentProject.getTitle()
+        );
+        for (Task task : project_db.getTasks(currentProject.getId())) {
+            createEntry(taskSource,
+                    task.getDescription(),
+                    LocalDate.ofEpochDay(task.getStartDate()),
+                    LocalDate.ofEpochDay(task.getEndDate()),
+                    color,
+                    currentProject.getTitle()
+            );
+        }
     }
 }

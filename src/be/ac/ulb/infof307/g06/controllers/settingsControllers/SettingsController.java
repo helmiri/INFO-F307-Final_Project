@@ -19,6 +19,9 @@ public class SettingsController extends Controller implements SettingsViewContro
         super(user_db, project_db, stage, scene);
     }
 
+    /**
+     * Shows menu
+     */
     @Override
     public void show() {
         AnchorPane pane = loadScene("SettingsView.fxml");
@@ -32,11 +35,22 @@ public class SettingsController extends Controller implements SettingsViewContro
         stage.sizeToScene();
     }
 
+    /**
+     * Returns tags scene
+     *
+     * @return tags scene
+     */
     @Override
     public AnchorPane getTagsScene() {
         return loadScene("TagsView.fxml");
     }
 
+    /**
+     * loads a scene
+     *
+     * @param view view
+     * @return AnchorPane
+     */
     private AnchorPane loadScene(String view) {
         loader = new FXMLLoader(SettingsViewController.class.getResource(view));
         try {
@@ -47,6 +61,11 @@ public class SettingsController extends Controller implements SettingsViewContro
         return null;
     }
 
+    /**
+     * Gets the storage scene
+     *
+     * @return Anchorpane storage scene
+     */
     @Override
     public AnchorPane getStorageScene() {
         return loadScene("StorageView.fxml");
@@ -67,12 +86,18 @@ public class SettingsController extends Controller implements SettingsViewContro
         return null;
     }
 
+    /**
+     * Shows storage menu
+     */
     @Override
     public void showStorage() {
         StorageController controller = new StorageController(user_db, project_db, stage, scene, loader.getController());
         controller.show();
     }
 
+    /**
+     * shows tags menu
+     */
     @Override
     public void showTags() {
         TagsController controller = new TagsController(user_db, project_db, stage, scene, loader.getController());
@@ -81,13 +106,10 @@ public class SettingsController extends Controller implements SettingsViewContro
 
     @Override
     public void showHelp() {
-
     }
 
     @Override
-    public void showAbout() {
-
-    }
+    public void showAbout() { }
 
     @Override
     public void onBackButtonPressed() {

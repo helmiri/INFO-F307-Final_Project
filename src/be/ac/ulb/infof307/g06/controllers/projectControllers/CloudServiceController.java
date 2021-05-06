@@ -36,7 +36,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private boolean isDBox;
     private List<Metadata> dboxFiles;
     private List<com.google.api.services.drive.model.File> gDriveFiles;
-    private DropBoxAuthorization authorization;
 
     public CloudServiceController(ProjectController projectController, UserDB userDB) {
         this.projectController = projectController;
