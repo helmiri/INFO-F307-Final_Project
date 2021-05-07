@@ -35,7 +35,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                      <tooltip>
-                        <Tooltip fx:id="collaboratorsToolTip" text="Collborators" />
+                        <Tooltip fx:id="collaboratorsToolTip" text="Number of collaborators." />
                      </tooltip>
                   </Label>
                   <Label fx:id="collaboratorsNumberLabel" layoutX="112.0" layoutY="65.0" text="20" textFill="WHITE">
@@ -52,7 +52,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                      <tooltip>
-                        <Tooltip fx:id="tasksToolTip" text="Tasks" />
+                        <Tooltip fx:id="tasksToolTip" text="Number of tasks." />
                      </tooltip>
                   </Label>
                   <Label fx:id="tasksNumberLabel" layoutX="125.0" layoutY="65.0" text="9" textFill="WHITE">
@@ -69,7 +69,7 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                      <tooltip>
-                        <Tooltip fx:id="projectsToolTip" text="Projects" />
+                        <Tooltip fx:id="projectsToolTip" text="Number of projects." />
                      </tooltip>
                   </Label>
                   <Label fx:id="projectsNumberLabel" layoutX="112.0" layoutY="65.0" text="53" textFill="WHITE">
@@ -108,7 +108,7 @@
                              </BarChart>
                               <Label fx:id="barChartLabel" layoutX="10.0" layoutY="9.0" opacity="0.0" prefHeight="336.0" prefWidth="490.0" text="barChartLabel">
                                  <tooltip>
-                                    <Tooltip fx:id="barChartToolTip" text="barChart" />
+                                    <Tooltip fx:id="barChartToolTip" text="Chart of tasks/projects." />
                                  </tooltip>
                               </Label>
                           </children>
@@ -146,7 +146,7 @@
             </Button>
             <TextField fx:id="fileNameTextField" alignment="CENTER" layoutX="45.0" layoutY="533.0" prefHeight="26.0" prefWidth="290.0" promptText="Statistics (Filename by default) ">
                <tooltip>
-                  <Tooltip fx:id="exportToolTip" text="exportToolTip" />
+                  <Tooltip fx:id="exportToolTip" text="Export." />
                </tooltip></TextField>
             <Button fx:id="exportCSVBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="106.0" layoutY="579.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#statsEvents" prefHeight="39.0" prefWidth="74.0" stylesheets="@../../resources/stylesheets/Button.css" text=".csv" textFill="WHITE">
                <font>
@@ -178,7 +178,7 @@
       </Label>
       <Label fx:id="pieChartLabel" layoutX="878.0" layoutY="90.0" opacity="0.0" prefHeight="322.0" prefWidth="490.0" text="pieChartLabel">
          <tooltip>
-            <Tooltip fx:id="pieChartToolTip" text="pieChartLabel" />
+            <Tooltip fx:id="pieChartToolTip" text="Pie chart of duration of a project." />
          </tooltip>
       </Label>
    </children>

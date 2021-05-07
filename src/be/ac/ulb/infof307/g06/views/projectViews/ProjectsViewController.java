@@ -131,8 +131,7 @@ public class ProjectsViewController {
         if (event.getSource() == backBtn) {
             listener.back();
         } else if (event.getSource() == helpBtn) {
-            assert true;
-            //TODO : displayHelp;
+            helpPopUp();
         } else if (event.getSource() == cloudUploadBtn && selectedProject != null) {
             listener.uploadProject(getMultipleSelectedProjects());
         } else if (event.getSource() == addBtn) {
@@ -156,23 +155,6 @@ public class ProjectsViewController {
             } else {
                 new AlertWindow("Warning", "Task needs a start and end date.").warningWindow();
             }
-        }
-    }
-
-    /**
-     * Creates the tooltips.
-     *
-     * @param tooltip      Tooltip
-     * @param textTooltip  String
-     * @param relatedLabel Object
-     */
-    public void createToolTips(Tooltip tooltip, String textTooltip, Object relatedLabel) {
-        tooltip.setText(textTooltip);
-        if (relatedLabel instanceof Button){
-            ((Button)relatedLabel).setTooltip(tooltip);
-        }
-        else if (relatedLabel instanceof ListView){
-            ((ListView)relatedLabel).setTooltip(tooltip);
         }
     }
 
