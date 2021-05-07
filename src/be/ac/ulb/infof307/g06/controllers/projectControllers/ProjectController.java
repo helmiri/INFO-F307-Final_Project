@@ -78,6 +78,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      *
      * @param listener listener
      */
+
     public void showAddProjectStage(ProjectsViewController.ViewListener listener) {
         try {
             FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("popups/AddProjectView.fxml"));
