@@ -39,7 +39,6 @@ public class StatsViewController{
     private Label pieChartLabel;
     @FXML
     private Label barChartLabel;
-
     @FXML
     private Button backToProjectMenu;
     @FXML
@@ -116,44 +115,6 @@ public class StatsViewController{
         isOverallView=false;
         overallViewBtn.setDisable(false);
         projectViewBtn.setDisable(true);
-        setToolTips();
-    }
-
-
-    /**
-     * Creates the tooltips.
-     *
-     * @param tooltip      Tooltip
-     * @param textTooltip  String
-     * @param relatedLabel Object
-     */
-    public void createToolTips(Tooltip tooltip, String textTooltip, Object relatedLabel) {
-        tooltip.setText(textTooltip);
-        if (relatedLabel instanceof Label){
-            ((Label)relatedLabel).setTooltip(tooltip);
-        }
-        else{
-            ((TextField)relatedLabel).setTooltip(tooltip);
-        }
-    }
-
-    /**
-     * Sets the tool tips on the interface.
-     */
-    public void setToolTips(){
-        String textCollaboratorsToolTip =  "Number of collaborators.",
-                textTasksToolTip        = "Number of tasks.",
-                textProjectsToolTip     = "Number of projects.",
-                textBarChartToolTip     = "Chart of tasks/projects.",
-                textPieChartToolTip     = "Pie chart of duration of a project.",
-                textExportToolTip       = "Export.";
-        createToolTips(collaboratorsToolTip, textCollaboratorsToolTip, collaboratorsNumberLabel);
-        createToolTips(tasksToolTip, textTasksToolTip, tasksNumberLabel);
-        createToolTips(projectsToolTip, textProjectsToolTip, projectsNumberLabel);
-        createToolTips(barChartToolTip, textBarChartToolTip, barChartLabel);
-        createToolTips(pieChartToolTip, textPieChartToolTip, pieChartLabel);
-        createToolTips(exportToolTip, textExportToolTip, fileNameTextField);
-
     }
 
     /**
@@ -168,7 +129,6 @@ public class StatsViewController{
         barChartInitializer();
         overallViewBtn.setDisable(true);
         projectViewBtn.setDisable(false);
-        setToolTips();
     }
 
     /**
