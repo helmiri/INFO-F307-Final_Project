@@ -291,8 +291,8 @@ public class StatsController extends Controller implements StatsViewController.V
         return "{" + '"' + "Collaborators" + '"' + ":" + counts.get(2) +
                 "," + '"' + "Tasks" + '"' + ":" + counts.get(1) +
                 "," + '"' + "Sub projects" + '"' + ":" + counts.get(0) +
-                "," + "'" + "Start date" + '"' + ":" + startDate +
-                "," + '"' + "Estimated date" + '"' + ":"+endDate+"}";
+                "," + '"' + "Start date" + '"' + ":" + startDate +
+                "," + '"' + "Estimated date" + '"' + ":" + endDate + "}";
     }
 
     /**
@@ -382,7 +382,7 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public void exportAsJSONOverallView(String fileName, String path) {
         List<Integer> counts = countOverallStats();
-        String json = "{\n" + user_db.getCurrentUser().getUserName() + ":{" + '"' + "Collaborators" + '"' + ":" + counts.get(2) + "," + '"' + "Tasks" + '"' + ":" + counts.get(1) + "," + '"' + "Projects" + '"' + ":" + counts.get(0) + "}\n}";
+        String json = "{\n" + '"' + user_db.getCurrentUser().getUserName() + '"' + ":{" + '"' + "Collaborators" + '"' + ":" + counts.get(2) + "," + '"' + "Tasks" + '"' + ":" + counts.get(1) + "," + '"' + "Projects" + '"' + ":" + counts.get(0) + "}\n}";
         write(json, fileName, path);
     }
 
