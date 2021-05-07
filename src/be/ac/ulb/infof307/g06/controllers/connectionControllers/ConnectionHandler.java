@@ -131,7 +131,7 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
         try {
             return userDB.userExists(username);
         } catch (SQLException e) {
-            new AlertWindow("Error", "An error has occurred with the database when checking if the user already exists: " + e).errorWindow();
+            new DatabaseException(e).show();
             return true;
         }
     }
@@ -143,6 +143,7 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     public void logout() {
         try {
             userDB.disconnectUser();
+            userDB.disconnectDB();
         } catch (SQLException e) {
             new AlertWindow("Error", "Couldn't disconnect the user: " + e).errorWindow();
         }
