@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.views.connectionViews.LoginViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,19 +21,23 @@ public class LoginController {
     }
 
     /**
-     * Sets the loader to show the Log In scene.
+     * Shows the login screen
      */
-    public void show() throws IOException {
-        // Load the fxml
+    public void show() {
         FXMLLoader loader = new FXMLLoader(LoginViewController.class.getResource("LoginView.fxml"));
-        AnchorPane mainLayout = loader.load();
+        AnchorPane mainLayout;
+        try {
+            mainLayout = loader.load();
+        } catch (IOException e) {
+            new AlertWindow("Error", "Could not load the window", e.getMessage());
+            return;
+        }
         Scene scene = new Scene(mainLayout);
         stage.setScene(scene);
         LoginViewController controller = loader.getController();
         controller.setListener(new LoginViewController.ViewListener() {
             @Override
             public void login(String username, String password) {
-
                 listener.onLogin(username, password);
             }
 
@@ -52,6 +57,7 @@ public class LoginController {
     }
 
     //--------------- LISTENER ----------------
+    // Hand over control to the ConnectionHandler
     public interface Listener {
         void onLogin(String username, String password);
         void onSignup();

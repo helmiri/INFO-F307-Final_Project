@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g06;
 
-import be.ac.ulb.infof307.g06.controllers.connectionControllers.ConnectionEngine;
+import be.ac.ulb.infof307.g06.controllers.connectionControllers.ConnectionHandler;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class Main extends Application {
     /**
-     * Launchs the main application
+     * Launches the main application
      *
      * @param args String[] Arguments
      */
@@ -32,7 +32,7 @@ public class Main extends Application {
             UserDB userDB = new UserDB(DB_PATH);
             ProjectDB projectDB = new ProjectDB(DB_PATH);
             boolean isFirstBoot = userDB.isFirstBoot();
-            ConnectionEngine engine = new ConnectionEngine(userDB, projectDB, stage, isFirstBoot);
+            ConnectionHandler engine = new ConnectionHandler(userDB, projectDB, stage, isFirstBoot);
             engine.showLogin();
         } catch (SQLException | ClassNotFoundException throwables) {
             new AlertWindow("Database error", "Could not access the database").errorWindow();

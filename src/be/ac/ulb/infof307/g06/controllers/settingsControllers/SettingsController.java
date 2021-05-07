@@ -56,7 +56,7 @@ public class SettingsController extends Controller implements SettingsViewContro
         try {
             return loader.load();
         } catch (IOException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "Unable to load the window", e.getMessage()).errorWindow();
         }
         return null;
     }

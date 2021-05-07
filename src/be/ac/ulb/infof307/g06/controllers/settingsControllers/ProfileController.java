@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -96,11 +97,16 @@ public class ProfileController extends Controller implements ProfileViewControll
         return false;
     }
 
+    /**
+     * Updates the user's information
+     *
+     * @return true on fail, false on success
+     */
     private boolean syncSettingsFailed() {
         try {
             user_db.userSettingsSync(user, "");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            new DatabaseException(e).show();
             return true;
         }
         return false;
@@ -117,17 +123,16 @@ public class ProfileController extends Controller implements ProfileViewControll
         if (validateTextField(newPassword, "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})")) {
             return;
         }
-        if (newPassword.equals(confirmationPassword)) {
-            try {
-                user_db.userSettingsSync(null, newPassword);
-                new AlertWindow("Success", "Password updated successfully").informationWindow();
-                return;
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-                return;
-            }
+        if (!newPassword.equals(confirmationPassword)) {
+            new AlertWindow("Error", "The passwords don't match").errorWindow();
+            return;
         }
-        new AlertWindow("Error", "The passwords don't match").errorWindow();
+        try {
+            user_db.userSettingsSync(null, newPassword);
+            new AlertWindow("Success", "Password updated successfully").informationWindow();
+        } catch (SQLException e) {
+            new DatabaseException(e).show();
+        }
     }
 
     /**

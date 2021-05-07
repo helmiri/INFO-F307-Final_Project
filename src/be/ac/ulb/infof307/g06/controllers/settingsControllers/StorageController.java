@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAuthorization;
 import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAuthorization;
@@ -42,7 +43,7 @@ public class StorageController extends Controller implements StorageViewControll
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
         } catch (SQLException e) {
-            new AlertWindow("Error", "An error occurred " + e.getMessage()).errorWindow();
+            new DatabaseException(e).show();
         }
     }
 
@@ -50,24 +51,27 @@ public class StorageController extends Controller implements StorageViewControll
     /**
      * Saves the storage limit to the database. (only available to admin users).
      *
-     * @param limit                 the storage limit.
-     * @param storageViewController
-     * @return boolean
+     * @param limit                 The new storage limit
+     * @param storageViewController the view controller (needed to refresh the scene)
+     * @return true on success, false otherwise
      */
     @Override
-    public boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException {
+    public boolean saveSettings(String limit, StorageViewController storageViewController) {
         boolean res = false;
-        if (user_db.isAdmin() && !limit.isBlank()) {
-            try {
-                setLimit(limit);
-                res = true;
-            } catch (NumberFormatException e) {
-                new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").errorWindow();
+        try {
+            if (user_db.isAdmin() && !limit.isBlank()) {
+                try {
+                    setLimit(limit);
+                    res = true;
+                } catch (NumberFormatException e) {
+                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").errorWindow();
+                }
             }
+            storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
+        } catch (SQLException e) {
+            new DatabaseException(e).show();
+            return false;
         }
-
-        storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin()
-        );
         return res;
     }
 
@@ -87,7 +91,7 @@ public class StorageController extends Controller implements StorageViewControll
     }
 
     /**
-     * Establishes the connection with the Dropbox account.
+     * Establishes a connection with the Dropbox account.
      */
     @Override
     public void authenticateDropBox() {
@@ -100,10 +104,11 @@ public class StorageController extends Controller implements StorageViewControll
             controller.setListener(this);
             openBrowser(url);
             controller.initialize(url, pane);
-        } catch (JsonReader.FileLoadException | IOException e) {
-            new AlertWindow("Error", "An error occurred").errorWindow();
+        } catch (IOException e) {
+            new AlertWindow("Error", "Could not load the client configuration", e.getMessage()).errorWindow();
+        } catch (JsonReader.FileLoadException e) {
+            new AlertWindow("Error", "An error occurred while setting up the connection", e.getMessage()).errorWindow();
         }
-
     }
 
     /**
@@ -135,9 +140,9 @@ public class StorageController extends Controller implements StorageViewControll
     }
 
     /**
-     * On ok button clicked
+     * Validates the code and stores the credentials
      *
-     * @param code code
+     * @param code The authentication code
      */
     @Override
     public void onOKClicked(String code) {
@@ -147,11 +152,12 @@ public class StorageController extends Controller implements StorageViewControll
                 credential = authorization.getAuthorization(code);
             }
             user_db.addDropBoxCredentials(credential);
-        } catch (DbxException | SQLException e) {
-            new AlertWindow("Error", "Could not complete the request");
-            return;
+            new AlertWindow("Credentials saved", "Settings saved").informationWindow();
+        } catch (DbxException e) {
+            new AlertWindow("Error", "Could not complete the request", e.getMessage());
+        } catch (SQLException e) {
+            new DatabaseException(e).show();
         }
-        new AlertWindow("Credentials saved", "Settings saved").informationWindow();
     }
 
     /**

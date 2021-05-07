@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
@@ -29,7 +29,7 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             viewController.initialize(project_db.getAllTags());
         } catch (SQLException e) {
-            new AlertWindow("Error", "An error has occurred with the database while getting the tags: " + e).errorWindow();
+            new DatabaseException(e).show();
         }
     }
 
@@ -46,7 +46,7 @@ public class TagsController extends Controller implements TagsViewController.Vie
             project_db.createTag(text, toRGBCode);
             viewController.refresh(project_db.getAllTags());
         } catch (SQLException e) {
-            new AlertWindow("Error", "Can't add the tag. " + e).errorWindow();
+            new DatabaseException(e).show();
         }
     }
 
@@ -63,9 +63,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
             project_db.editTag(selectedTag.getId(), text, toRGBCode);
             viewController.refresh(project_db.getAllTags());
         } catch (SQLException e) {
-            new AlertWindow("Error", " " + e).errorWindow();
+            new DatabaseException(e).show();
         }
-
     }
 
     /**
@@ -79,9 +78,7 @@ public class TagsController extends Controller implements TagsViewController.Vie
             project_db.deleteTag(selectedTag.getId());
             viewController.refresh(project_db.getAllTags());
         } catch (SQLException e) {
-            new AlertWindow("Error", " " + e).errorWindow();
+            new DatabaseException(e).show();
         }
     }
-
-
 }

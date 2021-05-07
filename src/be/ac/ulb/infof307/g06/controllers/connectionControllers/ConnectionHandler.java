@@ -1,23 +1,23 @@
 package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
-public class ConnectionEngine implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
+public class ConnectionHandler implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
     //-------------- ATTRIBUTES ----------------
     private final UserDB userDB;
     private final ProjectDB projectDB;
     private final Stage stage;
     private final boolean isFirstBoot;
 
-    public ConnectionEngine(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot) {
+    public ConnectionHandler(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot) {
         this.userDB = userDB;
         this.projectDB = projectDB;
         this.stage = stage;
@@ -33,11 +33,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
     @Override
     public void showLogin() {
         LoginController controller = new LoginController(stage, this);
-        try {
-            controller.show();
-        } catch (IOException e) {
-            new AlertWindow("error", "" + e).errorWindow();
-        }
+        controller.show();
     }
 
     /**
@@ -74,11 +70,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
     @Override
     public void onSignup() {
         SignUpController controller = new SignUpController(stage, this, stage.getScene());
-        try {
-            controller.show();
-        } catch (IOException e) {
-            new AlertWindow("error", "" + e).errorWindow();
-        }
+        controller.show();
     }
 
     /**
@@ -104,8 +96,8 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
         if (isFirstBoot) {
             try {
                 userDB.setAdmin(256 * 1000000);
-            } catch (SQLException throwables) {
-                new AlertWindow("Database error", "Could not access the database").errorWindow();
+            } catch (SQLException e) {
+                new DatabaseException(e).show();
             }
         }
     }
@@ -124,8 +116,7 @@ public class ConnectionEngine implements SignUpController.Listener, LoginControl
         try {
             userDB.getUserInfo(userDB.addUser(firstName, lastName, userName, email, password));
         } catch (SQLException e) {
-            new AlertWindow("Error", "An error has occurred when adding the user to the database: " + e).errorWindow();
-            e.printStackTrace();
+            new DatabaseException(e).show();
         }
     }
 
