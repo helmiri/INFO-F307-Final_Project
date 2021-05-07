@@ -20,6 +20,7 @@ public abstract class Database {
      */
     public Database(String dbName) throws ClassNotFoundException, SQLException {
         dbURL = dbName;
+        // Ensures that the same connection  is shared across all instances
         if (db == null) {
             db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
             Class.forName("org.sqlite.JDBC");

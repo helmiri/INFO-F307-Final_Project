@@ -110,7 +110,6 @@ public class ProjectDB extends Database {
         } catch (Exception ignored) {
         }
 
-
         Objects.requireNonNull(rs).close();
         return id;
     }

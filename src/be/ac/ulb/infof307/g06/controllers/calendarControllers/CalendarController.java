@@ -58,7 +58,7 @@ public class CalendarController extends Controller implements CalendarViewContro
             viewController.initComboBox(projects, allProjects);
             loadProjects(allProjects);
         } catch (SQLException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "" + e).showErrorWindow();
         }
     }
 
@@ -132,7 +132,7 @@ public class CalendarController extends Controller implements CalendarViewContro
             database = new CalendarDB("Database.db");
             scene = new Scene(loader.load());
         } catch (IOException | ClassNotFoundException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "" + e).showErrorWindow();
         }
         viewController = loader.getController();
         viewController.setListener(this);
@@ -190,7 +190,7 @@ public class CalendarController extends Controller implements CalendarViewContro
                     calendar.setStyle(color);
                 }
             } catch (SQLException e) {
-                new AlertWindow("Error", "" + e).errorWindow();
+                new AlertWindow("Error", "" + e).showErrorWindow();
             }
 
         }
@@ -250,7 +250,7 @@ public class CalendarController extends Controller implements CalendarViewContro
                 insertProjectInCalendar(currentProject, color);
             }
         } catch (SQLException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "" + e).showErrorWindow();
         }
 
     }

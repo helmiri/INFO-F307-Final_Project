@@ -45,7 +45,7 @@ public class StorageViewController {
     public void events(ActionEvent actionEvent) throws SQLException {
         if (actionEvent.getSource() == saveBtn) {
             if (listener.saveSettings(limitField.getText(), this)) {
-                new AlertWindow("Save", "Changes saved").informationWindow();
+                new AlertWindow("Save", "Changes saved").showInformationWindow();
             }
         } else if (actionEvent.getSource() == dBoxButton) {
             listener.authenticateDropBox();

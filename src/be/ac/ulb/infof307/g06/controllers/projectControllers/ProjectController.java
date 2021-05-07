@@ -57,13 +57,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
             calendar_db = new CalendarDB("database.db");
             project_db.createTag("tag1", "#ff55ff");
         } catch (SQLException | ClassNotFoundException e) {
-            new AlertWindow("Error", " " + e).errorWindow();
+            new AlertWindow("Error", " " + e).showErrorWindow();
         }
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsView.fxml"));
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "" + e).showErrorWindow();
         }
         viewController = loader.getController();
         ioController.setViewController(viewController);
@@ -96,7 +96,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             addStage.show();
             controller.init(listener, addStage);
         } catch (IOException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "" + e).showErrorWindow();
         }
     }
 
@@ -168,7 +168,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public boolean storageLimitReached() {
         try {
             if (user_db.availableDisk() <= 0) {
-                new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").informationWindow();
+                new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").showInformationWindow();
                 return true;
             }
         } catch (SQLException e) {
@@ -225,7 +225,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             int projectID = project.getId();
             if (title.equals("")) {
-                new AlertWindow("Alert", "Project title cannot be empty").errorWindow();
+                new AlertWindow("Alert", "Project title cannot be empty").showErrorWindow();
             } else {
                 project_db.editProject(
                         projectID,
@@ -395,7 +395,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     taskNames.add(task2.getDescription());
                 }
                 if (taskNames.contains(new_description)) {
-                    new AlertWindow("Warning", "This task already exists.").warningWindow();
+                    new AlertWindow("Warning", "This task already exists.").showWarningWindow();
                 }
             }
             if (new_description.equals("")) {
@@ -463,7 +463,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     project_db.addTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
                 }
             } else {
-                new AlertWindow("Warning", "Please select a task before assigning a collaborator.").warningWindow();
+                new AlertWindow("Warning", "Please select a task before assigning a collaborator.").showWarningWindow();
             }
 
         } catch (SQLException e) {
@@ -487,7 +487,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     names.add((user_db.getUserInfo(collaborator).getUserName()));
                 }
             } else {
-                new AlertWindow("Warning", "Please select a task.").warningWindow();
+                new AlertWindow("Warning", "Please select a task.").showWarningWindow();
             }
         } catch (SQLException e) {
             new DatabaseException(e).show();
@@ -535,12 +535,12 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
         try {
             if (!user_db.userExists(username)) {
-                new AlertWindow("Alert", "User '" + username + "' doesn't exist").errorWindow();
+                new AlertWindow("Alert", "User '" + username + "' doesn't exist").showErrorWindow();
                 return;
             }
             int receiverID = user_db.getUserInfo(username).getId();
             if (project_db.getCollaborators(project_id).contains(receiverID)) {
-                new AlertWindow("Alert", "User '" + username + "' is already a collaborator in this project").errorWindow();
+                new AlertWindow("Alert", "User '" + username + "' is already a collaborator in this project").showErrorWindow();
                 return;
             }
             user_db.sendInvitation(project_id, user_db.getCurrentUser().getId(), receiverID);
@@ -617,14 +617,14 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
         try {
             if (ioController.onImportProject(path)) {
-                new AlertWindow("Success", "The project has been imported").informationWindow();
+                new AlertWindow("Success", "The project has been imported").showInformationWindow();
             } else {
-                new AlertWindow("Failure", "This project already exists in the database").errorWindow();
+                new AlertWindow("Failure", "This project already exists in the database").showErrorWindow();
             }
         } catch (SQLException e) {
             new DatabaseException(e).show();
         } catch (IOException e) {
-            new AlertWindow("Error", "An error reading the file", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error reading the file", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -638,9 +638,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public void exportProject(Project project, String path) {
         try {
             ioController.onExportProject(project, path);
-            new AlertWindow("Success", "Exportation successful").informationWindow();
+            new AlertWindow("Success", "Exportation successful").showInformationWindow();
         } catch (IOException e) {
-            new AlertWindow("Error", "An error occurred while exporting", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error occurred while exporting", e.getMessage()).showErrorWindow();
         } catch (DatabaseException e) {
             e.show();
         }
@@ -670,17 +670,17 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 new File(localFilePath + fileName).delete();
             }
         } catch (IOException e) {
-            new AlertWindow("Error", "An error occurred while exporting the project file", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error occurred while exporting the project file", e.getMessage()).showErrorWindow();
             success = false;
         } catch (DbxException e) {
-            new AlertWindow("Connection Error", "Could not connect to DropBox", e.getMessage()).errorWindow();
+            new AlertWindow("Connection Error", "Could not connect to DropBox", e.getMessage()).showErrorWindow();
             success = false;
         } catch (DatabaseException e) {
             e.show();
             success = false;
         }
         if (success) {
-            new AlertWindow("Success", "Upload successful").informationWindow();
+            new AlertWindow("Success", "Upload successful").showInformationWindow();
         }
     }
 
@@ -728,13 +728,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
             int parentID = 0;
 
             if (title.equals("")) {
-                new AlertWindow("Alert", "Title cannot be empty").errorWindow();
+                new AlertWindow("Alert", "Title cannot be empty").showErrorWindow();
             } else if (project_db.getProjectID(title) != 0) {
-                new AlertWindow("Alert", "Project '" + title + "' Already exists").errorWindow();
+                new AlertWindow("Alert", "Project '" + title + "' Already exists").showErrorWindow();
             } else if (startDate == null) {
-                new AlertWindow("Alert", "Project needs a start date").errorWindow();
+                new AlertWindow("Alert", "Project needs a start date").showErrorWindow();
             } else if (endDate == null) {
-                new AlertWindow("Alert", "Project needs an end date").errorWindow();
+                new AlertWindow("Alert", "Project needs an end date").showErrorWindow();
             } else if (parent.equals("") || project_db.getProjectID(parent) != 0) {
                 insertNewProject(title, description, startDate, endDate, tags, parent, parentID);
             }
@@ -793,7 +793,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 taskNames.add(task.getDescription());
             }
             if (taskNames.contains(taskDescription)) {
-                new AlertWindow("Warning", "This task already exists.").warningWindow();
+                new AlertWindow("Warning", "This task already exists.").showWarningWindow();
                 return;
             }
             if (project_id != 0) {

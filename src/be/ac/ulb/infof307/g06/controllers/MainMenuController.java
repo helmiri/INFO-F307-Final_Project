@@ -46,7 +46,7 @@ public class MainMenuController extends Controller implements MenuViewController
                 showInvitationStage(invitation);
             }
         } catch (IOException | SQLException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new AlertWindow("Error", "" + e).showErrorWindow();
         }
     }
 

@@ -48,16 +48,16 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
         try {
             res = userDB.validateData(username, password);
         } catch (SQLException e) {
-            new AlertWindow("error", "" + e).errorWindow();
+            new AlertWindow("error", "" + e).showErrorWindow();
         }
         switch (res) {
-            case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").errorWindow();
-            case -1 -> new AlertWindow("Login Error", "This user is already connected").errorWindow();
+            case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").showErrorWindow();
+            case -1 -> new AlertWindow("Login Error", "This user is already connected").showErrorWindow();
             default -> {
                 try {
                     userDB.getUserInfo(res);
                 } catch (SQLException e) {
-                    new AlertWindow("error", "" + e).errorWindow();
+                    new AlertWindow("error", "" + e).showErrorWindow();
                 }
                 showMainMenu();
             }
@@ -145,7 +145,7 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
             userDB.disconnectUser();
             userDB.disconnectDB();
         } catch (SQLException e) {
-            new AlertWindow("Error", "Couldn't disconnect the user: " + e).errorWindow();
+            new AlertWindow("Error", "Couldn't disconnect the user: " + e).showErrorWindow();
         }
     }
 

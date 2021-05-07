@@ -64,7 +64,7 @@ public class StorageController extends Controller implements StorageViewControll
                     setLimit(limit);
                     res = true;
                 } catch (NumberFormatException e) {
-                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").errorWindow();
+                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").showErrorWindow();
                 }
             }
             storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
@@ -81,12 +81,12 @@ public class StorageController extends Controller implements StorageViewControll
     @Override
     public void authenticateGoogleDrive() {
         AlertWindow alert = new AlertWindow("Authorization request", "Requesting authorization...\nDo not close the app. Click 'OK' to continue");
-        alert.informationWindow();
+        alert.showInformationWindow();
         GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(user_db.getCurrentUser().getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
         } catch (IOException | GeneralSecurityException e) {
-            new AlertWindow("Authorization request", "Access denied").errorWindow();
+            new AlertWindow("Authorization request", "Access denied").showErrorWindow();
         }
     }
 
@@ -105,9 +105,9 @@ public class StorageController extends Controller implements StorageViewControll
             openBrowser(url);
             controller.initialize(url, pane);
         } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the client configuration", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Could not load the client configuration", e.getMessage()).showErrorWindow();
         } catch (JsonReader.FileLoadException e) {
-            new AlertWindow("Error", "An error occurred while setting up the connection", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error occurred while setting up the connection", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -152,7 +152,7 @@ public class StorageController extends Controller implements StorageViewControll
                 credential = authorization.getAuthorization(code);
             }
             user_db.addDropBoxCredentials(credential);
-            new AlertWindow("Credentials saved", "Settings saved").informationWindow();
+            new AlertWindow("Credentials saved", "Settings saved").showInformationWindow();
         } catch (DbxException e) {
             new AlertWindow("Error", "Could not complete the request", e.getMessage());
         } catch (SQLException e) {

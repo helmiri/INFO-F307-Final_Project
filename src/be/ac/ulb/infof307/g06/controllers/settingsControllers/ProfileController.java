@@ -124,12 +124,12 @@ public class ProfileController extends Controller implements ProfileViewControll
             return;
         }
         if (!newPassword.equals(confirmationPassword)) {
-            new AlertWindow("Error", "The passwords don't match").errorWindow();
+            new AlertWindow("Error", "The passwords don't match").showErrorWindow();
             return;
         }
         try {
             user_db.userSettingsSync(null, newPassword);
-            new AlertWindow("Success", "Password updated successfully").informationWindow();
+            new AlertWindow("Success", "Password updated successfully").showInformationWindow();
         } catch (SQLException e) {
             new DatabaseException(e).show();
         }
@@ -146,6 +146,6 @@ public class ProfileController extends Controller implements ProfileViewControll
                    - The username must not contain any special characters or spaces (8 to 16 chars)
                    - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)
                 """;
-        new AlertWindow("Wrong enters", contextText).warningWindow();
+        new AlertWindow("Wrong enters", contextText).showWarningWindow();
     }
 }

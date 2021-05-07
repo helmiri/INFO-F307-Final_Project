@@ -57,7 +57,7 @@ public class SignUpController implements SignUpViewController.ViewListener {
             if (!(listener.doesUserExist(userName))) {
                 showConditionStage(firstName, lastName, userName, email, password);
             } else {
-                new AlertWindow("Error", "This user already exists").informationWindow();
+                new AlertWindow("Error", "This user already exists").showInformationWindow();
             }
         } else {
             String contextText = """
@@ -67,7 +67,7 @@ public class SignUpController implements SignUpViewController.ViewListener {
                        - The username must not contain any special characters or spaces (8 to 16 chars)
                        - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)
                     """;
-            new AlertWindow("Wrong enters", contextText).warningWindow();
+            new AlertWindow("Wrong enters", contextText).showWarningWindow();
         }
     }
 

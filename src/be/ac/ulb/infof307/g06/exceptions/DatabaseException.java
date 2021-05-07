@@ -11,6 +11,6 @@ public class DatabaseException extends Exception {
     }
 
     public void show() {
-        alert.errorWindow();
+        alert.showErrorWindow();
     }
 }

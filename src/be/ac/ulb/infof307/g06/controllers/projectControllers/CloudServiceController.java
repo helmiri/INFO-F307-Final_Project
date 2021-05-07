@@ -70,9 +70,9 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             gDriveFiles = gDriveClient.getFiles();
         } catch (IOException e) {
-            new AlertWindow("Error", "Could not retrieve the files ", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Could not retrieve the files ", e.getMessage()).showErrorWindow();
         } catch (GeneralSecurityException e) {
-            new AlertWindow("Error", "Could not connect to google drive ", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Could not connect to google drive ", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -91,9 +91,9 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             dropBoxFiles = dbxClient.getFiles();
         } catch (DbxException e) {
-            new AlertWindow("Credential error", e.getMessage()).errorWindow();
+            new AlertWindow("Credential error", e.getMessage()).showErrorWindow();
         } catch (SQLException e) {
-            new AlertWindow("Error", "Could not retrieve the files", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Could not retrieve the files", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -131,7 +131,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
                 if (!localFile.exists()) {
                     download = true;
                 } else if (isGoogleDriveFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
-                    new AlertWindow("Identical files", "The file " + fileMeta.getName() + " already exists").informationWindow();
+                    new AlertWindow("Identical files", "The file " + fileMeta.getName() + " already exists").showInformationWindow();
                 } else {
                     download = true;
                 }
@@ -182,7 +182,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             if (!localFile.exists()) {
                 download = true;
             } else if (isDropBoxFileIdentical(localFilePath, (FileMetadata) fileMeta)) {
-                new AlertWindow("Identical files", "The file " + fileMeta.getName() + " already exists").informationWindow();
+                new AlertWindow("Identical files", "The file " + fileMeta.getName() + " already exists").showInformationWindow();
             } else {
                 download = true;
             }
@@ -268,7 +268,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             controller.show(files);
         } catch (IOException e) {
-            new AlertWindow("Error", "An error has occurred : ", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error has occurred : ", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -316,7 +316,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
                 showCloudDownloadStage();
             }
         } catch (IOException e) {
-            new AlertWindow("Error", "Unable to load window", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Unable to load window", e.getMessage()).showErrorWindow();
         }
     }
 

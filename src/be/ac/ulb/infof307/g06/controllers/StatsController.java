@@ -63,7 +63,7 @@ public class StatsController extends Controller implements StatsViewController.V
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
-            new AlertWindow("Error", "An error has occurred. Try to restart the application.", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error has occurred. Try to restart the application.", e.getMessage()).showErrorWindow();
         }
         statsView = loader.getController();
         statsView.setListener(this);
@@ -170,7 +170,7 @@ public class StatsController extends Controller implements StatsViewController.V
                 emptyStats(res);
             }
         }catch(SQLException e){
-            new AlertWindow("Database error", "Unable to load data due to a database access error: ", e.getMessage()).errorWindow();
+            new AlertWindow("Database error", "Unable to load data due to a database access error: ", e.getMessage()).showErrorWindow();
             emptyStats(res);
             return res;
         }
@@ -197,7 +197,7 @@ public class StatsController extends Controller implements StatsViewController.V
             return res;
         }
         catch (SQLException e){
-            new AlertWindow("Error", "An error has occurred with the database while trying to load counts: ", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "An error has occurred with the database while trying to load counts: ", e.getMessage()).showErrorWindow();
             emptyStats(res);
             return res;
         }
@@ -313,11 +313,11 @@ public class StatsController extends Controller implements StatsViewController.V
                 content = statsToCSVString(mainProjectID, root.getChildren().get(i).getValue(), content, root.getChildren().get(i));
             }
             csv.write(content);
-            new AlertWindow("Success", "Exported successfully").informationWindow();
+            new AlertWindow("Success", "Exported successfully").showInformationWindow();
         } catch (FileNotFoundException e) {
-            new AlertWindow("Error", "Couldn't find or access to this file: ", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Couldn't find or access to this file: ", e.getMessage()).showErrorWindow();
         } catch (SQLException e) {
-            new AlertWindow("Database Error", "Could not access the database: ", e.getMessage()).errorWindow();
+            new AlertWindow("Database Error", "Could not access the database: ", e.getMessage()).showErrorWindow();
         } catch (DatabaseException e) {
             e.show();
         }
@@ -367,9 +367,9 @@ public class StatsController extends Controller implements StatsViewController.V
             List<Integer> counts = countOverallStats();
             content += user_db.getCurrentUser().getUserName() + "," + counts.get(2) + "," + counts.get(1) + "," + counts.get(0);
             csv.write(content);
-            new AlertWindow("Success", "Success in exporting statistics.").informationWindow();
+            new AlertWindow("Success", "Success in exporting statistics.").showInformationWindow();
         } catch (FileNotFoundException e) {
-            new AlertWindow("Error", "Couldn't find or access to this file.", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Couldn't find or access to this file.", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -398,9 +398,9 @@ public class StatsController extends Controller implements StatsViewController.V
             FileWriter fw = new FileWriter(path + fileName, false);
             fw.write(chosenString + "\n");
             fw.close();
-            new AlertWindow("Success", "Success in exporting statistics.").informationWindow();
+            new AlertWindow("Success", "Success in exporting statistics.").showInformationWindow();
         } catch (IOException e) {
-            new AlertWindow("Error", "Couldn't write in this file (" + path + fileName+")", e.getMessage()).errorWindow();
+            new AlertWindow("Error", "Couldn't write in this file (" + path + fileName + ")", e.getMessage()).showErrorWindow();
         }
     }
 

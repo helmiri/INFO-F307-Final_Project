@@ -153,13 +153,13 @@ public class ProjectsViewController {
                 listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
                 displayTask();
             } else {
-                new AlertWindow("Warning", "Task needs a start and end date.").warningWindow();
+                new AlertWindow("Warning", "Task needs a start and end date.").showWarningWindow();
             }
         }
     }
 
     public void helpPopUp(){
-        new AlertWindow("Help", "Go to Settings > Help > Projects management.").informationWindow();
+        new AlertWindow("Help", "Go to Settings > Help > Projects management.").showInformationWindow();
     }
 
     /**
@@ -241,7 +241,7 @@ public class ProjectsViewController {
             listener.deleteCollaborator(collaborator, selectedProject.getId());
             collaboratorsTable.getItems().removeAll(collaborator);
         } else {
-            new AlertWindow("Warning", "Please select a project before deleting a collaborator.").warningWindow();
+            new AlertWindow("Warning", "Please select a project before deleting a collaborator.").showWarningWindow();
         }
 
     }
