@@ -158,6 +158,10 @@ public class ProjectsViewController {
         }
     }
 
+    public void helpPopUp(){
+        new AlertWindow("Help", "Go to Settings > Help > Projects management.").informationWindow();
+    }
+
     /**
      * Hides the tree table root.
      */
