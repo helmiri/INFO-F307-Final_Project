@@ -224,9 +224,9 @@ public class StatsViewController{
      * Displays stats of the number of sub/projects, tasks and collaborators.
      */
     public void displayBasicStats(List<Integer> infos) {
-        projectsNumber.setText(Integer.toString(infos.get(0)));
-        tasksNumber.setText(infos.get(1).toString());
-        collaboratorsNumber.setText(Integer.toString(infos.get(2)));
+        projectsNumberLabel.setText(Integer.toString(infos.get(0)));
+        tasksNumberLabel.setText(infos.get(1).toString());
+        collaboratorsNumberLabel.setText(Integer.toString(infos.get(2)));
     }
 
     /**
@@ -256,9 +256,9 @@ public class StatsViewController{
      * Resets the texts in labels in statistics.
      */
     public void resetTextLabel(){
-        projectsNumber.setText("0");
-        tasksNumber.setText("0");
-        collaboratorsNumber.setText("0");
+        projectsNumberLabel.setText("0");
+        tasksNumberLabel.setText("0");
+        collaboratorsNumberLabel.setText("0");
         startDate.setText("?/?/?");
         estimatedDate.setText("?/?/?");
         finishDate.setText("?/?/?");
