@@ -3,6 +3,7 @@ package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.controllers.calendarControllers.CalendarController;
 import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
 import be.ac.ulb.infof307.g06.controllers.settingsControllers.SettingsController;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.Project;
@@ -121,7 +122,7 @@ public class MainMenuController extends Controller implements MenuViewController
         try {
             controller.show();
         } catch (SQLException e) {
-            new AlertWindow("Error", "" + e).errorWindow();
+            new DatabaseException(e).show();
         }
     }
 
@@ -150,7 +151,7 @@ public class MainMenuController extends Controller implements MenuViewController
             user_db.removeInvitation(invitation.getInvitationID());
             invitationStage.close();
         } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database \n" + e).errorWindow();
+            new DatabaseException(e).show();
         }
     }
 
@@ -166,7 +167,7 @@ public class MainMenuController extends Controller implements MenuViewController
             user_db.removeInvitation(invitation.getInvitationID());
             invitationStage.close();
         } catch (SQLException e) {
-            new AlertWindow("Database error", "Could not access the database \n" + e).errorWindow();
+            new DatabaseException(e).show();
         }
     }
 
