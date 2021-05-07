@@ -35,10 +35,10 @@
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
                      <tooltip>
-                        <Tooltip fx:id="collabortorsToolTip" text="Collborators" />
+                        <Tooltip fx:id="collaboratorsToolTip" text="Collborators" />
                      </tooltip>
                   </Label>
-                  <Label fx:id="collaboratorsNumber" layoutX="112.0" layoutY="65.0" text="20" textFill="WHITE">
+                  <Label fx:id="collaboratorsNumberLabel" layoutX="112.0" layoutY="65.0" text="20" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -55,7 +55,7 @@
                         <Tooltip fx:id="tasksToolTip" text="Tasks" />
                      </tooltip>
                   </Label>
-                  <Label fx:id="tasksNumber" layoutX="125.0" layoutY="65.0" text="9" textFill="WHITE">
+                  <Label fx:id="tasksNumberLabel" layoutX="125.0" layoutY="65.0" text="9" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -72,7 +72,7 @@
                         <Tooltip fx:id="projectsToolTip" text="Projects" />
                      </tooltip>
                   </Label>
-                  <Label fx:id="projectsNumber" layoutX="112.0" layoutY="65.0" text="53" textFill="WHITE">
+                  <Label fx:id="projectsNumberLabel" layoutX="112.0" layoutY="65.0" text="53" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>

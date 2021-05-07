@@ -25,7 +25,7 @@ public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
 
     @FXML
-    private Tooltip collabortorsToolTip;
+    private Tooltip collaboratorsToolTip;
     @FXML
     private Tooltip tasksToolTip;
     @FXML
@@ -52,11 +52,11 @@ public class StatsViewController{
     @FXML
     private Button exportJSONBtn;
     @FXML
-    private Label collaboratorsNumber;
+    private Label collaboratorsNumberLabel;
     @FXML
-    private Label tasksNumber;
+    private Label tasksNumberLabel;
     @FXML
-    private Label projectsNumber;
+    private Label projectsNumberLabel;
     @FXML
     private Label startDate;
     @FXML
@@ -148,9 +148,9 @@ public class StatsViewController{
                 textBarChartToolTip     = "Chart of tasks/projects.",
                 textPieChartToolTip     = "Pie chart of duration of a project.",
                 textExportToolTip       = "Export.";
-        createToolTips(collabortorsToolTip, textCollaboratorsToolTip, collaboratorsNumber);
-        createToolTips(tasksToolTip, textTasksToolTip, tasksNumber);
-        createToolTips(projectsToolTip, textProjectsToolTip, projectsNumber);
+        createToolTips(collaboratorsToolTip, textCollaboratorsToolTip, collaboratorsNumberLabel);
+        createToolTips(tasksToolTip, textTasksToolTip, tasksNumberLabel);
+        createToolTips(projectsToolTip, textProjectsToolTip, projectsNumberLabel);
         createToolTips(barChartToolTip, textBarChartToolTip, barChartLabel);
         createToolTips(pieChartToolTip, textPieChartToolTip, pieChartLabel);
         createToolTips(exportToolTip, textExportToolTip, fileNameTextField);
