@@ -78,7 +78,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public AnchorPane getHelpScene() {
-        return null;
+        return loadScene("helpViews/HelpMenuView.fxml");
     }
 
     /**
