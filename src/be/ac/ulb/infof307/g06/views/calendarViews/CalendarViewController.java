@@ -11,9 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.util.Callback;
@@ -241,7 +241,6 @@ public class CalendarViewController {
      */
     public void setLinesStyle(LocalDate date) {
         boolean isCurrent = date.equals(LocalDate.now());
-        System.out.println(date);
         for (Line weekDaysSeparator : weekDaysSeparators) {
             weekDaysSeparator.setStyle("-fx-stroke: BLACK;");
         }

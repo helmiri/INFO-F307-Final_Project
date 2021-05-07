@@ -307,17 +307,11 @@ public class ProjectsViewController {
      * @return The selected project
      */
     public Project getSelectedProject() {
-        TreeItem<Project> project;
-        try{
-             project = treeProjects.getSelectionModel().getSelectedItems().get(0);
-        } catch (IndexOutOfBoundsException e){
-            // Occurs when somehow nothing is selected
+        ObservableList<TreeItem<Project>> items = treeProjects.getSelectionModel().getSelectedItems();
+        if (items.size() == 0) {
             return null;
         }
-        if (project != null) {
-            return project.getValue();
-        }
-        return null;
+        return items.get(0).getValue();
     }
 
     /**

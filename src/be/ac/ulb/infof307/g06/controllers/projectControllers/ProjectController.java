@@ -24,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -613,11 +614,16 @@ public class ProjectController extends Controller implements ProjectsViewControl
         if (storageLimitReached()) {
             return;
         }
-        int res = ioController.onImportProject(path);
-        if (res == 1) {
-            new AlertWindow("Success", "The project has been imported").informationWindow();
-        } else if (res == -1) {
-            new AlertWindow("Error", "An error occurred").errorWindow();
+        try {
+            if (ioController.onImportProject(path)) {
+                new AlertWindow("Success", "The project has been imported").informationWindow();
+            } else {
+                new AlertWindow("Failure", "This project already exists in the database").errorWindow();
+            }
+        } catch (SQLException e) {
+            new DatabaseException(e).show();
+        } catch (IOException e) {
+            new AlertWindow("Error", "An error reading the file", e.getMessage()).errorWindow();
         }
     }
 
@@ -629,11 +635,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     @Override
     public void exportProject(Project project, String path) {
-        boolean res = ioController.onExportProject(project, path);
-        if (res) {
+        try {
+            ioController.onExportProject(project, path);
             new AlertWindow("Success", "Exportation successful").informationWindow();
-        } else {
-            new AlertWindow("Error", "An error occurred while exporting").errorWindow();
+        } catch (IOException e) {
+            new AlertWindow("Error", "An error occurred while exporting", e.getMessage()).errorWindow();
+        } catch (DatabaseException e) {
+            e.show();
         }
     }
 
@@ -648,18 +656,33 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         cloudServiceController.showSelectionStage(false);
-        for (Project project : projects) {
-            String localFilePath = System.getProperty("user.dir");
-            ioController.onExportProject(project, localFilePath);
-            String fileName = "/" + project.getTitle() + ".tar.gz";
-            try {
+        boolean success = true;
+        try {
+            for (Project project : projects) {
+                // Export the project
+                String localFilePath = System.getProperty("user.dir");
+                ioController.onExportProject(project, localFilePath);
+                // Upload the exported file
+                String fileName = "/" + project.getTitle() + ".tar.gz";
                 cloudServiceController.uploadProject(fileName, localFilePath + fileName);
-                new AlertWindow("Success", "Upload successful").informationWindow();
-            } catch (IOException | DbxException e) {
-                new AlertWindow("Error", "Could not upload project: " + project.getTitle(), e.getMessage()).errorWindow();
+                // Delete temporary file
+                new File(localFilePath + fileName).delete();
             }
+        } catch (IOException e) {
+            new AlertWindow("Error", "An error occurred while exporting the project file", e.getMessage()).errorWindow();
+            success = false;
+        } catch (DbxException e) {
+            new AlertWindow("Connection Error", "Could not connect to DropBox", e.getMessage()).errorWindow();
+            success = false;
+        } catch (DatabaseException e) {
+            e.show();
+            success = false;
+        }
+        if (success) {
+            new AlertWindow("Success", "Upload successful").informationWindow();
         }
     }
+
 
     /**
      * On download project button pressed

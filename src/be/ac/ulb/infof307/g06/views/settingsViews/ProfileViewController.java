@@ -74,7 +74,6 @@ public class ProfileViewController {
             }
         } else if (!email.isBlank()) {
             if (listener.saveEmail(email)) {
-                System.out.println("Hey");
                 resetFIeld(emailField, email);
             }
         } else if (!newPassword.isBlank()) {

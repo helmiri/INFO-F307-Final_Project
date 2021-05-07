@@ -33,7 +33,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private DropBoxAPI dbxClient;
     private GoogleDriveAPI gDriveClient;
     private boolean isDBox;
-    private List<Metadata> dboxFiles;
+    private List<Metadata> dropBoxFiles;
     private List<com.google.api.services.drive.model.File> gDriveFiles;
 
     public CloudServiceController(ProjectController projectController, UserDB userDB) {
@@ -89,7 +89,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             } else if (dbxClient == null) {
                 dbxClient = new DropBoxAPI(credential.getAccessToken(), credential.getAppKey());
             }
-            dboxFiles = dbxClient.getFiles();
+            dropBoxFiles = dbxClient.getFiles();
         } catch (DbxException e) {
             new AlertWindow("Credential error", e.getMessage()).errorWindow();
         } catch (SQLException e) {
@@ -159,6 +159,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             for (com.google.api.services.drive.model.File file : gDriveFiles) {
                 if (file.getName().equals(cloudPath)) {
                     files.add(file);
+                    break;
                 }
             }
         }
@@ -190,12 +191,12 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
             try {
                 dbxClient.downloadFile(localFilePath, fileMeta.getPathDisplay());
+                projectController.importProject(localFilePath);
             } catch (IOException | DbxException | NoSuchAlgorithmException e) {
                 new AlertWindow("Error", "An error occurred: " + e.getMessage());
             }
-            projectController.importProject(localFilePath);
         }
-        dboxFiles = null;
+        dropBoxFiles = null;
     }
 
     /**
@@ -207,7 +208,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private List<Metadata> getDropBoxFiles(List<String> cloudPaths) {
         List<Metadata> fileMetas = new ArrayList<>();
         for (String cloudPath : cloudPaths) {
-            for (Metadata metadata : dboxFiles) {
+            for (Metadata metadata : dropBoxFiles) {
                 if (metadata.getPathDisplay().equals(cloudPath)) {
                     fileMetas.add(metadata);
                     break;
@@ -255,10 +256,10 @@ public class CloudServiceController implements CloudSelectionViewController.View
             controller.setListener(this);
             List<String> files;
             if (isDBox) {
-                if (dboxFiles == null) {
+                if (dropBoxFiles == null) {
                     return;
                 }
-                files = dBoxToStrings(dboxFiles);
+                files = dBoxToStrings(dropBoxFiles);
             } else {
                 if (gDriveFiles == null) {
                     return;
@@ -288,12 +289,12 @@ public class CloudServiceController implements CloudSelectionViewController.View
     /**
      * Extract the paths of the files from the DropBox metadata
      *
-     * @param dboxFiles The metadata of the files
+     * @param dropBoxFiles The metadata of the files
      * @return A list containing the paths of the files
      */
-    private List<String> dBoxToStrings(List<Metadata> dboxFiles) {
+    private List<String> dBoxToStrings(List<Metadata> dropBoxFiles) {
         List<String> res = new ArrayList<>();
-        for (Metadata entry : dboxFiles) {
+        for (Metadata entry : dropBoxFiles) {
             res.add(entry.getPathDisplay());
         }
         return res;
@@ -324,7 +325,6 @@ public class CloudServiceController implements CloudSelectionViewController.View
      *
      * @param fileName      The file name of the file to be stored in the cloud
      * @param localFilePath The path to the file to be uploaded
-     * @return true on success, false otherwise
      */
     public void uploadProject(String fileName, String localFilePath) throws IOException, DbxException {
         if (isDBox) {

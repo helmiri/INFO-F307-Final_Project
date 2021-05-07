@@ -40,12 +40,11 @@ public class ProfileController extends Controller implements ProfileViewControll
      */
     @Override
     public boolean saveFirstName(String field) {
-        if (!validateTextField(field, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")) {
+        if (validateTextField(field, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")) {
             return false;
         }
         user.setFirstName(field);
-        if (syncSettingsFailed()) return false;
-        return true;
+        return !syncSettingsFailed();
     }
 
     /**
@@ -56,12 +55,11 @@ public class ProfileController extends Controller implements ProfileViewControll
      */
     @Override
     public boolean saveLastName(String field) {
-        if (!validateTextField(field, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")) {
+        if (validateTextField(field, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")) {
             return false;
         }
         user.setLastName(field);
-        if (syncSettingsFailed()) return false;
-        return true;
+        return !syncSettingsFailed();
     }
 
 
@@ -70,16 +68,16 @@ public class ProfileController extends Controller implements ProfileViewControll
      *
      * @param field   TextField
      * @param pattern String
-     * @return true on success, false otherwise
+     * @return true on fail, false on success
      */
     public boolean validateTextField(String field, String pattern) {
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(field);
         if (!m.matches()) {
             showWarning();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -90,11 +88,11 @@ public class ProfileController extends Controller implements ProfileViewControll
      */
     @Override
     public boolean saveEmail(String field) {
-        if (!validateTextField(field, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+        if (validateTextField(field, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
             return false;
         }
         user.setEmail(field);
-        if (syncSettingsFailed()) return false;
+        syncSettingsFailed();
         return false;
     }
 
@@ -116,7 +114,7 @@ public class ProfileController extends Controller implements ProfileViewControll
      */
     @Override
     public void savePassword(String newPassword, String confirmationPassword) {
-        if (!validateTextField(newPassword, "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})")) {
+        if (validateTextField(newPassword, "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#_$%!]).{6,16})")) {
             return;
         }
         if (newPassword.equals(confirmationPassword)) {
