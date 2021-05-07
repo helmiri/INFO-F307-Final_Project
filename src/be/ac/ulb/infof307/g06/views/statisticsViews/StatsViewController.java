@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g06.views.statisticsViews;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -112,7 +111,7 @@ public class StatsViewController{
             projectsArray = listener.getProjects();
             listener.setStats(projectsArray, root);
         } catch (DatabaseException e) {
-            new AlertWindow("Error", "An error has occurred with the database: " + e).errorWindow();
+            e.show();
         }
         isOverallView=false;
         overallViewBtn.setDisable(false);
@@ -189,8 +188,8 @@ public class StatsViewController{
             }
             projectsChart.setData(datas);
         }
-        catch(DatabaseException e){
-            new AlertWindow("Error", "An error has occurred with the database: "+e).errorWindow();
+        catch(DatabaseException e) {
+            e.show();
         }
     }
 
@@ -215,8 +214,8 @@ public class StatsViewController{
             }
             tasksChart.getData().add(series);
         }
-        catch(DatabaseException e){
-            new AlertWindow("Error", "An error has occurred with the database while loading the bar chart: "+e).errorWindow();
+        catch(DatabaseException e) {
+            e.show();
         }
     }
 
@@ -306,9 +305,17 @@ public class StatsViewController{
         File selectedDirectory = directoryChooser.showDialog(new Stage());
         if (selectedDirectory != null) {
             if (event.getSource() == exportJSONBtn && !isOverallView) {
-                if (fileName.equals("")) { listener.exportStatsAsJson("\\Statistics.json",selectedDirectory.getAbsolutePath(), root); }
-                else { listener.exportStatsAsJson("\\" + fileName + ".json",selectedDirectory.getAbsolutePath(), root); }
-              }
+                try {
+                    if (fileName.equals("")) {
+
+                        listener.exportStatsAsJson("\\Statistics.json", selectedDirectory.getAbsolutePath(), root);
+                    } else {
+                        listener.exportStatsAsJson("\\" + fileName + ".json", selectedDirectory.getAbsolutePath(), root);
+                    }
+                } catch (DatabaseException e) {
+                    // do nothing
+                }
+            }
             else if (event.getSource() == exportCSVBtn && !isOverallView) {
                 if (fileName.equals("")) { listener.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
                 else { listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
@@ -349,7 +356,7 @@ public class StatsViewController{
 
         void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
 
-        void exportStatsAsJson(String fileName, String path, TreeItem<Project> root);
+        void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) throws DatabaseException;
 
         void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root);
 

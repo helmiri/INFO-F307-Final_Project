@@ -3,6 +3,7 @@ package be.ac.ulb.infof307.g06.models;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.layout.Region;
 
 import java.util.Optional;
 
@@ -19,16 +20,22 @@ public class AlertWindow {
         headerText = null;
     }
 
+    public AlertWindow(String title, String message, String header) {
+        this(title, message);
+        headerText = header;
+    }
+
     public void setAttributes() {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(message);
+        resize();
         dialogPane = alert.getDialogPane();
     }
 
-    public void resize(int height, int width) {
-        dialogPane.setMinWidth(width);
-        dialogPane.setMaxHeight(height);
+    public void resize() {
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
     }
 
     public void informationWindow() {
