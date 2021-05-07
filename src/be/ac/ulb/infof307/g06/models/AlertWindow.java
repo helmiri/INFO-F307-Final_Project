@@ -21,8 +21,8 @@ public class AlertWindow {
     }
 
     public AlertWindow(String title, String message, String header) {
-        this(title, message);
-        headerText = header;
+        this(title, header);
+        headerText = message;
     }
 
     public void setAttributes() {

@@ -423,7 +423,9 @@ public class ProjectsViewController {
         displayTask();
         displayCollaborators();
         collabComboBox.getItems().setAll(listener.getCollaborators(project));
-        projectTags.setItems(tagsName);
+        if (!tagsName.isEmpty()) {
+            projectTags.setItems(tagsName);
+        }
     }
 
     /**
