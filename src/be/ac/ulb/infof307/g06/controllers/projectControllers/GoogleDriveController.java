@@ -44,11 +44,21 @@ public class GoogleDriveController {
         return downloadedFilePaths;
     }
 
+    /**
+     * Checks whether the file exists
+     *
+     * @param localPath ath to local file
+     * @param fileMeta  Metadata of the file to be downloaded
+     * @return The path to the new file if it does not exist, null otherwise
+     * @throws IOException On file access error
+     */
     private String getPathIfNotExists(String localPath, File fileMeta) throws IOException {
         String localFilePath = localPath + "/" + fileMeta.getName();
         java.io.File localFile = new java.io.File(localFilePath);
-        if (isFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
-            return null;
+        if (new java.io.File(localFilePath).exists()) {
+            if (isFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
+                return null;
+            }
         }
         return localFilePath;
     }

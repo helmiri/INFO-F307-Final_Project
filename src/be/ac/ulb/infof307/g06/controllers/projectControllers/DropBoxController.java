@@ -7,6 +7,7 @@ import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -56,8 +57,10 @@ public class DropBoxController {
      */
     private String getPathIfNotExists(String localPath, Metadata fileMeta) {
         String downloadedFile = localPath + "/" + fileMeta.getName();
-        if (isFileIdentical(downloadedFile, (FileMetadata) fileMeta)) {
-            return null;
+        if (new File(downloadedFile).exists()) {
+            if (isFileIdentical(downloadedFile, (FileMetadata) fileMeta)) {
+                return null;
+            }
         }
         return downloadedFile;
     }
