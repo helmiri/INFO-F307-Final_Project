@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.views.statisticsViews;
 
-import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
 import javafx.collections.FXCollections;
@@ -18,7 +17,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.util.List;
 
@@ -85,7 +83,6 @@ public class StatsViewController{
     @FXML
     private BarChart<String, Integer> tasksChart;
     private Project selectedProject;
-    private Task selectedTask;
     private boolean isOverallView=true;
     private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
@@ -108,16 +105,12 @@ public class StatsViewController{
      */
     @FXML
     public void initTables(){
-        try {
-            List<Integer> projectsArray;
-            tasksColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-            projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
-            projectsTreeView.setRoot(root);
-            projectsArray = listener.getProjects();
-            listener.setProjectsTable(projectsArray, root);
-        } catch (DatabaseException e) {
-            e.show();
-        }
+        List<Integer> projectsArray;
+        tasksColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
+        projectsTreeView.setRoot(root);
+        projectsArray = listener.getProjects();
+        listener.setProjectsTable(projectsArray, root);
         isOverallView=false;
         overallViewBtn.setDisable(false);
         projectViewBtn.setDisable(true);
@@ -141,21 +134,20 @@ public class StatsViewController{
      * Initializes the pie chart that shows projects by their time.
      */
     public void pieChartInitializer(){
-        try{
-            List<Integer> projects= listener.getProjects();
-            ObservableList<PieChart.Data> datas= FXCollections.observableArrayList();
-            for(int i=0;i<projects.size();i++){
-                projectsChart.setPrefWidth(513+(10*i));
-                projectsChart.setPrefHeight(322+(4*i));
-                pieChartAnchorPane.setPrefWidth(513+(10*i));
-                pieChartAnchorPane.setPrefHeight(322+(4*i));
-                Project project =listener.getProjectsFromID(projects.get(i));
-                datas.add(i,new PieChart.Data(project.getTitle(),project.getDuration()));
+        List<Integer> projects= listener.getProjects();
+        if (projects != null) {
+            ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
+            for (int i = 0; i < projects.size(); i++) {
+                projectsChart.setPrefWidth(513 + (10 * i));
+                projectsChart.setPrefHeight(322 + (4 * i));
+                pieChartAnchorPane.setPrefWidth(513 + (10 * i));
+                pieChartAnchorPane.setPrefHeight(322 + (4 * i));
+                Project project = listener.getProjectsFromID(projects.get(i));
+                if(project !=null) {
+                    datas.add(i, new PieChart.Data(project.getTitle(), project.getDuration()));
+                }
             }
             projectsChart.setData(datas);
-        }
-        catch(DatabaseException e) {
-            e.show();
         }
     }
 
@@ -164,25 +156,25 @@ public class StatsViewController{
      */
     public void barChartInitializer(){
         XYChart.Series<String,Integer> series = new XYChart.Series<>();
-        try{
-            List<Integer> projects = listener.getProjects();
-            int numberOfProjects=0;
+
+        List<Integer> projects = listener.getProjects();
+        if (projects != null) {
+            int numberOfProjects = 0;
             for (Integer integer : projects) {
                 Project project = listener.getProjectsFromID(integer);
                 Integer tasksCount = listener.countTasksOfAProject(project.getId());
-                if (tasksCount != 0) {
+                if(project != null && tasksCount != 0) {
                     numberOfProjects++;
                     tasksChart.setPrefWidth(513 + (numberOfProjects * 30));
                     barChartAnchorPane.setPrefWidth(513 + (numberOfProjects * 30));
                     barChartPane.setPrefWidth(513 + (numberOfProjects * 30));
                     series.getData().add(new XYChart.Data<>(project.getTitle(), tasksCount));
+
                 }
             }
             tasksChart.getData().add(series);
         }
-        catch(DatabaseException e) {
-            e.show();
-        }
+
     }
 
     /**
@@ -218,8 +210,11 @@ public class StatsViewController{
         displayProjectStats();
     }
 
+    /**
+     * Displays the end date of a task when we click on it.
+     */
     public void onTaskSelected(){
-        selectedTask = getSelectedTask();
+        Task selectedTask = getSelectedTask();
         if(selectedTask == null){
             taskEndDateLabel.setText("?/?/?");
         }
@@ -241,6 +236,11 @@ public class StatsViewController{
         return null;
     }
 
+    /**
+     * Gets the selected task in the table.
+     *
+     * @return Task, the selected task in the task table view.
+     */
     public Task getSelectedTask(){
         if(tasksTableView.getSelectionModel().getSelectedItem() != null){
             return tasksTableView.getSelectionModel().getSelectedItem();
@@ -285,33 +285,24 @@ public class StatsViewController{
      */
     public void exports(ActionEvent event) {
         String fileName = fileNameTextField.getText();
+        if(fileName.equals("")){
+            fileName="Statistics";
+        }
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("src"));
         File selectedDirectory = directoryChooser.showDialog(new Stage());
         if (selectedDirectory != null) {
             if (event.getSource() == exportJSONBtn && !isOverallView) {
-                try {
-                    if (fileName.equals("")) {
-
-                        listener.exportStatsAsJson("\\Statistics.json", selectedDirectory.getAbsolutePath(), root);
-                    } else {
-                        listener.exportStatsAsJson("\\" + fileName + ".json", selectedDirectory.getAbsolutePath(), root);
-                    }
-                } catch (DatabaseException e) {
-                    // do nothing
-                }
+                listener.exportStatsAsJson("\\" + fileName + ".json", selectedDirectory.getAbsolutePath(), root);
             }
             else if (event.getSource() == exportCSVBtn && !isOverallView) {
-                if (fileName.equals("")) { listener.exportStatsAsCSV("\\Statistics.csv", selectedDirectory.getAbsolutePath(), root); }
-                else { listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root); }
+                listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root);
             }
             else if(event.getSource() == exportJSONBtn && isOverallView){
-                if (fileName.equals("")) { listener.exportAsJSONOverallView("\\Statistics.json",selectedDirectory.getAbsolutePath()); }
-                else { listener.exportAsJSONOverallView("\\" + fileName + ".json",selectedDirectory.getAbsolutePath()); }
+                 listener.exportAsJSONOverallView("\\" + fileName + ".json",selectedDirectory.getAbsolutePath());
             }
             else if (event.getSource() == exportCSVBtn && isOverallView){
-                if (fileName.equals("")) { listener.exportAsCSVOverallView("\\Statistics.csv", selectedDirectory.getAbsolutePath()); }
-                else { listener.exportAsCSVOverallView("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath()); }
+                 listener.exportAsCSVOverallView("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath());
             }
         }
     }
@@ -333,17 +324,17 @@ public class StatsViewController{
 
         void onBackButtonClicked();
 
-        List<Integer> getProjects() throws DatabaseException;
+        List<Integer> getProjects() ;
 
-        Integer countTasksOfAProject(int projectId) throws DatabaseException;
+        Integer countTasksOfAProject(int projectId) ;
 
-        Project getProjectsFromID(int id) throws DatabaseException;
+        Project getProjectsFromID(int id) ;
 
-        void setProjectsTable(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
+        void setProjectsTable(List<Integer> projects,TreeItem<Project> root) ;
 
         ObservableList<Task> setTasksTable(Project selectedProject);
 
-        void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) throws DatabaseException;
+        void exportStatsAsJson(String fileName, String path, TreeItem<Project> root);
 
         void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root);
 
