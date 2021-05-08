@@ -54,16 +54,16 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public void show() {
         try {
-            calendar_db = new CalendarDB("database.db");
+            calendar_db = new CalendarDB("Database.db");
             project_db.createTag("tag1", "#ff55ff");
         } catch (SQLException | ClassNotFoundException e) {
-            new AlertWindow("Error", " " + e).showErrorWindow();
+            new DatabaseException(e).show();
         }
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsView.fxml"));
         try {
             scene = new Scene(loader.load());
         } catch (IOException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+            new AlertWindow("Error", "Could not load the window", e.getMessage()).showErrorWindow();
         }
         viewController = loader.getController();
         ioController.setViewController(viewController);
@@ -96,7 +96,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             addStage.show();
             controller.init(listener, addStage);
         } catch (IOException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+            new AlertWindow("Error", "Could not load the window", e.getMessage()).showErrorWindow();
         }
     }
 
@@ -657,7 +657,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         cloudServiceController.showSelectionStage(false);
-        boolean success = true;
         try {
             for (Project project : projects) {
                 // Export the project
@@ -669,18 +668,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 // Delete temporary file
                 new File(localFilePath + fileName).delete();
             }
+            new AlertWindow("Success", "Upload successful").showInformationWindow();
         } catch (IOException e) {
             new AlertWindow("Error", "An error occurred while exporting the project file", e.getMessage()).showErrorWindow();
-            success = false;
         } catch (DbxException e) {
             new AlertWindow("Connection Error", "Could not connect to DropBox", e.getMessage()).showErrorWindow();
-            success = false;
         } catch (DatabaseException e) {
             e.show();
-            success = false;
-        }
-        if (success) {
-            new AlertWindow("Success", "Upload successful").showInformationWindow();
         }
     }
 
