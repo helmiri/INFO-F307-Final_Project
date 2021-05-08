@@ -1,4 +1,3 @@
-
 package be.ac.ulb.infof307.g06.models.database;
 
 import be.ac.ulb.infof307.g06.models.Hash;
@@ -18,12 +17,18 @@ public class UserDB extends Database {
 
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
-        this.hash = new Hash();
+        hash = new Hash();
     }
 
+    /**
+     * Checks whether the current user has administrator privileges
+     *
+     * @return true if it's the case, false otherwise
+     * @throws SQLException On database access error
+     */
     public boolean isAdmin() throws SQLException {
-        ResultSet res = sqlQuery("SELECT id FROM admin");
-        boolean check = res.getInt("id") == currentUser.getId();
+        ResultSet res = sqlQuery("SELECT id FROM admin where id='" + currentUser.getId() + "'");
+        boolean check = res.next();
         res.close();
         return check;
     }
@@ -39,10 +44,20 @@ public class UserDB extends Database {
         sqlUpdate("INSERT INTO admin(id, diskLimit) VALUES(" + 1 + "," + diskLimit + ")");
     }
 
+    /**
+     * Sets the disk usage limit value
+     *
+     * @param value The limit value
+     * @throws SQLException On database access error
+     */
     public void setLimit(long value) throws SQLException {
+        //noinspection SqlWithoutWhere
         sqlUpdate("UPDATE admin SET diskLimit='" + value + "'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void createTables() throws SQLException {
         sqlUpdate("CREATE TABLE IF NOT EXISTS users(id Integer, fName varchar(20), lName varchar(20), userName varchar(20)," +
@@ -51,12 +66,36 @@ public class UserDB extends Database {
         sqlUpdate("CREATE TABLE IF NOT EXISTS DropBoxCredentials(id integer, accessToken varchar(256), expiration long, refreshToken varchar(256), appKey varchar(256), appSecret varchar(256))");
     }
 
+    /**
+     * Inserts the user's dropbox credentials into the database
+     *
+     * @param credential The credential object
+     * @throws SQLException On database access error
+     */
     public void addDropBoxCredentials(DbxCredential credential) throws SQLException {
         sqlUpdate("INSERT INTO DropBoxCredentials VALUES ('" + currentUser.getId() + "','"
                 + credential.getAccessToken() + "','" + credential.getExpiresAt() + "','" + credential.getRefreshToken() + "','"
                 + credential.getAppKey() + "','" + credential.getAppSecret() + "');");
     }
 
+    /**
+     * Updates the user's dropbox credentials
+     *
+     * @param credential The credential object
+     * @throws SQLException on database access error
+     */
+    public void updateDropBoxCredentials(DbxCredential credential) throws SQLException {
+        sqlUpdate("UPDATE DropBoxCredentials set accessToken='" + credential.getAccessToken() + "', refreshToken='"
+                + credential.getRefreshToken() + "', appKey='" + credential.getAppKey() + "', expiration='"
+                + credential.getExpiresAt() + "', appSecret='" + credential.getAppSecret() + "' where id='" + currentUser.getId() + "'");
+    }
+
+    /**
+     * Retrieves the user's dropbox credentials
+     *
+     * @return The credentials object
+     * @throws SQLException On database access error
+     */
     public DbxCredential getDropBoxCredentials() throws SQLException {
         ResultSet res;
         res = sqlQuery("SELECT accessToken, expiration, refreshToken, appKey, appSecret from DropBoxCredentials where id='" + currentUser.getId() + "'");
@@ -69,6 +108,12 @@ public class UserDB extends Database {
         return credential;
     }
 
+    /**
+     * Checks whether the app has been booted for the first time
+     *
+     * @return true if the database is empty, false otherwise
+     * @throws SQLException On database access error
+     */
     public boolean isFirstBoot() throws SQLException {
         ResultSet res = sqlQuery("SELECT * FROM users;");
         boolean empty = res.isClosed();
@@ -107,15 +152,21 @@ public class UserDB extends Database {
         return res;
     }
 
-    private void setCurrentUser(String fName, String lName, String userName, String email, int res) {
+    /**
+     * Sets the current user for query purposes
+     *
+     * @param fName    The user's first name
+     * @param lName    The user's last name
+     * @param userName The user's username
+     * @param email    The user's email
+     * @param id       The ID of the user
+     * @throws SQLException on error accessing the database
+     */
+    private void setCurrentUser(String fName, String lName, String userName, String email, int id) throws SQLException {
         Database.currentUser = new User(userName, fName, lName, email, false);
-        Database.currentUser.setId(res);
+        Database.currentUser.setId(id);
         boolean isAdmin;
-        try {
-            isAdmin = isAdmin();
-        } catch (SQLException throwables) {
-            isAdmin = true;
-        }
+        isAdmin = isAdmin();
         Database.currentUser.setAdmin(isAdmin);
     }
 
@@ -159,7 +210,13 @@ public class UserDB extends Database {
         return key;
     }
 
-
+    /**
+     * Check whether the user has administrator privileges
+     *
+     * @param id The id of the user
+     * @return True if it's the case, false otherwise
+     * @throws SQLException On database access error
+     */
     public boolean isAdmin(int id) throws SQLException {
         ResultSet res = sqlQuery("SELECT id from admin where id='" + id + "'");
 
@@ -171,6 +228,14 @@ public class UserDB extends Database {
         return bool;
     }
 
+    /**
+     * Checks whether the username and password match those in the database
+     *
+     * @param password The password
+     * @param res      ResultSet object containing the username and password
+     * @return The ID of the user on success, null if the user is already connected, 0 if the credentials aren't valid
+     * @throws SQLException On database error
+     */
     private Integer validate(String password, ResultSet res) throws SQLException {
         if (res.getBoolean("status")) {
             return null;
@@ -188,7 +253,7 @@ public class UserDB extends Database {
      * Queries the database for the user's information
      *
      * @param id The user's id
-     * @return The user's informatione the key is the field's name containing fName, lName, email, uName
+     * @return The user's information the key is the field's name containing fName, lName, email, uName
      * @throws SQLException If a database access error occurs
      */
 
@@ -212,6 +277,13 @@ public class UserDB extends Database {
         return queryUserInfo(usernameField);
     }
 
+    /**
+     * Retrieves the user's information
+     *
+     * @param idField The user's ID
+     * @return A User object with the user's information
+     * @throws SQLException On error accessing the database
+     */
     private User queryUserInfo(String idField) throws SQLException {
         ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email " + idField);
         if (usrInfo.isClosed()) {
@@ -236,6 +308,14 @@ public class UserDB extends Database {
         sqlUpdate("UPDATE users SET status=false WHERE id='" + currentUser.getId() + "'");
     }
 
+    /**
+     * Adds an invitation to the database
+     *
+     * @param projectId  The ID of the project the user is invited to participate on
+     * @param senderId   The sender's ID
+     * @param receiverId The destination's ID
+     * @throws SQLException On error accessing the database
+     */
     public void sendInvitation(int projectId, int senderId, int receiverId) throws SQLException {
         ResultSet rs = null;
         int id;
@@ -251,6 +331,12 @@ public class UserDB extends Database {
         rs.close();
     }
 
+    /**
+     * Removes an invitation
+     *
+     * @param inviteID The invitation ID
+     * @throws SQLException on error accessing the database
+     */
     public void removeInvitation(int inviteID) throws SQLException {
         sqlUpdate("DELETE FROM Invitations WHERE id = '" + inviteID + "';");
     }
@@ -343,6 +429,13 @@ public class UserDB extends Database {
         return limit;
     }
 
+    /**
+     * Updates the user's information
+     *
+     * @param newUser     The new user information. If null, it won't be updated
+     * @param newPassword The new password. If null, the password won't be updated
+     * @throws SQLException On database access error
+     */
     public void userSettingsSync(User newUser, String newPassword) throws SQLException {
         if (newUser != null) {
             currentUser = newUser;
@@ -352,4 +445,5 @@ public class UserDB extends Database {
         String hashPassword = hash.hashPassword(newPassword, currentUser.getUserName()); // change salt
         sqlUpdate("UPDATE users set password='" + hashPassword + "' where id='" + currentUser.getId() + "'");
     }
+
 }

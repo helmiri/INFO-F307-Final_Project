@@ -149,9 +149,14 @@ public class StorageController extends Controller implements StorageViewControll
         try {
             DbxCredential credential = user_db.getDropBoxCredentials();
             if (credential == null) {
+                // Insert if no credentials found
                 credential = authorization.getAuthorization(code);
+                user_db.addDropBoxCredentials(credential);
+            } else {
+                // Update existing credentials if found
+                credential = authorization.getAuthorization(code);
+                user_db.updateDropBoxCredentials(credential);
             }
-            user_db.addDropBoxCredentials(credential);
             new AlertWindow("Credentials saved", "Settings saved").showInformationWindow();
         } catch (DbxException e) {
             new AlertWindow("Error", "Could not complete the request", e.getMessage());
