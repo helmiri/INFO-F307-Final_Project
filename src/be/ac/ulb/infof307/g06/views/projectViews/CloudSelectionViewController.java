@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 public class CloudSelectionViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
+    private AnchorPane layout;
+    @FXML
     private Button GDriveButton;
     @FXML
     private CloudSelectionViewController.ViewListener listener;
@@ -19,12 +21,10 @@ public class CloudSelectionViewController {
 
     /**
      * Show the cloud selection stage.
-     *
-     * @param pane AnchorPane, the pane for the cloud selection.
      */
-    public void show(AnchorPane pane) {
+    public void show() {
         stage = new Stage();
-        stage.setScene(new Scene(pane));
+        stage.setScene(new Scene(layout));
         stage.setTitle("Cloud service selection");
         stage.setOnCloseRequest(Event::consume);
         stage.showAndWait();
