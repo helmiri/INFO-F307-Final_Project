@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.views.statisticsViews;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -22,7 +24,6 @@ import java.util.List;
 
 public class StatsViewController{
     //-------------- ATTRIBUTES ----------------
-
     @FXML
     private Tooltip collaboratorsToolTip;
     @FXML
@@ -60,7 +61,7 @@ public class StatsViewController{
     @FXML
     private Label estimatedDate;
     @FXML
-    private Label finishDate;
+    private Label taskEndDateLabel;
     @FXML
     private Text msgExportText;
     @FXML
@@ -76,10 +77,15 @@ public class StatsViewController{
     @FXML
     private TreeTableView<Project> projectsTreeView;
     @FXML
+    private TableView<Task> tasksTableView;
+    @FXML
+    private TableColumn<Task, String> tasksColumn;
+    @FXML
     private PieChart projectsChart;
     @FXML
     private BarChart<String, Integer> tasksChart;
     private Project selectedProject;
+    private Task selectedTask;
     private boolean isOverallView=true;
     private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
@@ -94,21 +100,21 @@ public class StatsViewController{
         if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
         else if (event.getSource() == overallViewBtn     ) { listener.show()               ;}
         else if (event.getSource() == projectViewBtn     ) { listener.showIndividualStats()   ;}
-        else if (event.getSource() == exportJSONBtn
-                || event.getSource() == exportCSVBtn     ) { exports(event); }
+        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn     ) { exports(event); }
     }
 
     /**
      * Initializes the project view with the tree table with values and sets stats on the screen.
      */
     @FXML
-    public void initTreeTableView(){
+    public void initTables(){
         try {
             List<Integer> projectsArray;
+            tasksColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
             projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
             projectsTreeView.setRoot(root);
             projectsArray = listener.getProjects();
-            listener.setStats(projectsArray, root);
+            listener.setProjectsTable(projectsArray, root);
         } catch (DatabaseException e) {
             e.show();
         }
@@ -193,10 +199,11 @@ public class StatsViewController{
      */
     public void displayProjectStats() {
         List<Integer> infos = listener.countIndividualProjectStats(selectedProject);
-        Project selectedProject = getSelectedProject();
         displayBasicStats(infos);
+        tasksTableView.setItems(listener.setTasksTable(selectedProject));
         startDate.setText(listener.dateToString(selectedProject.getStartDate()));
         estimatedDate.setText(listener.dateToString(selectedProject.getEndDate()));
+        taskEndDateLabel.setText("?/?/?");
     }
 
     /**
@@ -211,18 +218,16 @@ public class StatsViewController{
         displayProjectStats();
     }
 
-    /**
-     * Resets the texts in labels in statistics.
-     */
-    public void resetTextLabel(){
-        projectsNumberLabel.setText("0");
-        tasksNumberLabel.setText("0");
-        collaboratorsNumberLabel.setText("0");
-        startDate.setText("?/?/?");
-        estimatedDate.setText("?/?/?");
-        finishDate.setText("?/?/?");
-
+    public void onTaskSelected(){
+        selectedTask = getSelectedTask();
+        if(selectedTask == null){
+            taskEndDateLabel.setText("?/?/?");
+        }
+        else{
+            taskEndDateLabel.setText(listener.dateToString(selectedTask.getEndDate()));
+        }
     }
+
 
     /**
      * Gets the selected project in the tree table.
@@ -234,6 +239,26 @@ public class StatsViewController{
             return projectsTreeView.getSelectionModel().getSelectedItem().getValue();
         }
         return null;
+    }
+
+    public Task getSelectedTask(){
+        if(tasksTableView.getSelectionModel().getSelectedItem() != null){
+            return tasksTableView.getSelectionModel().getSelectedItem();
+        }
+        return null;
+    }
+
+    /**
+     * Resets the texts in labels in statistics.
+     */
+    public void resetTextLabel(){
+        projectsNumberLabel.setText("0");
+        tasksNumberLabel.setText("0");
+        collaboratorsNumberLabel.setText("0");
+        startDate.setText("?/?/?");
+        estimatedDate.setText("?/?/?");
+        taskEndDateLabel.setText("?/?/?");
+
     }
 
     /**
@@ -314,7 +339,9 @@ public class StatsViewController{
 
         Project getProjectsFromID(int id) throws DatabaseException;
 
-        void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
+        void setProjectsTable(List<Integer> projects,TreeItem<Project> root) throws DatabaseException;
+
+        ObservableList<Task> setTasksTable(Project selectedProject);
 
         void exportStatsAsJson(String fileName, String path, TreeItem<Project> root) throws DatabaseException;
 

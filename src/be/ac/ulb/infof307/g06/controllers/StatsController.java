@@ -3,9 +3,12 @@ package be.ac.ulb.infof307.g06.controllers;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
+import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
@@ -38,7 +41,7 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public void show() {
         String fxmlName = "OverallStatsView.fxml";
-        toShow(fxmlName);
+        load(fxmlName);
         statsView.initOverallStats();
     }
 
@@ -48,8 +51,8 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public void showIndividualStats() {
         String fxmlName = "IndividualStatsView.fxml";
-        toShow(fxmlName);
-        statsView.initTreeTableView();
+        load(fxmlName);
+        statsView.initTables();
     }
 
     /**
@@ -57,7 +60,7 @@ public class StatsController extends Controller implements StatsViewController.V
      *
      * @param fxmlFilename name of the xml file to be loaded
      */
-    private void toShow(String fxmlFilename) {
+    private void load(String fxmlFilename) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(StatsViewController.class.getResource(fxmlFilename));
         try {
@@ -124,7 +127,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @throws DatabaseException when a database error occurs
      */
     @Override
-    public void setStats(List<Integer> projects,TreeItem<Project> root) throws DatabaseException {
+    public void setProjectsTable(List<Integer> projects,TreeItem<Project> root) throws DatabaseException {
         try{
             Map<Integer, TreeItem<Project>> statsTreeMap = new HashMap<>();
             for(Integer project : projects){
@@ -141,6 +144,23 @@ public class StatsController extends Controller implements StatsViewController.V
         }catch(SQLException e){
             throw new DatabaseException(e);
         }
+    }
+
+    /**
+     * Displays tasks of the selected project in the tasks table.
+     *
+     * @param selectedProject Project, the selected project.
+     * @return ObservableList of tasks, that contains tasks of the selected project.
+     */
+    @Override
+    public ObservableList<Task> setTasksTable(Project selectedProject) {
+        try{
+            List<Task> projectTasks = project_db.getTasks(selectedProject.getId());
+            return FXCollections.observableArrayList(projectTasks);
+        }catch(SQLException e){
+
+        }
+        return FXCollections.observableArrayList();
     }
 
     /**
