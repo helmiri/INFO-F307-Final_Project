@@ -14,7 +14,7 @@
          <children>
             <ImageView fitHeight="398.0" fitWidth="790.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@carrouselImage/test3.png" />
+                  <Image url="@../../../resources/screenshots/test3.png" />
                </image>
             </ImageView>
          </children>
@@ -23,7 +23,7 @@
          <children>
             <ImageView fitHeight="451.0" fitWidth="790.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@carrouselImage/test2.png" />
+                  <Image url="@../../../resources/screenshots/test2.png" />
                </image>
             </ImageView>
          </children>
@@ -32,7 +32,7 @@
          <children>
             <ImageView fitHeight="451.0" fitWidth="790.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@carrouselImage/test1.jpg" />
+                  <Image url="@../../../resources/screenshots/test1.jpg" />
                </image>
             </ImageView>
          </children>
