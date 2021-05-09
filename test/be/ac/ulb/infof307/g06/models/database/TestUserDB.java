@@ -6,12 +6,12 @@ import be.ac.ulb.infof307.g06.models.User;
 import com.dropbox.core.oauth.DbxCredential;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,13 +19,13 @@ public class TestUserDB extends TestDatabase {
 
 
     public TestUserDB() throws ClassNotFoundException, SQLException {
-        super();
     }
 
     @Test
-    @DisplayName("Insert")
+    @DisplayName("User Insert")
     public void testAddUser() throws Exception {
         assertEquals(11, userDB.addUser("User1_fName", "User1_lname", "User1_userName", "user1.email.com", "123passwd"));
+        // Manually check that the user has been inserted
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("Select fName from users where fName='User1_fName'");
         assertTrue(res.next());
@@ -34,37 +34,49 @@ public class TestUserDB extends TestDatabase {
         res.close();
     }
 
-    @Test
-    @DisplayName("User Exists")
-    public void testUserExists() throws Exception {
-        assertFalse(userDB.userExists("doesNotExist"));
 
-        Statement state = db.createStatement();
-        ResultSet res;
-        for (int i = 0; i < 10; i++) {
-            res = state.executeQuery("Select userName from users where userName='" + testData.get(i).get("userName") + "'");
-            assertTrue(res.next());
-            assertTrue(userDB.userExists(testData.get(i).get("userName")));
-            res.close();
-        }
-        state.close();
+    @Test
+    @DisplayName("User does not exist")
+    public void testUserDoesNotExist() throws SQLException {
+        assertFalse(userDB.userExists("RandomUserName"));
+        assertFalse(userDB.userExists("User_1userName")); // Malformed username
     }
 
     @Test
-    @DisplayName("Data validation")
-    public void testValidateData() throws SQLException {
-        Statement state = db.createStatement();
-        ResultSet res;
-        for (int i = 0; i < 10; i++) {
-            res = state.executeQuery("SELECT userName FROM users WHERE userName='" + testData.get(i).get("userName") + "'");
-            assertTrue(res.next());
-            res.close();
+    @DisplayName("User Exists")
+    public void testUserExists() throws Exception {
+        for (Map<String, String> item : testData) {
+            assertTrue(userDB.userExists(item.get("userName")));
         }
-        state.close();
-        assertEquals(0, userDB.validateData("DoesNotExist", "password"));
-        assertEquals(0, userDB.validateData("userName", "wrongPasswd"));
+    }
 
-        for (int i = 0; i < 10; i++) {
+    @Test
+    @DisplayName("Wrong password login")
+    public void testWrongPasswordValidation() throws SQLException {
+        for (Map<String, String> item : testData) {
+            assertEquals(0, userDB.validateData(item.get("userName"), "RandomWrongPassword"));
+        }
+    }
+
+    @Test
+    @DisplayName("Wrong username login")
+    public void testWrongUsernameValidation() throws SQLException {
+        for (Map<String, String> item : testData) {
+            assertEquals(0, userDB.validateData("NonExistentUserName", item.get("password")));
+        }
+    }
+
+    @Test
+    @DisplayName("Wrong login credentials")
+    public void testWrongLoginCredentials() throws SQLException {
+        assertEquals(0, userDB.validateData("NonExistentUserName", "RandomWrongPassword"));
+    }
+
+    @Test
+    @DisplayName("Test Login")
+    public void testValidateData() throws SQLException {
+        // validateData should return the ID of the user on successful login (indexed at 1)
+        for (int i = 0; i < testData.size(); i++) {
             assertEquals(i + 1, userDB.validateData(testData.get(i).get("userName"), testData.get(i).get("password")));
         }
     }
@@ -73,8 +85,9 @@ public class TestUserDB extends TestDatabase {
     @DisplayName("Get user info")
     public void testGetUserInfo() throws SQLException {
         // queryUserInfo + getUserInfo test due to queryUserInfo being a private implementation method
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < testData.size(); i++) {
             User usrInfo = userDB.getUserInfo(i + 1);
+            assertEquals(testData.get(i).get("userName"), usrInfo.getUserName());
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
             assertEquals(testData.get(i).get("lName"), usrInfo.getLastName());
             assertEquals(testData.get(i).get("email"), usrInfo.getEmail());
