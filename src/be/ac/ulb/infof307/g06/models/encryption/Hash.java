@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g06.models;
+package be.ac.ulb.infof307.g06.models.encryption;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

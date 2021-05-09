@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.models.database;
 
-import be.ac.ulb.infof307.g06.models.Hash;
 import be.ac.ulb.infof307.g06.models.Invitation;
 import be.ac.ulb.infof307.g06.models.User;
+import be.ac.ulb.infof307.g06.models.encryption.Hash;
 import com.dropbox.core.oauth.DbxCredential;
 
 import java.sql.PreparedStatement;

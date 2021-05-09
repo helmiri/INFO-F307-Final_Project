@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 
-import be.ac.ulb.infof307.g06.models.Hash;
 import be.ac.ulb.infof307.g06.models.User;
+import be.ac.ulb.infof307.g06.models.encryption.Hash;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
