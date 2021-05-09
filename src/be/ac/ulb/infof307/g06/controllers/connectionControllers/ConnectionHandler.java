@@ -5,9 +5,12 @@ import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.models.encryption.EncryptedFile;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class ConnectionHandler implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
@@ -80,6 +83,13 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     public void showMainMenu() {
         stage.setOnCloseRequest(e -> {
             logout();
+            EncryptedFile databaseFile = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", "Database_Decrypted.db");
+            try {
+                databaseFile.encryptFile("Database.db");
+                new File("Database_Decrypted.db").delete();
+            } catch (IOException ioException) {
+                new AlertWindow("Error", "Could not commit the database", ioException.getMessage()).showErrorWindow();
+            }
             Platform.exit();
             System.exit(0);
         });
@@ -105,11 +115,11 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     /**
      * Creates a user in the database.
      *
-     * @param firstName String
-     * @param lastName  String
-     * @param userName  String
-     * @param email     String
-     * @param password  String
+     * @param firstName User's first name
+     * @param lastName  User's last name
+     * @param userName  User's username
+     * @param email     User's email
+     * @param password  User's password
      */
     @Override
     public void createUser(String firstName, String lastName, String userName, String email, String password) {
