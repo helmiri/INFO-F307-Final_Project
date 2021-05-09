@@ -114,6 +114,8 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showHelp() {
+        HelpController controller = new HelpController(user_db, project_db, stage, scene, loader.getController());
+        controller.show();
     }
 
     @Override

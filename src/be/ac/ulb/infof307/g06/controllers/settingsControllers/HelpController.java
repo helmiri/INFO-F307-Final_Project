@@ -18,7 +18,7 @@ public class HelpController extends Controller implements HelpViewController.Vie
         super(user_db, project_db, stage, scene);
         this.helpViewController = helpViewController;
     }
-
+    // TODO : Handle exceptions
     /**
      * Shows help menu
      */

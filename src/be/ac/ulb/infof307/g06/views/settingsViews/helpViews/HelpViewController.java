@@ -1,13 +1,25 @@
 package be.ac.ulb.infof307.g06.views.settingsViews.helpViews;
 
-
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
+import javafx.scene.Node;
+import java.io.IOException;
 
 public class HelpViewController{
     //-------------- ATTRIBUTES ----------------
+// TODO : Changer structure des Controllers ! + EXCEPTIONS
+    @FXML
+    private AnchorPane  pane1;
+
+    @FXML
+    private AnchorPane  pane2;
+
+    @FXML
+    private AnchorPane  pane3;
 
 
     @FXML
@@ -36,21 +48,21 @@ public class HelpViewController{
      * @param event ActionEvent
      */
     @FXML
-    private void helpEvents(ActionEvent event) {
+    private void helpEvents(ActionEvent event) throws IOException {
         if (event.getSource() == projectManagementHelpBtn){
-            System.out.println("Project management button");
+            listener.projectManagementHelp();
         }
         else if (event.getSource() == storageHelpBtn){
-            System.out.println("Storage help button");
+            listener.storageHelp();
         }
         else if (event.getSource() == exportImportHelpBtn){
-            System.out.println("export/import help button");
+            listener.exportImportHelp();
         }
         else if (event.getSource() == calendarHelpBtn){
-            System.out.println("Calendar help Button");
+            listener.calendarHelp();
         }
         else if (event.getSource() == tagsHelpBtn){
-            System.out.println("Tags help button");
+            listener.tagsHelp();
         }
         else if (event.getSource() == profileHelpBtn){
             listener.profileHelp();
@@ -121,6 +133,11 @@ public class HelpViewController{
     }
 
     public interface ViewListener {
-
+        void projectManagementHelp() throws IOException;
+        void storageHelp() throws IOException;
+        void calendarHelp() throws IOException;
+        void exportImportHelp()throws IOException;
+        void tagsHelp() throws IOException;
+        void profileHelp() throws IOException;
     }
 }

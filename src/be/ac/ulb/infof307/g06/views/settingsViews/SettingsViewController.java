@@ -53,9 +53,11 @@ public class SettingsViewController {
         } else if (aboutBtn.equals(source)) {
             swapButtonStyles(aboutBtn);
             setSubPaneScene(listener.getAboutScene());
+            listener.showAbout();
         } else if (helpBtn.equals(source)) {
             swapButtonStyles(helpBtn);
             setSubPaneScene(listener.getHelpScene());
+            listener.showHelp();
         } else if (tagsBtn.equals(source)) {
             swapButtonStyles(tagsBtn);
             setSubPaneScene(listener.getTagsScene());
