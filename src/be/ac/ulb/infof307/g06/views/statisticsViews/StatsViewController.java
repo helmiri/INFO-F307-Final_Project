@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.views.statisticsViews;
 
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
 import javafx.collections.FXCollections;
@@ -292,19 +293,28 @@ public class StatsViewController{
         directoryChooser.setInitialDirectory(new File("src"));
         File selectedDirectory = directoryChooser.showDialog(new Stage());
         if (selectedDirectory != null) {
-            if (event.getSource() == exportJSONBtn && !isOverallView) {
-                listener.exportStatsAsJson("\\" + fileName + ".json", selectedDirectory.getAbsolutePath(), root);
+            String separator = determineOS(selectedDirectory.getAbsolutePath());
+            if (event.getSource() == exportJSONBtn) {
+                listener.exportStatsAsJson(separator + fileName + ".json", selectedDirectory.getAbsolutePath());
             }
-            else if (event.getSource() == exportCSVBtn && !isOverallView) {
-                listener.exportStatsAsCSV("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath(), root);
-            }
-            else if(event.getSource() == exportJSONBtn && isOverallView){
-                 listener.exportAsJSONOverallView("\\" + fileName + ".json",selectedDirectory.getAbsolutePath());
-            }
-            else if (event.getSource() == exportCSVBtn && isOverallView){
-                 listener.exportAsCSVOverallView("\\" + fileName + ".csv", selectedDirectory.getAbsolutePath());
+            else if (event.getSource() == exportCSVBtn) {
+                listener.exportStatsAsCSV(separator + fileName + ".csv", selectedDirectory.getAbsolutePath());
             }
         }
+    }
+
+    /**
+     * Determines the OS for the absolute path thanks to the separator.
+     *
+     * @param absolutePath The absolute path of the directory selected.
+     * @return The separator ("\" or "/") in the path according to the OS.
+     */
+    public String  determineOS(String absolutePath){
+        String separator = "/";
+        if (!absolutePath.contains(separator)){
+            separator = "\\";
+        }
+        return separator;
     }
 
     //--------------- LISTENER ----------------
@@ -334,17 +344,13 @@ public class StatsViewController{
 
         ObservableList<Task> setTasksTable(Project selectedProject);
 
-        void exportStatsAsJson(String fileName, String path, TreeItem<Project> root);
+        void exportStatsAsJson(String fileName, String path);
 
-        void exportStatsAsCSV(String fileName, String path, TreeItem<Project> root);
+        void exportStatsAsCSV(String fileName, String path);
 
         List<Integer> countOverallStats() ;
 
         List<Integer> countIndividualProjectStats(Project selectedProject);
-
-        void exportAsCSVOverallView(String fileName, String path);
-
-        void exportAsJSONOverallView(String fileName, String path);
 
         String dateToString(Long date);
 
