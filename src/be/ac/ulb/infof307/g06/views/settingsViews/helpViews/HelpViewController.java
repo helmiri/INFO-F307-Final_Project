@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views.settingsViews.helpViews;
 
 
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -52,7 +53,59 @@ public class HelpViewController{
             System.out.println("Tags help button");
         }
         else if (event.getSource() == profileHelpBtn){
-            System.out.println("profile help button");
+            listener.profileHelp();
+        }
+    }
+
+    /**
+     * Animates the transition.
+     *
+     * @param duration double
+     * @param node node
+     * @param width double
+     */
+    public void translateAnimation(double duration, Node node, double width){
+        TranslateTransition translateTransition= new TranslateTransition(Duration.seconds(duration), node);
+        translateTransition.setByX(width);
+        translateTransition.play();
+    }
+    int show = 0;
+
+    /**
+     * Goes to the next image.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void next(ActionEvent event){
+        if (show == 0){
+            translateAnimation(0.1, pane1, -790);
+            show ++;
+
+        }
+        else if (show == 1){
+            translateAnimation(0.1, pane2, -790);
+            show ++;
+
+        }
+
+    }
+
+    /**
+     * Goes to the previous image.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void previous(ActionEvent event){
+        if(show == 1){
+            translateAnimation(0.1, pane1, 790);
+            show--;
+
+        }
+        else if(show == 2){
+            translateAnimation(0.1, pane2, 790);
+            show--;
         }
     }
 

@@ -34,7 +34,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
+public class
+
+ProjectController extends Controller implements ProjectsViewController.ViewListener {
     private final IOController ioController;
     //--------------- ATTRIBUTES ----------------
     private CalendarDB calendar_db;
@@ -106,6 +108,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      * @param project  project to edit
      * @param listener listener
      */
+    
     public void showEditProjectStage(Project project, ProjectsViewController.ViewListener listener) throws DatabaseException {
         final String stageTitle = "Edit project";
         final String view = "popups/EditProjectView.fxml";
