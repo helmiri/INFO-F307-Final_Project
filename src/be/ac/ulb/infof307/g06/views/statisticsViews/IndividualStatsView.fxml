@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.effect.Bloom?>
@@ -27,6 +28,9 @@
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="Start date of the selected project" />
+                     </tooltip>
                   </Label>
                   <Label fx:id="startDate" layoutX="7.0" layoutY="65.0" text="?/?/?" textFill="WHITE">
                      <font>
@@ -41,6 +45,9 @@
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="Number of collaborators in the selected project" />
+                     </tooltip>
                   </Label>
                   <Label fx:id="collaboratorsNumberLabel" layoutX="112.0" layoutY="65.0" text="0" textFill="WHITE">
                      <font>
@@ -55,6 +62,9 @@
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="Number of tasks in the selected project" />
+                     </tooltip>
                   </Label>
                   <Label fx:id="tasksNumberLabel" layoutX="112.0" layoutY="65.0" text="0" textFill="WHITE">
                      <font>
@@ -74,6 +84,9 @@
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="Estimated end date of the selected project" />
+                     </tooltip>
                   </Label>
                   <Label fx:id="estimatedDate" layoutX="7.0" layoutY="65.0" text="?/?/?" textFill="WHITE">
                      <font>
@@ -88,6 +101,9 @@
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="Number of sub projects in the selected project" />
+                     </tooltip>
                   </Label>
                   <Label fx:id="projectsNumberLabel" layoutX="116.0" layoutY="65.0" text="0" textFill="WHITE">
                      <font>
@@ -98,10 +114,13 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="275.0" styleClass="container" stylesheets="@../../resources/stylesheets/StatsView.css">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="168.0" styleClass="shadow" stylesheets="@../../resources/stylesheets/StatsView.css" text="Task end date" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="202.0" styleClass="shadow" stylesheets="@../../resources/stylesheets/StatsView.css" text="Task end date" textFill="WHITE">
                      <font>
                         <Font name="Cambria Bold" size="24.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="End date of the selected task" />
+                     </tooltip>
                   </Label>
                   <Label fx:id="taskEndDateLabel" layoutX="14.0" layoutY="65.0" text="?/?/?" textFill="WHITE">
                      <font>
@@ -116,6 +135,9 @@
         <columns>
           <TreeTableColumn fx:id="projectsColumn" prefWidth="379.0" text="Projects" />
         </columns>
+         <tooltip>
+            <Tooltip text="overview of project" />
+         </tooltip>
       </TreeTableView>
       <Polygon fill="#4ec8f50d" layoutX="-159.0" layoutY="386.0" points="156.59999084472656, 516.0, 158.59999084472656, 29.0, 685.5999755859375, 516.0" stroke="TRANSPARENT" strokeType="INSIDE">
          <effect>
@@ -179,6 +201,9 @@
         <columns>
           <TableColumn fx:id="tasksColumn" prefWidth="379.0" text="Tasks" />
         </columns>
+         <tooltip>
+            <Tooltip text="overview of tasks" />
+         </tooltip>
       </TableView>
    </children>
 </AnchorPane>

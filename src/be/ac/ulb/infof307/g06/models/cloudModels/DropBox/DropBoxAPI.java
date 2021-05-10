@@ -97,6 +97,7 @@ public class DropBoxAPI {
      *
      * @param file File to be hashed
      * @return The hash of the file
+     * @throws IOException exception
      */
     public String getHash(String file) throws IOException {
         MessageDigest hasher = new DropBoxContentHasher();

@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.views.mainMenuViews;
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -47,6 +48,9 @@ public class MenuViewController {
             listener.showProjects();
         } else if (event.getSource() == calendarAccessBtn) {
             listener.showCalendar();
+        }
+        else if (event.getSource() == helpBtn){
+            new AlertWindow("Help", "Let your mouse for a few seconds on a button to see a tooltip.").showInformationWindow();
         }
     }
     //--------------- LISTENER ----------------

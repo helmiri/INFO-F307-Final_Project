@@ -62,14 +62,14 @@
                </font>
             </Label>
             <TextArea fx:id="projectsDescription" disable="true" layoutX="39.0" layoutY="138.0" prefHeight="118.0" prefWidth="450.0" promptText="DESCRIPTION" />
-            <Button fx:id="exportProjectBtn" layoutX="427.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" stylesheets="@../../resources/stylesheets/Button.css" text="EXPORT" textFill="white" />
+            <Button fx:id="exportProjectBtn" layoutX="442.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="EXPORT" textFill="white" />
             <ListView fx:id="projectTags" layoutX="37.0" layoutY="85.0" orientation="HORIZONTAL" prefHeight="43.0" prefWidth="450.0">
                <tooltip>
                   <Tooltip fx:id="tagToolTip" text="tags associated to the selected project." />
                </tooltip></ListView>
-            <Button fx:id="importProjectBtn" layoutX="354.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="60.0" stylesheets="@../../resources/stylesheets/Button.css" text="IMPORT" textFill="white" />
-            <Button fx:id="cloudDownloadBtn" layoutX="234.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="111.0" stylesheets="@../../resources/stylesheets/Button.css" text="DOWNLOAD" textFill="white" />
-            <Button fx:id="cloudUploadBtn" layoutX="144.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="80.0" stylesheets="@../../resources/stylesheets/Button.css" text="UPLOAD" textFill="white" />
+            <Button fx:id="importProjectBtn" layoutX="337.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="IMPORT" textFill="white" />
+            <Button fx:id="cloudDownloadBtn" layoutX="105.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="111.0" stylesheets="@../../resources/stylesheets/Button.css" text="DOWNLOAD" textFill="white" />
+            <Button fx:id="cloudUploadBtn" layoutX="14.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="80.0" stylesheets="@../../resources/stylesheets/Button.css" text="UPLOAD" textFill="white" />
          </children>
       </Pane>
       <Pane layoutX="89.0" layoutY="465.0" prefHeight="459.0" prefWidth="546.0">
@@ -91,7 +91,7 @@
             </tooltip>
          </TableView>
          <Button fx:id="addTaskbtn" layoutX="442.0" layoutY="399.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD" textFill="white" />
-         <TextArea fx:id="descriptionTask" layoutX="17.0" layoutY="398.0" prefHeight="37.0" prefWidth="413.0" />
+         <TextArea fx:id="descriptionTask" layoutX="17.0" layoutY="398.0" prefHeight="37.0" prefWidth="413.0" promptText="Write a description for your task." />
          <DatePicker fx:id="startDateTask" layoutX="17.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0" promptText="Start date" />
          <DatePicker fx:id="endDateTask" layoutX="285.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0" promptText="End date" />
       </Pane>
@@ -112,7 +112,7 @@
             </tooltip>
          </TableView>
          <Button fx:id="addCollaboratorsBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="210.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD" textFill="white" />
-         <TextArea fx:id="collaboratorsName" layoutX="60.0" layoutY="340.0" prefHeight="12.0" prefWidth="210.0" />
+         <TextArea fx:id="collaboratorsName" layoutX="60.0" layoutY="340.0" prefHeight="12.0" prefWidth="210.0" promptText="Enter the collaborator's name." />
       </Pane>
       <Pane layoutX="664.0" layoutY="465.0" prefHeight="440.0" prefWidth="330.0">
          <TableView fx:id="taskCollaboratorTable" layoutX="60.0" layoutY="8.0" prefHeight="317.0" prefWidth="210.0" style="-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;">
