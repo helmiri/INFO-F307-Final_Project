@@ -39,24 +39,6 @@ public class Hash {
     }
 
     /**
-     * Return a hash for a file.
-     *
-     * @param filename Path to the file
-     * @return The hash of the file
-     * @throws IOException              On error creating the checksum
-     * @throws NoSuchAlgorithmException exception
-     */
-    public String hashFile(String filename) throws IOException, NoSuchAlgorithmException {
-        byte[] b = createChecksum(filename);
-        StringBuilder result = new StringBuilder();
-
-        for (byte value : b) {
-            result.append(Integer.toString((value & 0xff) + 0x100, 16).substring(1));
-        }
-        return result.toString();
-    }
-
-    /**
      * Return a 32 bytes hash password with the raw password and a salt (unique for each user).
      * @param password The user's password
      * @param salt Tye hash salt
