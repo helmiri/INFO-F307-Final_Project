@@ -48,7 +48,7 @@ function make_tests(){
   cd "$MAIN_LOCATION"
 
 
-  javac -cp "$CLASS_PATH" --module-path lib/javafx/"$os" --add-modules javafx.controls,javafx.fxml @./compile/test/sources.txt -d ./compile/test
+  javac -cp "$CLASS_PATH" --module-path lib/javafx/"$os" --add-modules javafx.controls,javafx.fxml,javafx.media @./compile/test/sources.txt -d ./compile/test
 
 }
 
@@ -71,7 +71,7 @@ function compile_program(){
 
 
 
-  javac -cp "$CLASS_PATH" --module-path lib/javafx/"$os" --add-modules javafx.controls,javafx.fxml @./compile/build/sources.txt ./src/be/ac/ulb/infof307/g06/Main.java -d ./compile/build
+  javac -cp "$CLASS_PATH" --module-path lib/javafx/"$os" --add-modules javafx.controls,javafx.fxml,javafx.media @./compile/build/sources.txt ./src/be/ac/ulb/infof307/g06/Main.java -d ./compile/build
 
   cp ./src/be/ac/ulb/infof307/g06/views/connectionViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/connectionViews/
   cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/
@@ -87,9 +87,11 @@ function compile_program(){
 
 }
 
-if [ "$2" == "test" ]; then
-  make_tests "$1"
+if [ "$1" == "test" ]; then
+  make_tests
 else
-  compile_program "$1"
+  compile_program
 fi
+
+
 
