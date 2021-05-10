@@ -100,7 +100,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public AnchorPane getAboutScene() {
-        return null;
+        return loadScene("AboutView.fxml");
     }
 
     /**
@@ -129,12 +129,6 @@ public class SettingsController extends Controller implements SettingsViewContro
         HelpController controller = new HelpController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
         controller.show();
     }
-
-    /**
-     * Loads the about scene controller.
-     */
-    @Override
-    public void showAbout() { }
 
     /**
      * Loads the profile scene controller
