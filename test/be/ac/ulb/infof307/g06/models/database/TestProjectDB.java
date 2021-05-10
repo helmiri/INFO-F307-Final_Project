@@ -1,14 +1,12 @@
 package be.ac.ulb.infof307.g06.models.database;
 
 import be.ac.ulb.infof307.g06.models.Project;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,7 +91,7 @@ class TestProjectDB extends TestDatabase {
     @Test
     void getUserProjects() throws SQLException {
         addCollaborator();
-        List<Integer> expected = new ArrayList<>(Arrays.asList(1));
+        List<Integer> expected = new ArrayList<>(Collections.singletonList(1));
         assertEquals(expected, projectDB.getUserProjects(2));
     }
 
@@ -123,11 +121,11 @@ class TestProjectDB extends TestDatabase {
     }
 
     @Test
-    void deleteTask() throws SQLException, IOException, ClassNotFoundException {
+    void deleteTask() throws SQLException {
         projectDB.createTask(taskDescription, 1, 0L, 0L);
         projectDB.createTask(taskDescription2, 1, 0L, 0L);
         projectDB.deleteTask(taskDescription, 1);
-        List<String> expected = new ArrayList<>(Arrays.asList(taskDescription2));
+        List<String> expected = new ArrayList<>(Collections.singletonList(taskDescription2));
         List<String> actual = new ArrayList<>();
         for (int i = 0; i < projectDB.getTasks(1).size(); i++) {
             actual.add(projectDB.getTasks(1).get(i).getDescription());
@@ -192,17 +190,16 @@ class TestProjectDB extends TestDatabase {
             actual.add(projectDB.getTags(1).get(i).getDescription());
         }
         assertEquals(expected, actual);
-
     }
 
     @Test
-    void removeTag() throws SQLException, IOException, ClassNotFoundException {
+    void removeTag() throws SQLException {
         int id1 = projectDB.createTag("tag1", "#ffffff");
         int id2 = projectDB.createTag("tag2", "#ffffff");
         projectDB.addTag(id1, 1);
         projectDB.addTag(id2, 1);
         projectDB.removeTag(1, id1);
-        List<String> expected = new ArrayList<>(Arrays.asList("tag2"));
+        List<String> expected = new ArrayList<>(Collections.singletonList("tag2"));
         List<String> actual = new ArrayList<>();
         for (int i = 0; i < projectDB.getTags(1).size(); i++) {
             actual.add(projectDB.getTags(1).get(i).getDescription());
