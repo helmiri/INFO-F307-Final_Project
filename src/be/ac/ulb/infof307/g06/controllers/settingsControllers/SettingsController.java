@@ -55,8 +55,8 @@ public class SettingsController extends Controller implements SettingsViewContro
         loader = new FXMLLoader(SettingsViewController.class.getResource(view));
         try {
             return loader.load();
-        } catch (IOException e) {
-            new AlertWindow("Error", "Unable to load the window", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Unable to load the window", error.getMessage()).showErrorWindow();
         }
         return null;
     }

@@ -72,9 +72,9 @@ public class ProfileController extends Controller implements ProfileViewControll
      * @return true on fail, false on success
      */
     public boolean validateTextField(String field, String pattern) {
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(field);
-        if (!m.matches()) {
+        Pattern pattern1 = Pattern.compile(pattern);
+        Matcher matcher1 = pattern1.matcher(field);
+        if (!matcher1.matches()) {
             showWarning();
             return true;
         }

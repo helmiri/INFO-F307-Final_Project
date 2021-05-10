@@ -45,8 +45,8 @@ public class MainMenuController extends Controller implements MenuViewController
             for (Invitation invitation : user_db.getInvitations(project_db)) {
                 showInvitationStage(invitation);
             }
-        } catch (IOException | SQLException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+        } catch (IOException | SQLException error) {
+            new AlertWindow("Error", "" + error).showErrorWindow();
         }
     }
 
@@ -150,8 +150,8 @@ public class MainMenuController extends Controller implements MenuViewController
             project_db.addCollaborator(project.getId(), receiver.getId());
             user_db.removeInvitation(invitation.getInvitationID());
             invitationStage.close();
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -166,8 +166,8 @@ public class MainMenuController extends Controller implements MenuViewController
         try {
             user_db.removeInvitation(invitation.getInvitationID());
             invitationStage.close();
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 

@@ -28,8 +28,8 @@ public class LoginController {
         AnchorPane mainLayout;
         try {
             mainLayout = loader.load();
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the window", e.getMessage());
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the window", error.getMessage());
             return;
         }
         Scene scene = new Scene(mainLayout);

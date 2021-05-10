@@ -58,14 +58,14 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         try {
             calendar_db = new CalendarDB("Database.db");
             project_db.createTag("tag1", "#ff55ff");
-        } catch (SQLException | ClassNotFoundException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException | ClassNotFoundException error) {
+            new DatabaseException(error).show();
         }
         FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsView.fxml"));
         try {
             scene = new Scene(loader.load());
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the window", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the window", error.getMessage()).showErrorWindow();
         }
         viewController = loader.getController();
         ioController.setViewController(viewController);
@@ -97,8 +97,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             addStage.setResizable(false);
             addStage.show();
             controller.init(listener, addStage);
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the window", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the window", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -116,14 +116,14 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         Object controller;
         try {
             controller = loadStage(stageTitle, view, stage);
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the window", e.getMessage());
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the window", error.getMessage());
             return;
         }
         try {
             ((EditProjectViewController) controller).init(project, listener, stage, project_db.getTags(project.getId()));
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
+        } catch (SQLException error) {
+            throw new DatabaseException(error);
         }
     }
 
@@ -158,8 +158,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         try {
             controller = loadStage(stageTitle, view, stage);
             ((EditTaskViewController) controller).init(task, listener, stage);
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the window", e.getMessage());
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the window", error.getMessage());
         }
     }
 
@@ -174,8 +174,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
                 new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").showInformationWindow();
                 return true;
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
             return true;
         }
         return false;
@@ -205,8 +205,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             project_db.deleteProject(projectID);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             calendar_db.removeProject(name);
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -247,8 +247,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             viewController.refreshTree(project_db.getProject(projectID));
             viewController.displayProject(project_db.getProject(projectID), newTags);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -264,8 +264,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         }
         try {
             showEditProjectStage(project, this);
-        } catch (DatabaseException e) {
-            e.show();
+        } catch (DatabaseException error) {
+            error.show();
         }
     }
 
@@ -282,8 +282,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             for (Integer project : projectsID) {
                 res.add(project_db.getProject(project));
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         // res will be empty if there are no projects/an error occurs
         return res;
@@ -303,8 +303,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             for (Tag tag : tags) {
                 tagsName.add(tag.getDescription());
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         // Will return an empty list on error
         return tagsName;
@@ -323,8 +323,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             for (Tag tag : tags) {
                 tagsName.add(tag.getDescription());
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         // Empty list on error
         return tagsName;
@@ -341,8 +341,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         Tag res = null;
         try {
             res = project_db.getTag(project_db.getTagID(name));
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         return res;
     }
@@ -408,8 +408,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             }
             viewController.displayTask();
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -423,8 +423,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         try {
             project_db.deleteTask(task.getDescription(), task.getProjectID());
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -443,8 +443,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
                 List<Task> taskList = project_db.getTasks(projectID);
                 return FXCollections.observableArrayList(taskList);
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         return FXCollections.observableArrayList();
     }
@@ -469,8 +469,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
                 new AlertWindow("Warning", "Please select a task before assigning a collaborator.").showWarningWindow();
             }
 
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -492,8 +492,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             } else {
                 new AlertWindow("Warning", "Please select a task.").showWarningWindow();
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         // Empty list on error
         return names;
@@ -509,8 +509,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
     public void deleteTaskCollaborator(String collaborator, Task task) {
         try {
             project_db.deleteTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -549,8 +549,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             user_db.sendInvitation(project_id, user_db.getCurrentUser().getId(), receiverID);
 
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -565,8 +565,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         try {
             project_db.deleteCollaborator(project_id, user_db.getUserInfo(collaboratorName).getId());
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -585,8 +585,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             for (Integer collaborator : collaborators) {
                 names.add((user_db.getUserInfo(collaborator).getUserName()));
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         return names;
     }
@@ -602,8 +602,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
     public boolean isUserInTask(String user, Task task) {
         try {
             return project_db.getTaskCollaborator(task.getId()).contains((user_db.getUserInfo(user).getId()));
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         return false;
     }
@@ -624,10 +624,10 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
             } else {
                 new AlertWindow("Failure", "This project already exists in the database").showErrorWindow();
             }
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
-        } catch (IOException e) {
-            new AlertWindow("Error", "An error reading the file", e.getMessage()).showErrorWindow();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
+        } catch (IOException error) {
+            new AlertWindow("Error", "An error reading the file", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -642,10 +642,10 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         try {
             ioController.onExportProject(project, path);
             new AlertWindow("Success", "Exportation successful").showInformationWindow();
-        } catch (IOException e) {
-            new AlertWindow("Error", "An error occurred while exporting", e.getMessage()).showErrorWindow();
-        } catch (DatabaseException e) {
-            e.show();
+        } catch (IOException error) {
+            new AlertWindow("Error", "An error occurred while exporting", error.getMessage()).showErrorWindow();
+        } catch (DatabaseException error) {
+            error.show();
         }
     }
 
@@ -672,12 +672,12 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
                 new File(localFilePath + fileName).delete();
             }
             new AlertWindow("Success", "Upload successful").showInformationWindow();
-        } catch (IOException e) {
-            new AlertWindow("Error", "An error occurred while exporting the project file", e.getMessage()).showErrorWindow();
-        } catch (DbxException e) {
-            new AlertWindow("Connection Error", "Could not connect to DropBox", e.getMessage()).showErrorWindow();
-        } catch (DatabaseException e) {
-            e.show();
+        } catch (IOException error) {
+            new AlertWindow("Error", "An error occurred while exporting the project file", error.getMessage()).showErrorWindow();
+        } catch (DbxException error) {
+            new AlertWindow("Connection Error", "Could not connect to DropBox", error.getMessage()).showErrorWindow();
+        } catch (DatabaseException error) {
+            error.show();
         }
     }
 
@@ -736,8 +736,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
                 insertNewProject(title, description, startDate, endDate, tags, parent, parentID);
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -797,8 +797,8 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
                 project_db.createTask(taskDescription, project_id, startDate, endDate);
             }
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -810,9 +810,9 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
      */
     @FXML
     private boolean validateDescription(String text) {
-        Pattern p = Pattern.compile("^.*[a-zA-Z0-9]{1,126}$");
-        Matcher m = p.matcher(text);
-        return m.matches();
+        Pattern pattern1 = Pattern.compile("^.*[a-zA-Z0-9]{1,126}$");
+        Matcher matcher1 = pattern1.matcher(text);
+        return matcher1.matches();
     }
 
 }

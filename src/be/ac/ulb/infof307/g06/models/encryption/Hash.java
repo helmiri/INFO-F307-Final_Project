@@ -77,6 +77,6 @@ public class Hash {
             byte[] hashedPassword = key.generateSecret(spec).getEncoded();
             return String.format("%x", new BigInteger(hashedPassword));
         }
-        catch (InvalidKeySpecException | NoSuchAlgorithmException e) {return "";}
+        catch (InvalidKeySpecException | NoSuchAlgorithmException error) {return "";}
     }
 }

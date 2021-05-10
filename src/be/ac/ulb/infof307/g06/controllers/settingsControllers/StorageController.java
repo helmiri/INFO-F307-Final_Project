@@ -42,8 +42,8 @@ public class StorageController extends Controller implements StorageViewControll
             storageViewController.setListener(this);
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
             storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -63,13 +63,13 @@ public class StorageController extends Controller implements StorageViewControll
                 try {
                     setLimit(limit);
                     res = true;
-                } catch (NumberFormatException e) {
-                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number").showErrorWindow();
+                } catch (NumberFormatException error) {
+                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number: "+error).showErrorWindow();
                 }
             }
             storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
             return false;
         }
         return res;
@@ -85,7 +85,7 @@ public class StorageController extends Controller implements StorageViewControll
         GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(user_db.getCurrentUser().getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
-        } catch (IOException | GeneralSecurityException e) {
+        } catch (IOException | GeneralSecurityException error) {
             new AlertWindow("Authorization request", "Access denied").showErrorWindow();
         }
     }
@@ -104,10 +104,10 @@ public class StorageController extends Controller implements StorageViewControll
             controller.setListener(this);
             openBrowser(url);
             controller.initialize(url, pane);
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the client configuration", e.getMessage()).showErrorWindow();
-        } catch (JsonReader.FileLoadException e) {
-            new AlertWindow("Error", "An error occurred while setting up the connection", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the client configuration", error.getMessage()).showErrorWindow();
+        } catch (JsonReader.FileLoadException error) {
+            new AlertWindow("Error", "An error occurred while setting up the connection", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -158,10 +158,10 @@ public class StorageController extends Controller implements StorageViewControll
                 user_db.updateDropBoxCredentials(credential);
             }
             new AlertWindow("Credentials saved", "Settings saved").showInformationWindow();
-        } catch (DbxException e) {
-            new AlertWindow("Error", "Could not complete the request", e.getMessage());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (DbxException error) {
+            new AlertWindow("Error", "Could not complete the request", error.getMessage());
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 

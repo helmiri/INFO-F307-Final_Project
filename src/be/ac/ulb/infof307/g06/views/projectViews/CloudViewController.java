@@ -58,13 +58,13 @@ public class CloudViewController {
      * @return a list containing the names of the files that have a .tar.gz extension
      */
     public List<String> filterValidFiles(List<String> entries) {
-        List<String> lst = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         for (String entry : entries) {
             if (entry.contains(".tar.gz")) {
-                lst.add(entry);
+                list.add(entry);
             }
         }
-        return lst;
+        return list;
     }
 
     /**

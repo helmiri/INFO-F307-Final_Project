@@ -28,8 +28,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         viewController.setListener(this);
         try {
             viewController.initialize(project_db.getAllTags());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -45,8 +45,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             project_db.createTag(text, toRGBCode);
             viewController.refresh(project_db.getAllTags());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -62,8 +62,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             project_db.editTag(selectedTag.getId(), text, toRGBCode);
             viewController.refresh(project_db.getAllTags());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -77,8 +77,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
         try {
             project_db.deleteTag(selectedTag.getId());
             viewController.refresh(project_db.getAllTags());
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 }

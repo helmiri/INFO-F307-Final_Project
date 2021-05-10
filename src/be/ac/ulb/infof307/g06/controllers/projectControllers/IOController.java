@@ -76,11 +76,11 @@ public class IOController extends Controller {
         deleteFile(jsonFile);
         try (FileWriter fileWriter = new FileWriter(jsonFile, true)) {
             saveProjectAndChildrenJSON(project, fileWriter);
-        } catch (IOException e) {
+        } catch (IOException error) {
             // Close file writer and throw exception back
-            throw new IOException(e);
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
+            throw new IOException(error);
+        } catch (SQLException error) {
+            throw new DatabaseException(error);
         }
         zip(project.getTitle(), jsonFile, archivePath);
         deleteFile(jsonFile);

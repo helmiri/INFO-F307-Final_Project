@@ -33,8 +33,8 @@ public class SignUpController implements SignUpViewController.ViewListener {
         Scene scene;
         try {
             scene = new Scene(loader.load());
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the scene", e.getMessage());
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the scene", error.getMessage());
             return;
         }
         stage.setScene(scene);
@@ -91,8 +91,8 @@ public class SignUpController implements SignUpViewController.ViewListener {
         Scene termsScene;
         try {
             termsScene = new Scene(loader.load());
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not load the window", e.getMessage());
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not load the window", error.getMessage());
             return;
         }
         termsStage.setScene(termsScene);
@@ -123,9 +123,9 @@ public class SignUpController implements SignUpViewController.ViewListener {
      * @return true if the field is valid, false otherwise
      */
     public boolean validateTextField(String field, String pattern) {
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(field);
-        return m.matches();
+        Pattern pattern1 = Pattern.compile(pattern);
+        Matcher matcher1 = pattern1.matcher(field);
+        return matcher1.matches();
     }
 
     //--------------- LISTENER ----------------

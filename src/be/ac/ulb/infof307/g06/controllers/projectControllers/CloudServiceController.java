@@ -56,10 +56,10 @@ public class CloudServiceController implements CloudSelectionViewController.View
             dropBoxSelected = false;
             googleDriveController = new GoogleDriveController(userDB.getCurrentUser().getUserName());
             googleDriveSelected = true;
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not retrieve the files ", e.getMessage()).showErrorWindow();
-        } catch (GeneralSecurityException e) {
-            new AlertWindow("Cloud service error", "Could not connect to google drive ", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not retrieve the files ", error.getMessage()).showErrorWindow();
+        } catch (GeneralSecurityException error) {
+            new AlertWindow("Cloud service error", "Could not connect to google drive ", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -72,10 +72,10 @@ public class CloudServiceController implements CloudSelectionViewController.View
             googleDriveSelected = false;
             dropBoxController = new DropBoxController(userDB.getDropBoxCredentials());
             dropBoxSelected = true;
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
-        } catch (DbxException e) {
-            new AlertWindow("Cloud service error", "An error occurred while trying to connect to DropBox", e.getMessage()).showErrorWindow();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
+        } catch (DbxException error) {
+            new AlertWindow("Cloud service error", "An error occurred while trying to connect to DropBox", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -97,10 +97,10 @@ public class CloudServiceController implements CloudSelectionViewController.View
             } else if (googleDriveSelected) {
                 downloadedFiles = googleDriveController.downloadFiles(cloudPath, localPath);
             }
-        } catch (IOException e) {
-            new AlertWindow("IOError", "An error occurred while saving the files", e.getMessage()).showErrorWindow();
-        } catch (NoSuchAlgorithmException | DbxException e) {
-            new AlertWindow("Connection Error", "An error occurred while fetching the files", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("IOError", "An error occurred while saving the files", error.getMessage()).showErrorWindow();
+        } catch (NoSuchAlgorithmException | DbxException error) {
+            new AlertWindow("Connection Error", "An error occurred while fetching the files", error.getMessage()).showErrorWindow();
         }
         importFiles(downloadedFiles);
     }
@@ -128,10 +128,10 @@ public class CloudServiceController implements CloudSelectionViewController.View
                 files = googleDriveController.fetchFiles();
             }
             controller.show(files);
-        } catch (IOException e) {
-            new AlertWindow("Error", "Could not read the file ", e.getMessage()).showErrorWindow();
-        } catch (DbxException e) {
-            new AlertWindow("DropBox Error", "An error has occurred. Make sure that your credentials are properly configured", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Could not read the file ", error.getMessage()).showErrorWindow();
+        } catch (DbxException error) {
+            new AlertWindow("DropBox Error", "An error has occurred. Make sure that your credentials are properly configured", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -151,8 +151,8 @@ public class CloudServiceController implements CloudSelectionViewController.View
             if (isDownload) {
                 showCloudDownloadStage();
             }
-        } catch (IOException e) {
-            new AlertWindow("Error", "Unable to load window", e.getMessage()).showErrorWindow();
+        } catch (IOException error) {
+            new AlertWindow("Error", "Unable to load window", error.getMessage()).showErrorWindow();
         }
     }
 

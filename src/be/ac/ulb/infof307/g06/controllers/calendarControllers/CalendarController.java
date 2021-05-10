@@ -57,8 +57,8 @@ public class CalendarController extends Controller implements CalendarViewContro
             Map<String, String> allProjects = database.getProjects();
             viewController.initComboBox(projects, allProjects);
             loadProjects(allProjects);
-        } catch (SQLException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+        } catch (SQLException error) {
+            new AlertWindow("Error", "" + error).showErrorWindow();
         }
     }
 
@@ -131,8 +131,8 @@ public class CalendarController extends Controller implements CalendarViewContro
         try {
             database = new CalendarDB("Database.db");
             scene = new Scene(loader.load());
-        } catch (IOException | ClassNotFoundException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+        } catch (IOException | ClassNotFoundException error) {
+            new AlertWindow("Error", "" + error).showErrorWindow();
         }
         viewController = loader.getController();
         viewController.setListener(this);
@@ -189,8 +189,8 @@ public class CalendarController extends Controller implements CalendarViewContro
                     calendar = tasksMap.get(selectedProject.getTitle());
                     calendar.setStyle(color);
                 }
-            } catch (SQLException e) {
-                new AlertWindow("Error", "" + e).showErrorWindow();
+            } catch (SQLException error) {
+                new AlertWindow("Error", "" + error).showErrorWindow();
             }
 
         }
@@ -249,8 +249,8 @@ public class CalendarController extends Controller implements CalendarViewContro
                 database.addProject(currentProject.getTitle(), color);
                 insertProjectInCalendar(currentProject, color);
             }
-        } catch (SQLException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+        } catch (SQLException error) {
+            new AlertWindow("Error", "" + error).showErrorWindow();
         }
 
     }
