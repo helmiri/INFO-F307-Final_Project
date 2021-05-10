@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
@@ -59,6 +60,10 @@ public class TagsController extends Controller implements TagsViewController.Vie
      */
     @Override
     public void onUpdateButtonClicked(Tag selectedTag, String text, String toRGBCode) {
+        if (selectedTag == null) {
+            new AlertWindow("Invalid selection", "A tag must first be selected").showInformationWindow();
+            return;
+        }
         try {
             project_db.editTag(selectedTag.getId(), text, toRGBCode);
             viewController.refresh(project_db.getAllTags());

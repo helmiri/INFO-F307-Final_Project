@@ -12,7 +12,8 @@
         <ColorPicker fx:id="tagsColorPicker" layoutX="345.0" layoutY="741.0" prefHeight="25.0" prefWidth="96.0"/>
         <TextField fx:id="defaultTagNameTextField" alignment="CENTER" layoutX="311.0" layoutY="703.0" prefHeight="25.0"
                    prefWidth="350.0" promptText="Tag's name"/>
-        <Button fx:id="updateBtn" layoutX="530.0" layoutY="741.0" mnemonicParsing="false" onAction="#events"
+        <Button fx:id="updateBtn" stylesheets="@../../resources/stylesheets/Button.css" layoutX="530.0" layoutY="741.0"
+                mnemonicParsing="false" onAction="#events"
                 prefHeight="25.0" prefWidth="96.0" text="UPDATE">
             <font>
                 <Font name="Calibri" size="12.0"/>
