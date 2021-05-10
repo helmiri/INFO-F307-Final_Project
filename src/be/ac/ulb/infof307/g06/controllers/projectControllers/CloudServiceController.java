@@ -30,6 +30,12 @@ public class CloudServiceController implements CloudSelectionViewController.View
     private boolean dropBoxSelected;
     private boolean googleDriveSelected;
 
+    /**
+     * Constructor
+     *
+     * @param projectController ProjectController, the project controller
+     * @param userDB UserDB, the user database
+     */
     public CloudServiceController(ProjectController projectController, UserDB userDB) {
         this.projectController = projectController;
         this.userDB = userDB;
@@ -108,6 +114,11 @@ public class CloudServiceController implements CloudSelectionViewController.View
         importFiles(downloadedFiles);
     }
 
+    /**
+     * Import all the downloaded files.
+     *
+     * @param downloadedFiles List, a list of the downloaded files to import.
+     */
     private void importFiles(List<String> downloadedFiles) {
         for (String file : downloadedFiles) {
             projectController.importProject(file);

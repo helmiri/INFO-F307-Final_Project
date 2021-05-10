@@ -6,15 +6,29 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.views.settingsViews.StorageViewController;
 import be.ac.ulb.infof307.g06.views.settingsViews.TagsViewController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
+/**
+ * Main controller for the tags section.
+ */
 public class TagsController extends Controller implements TagsViewController.ViewListener {
     TagsViewController viewController;
 
+    /**
+     * Constructor
+     *
+     * @param user_db UserDB, the user database
+     * @param project_db ProjectDB, the project database
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param viewController TagsViewController, the view controller
+     * @param DB_PATH String, the path to the database
+     */
     //--------------- METHODS ----------------
     public TagsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, TagsViewController viewController, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
