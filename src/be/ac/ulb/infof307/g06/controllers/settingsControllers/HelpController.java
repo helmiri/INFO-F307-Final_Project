@@ -61,12 +61,6 @@ public class HelpController extends Controller implements HelpViewController.Vie
         showHelp("ProjectManagementTest.fxml", "Project Management");
     }
 
-    @Override
-    public String okok(){
-        return "/home/aline/Bureau/BA3/Genie/ProjetGenie/2021-groupe-6/src/be/ac/ulb/infof307/g06/resources/screenshots/yseult-indelebile-lyric-video.mp4";
-
-    }
-
     /**
      * Shows storage help.
      *

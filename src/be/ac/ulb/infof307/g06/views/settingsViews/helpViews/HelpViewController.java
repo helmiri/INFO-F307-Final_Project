@@ -262,57 +262,58 @@ public class HelpViewController implements Initializable {
         videoLabel.setText("x"+String.valueOf(rateValue));
     }
 
-    /**
-     * Animates the transition.
-     *
-     * @param duration double
-     * @param node node
-     * @param width double
-     */
-    public void translateAnimation(double duration, Node node, double width){
-        TranslateTransition translateTransition= new TranslateTransition(Duration.seconds(duration), node);
-        translateTransition.setByX(width);
-        translateTransition.play();
-    }
-    int show = 0;
-
-    /**
-     * Goes to the next image.
-     *
-     * @param event ActionEvent
-     */
-    @FXML
-    void next(ActionEvent event){
-        if (show == 0){
-            translateAnimation(0.1, pane1, -790);
-            show ++;
-
-        }
-        else if (show == 1){
-            translateAnimation(0.1, pane2, -790);
-            show ++;
-
-        }
-
-    }
-
-    /**
-     * Goes to the previous image.
-     *
-     * @param event ActionEvent
-     */
-    @FXML
-    void previous(ActionEvent event){
-        if(show == 1){
-            translateAnimation(0.1, pane1, 790);
-            show--;
-
-        }
-        else if(show == 2){
-            translateAnimation(0.1, pane2, 790);
-            show--;
-        }
-    }
+    // PARTIE "CAROUSEL" DEVRA ETRE SUPPRIMEE
+//    /**
+//     * Animates the transition.
+//     *
+//     * @param duration double
+//     * @param node node
+//     * @param width double
+//     */
+//    public void translateAnimation(double duration, Node node, double width){
+//        TranslateTransition translateTransition= new TranslateTransition(Duration.seconds(duration), node);
+//        translateTransition.setByX(width);
+//        translateTransition.play();
+//    }
+//    int show = 0;
+//
+//    /**
+//     * Goes to the next image.
+//     *
+//     * @param event ActionEvent
+//     */
+//    @FXML
+//    void next(ActionEvent event){
+//        if (show == 0){
+//            translateAnimation(0.1, pane1, -790);
+//            show ++;
+//
+//        }
+//        else if (show == 1){
+//            translateAnimation(0.1, pane2, -790);
+//            show ++;
+//
+//        }
+//
+//    }
+//
+//    /**
+//     * Goes to the previous image.
+//     *
+//     * @param event ActionEvent
+//     */
+//    @FXML
+//    void previous(ActionEvent event){
+//        if(show == 1){
+//            translateAnimation(0.1, pane1, 790);
+//            show--;
+//
+//        }
+//        else if(show == 2){
+//            translateAnimation(0.1, pane2, 790);
+//            show--;
+//        }
+//    }
 
 
     //--------------- LISTENER ----------------
@@ -332,6 +333,5 @@ public class HelpViewController implements Initializable {
         void exportImportHelp()throws IOException;
         void tagsHelp() throws IOException;
         void profileHelp() throws IOException;
-        String okok();
     }
 }
