@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+
+/**
+ * Controller for the calendar menu
+ */
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
     CalendarColor colorObject = new CalendarColor();
     private CalendarViewController viewController;

@@ -9,6 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+/**
+ * Controller for the profile menu.
+ */
 public class ProfileViewController {
     ViewListener listener;
     @FXML
@@ -94,6 +97,9 @@ public class ProfileViewController {
         field.setPromptText(prompt);
     }
 
+    /**
+     * Communicates to the controller which button has been pressed.
+     */
     public interface ViewListener {
         boolean saveFirstName(String field);
 

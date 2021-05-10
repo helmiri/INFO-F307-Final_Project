@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 public class LoginController {
     public static final int HEIGHT = 465;
     public static final int WIDTH = 715;
