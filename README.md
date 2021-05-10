@@ -108,6 +108,9 @@ Pour l'itération 2, on a commencé par faire un gros "refactor" de notre code. 
 
 Pour l'itération 3, on a perfectionné la structure MVC du projet en ajoutant des "Listener" afin de diminuer le couplage dans les différents fichiers. Ensuite, on a cloturé le design de l'interface des statistiques dans le but que le visuel soit plus compréhensible pour l'utilisateur. De ce fait, on a maintenant une vue générale et une vue individuelle pour une analyse plus fine des statistiques. Pendant ce temps, on a également travaillé sur le calendrier sur base de la librairie "CalendarFX". Enfin, on a ajouté une fonctionnalité afin de télécharger les projets via "GoogleDrive" pour pouvoir satisfaire un plus grand public d'utilisateurs.
 
+Lors de l'itération 4 nous avons dû intégrer à notre projet l'intégrité des données, un système de sécurité ainsi que des aides dans l'application. Nous avons commencé par régler les différentes "issues" qui nous avaient été pointées du doigt pour ensuite mieux attaqué les différentes choses à rajouter ou modifier.L'intégrité et la sécurité des données ont été faites en parallèle des aides. Pour les aides nous sommes partis sur des videos tutorielles.
+
+
 ## Screenshot
 ![logIn](https://user-images.githubusercontent.com/33431271/117679889-f5bb8600-b1b0-11eb-9a12-6d14594c1a76.PNG)
 ![image](https://user-images.githubusercontent.com/33431271/117679976-0835bf80-b1b1-11eb-8271-502c3415768a.png)
