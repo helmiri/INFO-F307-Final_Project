@@ -17,7 +17,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import javafx.scene.Node;
-
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -154,7 +154,8 @@ public class HelpViewController implements Initializable {
     }
 
     public String pathToVideo(){
-        return "/home/aline/Bureau/BA3/Genie/ProjetGenie/2021-groupe-6/src/be/ac/ulb/infof307/g06/resources/screenshots/projectManagementTest.mp4";
+        File file  = new File("src/be/ac/ulb/infof307/g06/resources/screenshots");
+        return file.getAbsolutePath() + "/projectManagementTest.mp4";
     }
 
     /**
