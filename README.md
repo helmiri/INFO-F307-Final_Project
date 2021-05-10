@@ -46,7 +46,7 @@ où PATH_TO_JDK_JAVA.EXE vers java.exe
 
 MacOS et Linux:
 
-- Ouvrez un terminal dans le dossier ou le script exec.sh réside et exécutez la commande suivante :
+- Ouvrez un terminal dans le dossier ou le script exec.sh (dans le dossier unix) réside et exécutez la commande suivante :
 
 `./exec.sh`
 
@@ -62,7 +62,7 @@ où x est le numéro de l'itération
 
 MacOS et Linux:
  
-- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec.bat réside et exécutez la commande suivante :
+- Ouvrez une fenêtre cmd ou PowerShell dans le dossier ou le script exec.sh (dans le dossier unix) réside et exécutez la commande suivante :
 
 `./exec.sh jar iteration-x`
 
@@ -91,7 +91,7 @@ où PATH_TO_JDK_JAVAC.EXE est le chemin vers javac.exe
 
 MacOS et Linux:
 
-- Ouvrez terminal dans le dossier ou le script compile.sh réside et exécutez la commande suivante : 
+- Ouvrez terminal dans le dossier ou le script compile.sh (dans le dossier unix) réside et exécutez la commande suivante : 
 
 `./compile.sh test`
 
@@ -107,7 +107,7 @@ où PATH_TO_JDK_JAVA.EXE vers java.exe
 
 MacOS et Linux:
 
-- Ouvrez terminal dans le dossier ou le script exec.sh réside et exécutez la commande suivante : 
+- Ouvrez terminal dans le dossier ou le script exec.sh réside (dans le dossier unix) et exécutez la commande suivante : 
 
 `./exec.sh test`
 
