@@ -97,6 +97,9 @@ public class ProfileViewController {
         field.setPromptText(prompt);
     }
 
+    /**
+     * Controller communication
+     */
     public interface ViewListener {
         /**
          * Save the new first name

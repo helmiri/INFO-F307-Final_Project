@@ -34,6 +34,9 @@ public class InvitationViewController {
 
     /**
      * Initializes the fields related to the edition of a project.
+     *
+     * @param invitation     The invitation to be shown
+     * @param invitationPane invitation layout
      */
     public void show(Invitation invitation, AnchorPane invitationPane) {
         Project invitedProject = invitation.getProject();

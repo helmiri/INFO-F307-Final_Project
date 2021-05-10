@@ -52,7 +52,7 @@ public class HelpController extends Controller implements HelpViewController.Vie
             helpStage.setResizable(false);
             helpStage.show();
         } catch (IOException e) {
-            new AlertWindow("Error", "" + e).showErrorWindow();
+            new AlertWindow("Error", "An error occurred", e.getMessage()).showErrorWindow();
         }
     }
 }

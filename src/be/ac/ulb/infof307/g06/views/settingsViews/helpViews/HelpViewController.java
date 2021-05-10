@@ -234,6 +234,11 @@ public class HelpViewController {
         videoLabel.setText("x" + rateValue);
     }
 
+    /**
+     * Sets the new media player to be used
+     *
+     * @param player The media player
+     */
     public void setPlayer(MediaPlayer player) {
         mediaPlayer = player;
     }
@@ -253,6 +258,13 @@ public class HelpViewController {
      * Listener that communicates with the controller
      */
     public interface ViewListener {
+        /**
+         * Displays a new stage with help information
+         *
+         * @param fileName The path to the video to be played
+         * @param title    The title of the window
+         * @param player   The player used
+         */
         void showHelp(String fileName, String title, MediaPlayer player);
     }
 }
