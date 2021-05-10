@@ -20,6 +20,13 @@ public class GoogleDriveController {
     private final GoogleDriveAPI gDriveClient;
     private List<File> gDriveFiles;
 
+    /**
+     * Constructor
+     *
+     * @param userName String, the user name
+     * @throws IOException exception
+     * @throws GeneralSecurityException exception
+     */
     public GoogleDriveController(String userName) throws IOException, GeneralSecurityException {
         GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(userName);
         NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();

@@ -12,9 +12,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Main controller for the settings.
+ */
 public class SettingsController extends Controller implements SettingsViewController.ViewListener {
     private FXMLLoader loader;
 
+    /**
+     * Constructor
+     *
+     * @param user_db UserDB, the user database
+     * @param project_db ProjectDB, the project database
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param DB_PATH String, the path to the database
+     */
     public SettingsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
     }
@@ -118,6 +130,9 @@ public class SettingsController extends Controller implements SettingsViewContro
         controller.show();
     }
 
+    /**
+     * Loads the about scene controller.
+     */
     @Override
     public void showAbout() { }
 

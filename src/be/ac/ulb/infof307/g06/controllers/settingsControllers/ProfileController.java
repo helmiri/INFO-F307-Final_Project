@@ -18,9 +18,19 @@ import java.util.regex.Pattern;
  * User configuration controller
  */
 public class ProfileController extends Controller implements ProfileViewController.ViewListener {
-    ProfileViewController viewController;
-    User user;
+    private ProfileViewController viewController;
+    private User user;
 
+    /**
+     * Constructor
+     *
+     * @param user_db UserDB, the user database
+     * @param project_db ProjectDB, the project database
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param controller ProfileViewController, the view controller
+     * @param DB_PATH String, the path to the database
+     */
     public ProfileController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, ProfileViewController controller, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
         viewController = controller;

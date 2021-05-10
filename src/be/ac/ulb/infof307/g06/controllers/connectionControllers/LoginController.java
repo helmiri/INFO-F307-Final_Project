@@ -9,7 +9,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
+/**
+ * Controller for the login view.
+ */
 public class LoginController {
     public static final int HEIGHT = 465;
     public static final int WIDTH = 715;
@@ -17,6 +19,12 @@ public class LoginController {
     private final Stage stage;
     private final Listener listener;
 
+    /**
+     * Constructor.
+     *
+     * @param stage Stage, a stage.
+     * @param listener Listener, a listener
+     */
     //--------------- METHODS ----------------
     public LoginController(Stage stage, Listener listener) {
         this.stage = stage;
@@ -59,10 +67,23 @@ public class LoginController {
         stage.show();
     }
 
+    /**
+     * The listener and his methods.
+     */
     //--------------- LISTENER ----------------
     // Hand over control to the ConnectionHandler
     public interface Listener {
+        /**
+         * When we log in
+         *
+         * @param username String, the username
+         * @param password String, the password
+         */
         void onLogin(String username, String password);
+
+        /**
+         * When we sign up.
+         */
         void onSignup();
     }
 }

@@ -49,8 +49,14 @@ public class ConditionsViewController {
      * Communicates to the controller which button has been clicked
      */
     public interface ViewListener {
+        /**
+         * Action to be performed when the user accepts the agreement
+         */
         void onConditionsAccepted();
 
+        /**
+         * Action to be performed when the user declines the agreement
+         */
         void onConditionsDeclined();
     }
 }

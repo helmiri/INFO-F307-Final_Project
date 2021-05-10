@@ -20,10 +20,22 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Controller for the main menu.
+ */
 public class MainMenuController extends Controller implements MenuViewController.ViewListener, InvitationViewController.ViewListener {
     //--------------- ATTRIBUTE ----------------
     private Listener listener;
 
+    /**
+     * Constructor
+     *
+     * @param user_db UserDB, the user database
+     * @param project_db ProjectDB, the project database
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param DB_PATH String, the path to the database
+     */
     //--------------- METHODS ----------------
     public MainMenuController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
@@ -53,6 +65,8 @@ public class MainMenuController extends Controller implements MenuViewController
 
     /**
      * Sets the loader to show the stage with an invitation to join a project.
+     *
+     * @param invitation The invitation to be accepted/declined
      */
     public void showInvitationStage(Invitation invitation) throws IOException {
         FXMLLoader loader = new FXMLLoader(InvitationViewController.class.getResource("InvitationView.fxml"));
@@ -97,6 +111,9 @@ public class MainMenuController extends Controller implements MenuViewController
         controller.show();
     }
 
+    /**
+     * Show the projects menu
+     */
     @Override
     public void showProjects() {
         ProjectController controller = new ProjectController(user_db, project_db, stage, scene, DB_PATH);
@@ -183,6 +200,9 @@ public class MainMenuController extends Controller implements MenuViewController
         this.listener = listener;
     }
 
+    /**
+     * The listener and his methods.
+     */
     public interface Listener {
 
         /**

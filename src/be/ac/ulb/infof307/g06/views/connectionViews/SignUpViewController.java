@@ -29,7 +29,7 @@ public class SignUpViewController {
     private TextField passwordConfirmationField;
     @FXML
     private Text signUpTxtPopup;
-    protected ViewListener listener;
+    private ViewListener listener;
 
     //---------------- METHODS ----------------
 
@@ -62,8 +62,21 @@ public class SignUpViewController {
      * Communicates to the controller which button has been clicked
      */
     public interface ViewListener {
+        /**
+         * On signup  button clicked
+         *
+         * @param firstName            The first name entered
+         * @param lastName             The last name entered
+         * @param userName             The username entered
+         * @param email                The email entered
+         * @param password             The password entered
+         * @param passwordConfirmation The confirmation password entered
+         */
         void signup(String firstName, String lastName, String userName, String email, String password, String passwordConfirmation);
 
+        /**
+         * Go back to previous scene
+         */
         void back();
     }
 }

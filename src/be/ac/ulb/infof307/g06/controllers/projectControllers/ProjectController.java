@@ -24,7 +24,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -35,9 +34,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class
-
-ProjectController extends Controller implements ProjectsViewController.ViewListener {
+/**
+ * Handles the main page for projects management and only that.
+ */
+public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
     private final IOController ioController;
     //--------------- ATTRIBUTES ----------------
     private CalendarDB calendar_db;
@@ -46,6 +46,15 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
     private String DB_PATH;
 
     //--------------- METHODS ----------------
+    /**
+     * Constructor.
+     *
+     * @param user_db UserDB, the user database.
+     * @param project_db ProjectDB, the project database.
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param DB_PATH String, the path to the database.
+     */
     public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
         ioController = new IOController(user_db, project_db, stage, scene, DB_PATH);
@@ -130,6 +139,15 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         }
     }
 
+    /**
+     * Load a stage.
+     *
+     * @param stageTitle String, the title to the stage
+     * @param view String, the view to load
+     * @param stage Stage, the stage to load
+     * @return Object, a controller
+     * @throws IOException exception
+     */
     private Object loadStage(String stageTitle, String view, Stage stage) throws IOException {
         FXMLLoader loader;
         AnchorPane layout;

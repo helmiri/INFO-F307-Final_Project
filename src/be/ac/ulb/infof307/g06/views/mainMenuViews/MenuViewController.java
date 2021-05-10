@@ -64,16 +64,34 @@ public class MenuViewController {
      * Communicates to the controller which button has been pressed
      */
     public interface ViewListener {
+        /**
+         * Show the main menu scene
+         */
         void showMainMenu();
 
+        /**
+         * Shows the project scene
+         */
         void showProjects();
 
+        /**
+         * Shows the stats scene
+         */
         void showStats();
 
+        /**
+         * shows the settings scene
+         */
         void showSettings();
 
+        /**
+         * shows the calendar scene
+         */
         void showCalendar();
 
+        /**
+         * Logs the user out
+         */
         void logout();
     }
 }

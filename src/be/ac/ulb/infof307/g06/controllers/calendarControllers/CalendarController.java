@@ -27,9 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-
 /**
- * Controller for the calendar menu
+ * Main controller class for the calendar's view. Handles the monthly and weekly view.
  */
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
     CalendarColor colorObject = new CalendarColor();
@@ -43,6 +42,15 @@ public class CalendarController extends Controller implements CalendarViewContro
     private final Map<String, Calendar> tasksMap = new HashMap<>();
     private CalendarDB database;
 
+    /**
+     * Constructor.
+     *
+     * @param user_db UserDB, the user database
+     * @param project_db ProjectDB, the projects database
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param DB_PATH String, the path to the database
+     */
     public CalendarController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
     }
@@ -260,6 +268,8 @@ public class CalendarController extends Controller implements CalendarViewContro
     }
 
     /**
+     * Create an entry in the calendar with the selected project.
+     *
      * @param currentProject Project to insert in calendar
      * @param color          Project Color string
      * @throws SQLException exception

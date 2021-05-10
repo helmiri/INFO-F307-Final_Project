@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 /**
- * Controller for the profile menu.
+ * The profile settings scene
  */
 public class ProfileViewController {
     ViewListener listener;
@@ -98,15 +98,39 @@ public class ProfileViewController {
     }
 
     /**
-     * Communicates to the controller which button has been pressed.
+     * Controller communication
      */
     public interface ViewListener {
+        /**
+         * Save the new first name
+         *
+         * @param field The new first name
+         * @return true on success, false otherwise
+         */
         boolean saveFirstName(String field);
 
+        /**
+         * Save the new last name
+         *
+         * @param field The new last name
+         * @return true on success, false otherwise
+         */
         boolean saveLastName(String field);
 
+        /**
+         * Save the new email
+         *
+         * @param field The new email
+         * @return true on success, false otherwise
+         */
         boolean saveEmail(String field);
 
+        /**
+         * Saves the new password
+         *
+         * @param newPassword          The new entered password
+         * @param confirmationPassword The entered password to confirm the validity
+         */
         void savePassword(String newPassword, String confirmationPassword);
     }
 }

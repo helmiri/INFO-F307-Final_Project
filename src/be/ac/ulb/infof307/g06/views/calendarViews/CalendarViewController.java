@@ -345,17 +345,47 @@ public class CalendarViewController {
      * Communicates to the controller which button has been clicked
      */
     public interface ViewListener {
+        /**
+         * Return to previous scene
+         */
         void back();
 
-
+        /**
+         * Action performed when the user selects a project
+         *
+         * @param selections The selection
+         */
         void onProjectSelected(ObservableSet<Entry<?>> selections);
 
+        /**
+         * Changes the view based on the user's selection
+         *
+         * @param today   The current day
+         * @param month   The month
+         * @param forward Advance the calendar forward in time
+         */
         void changeDate(boolean today, boolean month, boolean forward);
 
+        /**
+         * Add a project to the view
+         *
+         * @param projects The list of projects
+         */
         void addProject(ObservableList<? extends String> projects);
 
+        /**
+         * Fetches the current date
+         *
+         * @return The current date
+         */
         LocalDate getCurrentDate();
 
+        /**
+         * Changes the color of a project and all it's tasks
+         *
+         * @param color      The new color
+         * @param selections The selected project
+         */
         void changeColor(String color, ObservableSet<Entry<?>> selections);
     }
 

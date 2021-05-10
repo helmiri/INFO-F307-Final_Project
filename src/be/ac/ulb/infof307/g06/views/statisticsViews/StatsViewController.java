@@ -159,7 +159,7 @@ public class StatsViewController{
             for (Integer integer : projects) {
                 Project project = listener.getProjectsFromID(integer);
                 Integer tasksCount = listener.countTasksOfAProject(project.getId());
-                if (project != null && tasksCount != 0) {
+                if (tasksCount != 0) {
                     numberOfProjects++;
                     tasksChart.setPrefWidth(513 + (numberOfProjects * 30));
                     barChartAnchorPane.setPrefWidth(513 + (numberOfProjects * 30));
@@ -325,30 +325,97 @@ public class StatsViewController{
      * Communicates to the controller which button has been clicked
      */
     public interface ViewListener {
+        /**
+         * Displays the scene
+         */
         void show();
 
+        /**
+         * Shows the selected project's scene
+         */
         void showIndividualStats();
 
+        /**
+         * Back to the previous scene
+         */
         void onBackButtonClicked();
 
+        /**
+         * Fetches the user's projects
+         *
+         * @return A list containing the IDs of the projects
+         */
         List<Integer> getProjects();
 
+        /**
+         * Counts the number of tasks of a project
+         *
+         * @param projectId The project ID
+         * @return The number of tasks
+         */
         Integer countTasksOfAProject(int projectId);
 
-        Project getProjectsFromID(int id) ;
+        /**
+         * Retrieves to project
+         *
+         * @param id The project ID
+         * @return The project data object
+         */
+        Project getProjectsFromID(int id);
 
-        void setProjectsTable(List<Integer> projects, TreeItem<Project> root) ;
+        /**
+         * Populates the table with the project titles
+         *
+         * @param projects The list of project IDs
+         * @param root     The item in the table
+         */
+        void setProjectsTable(List<Integer> projects, TreeItem<Project> root);
 
+        /**
+         * Initializes the task table
+         *
+         * @param selectedProject The project who's tasks are to be shown
+         * @return The list of tasks
+         */
         ObservableList<Task> setTasksTable(Project selectedProject);
 
+        /**
+         * Exportation in JSON format
+         *
+         * @param fileName The name of the file
+         * @param path     The path where it will be saved
+         */
         void exportStatsAsJson(String fileName, String path);
 
+        /**
+         * Exportation in CSV format
+         *
+         * @param fileName The name of the file
+         * @param path     The path where it will be saved
+         */
         void exportStatsAsCSV(String fileName, String path);
 
-        List<Integer> countOverallStats() ;
+        /**
+         * Counts the number of collaborators, tasks and projects across all projects
+         *
+         * @return a list containing the number of each statistic
+         */
+        List<Integer> countOverallStats();
 
+        /**
+         * Counts the number of collaborators and tasks of a selected project
+         *
+         * @param selectedProject the selected project
+         * @return A list with the statistics
+         */
         List<Integer> countIndividualProjectStats(Project selectedProject);
 
+        /**
+         * Converts a date to string format
+         *
+         * @param date The date in long format
+         * @return The date in string format
+         */
         String dateToString(Long date);
 
     }

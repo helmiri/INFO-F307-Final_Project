@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Controller for the sign up view.
+ */
 public class SignUpController implements SignUpViewController.ViewListener {
     //--------------- ATTRIBUTES ----------------
     private final Listener listener;
@@ -18,6 +21,13 @@ public class SignUpController implements SignUpViewController.ViewListener {
     private final FXMLLoader loader;
     private final Scene previousScene;
 
+    /**
+     * Constructor.
+     *
+     * @param stage Stage, a stage
+     * @param listener Listener, a listener
+     * @param loginScene Scene, the scene of the login.
+     */
     //--------------- METHODS ----------------
     public SignUpController(Stage stage, Listener listener, Scene loginScene) {
         this.stage = stage;
@@ -46,6 +56,16 @@ public class SignUpController implements SignUpViewController.ViewListener {
         stage.show();
     }
 
+    /**
+     * Shows the conditions stage if the informations are valid.
+     *
+     * @param firstName String, the user's first name
+     * @param lastName String, the user's last name
+     * @param userName String, the user's username
+     * @param email String, the user's email
+     * @param password String the user's password
+     * @param passwordConfirmation String, confirmation of the user's password
+     */
     @Override
     public void signup(String firstName, String lastName, String userName, String email, String password, String passwordConfirmation) {
         if (validateTextField(lastName, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")
@@ -71,6 +91,9 @@ public class SignUpController implements SignUpViewController.ViewListener {
         }
     }
 
+    /**
+     * Go back to the previous scene.
+     */
     @Override
     public void back() {
         stage.setScene(previousScene);
@@ -128,17 +151,43 @@ public class SignUpController implements SignUpViewController.ViewListener {
         return matcher1.matches();
     }
 
+    /**
+     * The listener and his methods.
+     */
     //--------------- LISTENER ----------------
     // Hand over control to the ConnectionHandler
     public interface Listener {
+        /**
+         * creates a user.
+         *
+         * @param firstName String, the first name
+         * @param lastName String, the last name
+         * @param userName String, the username
+         * @param email String, the email
+         * @param password String, the password
+         */
         void createUser(String firstName, String lastName, String userName, String email, String password);
 
+        /**
+         * Show the main menu.
+         */
         void showMainMenu();
 
+        /**
+         * When we sign up.
+         */
         void onSignup();
 
+        /**
+         * checks if the user exists.
+         * @param username String, the username
+         * @return boolean
+         */
         boolean doesUserExist(String username);
 
+        /**
+         * Show the login scene.
+         */
         void showLogin();
     }
 
