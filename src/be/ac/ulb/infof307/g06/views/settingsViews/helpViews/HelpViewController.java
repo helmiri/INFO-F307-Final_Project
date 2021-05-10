@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.views.settingsViews.helpViews;
 
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,11 +96,12 @@ public class HelpViewController {
         if (event.getSource() == projectManagementHelpBtn) {
             makeHelpWindow("projectManagementHelp.mp4", "Project Management");
         } else if (event.getSource() == storageHelpBtn) {
-            makeHelpWindow("storageHelp.mp4", "Storage management");
+            //makeHelpWindow("storageHelp.mp4", "Storage management");
+            new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == exportImportHelpBtn) {
-            makeHelpWindow("exportImportHelp.mp4", "Import / Export");
+            new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == calendarHelpBtn) {
-            makeHelpWindow("calendarHelp.mp4", "Calendar");
+            new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == tagsHelpBtn) {
             makeHelpWindow("tagsHelp.mp4", "Tags management");
         } else if (event.getSource() == profileHelpBtn) {
