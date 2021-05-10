@@ -1,39 +1,23 @@
 package be.ac.ulb.infof307.g06.views.settingsViews.helpViews;
 
-import be.ac.ulb.infof307.g06.models.AlertWindow;
-import javafx.animation.TranslateTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
-import javafx.scene.Node;
+
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
 
-public class HelpViewController implements Initializable {
+
+public class HelpViewController {
     //-------------- ATTRIBUTES ----------------
-// TODO : Changer structure des Controllers ! + EXCEPTIONS
-    @FXML
-    private AnchorPane  pane1;
-
-    @FXML
-    private AnchorPane  pane2;
-
-    @FXML
-    private AnchorPane  pane3;
 
     @FXML
     private Button projectManagementHelpBtn;
@@ -90,45 +74,50 @@ public class HelpViewController implements Initializable {
     @FXML
     private Slider progressBar;
 
-    String path;
-
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     @FXML
     private MediaView mediaView;
 
     private ViewListener listener;
 
     //--------------- METHODS ----------------
+
     /**
      * The main method for button's events.
      *
      * @param event ActionEvent
      */
     @FXML
-    private void helpEvents(ActionEvent event) throws IOException {
-        if (event.getSource() == projectManagementHelpBtn){
-            listener.projectManagementHelp();
+    private void helpEvents(ActionEvent event) {
+
+        if (event.getSource() == projectManagementHelpBtn) {
+            makeHelpWindow("projectManagementTest.mp4", "Project Management");
+        } else if (event.getSource() == storageHelpBtn) {
+            makeHelpWindow("storageHelp.mp4", "Storage management");
+        } else if (event.getSource() == exportImportHelpBtn) {
+            makeHelpWindow("exportImportHelp.mp4", "Import / Export");
+        } else if (event.getSource() == calendarHelpBtn) {
+            makeHelpWindow("calendarHelp.mp4", "Calendar");
+        } else if (event.getSource() == tagsHelpBtn) {
+            makeHelpWindow("tagsHelp.mp4", "Tags management");
+        } else if (event.getSource() == profileHelpBtn) {
+            makeHelpWindow("profileHelp.mp4", "Profile Management");
         }
-        else if (event.getSource() == storageHelpBtn){
-            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
-            //listener.storageHelp();
-        }
-        else if (event.getSource() == exportImportHelpBtn){
-            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
-            //listener.exportImportHelp();
-        }
-        else if (event.getSource() == calendarHelpBtn){
-            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
-            //listener.calendarHelp();
-        }
-        else if (event.getSource() == tagsHelpBtn){
-            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
-            //listener.tagsHelp();
-        }
-        else if (event.getSource() == profileHelpBtn){
-            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
-            //listener.profileHelp();
-        }
+
+    }
+
+    /**
+     * Sets media player and shows help window
+     *
+     * @param path  path to video file
+     * @param title window title
+     */
+    private void makeHelpWindow(String path, String title) {
+        File file = new File("src/be/ac/ulb/infof307/g06/resources/screenshots");
+        path = file.getAbsolutePath() + "/" + path;
+        Media media = new Media(Paths.get(path).toUri().toString());
+        mediaPlayer = new MediaPlayer(media);
+        listener.showHelp("ProjectManagementTest.fxml", title, mediaPlayer);
     }
 
     /**
@@ -143,20 +132,6 @@ public class HelpViewController implements Initializable {
         mediaPlayer.seek(Duration.seconds(progressBar.getValue()));
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        path = pathToVideo();
-        Media media =new Media(Paths.get(path).toUri().toString());
-        mediaPlayer = new MediaPlayer(media);
-
-//        mediaView.setMediaPlayer(mediaPlayer);
-    }
-
-    public String pathToVideo(){
-        File file  = new File("src/be/ac/ulb/infof307/g06/resources/screenshots");
-        return file.getAbsolutePath() + "/projectManagementTest.mp4";
-    }
 
     /**
      * Plays the video when the button is clicked.
@@ -174,12 +149,7 @@ public class HelpViewController implements Initializable {
      * Sets the progress bar.
      */
     public void setProgressBar(){
-        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
-            @Override
-            public void changed(ObservableValue<? extends Duration> observableValue, Duration duration, Duration currentDuration) {
-                progressBar.setValue(currentDuration.toSeconds());
-            }
-        });
+        mediaPlayer.currentTimeProperty().addListener((observableValue, duration, currentDuration) -> progressBar.setValue(currentDuration.toSeconds()));
     }
 
     /**
@@ -259,64 +229,15 @@ public class HelpViewController implements Initializable {
     private void setVideoRate(double rateValue) {
         mediaPlayer.setRate(rateValue);
         videoLabel.setVisible(true);
-        videoLabel.setText("x"+String.valueOf(rateValue));
+        videoLabel.setText("x" + rateValue);
     }
 
-    // PARTIE "CAROUSEL" DEVRA ETRE SUPPRIMEE
-//    /**
-//     * Animates the transition.
-//     *
-//     * @param duration double
-//     * @param node node
-//     * @param width double
-//     */
-//    public void translateAnimation(double duration, Node node, double width){
-//        TranslateTransition translateTransition= new TranslateTransition(Duration.seconds(duration), node);
-//        translateTransition.setByX(width);
-//        translateTransition.play();
-//    }
-//    int show = 0;
-//
-//    /**
-//     * Goes to the next image.
-//     *
-//     * @param event ActionEvent
-//     */
-//    @FXML
-//    void next(ActionEvent event){
-//        if (show == 0){
-//            translateAnimation(0.1, pane1, -790);
-//            show ++;
-//
-//        }
-//        else if (show == 1){
-//            translateAnimation(0.1, pane2, -790);
-//            show ++;
-//
-//        }
-//
-//    }
-//
-//    /**
-//     * Goes to the previous image.
-//     *
-//     * @param event ActionEvent
-//     */
-//    @FXML
-//    void previous(ActionEvent event){
-//        if(show == 1){
-//            translateAnimation(0.1, pane1, 790);
-//            show--;
-//
-//        }
-//        else if(show == 2){
-//            translateAnimation(0.1, pane2, 790);
-//            show--;
-//        }
-//    }
-
+    public void setPlayer(MediaPlayer player) {
+        mediaPlayer = player;
+    }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -327,11 +248,6 @@ public class HelpViewController implements Initializable {
     }
 
     public interface ViewListener {
-        void projectManagementHelp() throws IOException;
-        void storageHelp() throws IOException;
-        void calendarHelp() throws IOException;
-        void exportImportHelp()throws IOException;
-        void tagsHelp() throws IOException;
-        void profileHelp() throws IOException;
+        void showHelp(String fileName, String title, MediaPlayer player);
     }
 }
