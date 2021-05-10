@@ -89,6 +89,12 @@ Windows:
 
 où PATH_TO_JDK_JAVAC.EXE est le chemin vers javac.exe
 
+MacOS et Linux:
+
+- Ouvrez terminal dans le dossier ou le script compile.sh réside et exécutez la commande suivante : 
+
+`./compile.sh test`
+
 ## Démarrage
 
 Windows:
@@ -98,6 +104,12 @@ Windows:
 `.\windows\exec.bat PATH_TO_JDK_JAVA.EXE test`
 
 où PATH_TO_JDK_JAVA.EXE vers java.exe
+
+MacOS et Linux:
+
+- Ouvrez terminal dans le dossier ou le script exec.sh réside et exécutez la commande suivante : 
+
+`./exec.sh test`
 
 # Misc
 
