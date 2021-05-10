@@ -2,14 +2,13 @@ package be.ac.ulb.infof307.g06.models.encryption;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+/**
+ * String hashing class
+ */
 public class Hash {
 
     /**
@@ -34,7 +33,6 @@ public class Hash {
             SecretKeyFactory key = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hashedPassword = key.generateSecret(spec).getEncoded();
             return String.format("%x", new BigInteger(hashedPassword));
-        }
-        catch (InvalidKeySpecException | NoSuchAlgorithmException error) {return "";}
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException error) {return "";}
     }
 }

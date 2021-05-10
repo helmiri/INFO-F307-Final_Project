@@ -11,6 +11,9 @@ import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 
+/**
+ * The storage settings scene
+ */
 public class StorageViewController {
     //-------------- ATTRIBUTES ----------------
 
@@ -36,6 +39,7 @@ public class StorageViewController {
     private ViewListener listener;
 
     //--------------- METHODS ----------------
+
     /**
      * The main method for button's events.
      *
@@ -111,12 +115,14 @@ public class StorageViewController {
     }
 
 
-
     //--------------- LISTENER ----------------
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which action has been taken by the user
+     */
     public interface ViewListener {
         boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException;
 

@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The calendar database
+ */
 public class CalendarDB extends Database {
 
     /**

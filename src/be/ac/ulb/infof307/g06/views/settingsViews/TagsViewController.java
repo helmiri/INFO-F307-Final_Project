@@ -11,6 +11,9 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
+/**
+ * The tags settings scene
+ */
 public class TagsViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
@@ -93,7 +96,6 @@ public class TagsViewController {
         });
         defaultTagsTableView.setItems(FXCollections.observableArrayList(tags));
     }
-
 
 
     /**
