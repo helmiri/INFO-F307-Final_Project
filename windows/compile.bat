@@ -25,7 +25,7 @@ xcopy .\src .\compile\build /t/e
 
 @REM Compile 
 
-%1 -cp %classpath% --module-path lib\javafx\windows\lib --add-modules javafx.controls,javafx.fxml @.\compile\build\sources.txt .\src\be\ac\ulb\infof307\g06\Main.java -d .\compile\build
+%1 -cp %classpath% --module-path lib\javafx\windows\lib --add-modules javafx.controls,javafx.fxml,javafx.media @.\compile\build\sources.txt .\src\be\ac\ulb\infof307\g06\Main.java -d .\compile\build
 
 @REM Copy resources (icons, fxml, json)
 
@@ -35,9 +35,11 @@ copy .\src\be\ac\ulb\infof307\g06\views\projectViews\popups\*.fxml .\compile\bui
 copy .\src\be\ac\ulb\infof307\g06\views\statisticsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\statisticsViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\resources\icons\* .\compile\build\be\ac\ulb\infof307\g06\resources\icons\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\resources\stylesheets\*.css .\compile\build\be\ac\ulb\infof307\g06\resources\stylesheets\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\resources\videos\* .\compile\build\be\ac\ulb\infof307\g06\resources\videos\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\calendarViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\calendarViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\mainMenuViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\mainMenuViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\views\settingsViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\settingsViews\ > Nul
+copy .\src\be\ac\ulb\infof307\g06\views\settingsViews\helpViews\*.fxml .\compile\build\be\ac\ulb\infof307\g06\views\settingsViews\helpViews\ > Nul
 copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\DropBox\credentials.json > Nul
 copy .\src\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json .\compile\build\be\ac\ulb\infof307\g06\models\cloudModels\GoogleDrive\credentials.json > Nul
 
