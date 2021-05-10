@@ -4,6 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+/**
+ * The main menu scene
+ */
 public class MenuViewController {
     //-------------- ATTRIBUTES ----------------
 
@@ -24,6 +27,7 @@ public class MenuViewController {
     private ViewListener listener;
 
     //--------------- METHODS ----------------
+
     /**
      * The main method for button's events.
      *
@@ -46,13 +50,19 @@ public class MenuViewController {
         }
     }
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
      * @param listener ViewListener, the listener to the controller.
      */
-    public void setListener(ViewListener listener) { this.listener = listener; }
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
 
+    /**
+     * Communicates to the controller which button has been pressed
+     */
     public interface ViewListener {
         void showMainMenu();
 

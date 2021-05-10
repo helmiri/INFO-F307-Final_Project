@@ -6,6 +6,9 @@ import javafx.collections.ObservableList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Calendar colors
+ */
 public class CalendarColor {
     private Map<String, String> colorsMap = new HashMap<>();
 

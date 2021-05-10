@@ -1,5 +1,8 @@
 package be.ac.ulb.infof307.g06.models;
 
+/**
+ * User data object
+ */
 public class User {
     private int id;
     private boolean isAdmin;

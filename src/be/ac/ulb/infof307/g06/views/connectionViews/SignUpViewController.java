@@ -6,6 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+/**
+ * The signup scene
+ */
 public class SignUpViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML

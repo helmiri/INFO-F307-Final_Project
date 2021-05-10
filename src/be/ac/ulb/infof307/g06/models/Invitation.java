@@ -1,5 +1,8 @@
 package be.ac.ulb.infof307.g06.models;
 
+/**
+ * Invitation data object
+ */
 public class Invitation {
     private final int invitationID;
     private final Project project;

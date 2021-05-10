@@ -10,6 +10,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
+/**
+ * The settings scene
+ */
 public class SettingsViewController {
     //-------------- ATTRIBUTES ----------------
     private static final String hoverColor = "#95dbfa";
@@ -34,6 +37,7 @@ public class SettingsViewController {
     private ObservableList<Node> currentChildren;
 
     //--------------- METHODS ----------------
+
     /**
      * The main method for button's events.
      *
@@ -154,6 +158,7 @@ public class SettingsViewController {
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -163,6 +168,9 @@ public class SettingsViewController {
         listener = newListener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         AnchorPane getTagsScene();
 
