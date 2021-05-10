@@ -119,7 +119,7 @@ public class HelpViewController {
         path = file.getAbsolutePath() + "/" + path;
         Media media = new Media(Paths.get(path).toUri().toString());
         mediaPlayer = new MediaPlayer(media);
-        listener.showHelp("ProjectManagementTest.fxml", title, mediaPlayer);
+        listener.showHelp("TutorialView.fxml", title, mediaPlayer);
     }
 
     /**
