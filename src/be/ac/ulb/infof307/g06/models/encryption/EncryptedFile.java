@@ -12,6 +12,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
+
+
 /**
  * Encrypts/Decrypts password protected files
  */
