@@ -73,17 +73,19 @@ function compile_program(){
 
   javac -cp "$CLASS_PATH" --module-path lib/javafx/"$os" --add-modules javafx.controls,javafx.fxml,javafx.media @./compile/build/sources.txt ./src/be/ac/ulb/infof307/g06/Main.java -d ./compile/build
 
-  cp ./src/be/ac/ulb/infof307/g06/views/connectionViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/connectionViews/
-  cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/
-  cp ./src/be/ac/ulb/infof307/g06/resources/stylesheets/*.css ./compile/build/be/ac/ulb/infof307/g06/resources/stylesheets/
-  cp ./src/be/ac/ulb/infof307/g06/views/projectViews/popups/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/popups/
-  cp ./src/be/ac/ulb/infof307/g06/views/statisticsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/statisticsViews/
-  cp ./src/be/ac/ulb/infof307/g06/resources/icons/*.png ./compile/build/be/ac/ulb/infof307/g06/resources/icons/
-  cp ./src/be/ac/ulb/infof307/g06/views/calendarViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/calendarViews/
-  cp ./src/be/ac/ulb/infof307/g06/views/mainMenuViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/mainMenuViews/
-  cp ./src/be/ac/ulb/infof307/g06/views/settingsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/settingsViews/
-  cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json
-  cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json
+  cp ./src/be/ac/ulb/infof307/g06/views/connectionViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/connectionViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/projectViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/projectViews/popups/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/projectViews/popups/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/statisticsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/statisticsViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/resources/icons/* ./compile/build/be/ac/ulb/infof307/g06/resources/icons/ 
+  cp ./src/be/ac/ulb/infof307/g06/resources/stylesheets/*.css ./compile/build/be/ac/ulb/infof307/g06/resources/stylesheets/ 
+  cp ./src/be/ac/ulb/infof307/g06/resources/videos/* ./compile/build/be/ac/ulb/infof307/g06/resources/videos/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/calendarViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/calendarViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/mainMenuViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/mainMenuViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/settingsViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/settingsViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/views/settingsViews/helpViews/*.fxml ./compile/build/be/ac/ulb/infof307/g06/views/settingsViews/helpViews/ 
+  cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/DropBox/credentials.json 
+  cp ./src/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json ./compile/build/be/ac/ulb/infof307/g06/models/cloudModels/GoogleDrive/credentials.json 
 
 }
 
