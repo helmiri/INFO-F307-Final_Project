@@ -36,6 +36,17 @@ public class IOController extends Controller {
     private final String tempDir;
 
     //--------------- METHODS ----------------
+
+    /**
+     * File exportation/importation controller
+     *
+     * @param user_db    The user database used to retrieve information from
+     * @param project_db The project database used to retrieve information from
+     * @param stage      The application stage
+     * @param scene      The current scene (to swap back to)
+     * @param DB_PATH    The database path
+     */
+
     public IOController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         super(user_db, project_db, stage, scene, DB_PATH);
         tempDir = System.getProperty("user.dir") + "/temp/";
@@ -366,6 +377,11 @@ public class IOController extends Controller {
         myObj.delete();
     }
 
+    /**
+     * Delete files in a folder
+     *
+     * @param folder Target folder
+     */
     private void deleteTempFiles(File folder) {
         File[] files = folder.listFiles();
         if (files != null) {

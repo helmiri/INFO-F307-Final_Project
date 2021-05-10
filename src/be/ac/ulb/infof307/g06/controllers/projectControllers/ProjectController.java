@@ -829,6 +829,12 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         return matcher1.matches();
     }
 
+    /**
+     * Creates a text input dialog that will prompt the user for a password
+     *
+     * @param projectName The name of the project to be protected
+     * @return The password entered by the user
+     */
     private String promptPasswordInput(String projectName) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setHeaderText("File protection: " + projectName);
