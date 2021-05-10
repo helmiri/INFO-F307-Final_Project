@@ -94,15 +94,13 @@ public class HelpViewController {
     private void helpEvents(ActionEvent event) {
 
         if (event.getSource() == projectManagementHelpBtn) {
-            makeHelpWindow("projectManagementHelp.mp4", "Project Management");
-        } else if (event.getSource() == storageHelpBtn) {
-            //makeHelpWindow("storageHelp.mp4", "Storage management");
             new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
+        } else if (event.getSource() == storageHelpBtn) {
+            makeHelpWindow("storageHelp.mp4", "Storage management");
         } else if (event.getSource() == exportImportHelpBtn) {
             new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == calendarHelpBtn) {
-            //makeHelpWindow("calendarHelp.mp4", "Storage management");
-            new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
+            makeHelpWindow("calendarHelp.mp4", "Storage management");
         } else if (event.getSource() == tagsHelpBtn) {
             makeHelpWindow("tagsHelp.mp4", "Tags management");
         } else if (event.getSource() == profileHelpBtn) {
