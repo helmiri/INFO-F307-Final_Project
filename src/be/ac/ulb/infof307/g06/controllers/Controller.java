@@ -19,6 +19,15 @@ public abstract class Controller {
     protected Scene prevScene;
     protected String DB_PATH;
 
+    /**
+     * Constructor
+     *
+     * @param user_db UserDB, the user database
+     * @param project_db ProjectDB, the project database
+     * @param stage Stage, a stage
+     * @param scene Scene, a scene
+     * @param DB_PATH String, the path to the database
+     */
     //--------------- METHODS ----------------
     public Controller(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         this.user_db = user_db;

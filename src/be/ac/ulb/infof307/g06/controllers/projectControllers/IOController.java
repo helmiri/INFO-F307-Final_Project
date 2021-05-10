@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * File exportation/importation controller
+ */
 public class IOController extends Controller {
     //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
@@ -57,6 +60,11 @@ public class IOController extends Controller {
         }
     }
 
+    /**
+     * Sets the view controller to the projects view controller.
+     *
+     * @param viewController ProjectsViewController, the projects view controller.
+     */
     public void setViewController(ProjectsViewController viewController) {
         this.viewController = viewController;
     }

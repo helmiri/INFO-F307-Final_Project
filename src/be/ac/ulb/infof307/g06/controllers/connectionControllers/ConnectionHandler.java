@@ -13,6 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Main controller class for the connection.
+ */
 public class ConnectionHandler implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
     //-------------- ATTRIBUTES ----------------
     private final UserDB userDB;
@@ -22,6 +25,17 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     private final String DECRYPTED_DB_PATH;
     private final String ENCRYPTED_DB_PATH;
 
+    /**
+     /**
+     * Constructor.
+     *
+     * @param userDB UserDB, the user database
+     * @param projectDB ProjectDB, the projects database
+     * @param stage Stage, a stage
+     * @param isFirstBoot boolean, to see if it's the first time launching the app
+     * @param DECRYPTED_DB_PATH String, path to the decrypted database
+     * @param DB_PATH String, the path to the database
+     */
     public ConnectionHandler(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot, String DECRYPTED_DB_PATH, String DB_PATH) {
         this.userDB = userDB;
         this.projectDB = projectDB;

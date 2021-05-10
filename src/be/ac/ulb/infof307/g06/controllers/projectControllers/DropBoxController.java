@@ -20,6 +20,12 @@ public class DropBoxController {
     private final DropBoxAPI dbxClient;
     private List<Metadata> dropBoxFiles;
 
+    /**
+     * Constructor
+     *
+     * @param credential DbxCredential
+     * @throws DbxException throws a new exception.
+     */
     public DropBoxController(DbxCredential credential) throws DbxException {
         if (credential == null) {
             throw new DbxException("Credentials not found. Make sure that you granted access in settings");
