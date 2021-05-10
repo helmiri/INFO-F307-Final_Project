@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController">
+   <children>
+      <MediaView fx:id="mediaView" fitHeight="700.0" fitWidth="1260.0" />
+      <VBox layoutX="401.0" layoutY="724.0" prefHeight="132.0" prefWidth="459.0" spacing="20.0">
+         <children>
+            <HBox prefHeight="55.0" prefWidth="637.0" spacing="50.0" stylesheets="@../../../resources/stylesheets/Button.css">
+               <children>
+                  <Button fx:id="rewindBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#videoProgressEvents" prefHeight="55.0" prefWidth="102.0" text="&lt;&lt;" />
+                  <Button fx:id="playBtn" mnemonicParsing="false" onAction="#playBtnClicked" prefHeight="57.0" prefWidth="159.0" text="PLAY" />
+                  <Button fx:id="skipBtn" mnemonicParsing="false" onAction="#videoProgressEvents" prefHeight="55.0" prefWidth="102.0" text="&gt;&gt;" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="304.0" spacing="15.0" stylesheets="@../../../resources/stylesheets/Button.css">
+               <children>
+                  <Button fx:id="verySlowSpeedBtn" mnemonicParsing="false" onAction="#videoSpeedEvents" prefHeight="54.0" prefWidth="51.0" text="x0.5" />
+                  <Button fx:id="slowSpeedBtn" mnemonicParsing="false" onAction="#videoSpeedEvents" prefHeight="58.0" prefWidth="58.0" text="x0.75" />
+                  <Button fx:id="normalSpeedBtn" mnemonicParsing="false" onAction="#videoSpeedEvents" prefHeight="49.0" prefWidth="39.0" text="x1" />
+                  <Button fx:id="fastSpeedBtn" mnemonicParsing="false" onAction="#videoSpeedEvents" prefHeight="59.0" prefWidth="61.0" text="x1.75" />
+                  <Button fx:id="veryFastSpeedBtn" mnemonicParsing="false" onAction="#videoSpeedEvents" prefHeight="54.0" prefWidth="36.0" text="x2" />
+               </children>
+            </HBox>
+            <HBox prefHeight="57.0" prefWidth="369.0" spacing="100.0" stylesheets="@../../../resources/stylesheets/Button.css">
+               <children>
+                  <Button fx:id="pauseBtn" mnemonicParsing="false" onAction="#pauseBtnClicked" prefHeight="57.0" prefWidth="178.0" text="PAUSE" />
+                  <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopBtnClicked" prefHeight="57.0" prefWidth="178.0" text="STOP" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Label fx:id="videoLabel" disable="true" layoutX="1113.0" layoutY="725.0" prefHeight="65.0" prefWidth="95.0" textFill="#a43131">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Slider fx:id="progressBar" layoutX="14.0" layoutY="703.0" onMouseDragged="#progressBarEvents" onMousePressed="#progressBarEvents" prefHeight="16.0" prefWidth="1243.0" />
+   </children>
+</AnchorPane>
