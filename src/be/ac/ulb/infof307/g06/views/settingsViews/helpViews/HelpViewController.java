@@ -1,15 +1,29 @@
 package be.ac.ulb.infof307.g06.views.settingsViews.helpViews;
 
+import be.ac.ulb.infof307.g06.models.AlertWindow;
 import javafx.animation.TranslateTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import javafx.scene.Node;
-import java.io.IOException;
 
-public class HelpViewController{
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.ResourceBundle;
+
+public class HelpViewController implements Initializable {
     //-------------- ATTRIBUTES ----------------
 // TODO : Changer structure des Controllers ! + EXCEPTIONS
     @FXML
@@ -20,7 +34,6 @@ public class HelpViewController{
 
     @FXML
     private AnchorPane  pane3;
-
 
     @FXML
     private Button projectManagementHelpBtn;
@@ -40,7 +53,51 @@ public class HelpViewController{
     @FXML
     private Button profileHelpBtn;
 
+
+    @FXML
+    private Button playBtn;
+
+    @FXML
+    private Button stopBtn;
+
+    @FXML
+    private Button pauseBtn;
+    
+    @FXML
+    private Button rewindBtn;
+
+    @FXML
+    private Button skipBtn;
+
+    @FXML
+    private Button verySlowSpeedBtn;
+
+    @FXML
+    private Button slowSpeedBtn;
+
+    @FXML
+    private Button normalSpeedBtn;
+
+    @FXML
+    private Button fastSpeedBtn;
+
+    @FXML
+    private Button veryFastSpeedBtn;
+
+    @FXML
+    private Label videoLabel;
+
+    @FXML
+    private Slider progressBar;
+
+    String path;
+
+    MediaPlayer mediaPlayer;
+    @FXML
+    private MediaView mediaView;
+
     private ViewListener listener;
+
     //--------------- METHODS ----------------
     /**
      * The main method for button's events.
@@ -53,20 +110,155 @@ public class HelpViewController{
             listener.projectManagementHelp();
         }
         else if (event.getSource() == storageHelpBtn){
-            listener.storageHelp();
+            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
+            //listener.storageHelp();
         }
         else if (event.getSource() == exportImportHelpBtn){
-            listener.exportImportHelp();
+            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
+            //listener.exportImportHelp();
         }
         else if (event.getSource() == calendarHelpBtn){
-            listener.calendarHelp();
+            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
+            //listener.calendarHelp();
         }
         else if (event.getSource() == tagsHelpBtn){
-            listener.tagsHelp();
+            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
+            //listener.tagsHelp();
         }
         else if (event.getSource() == profileHelpBtn){
-            listener.profileHelp();
+            new AlertWindow("Coming soon...", "Coming soon...").showInformationWindow();
+            //listener.profileHelp();
         }
+    }
+
+    /**
+     * Events for the buttons linked to the progress bar of the video.
+     *
+     * @param event MouseEvent
+     */
+    @FXML
+    void progressBarEvents(MouseEvent event) {
+        progressBar.setMin(0);
+        progressBar.setMax(mediaPlayer.getTotalDuration().toSeconds());
+        mediaPlayer.seek(Duration.seconds(progressBar.getValue()));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        path = pathToVideo();
+        Media media =new Media(Paths.get(path).toUri().toString());
+        mediaPlayer = new MediaPlayer(media);
+
+//        mediaView.setMediaPlayer(mediaPlayer);
+    }
+
+    public String pathToVideo(){
+        return "/home/aline/Bureau/BA3/Genie/ProjetGenie/2021-groupe-6/src/be/ac/ulb/infof307/g06/resources/screenshots/projectManagementTest.mp4";
+    }
+
+    /**
+     * Plays the video when the button is clicked.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void playBtnClicked(ActionEvent event) {
+        mediaView.setMediaPlayer(mediaPlayer);
+        setProgressBar();
+        mediaPlayer.play();
+    }
+
+    /**
+     * Sets the progress bar.
+     */
+    public void setProgressBar(){
+        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observableValue, Duration duration, Duration currentDuration) {
+                progressBar.setValue(currentDuration.toSeconds());
+            }
+        });
+    }
+
+    /**
+     * Sets the video to pause when the button is clicked.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void pauseBtnClicked(ActionEvent event) {
+        mediaView.setMediaPlayer(mediaPlayer);
+        mediaPlayer.pause();
+    }
+
+    /**
+     * Stops the video when the button is clicked.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void stopBtnClicked(ActionEvent event) {
+        mediaView.setMediaPlayer(mediaPlayer);
+        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED ){
+            mediaPlayer.stop();
+        }
+        else {
+            mediaPlayer.play();
+        }
+    }
+
+    /**
+     * Events for the buttons linked to the progress of the video.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void videoProgressEvents(ActionEvent event) {
+        mediaView.setMediaPlayer(mediaPlayer);
+        if (event.getSource() == skipBtn){
+            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(10)));
+        }
+        else if (event.getSource() == rewindBtn){
+            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(-10)));
+        }
+    }
+
+    /**
+     * Events for the buttons linked to the speed of the video.
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void videoSpeedEvents(ActionEvent event) {
+        mediaView.setMediaPlayer(mediaPlayer);
+        videoLabel.setVisible(false);
+        if (event.getSource() == verySlowSpeedBtn){
+            setVideoRate(0.5);
+        }
+        else if (event.getSource() == slowSpeedBtn){
+            setVideoRate(0.75);
+        }
+        else if (event.getSource() == normalSpeedBtn){
+            setVideoRate(1);
+        }
+        else if (event.getSource() == fastSpeedBtn){
+            setVideoRate(1.75);
+        }
+        else if (event.getSource() == veryFastSpeedBtn){
+            setVideoRate(2);
+        }
+    }
+
+    /**
+     * Sets the video rate.
+     *
+     * @param rateValue Rate value.
+     */
+    private void setVideoRate(double rateValue) {
+        mediaPlayer.setRate(rateValue);
+        videoLabel.setVisible(true);
+        videoLabel.setText("x"+String.valueOf(rateValue));
     }
 
     /**
@@ -139,5 +331,6 @@ public class HelpViewController{
         void exportImportHelp()throws IOException;
         void tagsHelp() throws IOException;
         void profileHelp() throws IOException;
+        String okok();
     }
 }

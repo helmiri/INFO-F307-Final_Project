@@ -6,9 +6,12 @@ import be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 public class HelpController extends Controller implements HelpViewController.ViewListener {
     private final HelpViewController helpViewController;
@@ -55,7 +58,13 @@ public class HelpController extends Controller implements HelpViewController.Vie
      */
     @Override
     public void projectManagementHelp() throws IOException {
-        showHelp("ProjectManagementHelpView.fxml", "Project Management");
+        showHelp("ProjectManagementTest.fxml", "Project Management");
+    }
+
+    @Override
+    public String okok(){
+        return "/home/aline/Bureau/BA3/Genie/ProjetGenie/2021-groupe-6/src/be/ac/ulb/infof307/g06/resources/screenshots/yseult-indelebile-lyric-video.mp4";
+
     }
 
     /**
