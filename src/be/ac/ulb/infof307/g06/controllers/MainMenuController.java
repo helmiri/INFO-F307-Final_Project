@@ -25,8 +25,8 @@ public class MainMenuController extends Controller implements MenuViewController
     private Listener listener;
 
     //--------------- METHODS ----------------
-    public MainMenuController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(user_db, project_db, stage, scene);
+    public MainMenuController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
     }
 
     /**
@@ -93,13 +93,13 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showSettings() {
-        SettingsController controller = new SettingsController(user_db, project_db, stage, scene);
+        SettingsController controller = new SettingsController(user_db, project_db, stage, scene, DB_PATH);
         controller.show();
     }
 
     @Override
     public void showProjects() {
-        ProjectController controller = new ProjectController(user_db, project_db, stage, scene);
+        ProjectController controller = new ProjectController(user_db, project_db, stage, scene, DB_PATH);
         controller.show();
     }
 
@@ -108,7 +108,7 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showStats() {
-        StatsController controller = new StatsController(user_db, project_db, stage, scene);
+        StatsController controller = new StatsController(user_db, project_db, stage, scene, DB_PATH);
         controller.show();
     }
 
@@ -118,7 +118,7 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showCalendar() {
-        CalendarController controller = new CalendarController(user_db, project_db, stage, scene);
+        CalendarController controller = new CalendarController(user_db, project_db, stage, scene, DB_PATH);
         try {
             controller.show();
         } catch (SQLException e) {

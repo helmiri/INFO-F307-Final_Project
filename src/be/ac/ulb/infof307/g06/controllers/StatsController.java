@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,8 +28,8 @@ public class StatsController extends Controller implements StatsViewController.V
     private StatsViewController statsView;
 
     //--------------- METHODS ----------------
-    public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(user_db, project_db, stage, scene);
+    public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
     }
 
     /**

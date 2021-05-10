@@ -31,8 +31,8 @@ public class StorageController extends Controller implements StorageViewControll
     private DropBoxAuthorization authorization;
 
     //--------------- METHODS ----------------
-    public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, StorageViewController storageViewController) {
-        super(user_db, project_db, stage, scene);
+    public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, StorageViewController storageViewController, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
         this.storageViewController = storageViewController;
     }
 

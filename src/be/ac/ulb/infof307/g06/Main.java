@@ -32,9 +32,10 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws IllegalBlockSizeException, IOException, BadPaddingException, InvalidKeyException {
+        new File("data").mkdir();
         // Set main stage
-        String DB_PATH = "Database.db";
-        String DECRYPTED_DB_PATH = "Database_Decrypted.db";
+        String DB_PATH = "data/Database.db";
+        String DECRYPTED_DB_PATH = "data/Database_Decrypted.db";
         if (new File(DB_PATH).exists()) {
             EncryptedFile file = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", DB_PATH);
             file.decryptFile(DECRYPTED_DB_PATH);
@@ -43,10 +44,11 @@ public class Main extends Application {
             UserDB userDB = new UserDB(DECRYPTED_DB_PATH);
             ProjectDB projectDB = new ProjectDB(DECRYPTED_DB_PATH);
             boolean isFirstBoot = userDB.isFirstBoot();
-            ConnectionHandler handler = new ConnectionHandler(userDB, projectDB, stage, isFirstBoot);
+            ConnectionHandler handler = new ConnectionHandler(userDB, projectDB, stage, isFirstBoot, DECRYPTED_DB_PATH, DB_PATH);
             handler.showLogin();
         } catch (SQLException | ClassNotFoundException e) {
             new DatabaseException(e).show();
         }
     }
+
 }

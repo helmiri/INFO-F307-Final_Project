@@ -19,12 +19,16 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     private final ProjectDB projectDB;
     private final Stage stage;
     private final boolean isFirstBoot;
+    private final String DECRYPTED_DB_PATH;
+    private final String ENCRYPTED_DB_PATH;
 
-    public ConnectionHandler(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot) {
+    public ConnectionHandler(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot, String DECRYPTED_DB_PATH, String DB_PATH) {
         this.userDB = userDB;
         this.projectDB = projectDB;
         this.stage = stage;
         this.isFirstBoot = isFirstBoot;
+        this.DECRYPTED_DB_PATH = DECRYPTED_DB_PATH;
+        ENCRYPTED_DB_PATH = DB_PATH;
     }
 
     //-------------- METHODS ----------------
@@ -83,10 +87,10 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     public void showMainMenu() {
         stage.setOnCloseRequest(e -> {
             logout();
-            EncryptedFile databaseFile = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", "Database_Decrypted.db");
+            EncryptedFile databaseFile = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", DECRYPTED_DB_PATH);
             try {
-                databaseFile.encryptFile("Database.db");
-                new File("Database_Decrypted.db").delete();
+                databaseFile.encryptFile(ENCRYPTED_DB_PATH);
+                new File(DECRYPTED_DB_PATH).delete();
             } catch (IOException ioException) {
                 new AlertWindow("Error", "Could not commit the database", ioException.getMessage()).showErrorWindow();
             }
@@ -94,7 +98,7 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
             System.exit(0);
         });
         setAdminIfFirstBoot();
-        MainMenuController controller = new MainMenuController(userDB, projectDB, stage, stage.getScene());
+        MainMenuController controller = new MainMenuController(userDB, projectDB, stage, stage.getScene(), DECRYPTED_DB_PATH);
         controller.setListener(this);
         controller.show();
     }

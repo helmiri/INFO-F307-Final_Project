@@ -14,13 +14,15 @@ public abstract class Controller {
     protected UserDB user_db;
     protected ProjectDB project_db;
     protected Scene prevScene;
+    protected String DB_PATH;
 
     //--------------- METHODS ----------------
-    public Controller(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
+    public Controller(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
         this.user_db = user_db;
         this.project_db = project_db;
         this.stage = stage;
         prevScene = scene;
+        this.DB_PATH = DB_PATH;
     }
 
     /**

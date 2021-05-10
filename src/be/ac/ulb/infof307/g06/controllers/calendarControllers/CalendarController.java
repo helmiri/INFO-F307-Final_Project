@@ -39,8 +39,8 @@ public class CalendarController extends Controller implements CalendarViewContro
     private final Map<String, Calendar> tasksMap = new HashMap<>();
     private CalendarDB database;
 
-    public CalendarController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(user_db, project_db, stage, scene);
+    public CalendarController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
     }
 
     /**

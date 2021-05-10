@@ -18,8 +18,8 @@ public class ProfileController extends Controller implements ProfileViewControll
     ProfileViewController viewController;
     User user;
 
-    public ProfileController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, ProfileViewController controller) {
-        super(user_db, project_db, stage, scene);
+    public ProfileController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, ProfileViewController controller, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
         viewController = controller;
     }
 

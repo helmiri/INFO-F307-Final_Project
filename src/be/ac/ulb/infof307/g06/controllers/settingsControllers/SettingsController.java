@@ -15,8 +15,8 @@ import java.io.IOException;
 public class SettingsController extends Controller implements SettingsViewController.ViewListener {
     private FXMLLoader loader;
 
-    public SettingsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(user_db, project_db, stage, scene);
+    public SettingsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
     }
 
     /**
@@ -96,7 +96,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showStorage() {
-        StorageController controller = new StorageController(user_db, project_db, stage, scene, loader.getController());
+        StorageController controller = new StorageController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
         controller.show();
     }
 
@@ -105,7 +105,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showTags() {
-        TagsController controller = new TagsController(user_db, project_db, stage, scene, loader.getController());
+        TagsController controller = new TagsController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
         controller.show();
     }
 
@@ -114,7 +114,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showHelp() {
-        HelpController controller = new HelpController(user_db, project_db, stage, scene, loader.getController());
+        HelpController controller = new HelpController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
         controller.show();
     }
 
@@ -126,7 +126,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showProfile() {
-        ProfileController controller = new ProfileController(user_db, project_db, stage, scene, loader.getController());
+        ProfileController controller = new ProfileController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
         controller.show();
     }
 

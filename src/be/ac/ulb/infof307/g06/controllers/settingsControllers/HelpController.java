@@ -1,4 +1,5 @@
 package be.ac.ulb.infof307.g06.controllers.settingsControllers;
+
 import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
@@ -10,14 +11,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 
 public class HelpController extends Controller implements HelpViewController.ViewListener {
     private final HelpViewController helpViewController;
 
-    public HelpController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, HelpViewController helpViewController) {
-        super(user_db, project_db, stage, scene);
+    public HelpController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, HelpViewController helpViewController, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
         this.helpViewController = helpViewController;
     }
 

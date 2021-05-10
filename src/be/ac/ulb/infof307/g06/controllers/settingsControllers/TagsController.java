@@ -16,8 +16,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
     TagsViewController viewController;
 
     //--------------- METHODS ----------------
-    public TagsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, TagsViewController viewController) {
-        super(user_db, project_db, stage, scene);
+    public TagsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, TagsViewController viewController, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
         this.viewController = viewController;
     }
 
