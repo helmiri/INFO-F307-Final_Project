@@ -93,7 +93,7 @@ public class HelpViewController {
     private void helpEvents(ActionEvent event) {
 
         if (event.getSource() == projectManagementHelpBtn) {
-            makeHelpWindow("projectManagementTest.mp4", "Project Management");
+            makeHelpWindow("projectManagementHelp.mp4", "Project Management");
         } else if (event.getSource() == storageHelpBtn) {
             makeHelpWindow("storageHelp.mp4", "Storage management");
         } else if (event.getSource() == exportImportHelpBtn) {
