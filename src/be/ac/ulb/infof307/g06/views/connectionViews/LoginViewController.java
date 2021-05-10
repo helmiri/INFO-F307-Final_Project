@@ -23,7 +23,7 @@ public class LoginViewController{
     @FXML
     private PasswordField logInPasswordField;
 
-    protected ViewListener listener;
+    private ViewListener listener;
     //--------------- METHODS ----------------
 
     /**
@@ -66,8 +66,15 @@ public class LoginViewController{
      * Used to communicate with the login controller
      */
     public interface ViewListener {
+        /**
+         * @param username The username entered
+         * @param password The password entered
+         */
         void login(String username, String password);
 
+        /**
+         * On signup button clicked
+         */
         void signup();
     }
 

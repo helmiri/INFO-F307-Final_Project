@@ -53,6 +53,8 @@ public class MainMenuController extends Controller implements MenuViewController
 
     /**
      * Sets the loader to show the stage with an invitation to join a project.
+     *
+     * @param invitation The invitation to be accepted/declined
      */
     public void showInvitationStage(Invitation invitation) throws IOException {
         FXMLLoader loader = new FXMLLoader(InvitationViewController.class.getResource("InvitationView.fxml"));

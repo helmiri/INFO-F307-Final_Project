@@ -90,8 +90,18 @@ public class InvitationViewController {
      * Communicates to the controller which button has been clicked
      */
     public interface ViewListener {
+        /**
+         * @param invitation The invitation to be accepted
+         * @param stage      The stage to be closed
+         */
         void acceptInvitation(Invitation invitation, Stage stage);
 
+        /**
+         * T
+         *
+         * @param invitation The invitation to be declined
+         * @param stage      The stage to be closed
+         */
         void declineInvitation(Invitation invitation, Stage stage);
     }
 

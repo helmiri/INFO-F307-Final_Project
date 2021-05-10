@@ -29,7 +29,7 @@ public class SignUpViewController {
     private TextField passwordConfirmationField;
     @FXML
     private Text signUpTxtPopup;
-    protected ViewListener listener;
+    private ViewListener listener;
 
     //---------------- METHODS ----------------
 
