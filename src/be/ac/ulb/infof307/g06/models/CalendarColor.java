@@ -12,6 +12,9 @@ import java.util.Map;
 public class CalendarColor {
     private Map<String, String> colorsMap = new HashMap<>();
 
+    /**
+     * consturctor
+     */
     public CalendarColor() {
         colorsMap.put("AliceBlue", "#F0F8FF");
         colorsMap.put("AntiqueWhite", "#FAEBD7");
@@ -162,10 +165,19 @@ public class CalendarColor {
         colorsMap.put("YellowGreen", "#9ACD32");
     }
 
+    /**
+     * Returns the color code in hexadecimal
+     * @param color the color
+     * @return the hex value
+     */
     public String getHex(String color) {
         return colorsMap.get(color);
     }
 
+    /**
+     * returns all the colors available
+     * @return the colors
+     */
     public ObservableList<String> getAllColors() {
         return FXCollections.observableArrayList(colorsMap.keySet());
     }

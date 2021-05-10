@@ -19,18 +19,29 @@ public class Tag {
         this.color = color;
     }
 
+    /**
+     * @return the id of the tag
+     */
     public int getId() {
         return id;
     }
-
+    /**
+     * @return the description of the tag
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * @return the color of the tag
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * @return the size of the tag
+     */
     public int getSize() {
         return 4 + description.length() + 4;
     }
