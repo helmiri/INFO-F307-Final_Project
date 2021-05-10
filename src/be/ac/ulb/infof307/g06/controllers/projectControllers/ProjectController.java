@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -42,11 +43,13 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
     private CalendarDB calendar_db;
     private ProjectsViewController viewController;
     private CloudServiceController cloudServiceController;
+    private String DB_PATH;
 
     //--------------- METHODS ----------------
-    public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(user_db, project_db, stage, scene);
-        ioController = new IOController(user_db, project_db, stage, scene);
+    public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
+        ioController = new IOController(user_db, project_db, stage, scene, DB_PATH);
+        this.DB_PATH = DB_PATH;
     }
 
 
@@ -56,7 +59,7 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
     @Override
     public void show() {
         try {
-            calendar_db = new CalendarDB("Database.db");
+            calendar_db = new CalendarDB(DB_PATH);
             project_db.createTag("tag1", "#ff55ff");
         } catch (SQLException | ClassNotFoundException error) {
             new DatabaseException(error).show();
@@ -618,8 +621,14 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         if (storageLimitReached()) {
             return;
         }
+
+        String password = promptPasswordInput(path);
+        if (password.isBlank()) {
+            return;
+        }
+
         try {
-            if (ioController.onImportProject(path)) {
+            if (ioController.onImportProject(password, path)) {
                 new AlertWindow("Success", "The project has been imported").showInformationWindow();
             } else {
                 new AlertWindow("Failure", "This project already exists in the database").showErrorWindow();
@@ -639,8 +648,12 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
      */
     @Override
     public void exportProject(Project project, String path) {
+        String password = promptPasswordInput(project.getTitle());
+        if (password.isBlank()) {
+            return;
+        }
         try {
-            ioController.onExportProject(project, path);
+            ioController.onExportProject(password, project, path);
             new AlertWindow("Success", "Exportation successful").showInformationWindow();
         } catch (IOException error) {
             new AlertWindow("Error", "An error occurred while exporting", error.getMessage()).showErrorWindow();
@@ -662,9 +675,10 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         cloudServiceController.showSelectionStage(false);
         try {
             for (Project project : projects) {
+                String password = promptPasswordInput(project.getTitle());
                 // Export the project
                 String localFilePath = System.getProperty("user.dir");
-                ioController.onExportProject(project, localFilePath);
+                ioController.onExportProject(password, project, localFilePath);
                 // Upload the exported file
                 String fileName = "/" + project.getTitle() + ".tar.gz";
                 cloudServiceController.uploadProject(fileName, localFilePath + fileName);
@@ -815,4 +829,11 @@ ProjectController extends Controller implements ProjectsViewController.ViewListe
         return matcher1.matches();
     }
 
+    private String promptPasswordInput(String projectName) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText("File protection: " + projectName);
+        dialog.setContentText("Enter a password used to protect the file.");
+        dialog.showAndWait();
+        return dialog.getEditor().getText();
+    }
 }

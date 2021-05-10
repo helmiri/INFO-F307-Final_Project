@@ -7,6 +7,7 @@ import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.models.encryption.EncryptedFile;
 import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +22,8 @@ import org.rauschig.jarchivelib.CompressionType;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,10 +33,17 @@ import java.util.Map;
 public class IOController extends Controller {
     //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
+    private final String tempDir;
 
     //--------------- METHODS ----------------
-    public IOController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene) {
-        super(user_db, project_db, stage, scene);
+    public IOController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
+        super(user_db, project_db, stage, scene, DB_PATH);
+        tempDir = System.getProperty("user.dir") + "/temp/";
+        File directory = new File(tempDir);// Temporary file directory
+
+        if (!directory.mkdir()) { // Delete content if not empty
+            deleteTempFiles(directory);
+        }
     }
 
     public void setViewController(ProjectsViewController viewController) {
@@ -66,23 +76,27 @@ public class IOController extends Controller {
     /**
      * Export a complete project (root and all his children) in a "tar.gz" archive.
      *
-     * @param project     Project
-     * @param archivePath String
+     * @param password    Password to be used to encrypt the file
+     * @param project     Project to be exported
+     * @param archivePath Directory where the file will be saved
      * @throws IOException       on file write error
      * @throws DatabaseException when a database access error occurs
      */
-    public void onExportProject(Project project, String archivePath) throws IOException, DatabaseException {
-        String jsonFile = archivePath + "/file.json";
+    public void onExportProject(String password, Project project, String archivePath) throws IOException, DatabaseException {
+        String jsonFile = tempDir + "/file.json";
         deleteFile(jsonFile);
         try (FileWriter fileWriter = new FileWriter(jsonFile, true)) {
             saveProjectAndChildrenJSON(project, fileWriter);
         } catch (IOException error) {
+            error.printStackTrace();
             // Close file writer and throw exception back
             throw new IOException(error);
         } catch (SQLException error) {
             throw new DatabaseException(error);
         }
+
         zip(project.getTitle(), jsonFile, archivePath);
+        encrypt(password, archivePath + "/" + project.getTitle() + ".tar.gz");
         deleteFile(jsonFile);
     }
 
@@ -109,16 +123,20 @@ public class IOController extends Controller {
     /**
      * Import a complete project (root and all his children) from a archive "tar.gz".
      *
+     *
+     * @param password The password to be used to decrypt the file
      * @param archivePath The path to the file
      * @return false if the project already exists in the database, true on success
      * @throws SQLException when a database access error occurs
      * @throws IOException  on file read error
      */
-    public boolean onImportProject(String archivePath) throws SQLException, IOException {
-        File file = new File(archivePath);
+    public boolean onImportProject(String password, String archivePath) throws SQLException, IOException {
+        String sourcePath = decrypt(password, archivePath);
+        File file = new File(sourcePath);
+
         String directory = file.getAbsoluteFile().getParent();
-        String jsonFile = directory + "/file.json";
-        unzip(archivePath, directory);
+        String jsonFile = tempDir + "/file.json";
+        unzip(sourcePath, directory);
         if (isProjectInDb(jsonFile)) {
             deleteFile(jsonFile);
             return false;
@@ -127,6 +145,36 @@ public class IOController extends Controller {
         user_db.updateDiskUsage(project_db.getSizeOnDisk());
         deleteFile(jsonFile);
         return true;
+    }
+
+    /**
+     * Decrypts a file
+     *
+     * @param password The password to be used
+     * @param path     The path of the file to be decrypted
+     * @return A path to the decrypted file
+     * @throws IOException On error reading/writing the file
+     */
+    private String decrypt(String password, String path) throws IOException {
+        String tempPath = tempDir + "/archive.tar.gz";
+        EncryptedFile file = new EncryptedFile(password, path);
+        file.decryptFile(tempPath);
+        return tempPath;
+    }
+
+    /**
+     * Encrypts a file
+     *
+     * @param password The password to be used
+     * @param path     The path of the file to be encrypted
+     * @throws IOException On error reading/writing the file
+     */
+    private void encrypt(String password, String path) throws IOException {
+        String tempPath = tempDir + "/archive.tar.gz";
+        EncryptedFile file = new EncryptedFile(password, path);
+        file.encryptFile(tempPath);
+        deleteFile(path);
+        Files.move(Paths.get(tempPath), Paths.get(path));
     }
 
     /**
@@ -237,16 +285,16 @@ public class IOController extends Controller {
     /**
      * Zip a file in a "tar.gz" archive.
      *
-     * @param archiveName Archive name
-     * @param source      path to source file
-     * @param destination path to destination
+     * @param archiveName     Archive name
+     * @param sourcePath      path to source file
+     * @param destinationPath path to destination
      */
-    public void zip(String archiveName, String source, String destination) throws IOException {
-        File src = new File(source);
-        File dest = new File(destination);
+    public void zip(String archiveName, String sourcePath, String destinationPath) throws IOException {
+        File source = new File(sourcePath);
+        File destination = new File(destinationPath);
         Archiver archiver =
                 ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-        archiver.create(archiveName, dest, src);
+        archiver.create(archiveName, destination, source);
     }
 
     /**
@@ -260,7 +308,15 @@ public class IOController extends Controller {
                 ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
         File archive = new File(source);
         File dest = new File(destination);
-        archiver.extract(archive, dest); // WARNING OK
+        try {
+            archiver.extract(archive, dest); // WARNING OK
+        } catch (IOException e) {
+            // Catch and throw the exception back to notify the user of a potential cause because
+            // there is no way of detecting whether the file has been encrypted by the application
+            throw new IOException("Could not extract the file:\n\t- Is the password correct?\n\t- The file may not have originated from the application", e);
+        } finally {
+            archive.delete();
+        }
     }
 
     /**
@@ -271,26 +327,32 @@ public class IOController extends Controller {
      * @return true if the project is in the database, false otherwise
      */
     public boolean isProjectInDb(String jsonFile) throws IOException, SQLException {
-        BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
+
         String line;
         int count = 0;
-        while ((line = reader.readLine()) != null) {
-            ++count;
-            count %= 6;
-            if (count == 2) {
-                Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
-                int id = project_db.getProjectID(project.getTitle());
-                if (id != 0) {
-                    reader.close();
-                    return true;
-                }
-            } else {
-                if (line.equals("[")) {
-                    count = 1;
+        try (BufferedReader reader = new BufferedReader(new FileReader(jsonFile))) {
+            while ((line = reader.readLine()) != null) {
+                ++count;
+                count %= 6;
+                if (count == 2) {
+                    Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
+                    int id = project_db.getProjectID(project.getTitle());
+                    if (id != 0) {
+                        reader.close();
+                        return true;
+                    }
+                } else {
+                    if (line.equals("[")) {
+                        count = 1;
+                    }
                 }
             }
+            // Ensure that the buffer reader is closed and throw back the exception
+        } catch (IOException e) {
+            throw new IOException(e);
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
-        reader.close();
         return false;
     }
 
@@ -302,5 +364,14 @@ public class IOController extends Controller {
     public void deleteFile(String fileName) {
         File myObj = new File(fileName);
         myObj.delete();
+    }
+
+    private void deleteTempFiles(File folder) {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
     }
 }
