@@ -108,15 +108,20 @@ Pour l'itération 2, on a commencé par faire un gros "refactor" de notre code. 
 
 Pour l'itération 3, on a perfectionné la structure MVC du projet en ajoutant des "Listener" afin de diminuer le couplage dans les différents fichiers. Ensuite, on a cloturé le design de l'interface des statistiques dans le but que le visuel soit plus compréhensible pour l'utilisateur. De ce fait, on a maintenant une vue générale et une vue individuelle pour une analyse plus fine des statistiques. Pendant ce temps, on a également travaillé sur le calendrier sur base de la librairie "CalendarFX". Enfin, on a ajouté une fonctionnalité afin de télécharger les projets via "GoogleDrive" pour pouvoir satisfaire un plus grand public d'utilisateurs.
 
-## Screenshot
-![signup](https://user-images.githubusercontent.com/33431271/112816753-03460200-9082-11eb-92de-fd46c727796f.PNG)
-![login](https://user-images.githubusercontent.com/33431271/112816761-050fc580-9082-11eb-88ad-2a758668ddbd.PNG)
-![projets](https://user-images.githubusercontent.com/33431271/116112919-537fa680-a6b8-11eb-90cb-7ac83e89539a.PNG)
-![settings](https://user-images.githubusercontent.com/33431271/116112561-f552c380-a6b7-11eb-830e-90c832cd3114.PNG)
-![cloud](https://user-images.githubusercontent.com/33431271/116112587-fb48a480-a6b7-11eb-955f-aec80cc15d7f.PNG)
-![overall](https://user-images.githubusercontent.com/33431271/116119986-592cba80-a6bf-11eb-988f-01c9a328a3aa.PNG)
-![projectstats](https://user-images.githubusercontent.com/33431271/116119995-5a5de780-a6bf-11eb-80f5-ec9d57368543.PNG)
+Lors de l'itération 4 nous avons dû intégrer à notre projet l'intégrité des données, un système de sécurité ainsi que des aides dans l'application. Nous avons commencé par régler les différentes "issues" qui nous avaient été pointées du doigt pour ensuite mieux attaqué les différentes choses à rajouter ou modifier.L'intégrité et la sécurité des données ont été faites en parallèle des aides. Pour les aides nous sommes partis sur des videos tutorielles.
 
+
+## Screenshot
+![logIn](https://user-images.githubusercontent.com/33431271/117679889-f5bb8600-b1b0-11eb-9a12-6d14594c1a76.PNG)
+![image](https://user-images.githubusercontent.com/33431271/117679976-0835bf80-b1b1-11eb-8271-502c3415768a.png)
+![ProjectManagement](https://user-images.githubusercontent.com/33431271/117680003-0e2ba080-b1b1-11eb-9c34-d79f86cc7c0f.PNG)
+![weekCalendar](https://user-images.githubusercontent.com/33431271/117680029-1552ae80-b1b1-11eb-91c7-b74b38115418.PNG)
+![monthCalendar](https://user-images.githubusercontent.com/33431271/117680048-18e63580-b1b1-11eb-9b1b-f96da5170da1.PNG)
+![stats2](https://user-images.githubusercontent.com/33431271/117680062-1c79bc80-b1b1-11eb-8d4f-0786d73a9c1e.PNG)
+![profil](https://user-images.githubusercontent.com/33431271/117680101-27cce800-b1b1-11eb-99c0-5ef70c449674.PNG)
+![tags](https://user-images.githubusercontent.com/33431271/117680085-256a8e00-b1b1-11eb-8817-a255790e4d56.PNG)
+![storage](https://user-images.githubusercontent.com/33431271/117680072-1f74ad00-b1b1-11eb-8a95-bc9e8a6fb08c.PNG)
+![help](https://user-images.githubusercontent.com/33431271/117680080-23083400-b1b1-11eb-8c34-8bb1e6e39dc9.PNG)
 
 
 ## License
