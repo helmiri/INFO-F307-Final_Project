@@ -98,22 +98,27 @@ public class EncryptedFile {
         if (encrypted_source == null) {
             encrypted_source = source;
         }
-
         FileInputStream in = new FileInputStream(encrypted_source);
-        byte[] salt = new byte[8];
-        in.read(salt);
-
-        PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 100);
-        Cipher cipher = null;
-        try {
-            cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.DECRYPT_MODE, getSecretKey(), pbeParameterSpec);
-        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ignored) {
-            // The algorithm used for encryption/decryption ensure that these exceptions will never be triggered
-        }
-
+        ;
         FileOutputStream out = new FileOutputStream(destination);
-        processFile(in, out, cipher);
+        try {
+            byte[] salt = new byte[8];
+            in.read(salt);
+
+            PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 100);
+            Cipher cipher = null;
+            try {
+                cipher = Cipher.getInstance(algorithm);
+                cipher.init(Cipher.DECRYPT_MODE, getSecretKey(), pbeParameterSpec);
+            } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ignored) {
+                // The algorithm used for encryption/decryption ensure that these exceptions will never be triggered
+            }
+            processFile(in, out, cipher);
+        } finally {
+            in.close();
+            out.flush();
+            out.close();
+        }
     }
 
     /**
