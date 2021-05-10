@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController">
    <children>
-      <MediaView fx:id="mediaView" fitHeight="700.0" fitWidth="1260.0" />
+      <MediaView fx:id="mediaView" fitHeight="700.0" fitWidth="1200.0" layoutX="31.0" />
       <VBox layoutX="401.0" layoutY="724.0" prefHeight="132.0" prefWidth="459.0" spacing="20.0">
          <children>
             <HBox prefHeight="55.0" prefWidth="637.0" spacing="50.0" stylesheets="@../../../resources/stylesheets/Button.css">

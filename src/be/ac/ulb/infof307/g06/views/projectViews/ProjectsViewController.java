@@ -146,7 +146,7 @@ public class ProjectsViewController {
             importProject();
         } else if (event.getSource() == cloudDownloadBtn) {
             listener.downloadProject();
-        } else if (event.getSource() == addCollaboratorsBtn && selectedProject != null) {
+        } else if (event.getSource() == addCollaboratorsBtn) {
             listener.addCollaborator(collaboratorsName.getText(), selectedProject.getId());
         } else if (event.getSource() == addTaskbtn && selectedProject != null) {
             if (startDateTask.getValue() != null && endDateTask.getValue() != null) {

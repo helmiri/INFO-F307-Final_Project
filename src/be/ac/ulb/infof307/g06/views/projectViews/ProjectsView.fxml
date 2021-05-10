@@ -111,7 +111,9 @@
                <Tooltip fx:id="projectCollaboratorsToolTip" text="overview of your collaborators on the selected project." />
             </tooltip>
          </TableView>
-         <Button fx:id="addCollaboratorsBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="210.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD" textFill="white" />
+         <Button fx:id="addCollaboratorsBtn" layoutX="60.0" layoutY="395.0" mnemonicParsing="false" prefHeight="37.0"
+                 prefWidth="210.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD" textFill="white"
+                 onAction="#events"/>
          <TextArea fx:id="collaboratorsName" layoutX="60.0" layoutY="340.0" prefHeight="12.0" prefWidth="210.0" promptText="Enter the collaborator's name." />
       </Pane>
       <Pane layoutX="664.0" layoutY="465.0" prefHeight="440.0" prefWidth="330.0">
