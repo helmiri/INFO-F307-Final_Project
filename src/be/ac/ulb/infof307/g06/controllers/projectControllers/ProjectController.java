@@ -568,7 +568,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 return;
             }
             user_db.sendInvitation(project_id, user_db.getCurrentUser().getId(), receiverID);
-
+            new AlertWindow("Alert", "Invitation sent to '" + username + "'").showErrorWindow();
             user_db.updateDiskUsage(project_db.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
