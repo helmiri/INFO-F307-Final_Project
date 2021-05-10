@@ -1,5 +1,8 @@
 package be.ac.ulb.infof307.g06.models;
 
+/**
+ * A task data object
+ */
 public class Task {
     //-------------- ATTRIBUTES ----------------
     int id;

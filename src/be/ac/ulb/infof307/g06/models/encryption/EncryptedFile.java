@@ -12,6 +12,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
+/**
+ * Encrypts/Decrypts password protected files
+ */
 public class EncryptedFile {
     private final String algorithm = "PBEWithMD5AndTripleDES";
     private final String source;
@@ -19,7 +22,6 @@ public class EncryptedFile {
     private String encrypted_source;
 
     /**
-     * Encrypts/Decrypts password protected files
      *
      * @param password The password to be used for encryption/decryption
      * @param source   The source/encrypted file

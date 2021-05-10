@@ -16,12 +16,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Creates the stage on which the user can edit the project's information
+ */
 public class EditProjectViewController extends ProjectInputViewController{
     //---------- ATTRIBUTE ----------------
     @FXML
     private Button editProjectBtn;
     private Project project;
-    private final Long TO_DAY = 86400000L;
     //--------------- METHODS ----------------
 
     /**
@@ -51,6 +53,7 @@ public class EditProjectViewController extends ProjectInputViewController{
         descriptionProject.setText(description);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Long TO_DAY = 86400000L;
         dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * TO_DAY), formatter));
         endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * TO_DAY), formatter));
     }

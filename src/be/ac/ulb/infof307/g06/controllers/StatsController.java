@@ -23,6 +23,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * The statistics screen controller
+ */
 public class StatsController extends Controller implements StatsViewController.ViewListener  {
     //--------------- ATTRIBUTE ----------------
     private StatsViewController statsView;
@@ -97,8 +100,7 @@ public class StatsController extends Controller implements StatsViewController.V
     public Project getProjectsFromID(int id){
         try {
             return project_db.getProject(id);
-        }
-        catch(SQLException error) {
+        } catch(SQLException error) {
             new AlertWindow("Database error","Unable to get a project from its ID in the database: ",error.getMessage()).showErrorWindow();
             return null;
         }
@@ -134,8 +136,7 @@ public class StatsController extends Controller implements StatsViewController.V
                 int childID = project_db.getProjectID(title);
                 TreeItem<Project> projectTreeItem = new TreeItem<>(childProject);
                 statsTreeMap.put(childID, projectTreeItem);
-                if (parentID== 0){ statsView.addChild(root,projectTreeItem); }
-                else { statsView.addChild(statsTreeMap.get(parentID),projectTreeItem); }
+                if (parentID== 0){ statsView.addChild(root,projectTreeItem); } else { statsView.addChild(statsTreeMap.get(parentID),projectTreeItem); }
             }
             statsView.expandRoot(root);
         }catch(SQLException error){
@@ -210,8 +211,7 @@ public class StatsController extends Controller implements StatsViewController.V
                 res.set(2,project_db.countCollaborators(projectId));
             }
             return res;
-        }
-        catch (SQLException error){
+        } catch (SQLException error){
             new AlertWindow("Error", "An error has occurred with the database while trying to load counts: ", error.getMessage()).showErrorWindow();
             return res;
         }

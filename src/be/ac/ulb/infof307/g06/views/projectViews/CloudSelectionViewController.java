@@ -8,6 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * The stage on which the user can select which cloud service provider to use
+ */
 public class CloudSelectionViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
@@ -45,6 +48,7 @@ public class CloudSelectionViewController {
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -54,8 +58,12 @@ public class CloudSelectionViewController {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which cloud service the user has selected
+     */
     public interface ViewListener {
         void selectGoogleDrive();
+
         void selectDropBox();
     }
 }

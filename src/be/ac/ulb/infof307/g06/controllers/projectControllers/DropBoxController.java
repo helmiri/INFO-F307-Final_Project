@@ -13,6 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Communicates with the DropBox api
+ */
 public class DropBoxController {
     private final DropBoxAPI dbxClient;
     private List<Metadata> dropBoxFiles;

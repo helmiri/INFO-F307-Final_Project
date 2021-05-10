@@ -45,6 +45,7 @@ public class SignUpViewController {
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -54,6 +55,9 @@ public class SignUpViewController {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         void signup(String firstName, String lastName, String userName, String email, String password, String passwordConfirmation);
 

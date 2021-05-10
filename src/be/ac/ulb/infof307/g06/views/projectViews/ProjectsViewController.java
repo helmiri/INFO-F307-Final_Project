@@ -457,6 +457,7 @@ public class ProjectsViewController {
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -466,6 +467,9 @@ public class ProjectsViewController {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         void back();
 

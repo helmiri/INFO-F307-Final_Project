@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * The calendar window
+ */
 public class CalendarViewController {
     //-------------- ATTRIBUTES -------------
     @FXML
@@ -338,6 +341,9 @@ public class CalendarViewController {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         void back();
 

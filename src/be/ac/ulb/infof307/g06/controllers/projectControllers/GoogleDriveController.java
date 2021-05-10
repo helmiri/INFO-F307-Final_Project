@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Communicates with the google drive API
+ */
 public class GoogleDriveController {
     private final GoogleDriveAPI gDriveClient;
     private List<File> gDriveFiles;

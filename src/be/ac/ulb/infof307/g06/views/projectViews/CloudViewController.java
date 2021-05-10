@@ -86,6 +86,7 @@ public class CloudViewController {
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -95,6 +96,9 @@ public class CloudViewController {
         this.listener = listener;
     }
 
+    /**
+     *
+     */
     public interface ViewListener {
         void downloadFiles(List<String> item);
     }

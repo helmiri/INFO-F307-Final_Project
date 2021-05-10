@@ -12,6 +12,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * The invitation prompt
+ */
 public class InvitationViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
@@ -73,6 +76,7 @@ public class InvitationViewController {
     }
 
     //-------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -82,6 +86,9 @@ public class InvitationViewController {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         void acceptInvitation(Invitation invitation, Stage stage);
 

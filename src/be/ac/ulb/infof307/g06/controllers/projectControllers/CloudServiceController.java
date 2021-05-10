@@ -18,6 +18,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages the cloud services used by the application. Here we have DropBox and Google Drive
+ */
 public class CloudServiceController implements CloudSelectionViewController.ViewListener, CloudViewController.ViewListener {
     private final ProjectController projectController;
     private final UserDB userDB;

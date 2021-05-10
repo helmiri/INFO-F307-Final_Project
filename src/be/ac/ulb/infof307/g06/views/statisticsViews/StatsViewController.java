@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.views.statisticsViews;
 
-import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
 import javafx.collections.FXCollections;
@@ -18,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.util.List;
 
@@ -87,6 +87,7 @@ public class StatsViewController{
     private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
     //--------------- METHODS ----------------
+
     /**
      * The main method for button's events.
      *
@@ -94,10 +95,7 @@ public class StatsViewController{
      */
     @FXML
     private void statsEvents(ActionEvent event) {
-        if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); }
-        else if (event.getSource() == overallViewBtn     ) { listener.show()               ;}
-        else if (event.getSource() == projectViewBtn     ) { listener.showIndividualStats()   ;}
-        else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn     ) { exports(event); }
+        if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); } else if (event.getSource() == overallViewBtn     ) { listener.show()               ;} else if (event.getSource() == projectViewBtn     ) { listener.showIndividualStats()   ;} else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn     ) { exports(event); }
     }
 
     /**
@@ -215,8 +213,7 @@ public class StatsViewController{
         Task selectedTask = getSelectedTask();
         if(selectedTask == null){
             taskEndDateLabel.setText("?/?/?");
-        }
-        else{
+        } else{
             taskEndDateLabel.setText(listener.dateToString(selectedTask.getEndDate()));
         }
     }
@@ -293,8 +290,7 @@ public class StatsViewController{
             String separator = determineOS(selectedDirectory.getAbsolutePath());
             if (event.getSource() == exportJSONBtn) {
                 listener.exportStatsAsJson(separator + fileName + ".json", selectedDirectory.getAbsolutePath());
-            }
-            else if (event.getSource() == exportCSVBtn) {
+            } else if (event.getSource() == exportCSVBtn) {
                 listener.exportStatsAsCSV(separator + fileName + ".csv", selectedDirectory.getAbsolutePath());
             }
         }
@@ -315,6 +311,7 @@ public class StatsViewController{
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -324,6 +321,9 @@ public class StatsViewController{
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         void show();
 
@@ -331,13 +331,13 @@ public class StatsViewController{
 
         void onBackButtonClicked();
 
-        List<Integer> getProjects() ;
+        List<Integer> getProjects();
 
-        Integer countTasksOfAProject(int projectId) ;
+        Integer countTasksOfAProject(int projectId);
 
         Project getProjectsFromID(int id) ;
 
-        void setProjectsTable(List<Integer> projects,TreeItem<Project> root) ;
+        void setProjectsTable(List<Integer> projects, TreeItem<Project> root) ;
 
         ObservableList<Task> setTasksTable(Project selectedProject);
 

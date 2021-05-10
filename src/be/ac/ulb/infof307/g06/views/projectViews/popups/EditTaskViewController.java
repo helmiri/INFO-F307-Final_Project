@@ -14,6 +14,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Task editor
+ */
 public class EditTaskViewController {
     //--------------- ATTRIBUTES ----------------
     @FXML

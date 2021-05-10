@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * User configuration controller
+ */
 public class ProfileController extends Controller implements ProfileViewController.ViewListener {
     ProfileViewController viewController;
     User user;

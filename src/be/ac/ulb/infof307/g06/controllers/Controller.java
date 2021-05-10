@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
+/**
+ * Base class for controllers. Controllers should extend this class to ensure proper functionality
+ */
 public abstract class Controller {
     //--------------- ATTRIBUTES ----------------
     protected Stage stage;
@@ -33,5 +36,10 @@ public abstract class Controller {
         stage.sizeToScene();
     }
 
+    /**
+     * Shows the controller's screen
+     *
+     * @throws SQLException on error loading the view
+     */
     public abstract void show() throws SQLException;
 }

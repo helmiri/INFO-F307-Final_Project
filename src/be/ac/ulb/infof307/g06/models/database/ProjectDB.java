@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The database where all the project related info is stored
+ */
 public class ProjectDB extends Database {
 
     public ProjectDB(String dbName) throws ClassNotFoundException, SQLException {

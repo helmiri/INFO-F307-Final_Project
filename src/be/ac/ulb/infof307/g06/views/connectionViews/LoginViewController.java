@@ -7,6 +7,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+/**
+ * The login stage
+ */
 public class LoginViewController{
     //-------------- ATTRIBUTES ----------------
     @FXML
@@ -49,6 +52,7 @@ public class LoginViewController{
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -58,6 +62,9 @@ public class LoginViewController{
         this.listener = listener;
     }
 
+    /**
+     * Used to communicate with the login controller
+     */
     public interface ViewListener {
         void login(String username, String password);
 

@@ -149,8 +149,12 @@ public class TagsViewController {
     //--------------- LISTENER ----------------
 
     public void setListener(ViewListener listener) {
-        this.listener = listener; }
+        this.listener = listener;
+    }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
 
         void onAddButtonClicked(String text, String toRGBCode);

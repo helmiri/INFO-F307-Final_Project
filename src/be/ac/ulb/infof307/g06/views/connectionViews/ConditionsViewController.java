@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 
+/**
+ * The user agreement prompt
+ */
 public class ConditionsViewController {
     //-------------- ATTRIBUTES -------------
     @FXML
@@ -32,6 +35,7 @@ public class ConditionsViewController {
     }
 
     //--------------- LISTENER ----------------
+
     /**
      * Sets the listener.
      *
@@ -41,6 +45,9 @@ public class ConditionsViewController {
         this.listener = listener;
     }
 
+    /**
+     * Communicates to the controller which button has been clicked
+     */
     public interface ViewListener {
         void onConditionsAccepted();
 

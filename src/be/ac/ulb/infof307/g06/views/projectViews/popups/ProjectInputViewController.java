@@ -8,8 +8,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
+
 import java.time.LocalDate;
 
+/**
+ * The project input prompt on which the user can enter the project's information
+ */
 public class ProjectInputViewController {
     //---------- ATTRIBUTES ----------------
     @FXML

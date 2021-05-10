@@ -15,7 +15,9 @@ import javafx.util.Duration;
 import java.io.File;
 import java.nio.file.Paths;
 
-
+/**
+ * Help section view controller
+ */
 public class HelpViewController {
     //-------------- ATTRIBUTES ----------------
 
@@ -247,6 +249,9 @@ public class HelpViewController {
         this.listener = listener;
     }
 
+    /**
+     * Listener that communicates with the controller
+     */
     public interface ViewListener {
         void showHelp(String fileName, String title, MediaPlayer player);
     }

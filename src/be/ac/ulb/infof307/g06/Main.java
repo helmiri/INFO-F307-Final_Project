@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.sql.SQLException;
 
+/**
+ * The application launcher
+ */
 public class Main extends Application {
     /**
      * Launches the main application

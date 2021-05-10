@@ -4,6 +4,9 @@ import javafx.collections.ObservableList;
 
 import java.util.List;
 
+/**
+ * A project data object
+ */
 public class Project {
     //-------------- ATTRIBUTES ----------------
     private final int id;
@@ -18,12 +21,12 @@ public class Project {
     /**
      * Constructor.
      *
-     * @param id          int
-     * @param title       String
-     * @param description String
-     * @param startDate   Long
-     * @param endDate     Long
-     * @param projectId   int
+     * @param id          The ID of the project
+     * @param title       The title
+     * @param description The description
+     * @param startDate   The starting date
+     * @param endDate     The ending date
+     * @param projectId   The parent ID
      */
     public Project(int id, String title, String description, Long startDate, Long endDate, int projectId) {
         this.id = id;

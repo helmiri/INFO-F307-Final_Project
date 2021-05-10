@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * The DropBox API Implementation
+ */
 public class DropBoxAPI {
     private final DbxClientV2 dropboxClient;
 
