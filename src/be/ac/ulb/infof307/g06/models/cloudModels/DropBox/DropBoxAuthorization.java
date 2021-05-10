@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  * An example command-line application that runs through the web-based OAuth
  * flow (using {@link DbxWebAuth}). It grabs short-live token as well as
@@ -19,7 +20,10 @@ public class DropBoxAuthorization {
     private String authorizationUrl = "";
     private DbxWebAuth webAuth;
 
-
+    /**
+     * constructor
+     * @throws JsonReader.FileLoadException exceptions
+     */
     public DropBoxAuthorization() throws JsonReader.FileLoadException {
         // Only display important log messages.
         Logger.getLogger("").setLevel(Level.SEVERE);
@@ -28,6 +32,12 @@ public class DropBoxAuthorization {
         appInfo = DbxAppInfo.Reader.readFromFile(argAppInfoFile);
     }
 
+    /**
+     * returns the credentials after authorization
+     * @param code the authorization code
+     * @return the credentials
+     * @throws DbxException exception
+     */
     public DbxCredential getAuthorization(String code) throws DbxException {
         // Run through Dropbox API authorization process
         DbxAuthFinish authFinish = authorize(code);
@@ -38,6 +48,10 @@ public class DropBoxAuthorization {
                 authFinish.getExpiresAt(), authFinish.getRefreshToken(), appInfo.getKey(), appInfo.getSecret());
     }
 
+    /**
+     * returns the url to establish connection
+     * @return the url
+     */
     public String getUrl() {
         if (!authorizationUrl.isBlank()) {
             return authorizationUrl;
@@ -52,6 +66,12 @@ public class DropBoxAuthorization {
         return webAuth.authorize(webAuthRequest);
     }
 
+    /**
+     * Makes the authorization with the code.
+     * @param code the authorization code
+     * @return the authorization confirmation
+     * @throws DbxException exception
+     */
     public DbxAuthFinish authorize(String code) throws DbxException {
         code = code.trim();
         return webAuth.finishFromCode(code);

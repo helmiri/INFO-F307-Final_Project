@@ -5,6 +5,7 @@ import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
 /**
  * @author Kannan Goundan
  * https://github.com/dropbox/dropbox-api-content-hasher/blob/master/java/src/DropboxContentHasher.java

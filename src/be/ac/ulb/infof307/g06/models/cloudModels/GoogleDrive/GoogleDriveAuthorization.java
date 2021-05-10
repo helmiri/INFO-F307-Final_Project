@@ -19,6 +19,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
+/**
+ * The class that establishes the connection with the google drive cloud services.
+ */
 public class GoogleDriveAuthorization {
     private final String userName;
     private AuthorizationCodeInstalledApp authorization;
@@ -29,6 +34,10 @@ public class GoogleDriveAuthorization {
     private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
+    /**
+     * constructor
+     * @param userName the Gdrive username
+     */
     public GoogleDriveAuthorization(String userName) {
         this.userName = userName;
     }
@@ -61,6 +70,10 @@ public class GoogleDriveAuthorization {
         return authorization.authorize(userName);
     }
 
+    /**
+     * returns the authorization url
+     * @return the authorization url
+     */
     public String getUrl() {
         return authorization.getUrl();
     }

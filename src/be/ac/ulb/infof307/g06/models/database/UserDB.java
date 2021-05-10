@@ -11,9 +11,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The user database.
+ */
 public class UserDB extends Database {
     private Hash hash;
 
+    /**
+     * Same constructor as the main database abstract class (ecxept for the hash).
+     * @param dbName the name of the db
+     * @throws ClassNotFoundException if it doesnt find the parent class
+     * @throws SQLException if the query fails
+     */
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
         hash = new Hash();
@@ -340,6 +350,12 @@ public class UserDB extends Database {
         sqlUpdate("DELETE FROM Invitations WHERE id = '" + inviteID + "';");
     }
 
+    /**
+     * returns the invitations for collaboration of a user
+     * @param projectDB the project database
+     * @return all the invitations
+     * @throws SQLException if the query fails
+     */
     public List<Invitation> getInvitations(ProjectDB projectDB) throws SQLException {
         List<Invitation> invitations = new ArrayList<>();
         ResultSet rs = sqlQuery("SELECT id, project_id, user1_id FROM Invitations WHERE user2_id = '" + currentUser.getId() + "';");
