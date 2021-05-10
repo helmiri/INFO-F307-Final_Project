@@ -58,7 +58,7 @@ public class DropBoxController {
      * @param fileMeta  The file's metadata
      * @return The path where the file will be saved, null if it already exists
      */
-    private String getPathIfNotExists(String localPath, Metadata fileMeta) {
+    private String getPathIfNotExists(String localPath, Metadata fileMeta) throws IOException {
         String downloadedFile = localPath + "/" + fileMeta.getName();
         if (new File(downloadedFile).exists() && isFileIdentical(downloadedFile, (FileMetadata) fileMeta)) {
             return null;
@@ -92,7 +92,7 @@ public class DropBoxController {
      * @param fileMeta  Metadata of the file in the cloud storage
      * @return true if identical, false otherwise
      */
-    private boolean isFileIdentical(String localPath, FileMetadata fileMeta) {
+    private boolean isFileIdentical(String localPath, FileMetadata fileMeta) throws IOException {
         String hash = dbxClient.getHash(localPath);
         if (hash == null) {
             return false;
