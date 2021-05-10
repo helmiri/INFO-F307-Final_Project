@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import java.util.List;
 
 
-
 /**
  * A project data object
  */

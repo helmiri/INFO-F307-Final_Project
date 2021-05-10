@@ -5,7 +5,6 @@ import be.ac.ulb.infof307.g06.models.User;
 import java.sql.*;
 
 
-
 /**
  * The database main abstract class
  */

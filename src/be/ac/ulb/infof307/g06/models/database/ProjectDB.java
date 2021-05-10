@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 
-
 /**
  * The database where all the project related info is stored
  */

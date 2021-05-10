@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g06.models;
 
 
-
 /**
  * Invitation data object
  */

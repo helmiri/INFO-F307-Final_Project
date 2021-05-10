@@ -5,7 +5,6 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.layout.Region;
 
 
-
 /**
  * Creates and shows alert windows with information
  */

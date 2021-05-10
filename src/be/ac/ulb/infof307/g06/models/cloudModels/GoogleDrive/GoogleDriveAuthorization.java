@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 
 
 
-
 /**
  * The class that establishes the connection with the google drive cloud services.
  */
