@@ -89,10 +89,13 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
             logout();
             EncryptedFile databaseFile = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", DECRYPTED_DB_PATH);
             try {
+                userDB.disconnectDB();
                 databaseFile.encryptFile(ENCRYPTED_DB_PATH);
                 new File(DECRYPTED_DB_PATH).delete();
             } catch (IOException ioException) {
                 new AlertWindow("Error", "Could not commit the database", ioException.getMessage()).showErrorWindow();
+            } catch (SQLException error) {
+                new DatabaseException(error).show();
             }
             Platform.exit();
             System.exit(0);
@@ -157,7 +160,6 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     public void logout() {
         try {
             userDB.disconnectUser();
-            userDB.disconnectDB();
         } catch (SQLException e) {
             new AlertWindow("Error", "Couldn't disconnect the user: " + e).showErrorWindow();
         }
