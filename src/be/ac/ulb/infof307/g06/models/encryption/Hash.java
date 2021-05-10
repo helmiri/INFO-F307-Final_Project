@@ -13,32 +13,6 @@ import java.security.spec.InvalidKeySpecException;
 public class Hash {
 
     /**
-     * Return a hash for a file.
-     *
-     * @param filename Path to the file
-     * @return The hash of the file
-     * @throws IOException              On error reading the file
-     * @throws NoSuchAlgorithmException on invalid digest provider
-     */
-    private byte[] createChecksum(String filename) throws IOException, NoSuchAlgorithmException {
-        InputStream fis = new FileInputStream(filename);
-
-        byte[] buffer = new byte[1024];
-        MessageDigest complete = MessageDigest.getInstance("MD5");
-        int numRead;
-
-        do {
-            numRead = fis.read(buffer);
-            if (numRead > 0) {
-                complete.update(buffer, 0, numRead);
-            }
-        } while (numRead != -1);
-
-        fis.close();
-        return complete.digest();
-    }
-
-    /**
      * Return a 32 bytes hash password with the raw password and a salt (unique for each user).
      * @param password The user's password
      * @param salt Tye hash salt
