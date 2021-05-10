@@ -55,10 +55,8 @@ public class GoogleDriveController {
     private String getPathIfNotExists(String localPath, File fileMeta) throws IOException {
         String localFilePath = localPath + "/" + fileMeta.getName();
         java.io.File localFile = new java.io.File(localFilePath);
-        if (new java.io.File(localFilePath).exists()) {
-            if (isFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
-                return null;
-            }
+        if (new java.io.File(localFilePath).exists() && isFileIdentical(localFile, Objects.requireNonNull(fileMeta))) {
+            return null;
         }
         return localFilePath;
     }

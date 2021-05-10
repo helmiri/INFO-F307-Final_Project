@@ -129,8 +129,9 @@ public class EncryptedFile {
         int bytesRead;
         while ((bytesRead = inFile.read(input)) != -1) {
             byte[] output = cipher.update(input, 0, bytesRead);
-            if (output != null)
+            if (output != null) {
                 outFile.write(output);
+            }
         }
 
         byte[] output = new byte[0];

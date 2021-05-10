@@ -84,7 +84,6 @@ public class StatsViewController{
     @FXML
     private BarChart<String, Integer> tasksChart;
     private Project selectedProject;
-    private boolean isOverallView=true;
     private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
     //--------------- METHODS ----------------
@@ -112,7 +111,6 @@ public class StatsViewController{
         projectsTreeView.setRoot(root);
         projectsArray = listener.getProjects();
         listener.setProjectsTable(projectsArray, root);
-        isOverallView=false;
         overallViewBtn.setDisable(false);
         projectViewBtn.setDisable(true);
     }
@@ -123,7 +121,6 @@ public class StatsViewController{
     public void initOverallStats() {
         List<Integer> infos = listener.countOverallStats();
         displayBasicStats(infos);
-        isOverallView = true;
         tasksChart.setLegendVisible(true);
         pieChartInitializer();
         barChartInitializer();
@@ -164,7 +161,7 @@ public class StatsViewController{
             for (Integer integer : projects) {
                 Project project = listener.getProjectsFromID(integer);
                 Integer tasksCount = listener.countTasksOfAProject(project.getId());
-                if(project != null && tasksCount != 0) {
+                if (project != null && tasksCount != 0) {
                     numberOfProjects++;
                     tasksChart.setPrefWidth(513 + (numberOfProjects * 30));
                     barChartAnchorPane.setPrefWidth(513 + (numberOfProjects * 30));

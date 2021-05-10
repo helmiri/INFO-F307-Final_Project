@@ -57,10 +57,8 @@ public class DropBoxController {
      */
     private String getPathIfNotExists(String localPath, Metadata fileMeta) {
         String downloadedFile = localPath + "/" + fileMeta.getName();
-        if (new File(downloadedFile).exists()) {
-            if (isFileIdentical(downloadedFile, (FileMetadata) fileMeta)) {
-                return null;
-            }
+        if (new File(downloadedFile).exists() && isFileIdentical(downloadedFile, (FileMetadata) fileMeta)) {
+            return null;
         }
         return downloadedFile;
     }
@@ -113,6 +111,14 @@ public class DropBoxController {
         return res;
     }
 
+    /**
+     * Uploads a file
+     *
+     * @param localFilePath file path
+     * @param fileName      file name
+     * @throws IOException  exception
+     * @throws DbxException exception
+     */
     public void uploadFile(String localFilePath, String fileName) throws IOException, DbxException {
         dbxClient.uploadFile(localFilePath, fileName);
     }

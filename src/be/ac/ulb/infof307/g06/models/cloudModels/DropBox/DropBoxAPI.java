@@ -101,7 +101,9 @@ public class DropBoxAPI {
         try (InputStream in = new FileInputStream(file)) {
             while (true) {
                 int n = in.read(buf);
-                if (n < 0) break;  // EOF
+                if (n < 0) {
+                    break;
+                }  // EOF
                 hasher.update(buf, 0, n);
             }
         } catch (IOException error) {

@@ -40,11 +40,13 @@ public class Hash {
 
     /**
      * Return a hash for a file.
+     *
      * @param filename Path to the file
      * @return The hash of the file
-     * @throws Exception On error creating the checksum
+     * @throws IOException              On error creating the checksum
+     * @throws NoSuchAlgorithmException exception
      */
-    public String hashFile(String filename) throws Exception {
+    public String hashFile(String filename) throws IOException, NoSuchAlgorithmException {
         byte[] b = createChecksum(filename);
         StringBuilder result = new StringBuilder();
 

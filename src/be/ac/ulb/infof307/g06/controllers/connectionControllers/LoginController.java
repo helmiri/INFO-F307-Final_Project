@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginController {
+    public static final int HEIGHT = 465;
+    public static final int WIDTH = 715;
     //--------------- ATTRIBUTES ----------------
     private final Stage stage;
     private final Listener listener;
@@ -49,8 +51,8 @@ public class LoginController {
         stage.setTitle("I(Should)PlanAll");
 
         stage.setResizable(true);
-        stage.setHeight(465);
-        stage.setWidth(715);
+        stage.setHeight(HEIGHT);
+        stage.setWidth(WIDTH);
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();
