@@ -119,7 +119,8 @@ public class TestUserDB extends TestDatabase {
         userDB.sendInvitation(5, 3, 2);
         assertTrue(userDB.validateData("User_2_userName", "User_2_password") > 0);
         List<Invitation> invitations = userDB.getInvitations(projectDB);
-        assertTrue(invitations.size() == 2);
+        assertEquals(2, invitations.size());
+        // First invitation
         assertEquals(1, invitations.get(0).getInvitationID());
         assertEquals(1, invitations.get(0).getSender().getId());
         // Different invitation
@@ -141,7 +142,7 @@ public class TestUserDB extends TestDatabase {
     }
 
     @Test
-    @DisplayName("Set user info")
+    @DisplayName("User info setter")
     public void testSetUserInfo() throws SQLException {
         userDB.validateData("User_1_userName", "User_1_password");
         userDB.setUserInfo("NewFName", "NewLName", "NewEmail", "newPassword");
@@ -150,11 +151,26 @@ public class TestUserDB extends TestDatabase {
         assertEquals("NewFName", res.getFirstName());
         assertEquals("NewLName", res.getLastName());
         assertEquals("NewEmail", res.getEmail());
+    }
+
+    @Test
+    @DisplayName("Login with wrong new password")
+    public void testLoginWIthWrongNewPassword() throws SQLException {
+        userDB.validateData("User_1_userName", "User_1_password"); // Login with user
+        userDB.userSettingsSync(null, "newPassword");
+        userDB.disconnectUser();
+        // Wrong password
+        assertEquals(0, userDB.validateData("User_1_userName", "User_1_password"));
+    }
+
+    @Test
+    @DisplayName("Login with correct new password")
+    public void testLoginWithCorrectNewPassword() throws SQLException {
+        userDB.validateData("User_1_userName", "User_1_password"); // Login with user
+        userDB.userSettingsSync(null, "newPassword");
         userDB.disconnectUser();
         // Test new password
         assertEquals(1, userDB.validateData("User_1_userName", "newPassword"));
-        // Wrong password
-        assertEquals(-1, userDB.validateData("User_1_userName", "User_1_password"));
     }
 
     @Test
@@ -175,8 +191,6 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Disk usage update")
     public void testUpdateDiskUsage() throws SQLException {
-        userDB.updateDiskUsage(0);
-        assertEquals(0, userDB.getDiskUsage());
         userDB.updateDiskUsage(123456);
         assertEquals(123456, userDB.getDiskUsage());
     }
@@ -212,6 +226,8 @@ public class TestUserDB extends TestDatabase {
         DbxCredential testCredential = new DbxCredential(accessToken, expiration, refreshToken, appKey, appSecret);
         userDB.addDropBoxCredentials(testCredential);
         DbxCredential credential = userDB.getDropBoxCredentials();
+
+        // Check that the credential returned has the same info as the one inserted
         assertEquals(testCredential.getAccessToken(), credential.getAccessToken());
         assertEquals(testCredential.getRefreshToken(), credential.getRefreshToken());
         assertEquals(testCredential.getExpiresAt(), credential.getExpiresAt());
