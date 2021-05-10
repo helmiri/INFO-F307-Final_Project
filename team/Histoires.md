@@ -21,9 +21,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 |   | 8 | Histoire 8 | 3 | 32 | 24                             | X (10) | X (10) | X (3)  | X (1)  |
 |   | 9 | Histoire 9 | 1 | 25 | 29                             |        | X (20) | X (9)  |        |
 | 3 | 10 | Histoire 10 | 2 | / | 25                            |        |        |        |        |
-|   | 11 | Histoire 11 | 3 | / | 12                            |        |        |        | X (12) |
+|   | 11 | Histoire 11 | 3 | 16 | 12                            |        |        |        | X (12) |
 |   | 12 | Histoire 12 | 2 | / | 25                            |        |        |        | X (25) |
-|   | 13 | Histoire 13 | 1 | / | 25                            |        |        |        | X (25) |
+|   | 13 | Histoire 13 | 1 | 7.5| 25                            |        |        |        | X (25) |
 | / | /  | Refactoring | / | / | /                             |        |        |  X (7) |        |
 
 ----------------------
