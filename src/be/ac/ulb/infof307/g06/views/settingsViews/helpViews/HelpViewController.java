@@ -101,6 +101,7 @@ public class HelpViewController {
         } else if (event.getSource() == exportImportHelpBtn) {
             new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == calendarHelpBtn) {
+            //makeHelpWindow("calendarHelp.mp4", "Storage management");
             new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == tagsHelpBtn) {
             makeHelpWindow("tagsHelp.mp4", "Tags management");
@@ -117,7 +118,7 @@ public class HelpViewController {
      * @param title window title
      */
     private void makeHelpWindow(String path, String title) {
-        File file = new File("src/be/ac/ulb/infof307/g06/resources/screenshots");
+        File file = new File("src/be/ac/ulb/infof307/g06/resources/videos");
         path = file.getAbsolutePath() + "/" + path;
         Media media = new Media(Paths.get(path).toUri().toString());
         mediaPlayer = new MediaPlayer(media);
