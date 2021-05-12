@@ -3,14 +3,19 @@ package be.ac.ulb.infof307.g06.views.mainMenuViews;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * The main menu scene
  */
 public class MenuViewController {
-    //-------------- ATTRIBUTES ----------------
 
+    //-------------- ATTRIBUTES ----------------
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Button logOutBtn;
     @FXML
@@ -28,6 +33,12 @@ public class MenuViewController {
     private ViewListener listener;
 
     //--------------- METHODS ----------------
+
+    public void show(Stage stage) {
+        stage.setScene(new Scene(layout));
+        stage.sizeToScene();
+        stage.centerOnScreen();
+    }
 
     /**
      * The main method for button's events.

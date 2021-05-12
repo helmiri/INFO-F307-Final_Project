@@ -4,7 +4,6 @@ import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.User;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.settingsViews.ProfileViewController;
 import javafx.scene.Scene;
@@ -20,20 +19,24 @@ import java.util.regex.Pattern;
 public class ProfileController extends Controller implements ProfileViewController.ViewListener {
     private ProfileViewController viewController;
     private User user;
+    private UserDB userDB;
 
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage      Stage, a stage
+     * @param scene      Scene, a scene
      * @param controller ProfileViewController, the view controller
-     * @param DB_PATH String, the path to the database
+     * @param DB_PATH    String, the path to the database
      */
-    public ProfileController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, ProfileViewController controller, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public ProfileController(Stage stage, Scene scene, ProfileViewController controller, String DB_PATH) throws DatabaseException {
+        super(stage, scene, DB_PATH);
         viewController = controller;
+        try {
+            userDB = new UserDB(DB_PATH);
+        } catch (ClassNotFoundException | SQLException error) {
+            throw new DatabaseException(error);
+        }
     }
 
     /**
@@ -41,7 +44,7 @@ public class ProfileController extends Controller implements ProfileViewControll
      */
     @Override
     public void show() {
-        user = user_db.getCurrentUser();
+        user = userDB.getCurrentUser();
         viewController.setListener(this);
         viewController.initialize(user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail());
     }
@@ -58,7 +61,7 @@ public class ProfileController extends Controller implements ProfileViewControll
             return false;
         }
         user.setFirstName(field);
-        return !syncSettingsFailed();
+        return profileSaved();
     }
 
     /**
@@ -73,7 +76,7 @@ public class ProfileController extends Controller implements ProfileViewControll
             return false;
         }
         user.setLastName(field);
-        return !syncSettingsFailed();
+        return profileSaved();
     }
 
 
@@ -106,8 +109,7 @@ public class ProfileController extends Controller implements ProfileViewControll
             return false;
         }
         user.setEmail(field);
-        syncSettingsFailed();
-        return false;
+        return profileSaved();
     }
 
     /**
@@ -115,14 +117,14 @@ public class ProfileController extends Controller implements ProfileViewControll
      *
      * @return true on fail, false on success
      */
-    private boolean syncSettingsFailed() {
+    private boolean profileSaved() {
         try {
-            user_db.userSettingsSync(user, "");
+            userDB.userSettingsSync(user, "");
         } catch (SQLException e) {
             new DatabaseException(e).show();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -141,7 +143,7 @@ public class ProfileController extends Controller implements ProfileViewControll
             return;
         }
         try {
-            user_db.userSettingsSync(null, newPassword);
+            userDB.userSettingsSync(null, newPassword);
             new AlertWindow("Success", "Password updated successfully").showInformationWindow();
         } catch (SQLException e) {
             new DatabaseException(e).show();

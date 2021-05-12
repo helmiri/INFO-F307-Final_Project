@@ -24,13 +24,12 @@ public class EditTaskViewController {
     @FXML
     private TextField taskName;
     @FXML
-    protected DatePicker newStartDateTask;
+    private DatePicker newStartDateTask;
     @FXML
-    protected DatePicker newEndDateTask;
+    private DatePicker newEndDateTask;
     private Task task;
     private ProjectsViewController.ViewListener listener;
     private Stage stage;
-    private final Long TO_DAY = 86400000L;
 
     //--------------- METHODS ----------------
 
@@ -75,7 +74,8 @@ public class EditTaskViewController {
         descriptionProject.setText(description);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * TO_DAY), formatter));
-        endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * TO_DAY), formatter));
+        Long today = 86400000L;
+        dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * today), formatter));
+        endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * today), formatter));
     }
 }

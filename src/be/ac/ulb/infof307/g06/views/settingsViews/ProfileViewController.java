@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
  * The profile settings scene
  */
 public class ProfileViewController {
-    ViewListener listener;
+    private ViewListener listener;
     @FXML
     private AnchorPane pane;
     @FXML
@@ -67,19 +67,16 @@ public class ProfileViewController {
         String email = emailField.getText();
         String newPassword = newPasswordField.getText();
         String confirmation = confirmationField.getText();
-        if (!firstName.isBlank()) {
-            if (listener.saveFirstName(firstName)) {
-                resetFIeld(firstNameField, firstName);
-            }
-        } else if (!lastName.isBlank()) {
-            if (listener.saveLastName(lastName)) {
-                resetFIeld(lastNameField, lastName);
-            }
-        } else if (!email.isBlank()) {
-            if (listener.saveEmail(email)) {
-                resetFIeld(emailField, email);
-            }
-        } else if (!newPassword.isBlank()) {
+        if (!firstName.isBlank() && listener.saveFirstName(firstName)) {
+            resetField(firstNameField, firstName);
+        }
+        if (!lastName.isBlank() && listener.saveLastName(lastName)) {
+            resetField(lastNameField, lastName);
+        }
+        if (!email.isBlank() && listener.saveEmail(email)) {
+            resetField(emailField, email);
+        }
+        if (!newPassword.isBlank()) {
             listener.savePassword(newPassword, confirmation);
             newPasswordField.clear();
             confirmationField.clear();
@@ -92,7 +89,7 @@ public class ProfileViewController {
      * @param field  The Text field
      * @param prompt The new prompt
      */
-    private void resetFIeld(TextField field, String prompt) {
+    private void resetField(TextField field, String prompt) {
         field.clear();
         field.setPromptText(prompt);
     }

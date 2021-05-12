@@ -1,45 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="823.0" prefWidth="971.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController">
-   <children>
-      <VBox layoutX="230.0" layoutY="123.0" prefHeight="577.0" prefWidth="511.0" spacing="50.0">
-         <children>
-            <Button fx:id="projectManagementHelpBtn" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css" text="PROJECT MANAGEMENT" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="storageHelpBtn" layoutX="10.0" layoutY="64.0" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css" text="STORAGE" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="exportImportHelpBtn" layoutX="10.0" layoutY="172.0" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css" text="EXPORT/IMPORT" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="calendarHelpBtn" layoutX="10.0" layoutY="118.0" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css" text="CALENDAR" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="tagsHelpBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css" text="TAGS" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="profileHelpBtn" layoutX="10.0" layoutY="226.0" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css" text="PROFILE" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="823.0" prefWidth="971.0"
+            xmlns="http://javafx.com/javafx/15.0.1"
+            fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController">
+    <VBox layoutX="230.0" layoutY="123.0" prefHeight="577.0" prefWidth="511.0" spacing="50.0">
+        <Button fx:id="projectManagementHelpBtn" mnemonicParsing="false" onAction="#helpEvents" prefHeight="54.0"
+                prefWidth="540.0" styleClass="container" stylesheets="@../../../resources/stylesheets/Button.css"
+                text="PROJECT MANAGEMENT" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="storageHelpBtn" layoutX="10.0" layoutY="64.0" mnemonicParsing="false" onAction="#helpEvents"
+                prefHeight="54.0" prefWidth="540.0" styleClass="container"
+                stylesheets="@../../../resources/stylesheets/Button.css" text="STORAGE" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="exportImportHelpBtn" layoutX="10.0" layoutY="172.0" mnemonicParsing="false"
+                onAction="#helpEvents" prefHeight="54.0" prefWidth="540.0" styleClass="container"
+                stylesheets="@../../../resources/stylesheets/Button.css" text="EXPORT/IMPORT" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="calendarHelpBtn" layoutX="10.0" layoutY="118.0" mnemonicParsing="false" onAction="#helpEvents"
+                prefHeight="54.0" prefWidth="540.0" styleClass="container"
+                stylesheets="@../../../resources/stylesheets/Button.css" text="CALENDAR" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="tagsHelpBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#helpEvents"
+                prefHeight="54.0" prefWidth="540.0" styleClass="container"
+                stylesheets="@../../../resources/stylesheets/Button.css" text="TAGS" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="profileHelpBtn" layoutX="10.0" layoutY="226.0" mnemonicParsing="false" onAction="#helpEvents"
+                prefHeight="54.0" prefWidth="540.0" styleClass="container"
+                stylesheets="@../../../resources/stylesheets/Button.css" text="PROFILE" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="24.0"/>
+            </font>
+        </Button>
+    </VBox>
 </AnchorPane>

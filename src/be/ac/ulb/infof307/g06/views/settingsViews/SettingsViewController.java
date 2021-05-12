@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * The settings scene
@@ -17,6 +18,8 @@ public class SettingsViewController {
     //-------------- ATTRIBUTES ----------------
     private static final String hoverColor = "#95dbfa";
     private static final String defaultColor = "#4fc3f7";
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Button profileBtn;
     @FXML
@@ -37,6 +40,16 @@ public class SettingsViewController {
     private ObservableList<Node> currentChildren;
 
     //--------------- METHODS ----------------
+
+    /**
+     * Shows the settings window
+     */
+    public void show(Stage stage) {
+        stage.setScene(new Scene(layout));
+        stage.sizeToScene();
+        profileBtn.fire();
+    }
+
 
     /**
      * The main method for button's events.
@@ -74,7 +87,7 @@ public class SettingsViewController {
     /**
      * Sets the sub pane scene.
      *
-     * @param newAnchor AnchorPane, the anchorpane for the scene.
+     * @param newAnchor AnchorPane, the anchor pane for the scene.
      */
     private void setSubPaneScene(AnchorPane newAnchor) {
         if (newAnchor == null) {
@@ -128,7 +141,7 @@ public class SettingsViewController {
     }
 
     /**
-     * Unhighlight a button when we are not over it.
+     * Un-highlight a button when we are not over it.
      *
      * @param mouseEvent MouseEvent, the event of the mouse.
      */
@@ -149,12 +162,6 @@ public class SettingsViewController {
         setButtonStyle(source, defaultColor);
     }
 
-    /**
-     * Sets the default scene to the tags settings.
-     */
-    public void setDefaultScene() {
-        profileBtn.fire();
-    }
 
     //--------------- LISTENER ----------------
 
@@ -166,6 +173,7 @@ public class SettingsViewController {
     public void setListener(ViewListener newListener) {
         listener = newListener;
     }
+
 
     /**
      * Communicates to the controller which button has been clicked

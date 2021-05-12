@@ -311,10 +311,11 @@ public class ProjectDB extends Database {
 
     /**
      * Add a new task
+     *
      * @param description the description of the task
-     * @param project_id the id of the project
-     * @param startDate the starting date of the tast
-     * @param endDate the ending date of the task
+     * @param project_id  the id of the project
+     * @param startDate   the starting date of the test
+     * @param endDate     the ending date of the task
      * @throws SQLException if the query fails
      */
     public void createTask(String description, int project_id, Long startDate, Long endDate) throws SQLException {
@@ -342,7 +343,7 @@ public class ProjectDB extends Database {
      * @param prev_description the old description
      * @param new_description the new description
      * @param project_id the id of the project
-     * @param startDate the starting date of the tast
+     * @param startDate the starting date of the test
      * @param endDate the ending date of the task
      * @throws SQLException if the query fails
      */

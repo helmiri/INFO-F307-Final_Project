@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
+import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
@@ -26,22 +27,28 @@ import java.util.*;
 /**
  * Controller for the statistics.
  */
-public class StatsController extends Controller implements StatsViewController.ViewListener  {
+public class StatsController extends Controller implements StatsViewController.ViewListener {
     //--------------- ATTRIBUTE ----------------
     private StatsViewController statsView;
+    private UserDB userDB;
+    private ProjectDB projectDB;
 
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage   Stage, a stage
+     * @param scene   Scene, a scene
      * @param DB_PATH String, the path to the database
      */
     //--------------- METHODS ----------------
-    public StatsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public StatsController(Stage stage, Scene scene, String DB_PATH) throws DatabaseException {
+        super(stage, scene, DB_PATH);
+        try {
+            userDB = new UserDB(DB_PATH);
+            projectDB = new ProjectDB(DB_PATH);
+        } catch (ClassNotFoundException | SQLException error) {
+            throw new DatabaseException(error);
+        }
     }
 
     /**
@@ -70,31 +77,28 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param fxmlFilename name of the xml file to be loaded
      */
     private void load(String fxmlFilename) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(StatsViewController.class.getResource(fxmlFilename));
+        FXMLLoader loader = new FXMLLoader(StatsViewController.class.getResource(fxmlFilename));
         try {
-            scene = new Scene(loader.load());
-        } catch (IOException e) {
-            new AlertWindow("Error", "An error has occurred. Try to restart the application.", e.getMessage()).showErrorWindow();
+            currentScene = new Scene(loader.load());
+            statsView = loader.getController();
+            statsView.setListener(this);
+            stage.setScene(currentScene);
+        } catch (IOException error) {
+            new WindowLoadException(error).show();
         }
-        statsView = loader.getController();
-        statsView.setListener(this);
-        stage.setScene(scene);
-        stage.sizeToScene();
     }
 
     /**
      * Returns a projects list of the actual user.
      *
      * @return The IDs of the current user's projects
-     *
      */
     @Override
-    public List<Integer> getProjects()  {
+    public List<Integer> getProjects() {
         try {
-            return project_db.getUserProjects(user_db.getCurrentUser().getId());
-        } catch(SQLException error) {
-            new AlertWindow("Database error","Unable to get user's projects from the database: ",error.getMessage()).showErrorWindow();
+            return projectDB.getUserProjects(userDB.getCurrentUser().getId());
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
             return null;
         }
     }
@@ -106,11 +110,11 @@ public class StatsController extends Controller implements StatsViewController.V
      * @return The project
      */
     @Override
-    public Project getProjectsFromID(int id){
+    public Project getProjectsFromID(int id) {
         try {
-            return project_db.getProject(id);
-        } catch(SQLException error) {
-            new AlertWindow("Database error","Unable to get a project from its ID in the database: ",error.getMessage()).showErrorWindow();
+            return projectDB.getProject(id);
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
             return null;
         }
     }
@@ -122,7 +126,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @return date in string format
      */
     @Override
-    public String dateToString(Long date){
+    public String dateToString(Long date) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Long TO_DAY = 86400000L;
         return dateFormat.format(date * TO_DAY);
@@ -135,21 +139,25 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param root     The Project item from the table tree
      */
     @Override
-    public void setProjectsTable(List<Integer> projects,TreeItem<Project> root)  {
-        try{
+    public void setProjectsTable(List<Integer> projects, TreeItem<Project> root) {
+        try {
             Map<Integer, TreeItem<Project>> statsTreeMap = new HashMap<>();
-            for(Integer project : projects){
-                Project childProject = project_db.getProject(project);
+            for (Integer project : projects) {
+                Project childProject = projectDB.getProject(project);
                 int parentID = childProject.getParentId();
                 String title = childProject.getTitle();
-                int childID = project_db.getProjectID(title);
+                int childID = projectDB.getProjectID(title);
                 TreeItem<Project> projectTreeItem = new TreeItem<>(childProject);
                 statsTreeMap.put(childID, projectTreeItem);
-                if (parentID== 0){ statsView.addChild(root,projectTreeItem); } else { statsView.addChild(statsTreeMap.get(parentID),projectTreeItem); }
+                if (parentID == 0) {
+                    statsView.addChild(root, projectTreeItem);
+                } else {
+                    statsView.addChild(statsTreeMap.get(parentID), projectTreeItem);
+                }
             }
             statsView.expandRoot(root);
-        }catch(SQLException error){
-            new AlertWindow("Database error","Unable to get a project from the database: ",error.getMessage()).showErrorWindow();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
 
@@ -161,11 +169,11 @@ public class StatsController extends Controller implements StatsViewController.V
      */
     @Override
     public ObservableList<Task> setTasksTable(Project selectedProject) {
-        try{
-            List<Task> projectTasks = project_db.getTasks(selectedProject.getId());
+        try {
+            List<Task> projectTasks = projectDB.getTasks(selectedProject.getId());
             return FXCollections.observableArrayList(projectTasks);
-        }catch(SQLException error){
-            new AlertWindow("Database error","Unable to get tasks from the database: ",error.getMessage()).showErrorWindow();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         return FXCollections.observableArrayList();
     }
@@ -177,27 +185,28 @@ public class StatsController extends Controller implements StatsViewController.V
      */
     @Override
     public List<Integer> countOverallStats() {
-        List<Integer> res = new ArrayList<Integer>(Collections.nCopies(3, 0));
+        List<Integer> res = new ArrayList<>(Collections.nCopies(3, 0));
         try {
-            List<Integer> projects = project_db.getUserProjects(user_db.getCurrentUser().getId());
+            List<Integer> projects = projectDB.getUserProjects(userDB.getCurrentUser().getId());
             if (projects.size() != 0) {
                 int tasks = 0;
                 List<Integer> collaborators = new ArrayList<>();
                 for (Integer project : projects) {
-                    tasks += project_db.countTasks(project);
-                    List<Integer> projectsCollaborators = project_db.getCollaborators(project);
+                    tasks += projectDB.countTasks(project);
+                    List<Integer> projectsCollaborators = projectDB.getCollaborators(project);
                     for (Integer collaborator : projectsCollaborators) {
-                        if (!collaborators.contains(collaborator)) { collaborators.add(collaborator); }
+                        if (!collaborators.contains(collaborator)) {
+                            collaborators.add(collaborator);
+                        }
                     }
                 }
 
-                res.set(0,projects.size());
-                res.set(1,tasks);
-                res.set(2,collaborators.size());
+                res.set(0, projects.size());
+                res.set(1, tasks);
+                res.set(2, collaborators.size());
             }
-        }catch(SQLException error){
-            new AlertWindow("Database error", "Unable to load data due to a database access error: ", error.getMessage()).showErrorWindow();
-            return res;
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
         return res;
     }
@@ -209,18 +218,18 @@ public class StatsController extends Controller implements StatsViewController.V
      * @return a list with the number of sub-projects, tasks and collaborators of selectedProject
      */
     @Override
-    public List<Integer> countIndividualProjectStats(Project selectedProject){
-        List<Integer> res = new ArrayList<Integer>(Collections.nCopies(3, 0));
-        try{
+    public List<Integer> countIndividualProjectStats(Project selectedProject) {
+        List<Integer> res = new ArrayList<>(Collections.nCopies(3, 0));
+        try {
             int sub = 0;
-            if(selectedProject != null) {
+            if (selectedProject != null) {
                 int projectId = selectedProject.getId();
-                res.set(0,countSubProject(projectId, sub));
-                res.set(1,project_db.countTasks(projectId));
-                res.set(2,project_db.countCollaborators(projectId));
+                res.set(0, countSubProject(projectId, sub));
+                res.set(1, projectDB.countTasks(projectId));
+                res.set(2, projectDB.countCollaborators(projectId));
             }
             return res;
-        } catch (SQLException error){
+        } catch (SQLException error) {
             new AlertWindow("Error", "An error has occurred with the database while trying to load counts: ", error.getMessage()).showErrorWindow();
             return res;
         }
@@ -233,9 +242,9 @@ public class StatsController extends Controller implements StatsViewController.V
      * @return The number of tasks in the project
      */
     @Override
-    public Integer countTasksOfAProject(int projectId)  {
+    public Integer countTasksOfAProject(int projectId) {
         try {
-            return project_db.countTasks(projectId);
+            return projectDB.countTasks(projectId);
         } catch (SQLException error) {
             new AlertWindow("Database error", "Couldn't count the number of tasks from the database: ", error.getMessage()).showErrorWindow();
             return 0;
@@ -251,22 +260,23 @@ public class StatsController extends Controller implements StatsViewController.V
     public void exportStatsAsJson(String fileName, String path) {
         try {
             StringBuilder finalString = new StringBuilder("{\n");
-            List<Integer> projectsID = project_db.getUserProjects(user_db.getCurrentUser().getId());
+            List<Integer> projectsID = projectDB.getUserProjects(userDB.getCurrentUser().getId());
             for (Integer project : projectsID) {
-                Project child = project_db.getProject(project);
+                Project child = projectDB.getProject(project);
                 boolean isMainProject = child.getParentId() == 0;
-                if (isMainProject){
+                if (isMainProject) {
                     String treeBranchString = "";
-                    treeBranchString = statToJsonString(project, treeBranchString );
+                    treeBranchString = statToJsonString(project, treeBranchString);
                     String informationRelatedToStats = generateJSONFormat(child);
                     String gotChild = "{" + informationRelatedToStats.replaceAll("(^\\{|}$)", "");
                     treeBranchString = ("'" + child.getTitle() + "'" + " :" + gotChild + "," + treeBranchString + "\n");
                     finalString.append(treeBranchString);
                 }
-            } write(finalString + "}", fileName, path);
-        }catch(DatabaseException  error ) {
+            }
+            write(finalString + "}", fileName, path);
+        } catch (DatabaseException error) {
             error.show();
-        }catch(SQLException error){
+        } catch (SQLException error) {
             new AlertWindow("Database error", "An error has occurred with the database while trying to get a project: ", error.getMessage()).showErrorWindow();
         }
     }
@@ -280,19 +290,19 @@ public class StatsController extends Controller implements StatsViewController.V
      */
     public String statToJsonString(Integer id, String treeBranchString) throws DatabaseException {
         try {
-            List<Integer> projectsID = project_db.getSubProjects(id);
+            List<Integer> projectsID = projectDB.getSubProjects(id);
             for (int k = 0; k < projectsID.size(); k++) {
-                Project currentProject = project_db.getProject(projectsID.get(k));
+                Project currentProject = projectDB.getProject(projectsID.get(k));
 
                 String informationRelatedToStats = generateJSONFormat(currentProject);
-                if (project_db.getSubProjects(projectsID.get(k)).size() == 0) {
+                if (projectDB.getSubProjects(projectsID.get(k)).size() == 0) {
                     //Has no children so we can let the brackets closed --> 'name':{info}.
                     treeBranchString = (treeBranchString + '"' + currentProject.getTitle() + '"' + " :" + informationRelatedToStats + ",");
                 } else {
                     //Has a child so we let it open -->'Name':{info,... and check the child's children.
                     String gotChild = "{" + informationRelatedToStats.replaceAll("(^\\{|}$)", "");
                     treeBranchString += '"' + currentProject.getTitle() + '"' + " :" + gotChild + ",";
-                    treeBranchString = statToJsonString(project_db.getSubProjects(id).get(k), treeBranchString);
+                    treeBranchString = statToJsonString(projectDB.getSubProjects(id).get(k), treeBranchString);
                 }
             }
             treeBranchString += "},";
@@ -329,13 +339,14 @@ public class StatsController extends Controller implements StatsViewController.V
         try (PrintWriter csv = new PrintWriter(path + fileName)) {
             // Name of columns
             String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "Sub projects" + "," + "Parent ID" + "," + "Start date" + "," + "Estimated date" + "\r\n";
-            List<Integer> projectsID = project_db.getUserProjects(user_db.getCurrentUser().getId());
+            List<Integer> projectsID = projectDB.getUserProjects(userDB.getCurrentUser().getId());
             for (Integer project : projectsID) {
-                Project child = project_db.getProject(project);
+                Project child = projectDB.getProject(project);
                 boolean isMainProject = child.getParentId() == 0;
-                if (isMainProject){
+                if (isMainProject) {
                     content = statsToCSVString(project, child, content);
-                }}
+                }
+            }
             csv.write(content);
             new AlertWindow("Success", "Exported successfully").showInformationWindow();
         } catch (FileNotFoundException error) {
@@ -361,12 +372,12 @@ public class StatsController extends Controller implements StatsViewController.V
         int numberOfCollaborators = counter.get(2), numberOfTasks = counter.get(1), numberOfSubProjects = counter.get(0);
         String startDate = dateToString(currentProject.getStartDate()), endDate = dateToString(currentProject.getEndDate());
         try {
-            if (project_db.getSubProjects(currentProjectID).size() == 0) {
-                content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators + '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParentId() + "," + startDate + "," + endDate + "\r\n";
+            if (projectDB.getSubProjects(currentProjectID).size() == 0) {
+                content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators + '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + projectDB.getProject(currentProjectID).getParentId() + "," + startDate + "," + endDate + "\r\n";
             } else {
-                content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators + '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + project_db.getProject(currentProjectID).getParentId() + "," + startDate + "," + endDate + "\r\n";
-                for (int k = 0; k < project_db.getSubProjects(currentProjectID).size(); k++) {
-                    content = statsToCSVString(project_db.getSubProjects(currentProjectID).get(k), project_db.getProject(project_db.getSubProjects(currentProjectID).get(k)), content);
+                content += currentProjectID + "," + currentProject.getTitle() + "," + '"' + numberOfCollaborators + '"' + "," + '"' + numberOfTasks + '"' + "," + numberOfSubProjects + "," + projectDB.getProject(currentProjectID).getParentId() + "," + startDate + "," + endDate + "\r\n";
+                for (int k = 0; k < projectDB.getSubProjects(currentProjectID).size(); k++) {
+                    content = statsToCSVString(projectDB.getSubProjects(currentProjectID).get(k), projectDB.getProject(projectDB.getSubProjects(currentProjectID).get(k)), content);
                 }
             }
         } catch (SQLException error) {
@@ -382,7 +393,7 @@ public class StatsController extends Controller implements StatsViewController.V
      * @param fileName     String
      * @param path         String
      */
-    public void write(String chosenString, String fileName,String path) {
+    public void write(String chosenString, String fileName, String path) {
         try {
             FileWriter writer = new FileWriter(path + fileName, false);
             writer.write(chosenString + "\n");
@@ -395,14 +406,14 @@ public class StatsController extends Controller implements StatsViewController.V
 
     /**
      * @param projectID int
-     * @param counter int
+     * @param counter   int
      * @return int
      * @throws SQLException e
      */
     public int countSubProject(int projectID, int counter) throws SQLException {
-        for (int k = 0; k < project_db.getSubProjects(projectID).size(); k++) {
+        for (int k = 0; k < projectDB.getSubProjects(projectID).size(); k++) {
             counter += 1;
-            counter = countSubProject(project_db.getSubProjects(projectID).get(k), counter);
+            counter = countSubProject(projectDB.getSubProjects(projectID).get(k), counter);
         }
         return counter;
     }

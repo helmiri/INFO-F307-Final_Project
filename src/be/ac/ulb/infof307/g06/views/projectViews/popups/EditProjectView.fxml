@@ -9,24 +9,20 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="473.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/15.0.1"
             fx:controller="be.ac.ulb.infof307.g06.views.projectViews.popups.EditProjectViewController">
-   <children>
-      <VBox layoutX="158.0" layoutY="77.0" prefHeight="293.0" prefWidth="226.0" spacing="40.0">
-         <children>
-            <TextField fx:id="nameProject" prefHeight="35.0" promptText="Project's name"/>
-            <TextField fx:id="descriptionProject" prefHeight="35.0" promptText="Description"/>
-            <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Start date"/>
-            <DatePicker fx:id="endDateProject" layoutX="10.0" layoutY="160.0" prefHeight="35.0" prefWidth="295.0"
-                        promptText="End date"/>
-            <CheckComboBox fx:id="tagsProject" prefHeight="35.0" prefWidth="226.0"/>
-         </children>
-      </VBox>
-      <Button fx:id="editProjectBtn" layoutX="195.0" layoutY="405.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="25.0" prefWidth="152.0" stylesheets="@../../../resources/stylesheets/Button.css" text="EDIT"/>
-      <Text fx:id="errorText" fill="RED" layoutX="11.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            wrappingWidth="519.0">
-         <font>
+    <VBox layoutX="158.0" layoutY="77.0" prefHeight="293.0" prefWidth="226.0" spacing="40.0">
+        <TextField fx:id="nameProject" prefHeight="35.0" promptText="Project's name"/>
+        <TextField fx:id="descriptionProject" prefHeight="35.0" promptText="Description"/>
+        <DatePicker fx:id="dateProject" prefHeight="35.0" prefWidth="295.0" promptText="Start date"/>
+        <DatePicker fx:id="endDateProject" layoutX="10.0" layoutY="160.0" prefHeight="35.0" prefWidth="295.0"
+                    promptText="End date"/>
+        <CheckComboBox fx:id="tagsProject" prefHeight="35.0" prefWidth="226.0"/>
+    </VBox>
+    <Button fx:id="editProjectBtn" layoutX="195.0" layoutY="405.0" mnemonicParsing="false" onAction="#events"
+            prefHeight="25.0" prefWidth="152.0" stylesheets="@../../../resources/stylesheets/Button.css" text="EDIT"/>
+    <Text fx:id="errorText" fill="RED" layoutX="11.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          wrappingWidth="519.0">
+        <font>
             <Font name="Calibri" size="12.0"/>
-         </font>
-      </Text>
-   </children>
+        </font>
+    </Text>
 </AnchorPane>

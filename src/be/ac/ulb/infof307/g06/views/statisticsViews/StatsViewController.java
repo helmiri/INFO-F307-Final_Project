@@ -21,7 +21,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-public class StatsViewController{
+public class StatsViewController {
+    private final TreeItem<Project> root = new TreeItem<>();
     //-------------- ATTRIBUTES ----------------
     @FXML
     private Tooltip collaboratorsToolTip;
@@ -84,7 +85,6 @@ public class StatsViewController{
     @FXML
     private BarChart<String, Integer> tasksChart;
     private Project selectedProject;
-    private final TreeItem<Project> root = new TreeItem<>();
     private StatsViewController.ViewListener listener;
     //--------------- METHODS ----------------
 
@@ -95,14 +95,22 @@ public class StatsViewController{
      */
     @FXML
     private void statsEvents(ActionEvent event) {
-        if      (event.getSource() == backToProjectMenu  ) { listener.onBackButtonClicked(); } else if (event.getSource() == overallViewBtn     ) { listener.show()               ;} else if (event.getSource() == projectViewBtn     ) { listener.showIndividualStats()   ;} else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn     ) { exports(event); }
+        if (event.getSource() == backToProjectMenu) {
+            listener.onBackButtonClicked();
+        } else if (event.getSource() == overallViewBtn) {
+            listener.show();
+        } else if (event.getSource() == projectViewBtn) {
+            listener.showIndividualStats();
+        } else if (event.getSource() == exportJSONBtn || event.getSource() == exportCSVBtn) {
+            exports(event);
+        }
     }
 
     /**
      * Initializes the project view with the tree table with values and sets stats on the screen.
      */
     @FXML
-    public void initTables(){
+    public void initTables() {
         List<Integer> projectsArray;
         tasksColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         projectsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("title"));
@@ -129,8 +137,8 @@ public class StatsViewController{
     /**
      * Initializes the pie chart that shows projects by their time.
      */
-    public void pieChartInitializer(){
-        List<Integer> projects= listener.getProjects();
+    public void pieChartInitializer() {
+        List<Integer> projects = listener.getProjects();
         if (projects != null) {
             ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
             for (int i = 0; i < projects.size(); i++) {
@@ -139,7 +147,7 @@ public class StatsViewController{
                 pieChartAnchorPane.setPrefWidth(513 + (10 * i));
                 pieChartAnchorPane.setPrefHeight(322 + (4 * i));
                 Project project = listener.getProjectsFromID(projects.get(i));
-                if(project !=null) {
+                if (project != null) {
                     datas.add(i, new PieChart.Data(project.getTitle(), project.getDuration()));
                 }
             }
@@ -150,8 +158,8 @@ public class StatsViewController{
     /**
      * Initializes the bar chart that shows the number of tasks of projects.
      */
-    public void barChartInitializer(){
-        XYChart.Series<String,Integer> series = new XYChart.Series<>();
+    public void barChartInitializer() {
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
 
         List<Integer> projects = listener.getProjects();
         if (projects != null) {
@@ -197,7 +205,7 @@ public class StatsViewController{
     /**
      * Displays stats when a project is selected.
      */
-    public void onProjectSelected(){
+    public void onProjectSelected() {
         selectedProject = getSelectedProject();
         if (selectedProject == null) {
             resetTextLabel();
@@ -209,11 +217,11 @@ public class StatsViewController{
     /**
      * Displays the end date of a task when we click on it.
      */
-    public void onTaskSelected(){
+    public void onTaskSelected() {
         Task selectedTask = getSelectedTask();
-        if(selectedTask == null){
+        if (selectedTask == null) {
             taskEndDateLabel.setText("?/?/?");
-        } else{
+        } else {
             taskEndDateLabel.setText(listener.dateToString(selectedTask.getEndDate()));
         }
     }
@@ -224,7 +232,7 @@ public class StatsViewController{
      *
      * @return Project, the selected project on the tree table.
      */
-    public Project getSelectedProject(){
+    public Project getSelectedProject() {
         if (projectsTreeView.getSelectionModel().getSelectedItem() != null) {
             return projectsTreeView.getSelectionModel().getSelectedItem().getValue();
         }
@@ -236,8 +244,8 @@ public class StatsViewController{
      *
      * @return Task, the selected task in the task table view.
      */
-    public Task getSelectedTask(){
-        if(tasksTableView.getSelectionModel().getSelectedItem() != null){
+    public Task getSelectedTask() {
+        if (tasksTableView.getSelectionModel().getSelectedItem() != null) {
             return tasksTableView.getSelectionModel().getSelectedItem();
         }
         return null;
@@ -246,7 +254,7 @@ public class StatsViewController{
     /**
      * Resets the texts in labels in statistics.
      */
-    public void resetTextLabel(){
+    public void resetTextLabel() {
         projectsNumberLabel.setText("0");
         tasksNumberLabel.setText("0");
         collaboratorsNumberLabel.setText("0");
@@ -261,7 +269,9 @@ public class StatsViewController{
      *
      * @param root selected root
      */
-    public void expandRoot(TreeItem<Project> root){root.setExpanded(true);}
+    public void expandRoot(TreeItem<Project> root) {
+        root.setExpanded(true);
+    }
 
     /**
      * Adds a child to the related parent in the TreeTableView.
@@ -269,7 +279,7 @@ public class StatsViewController{
      * @param parent The project's parent
      * @param child  The project's child
      */
-    public void addChild(TreeItem<Project> parent, TreeItem<Project> child){
+    public void addChild(TreeItem<Project> parent, TreeItem<Project> child) {
         parent.getChildren().add(child);
     }
 
@@ -280,8 +290,8 @@ public class StatsViewController{
      */
     public void exports(ActionEvent event) {
         String fileName = fileNameTextField.getText();
-        if(fileName.equals("")){
-            fileName="Statistics";
+        if (fileName.equals("")) {
+            fileName = "Statistics";
         }
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("src"));
@@ -302,9 +312,9 @@ public class StatsViewController{
      * @param absolutePath The absolute path of the directory selected.
      * @return The separator ("\" or "/") in the path according to the OS.
      */
-    public String  determineOS(String absolutePath){
+    public String determineOS(String absolutePath) {
         String separator = "/";
-        if (!absolutePath.contains(separator)){
+        if (!absolutePath.contains(separator)) {
             separator = "\\";
         }
         return separator;

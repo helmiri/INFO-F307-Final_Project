@@ -14,9 +14,8 @@ import java.security.NoSuchAlgorithmException;
 public final class DropBoxContentHasher extends MessageDigest implements Cloneable {
     private MessageDigest overallHasher;
     private MessageDigest blockHasher;
-    private int blockPos = 0;
-
-    public static final int BLOCK_SIZE = 4 * 1024 * 1024;
+    private static final int BLOCK_SIZE = 4 * 1024 * 1024;
+    private int blockPos;
 
     public DropBoxContentHasher() {
         this(newSha256Hasher(), newSha256Hasher(), 0);
@@ -24,22 +23,26 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
 
     private DropBoxContentHasher(MessageDigest overallHasher, MessageDigest blockHasher, int blockPos) {
         super("Dropbox-Content-Hash");
-        this.overallHasher = overallHasher;
-        this.blockHasher = blockHasher;
-        this.blockPos = blockPos;
+        setOverallHasher(overallHasher);
+        setBlockHasher(blockHasher);
+        setBlockPos(blockPos);
+    }
+
+    private static int getBlockSize() {
+        return BLOCK_SIZE;
     }
 
     @Override
     protected void engineUpdate(byte input) {
         finishBlockIfFull();
 
-        blockHasher.update(input);
-        blockPos += 1;
+        getBlockHasher().update(input);
+        setBlockPos(getBlockPos() + 1);
     }
 
     @Override
     protected int engineGetDigestLength() {
-        return overallHasher.getDigestLength();
+        return getOverallHasher().getDigestLength();
     }
 
     @Override
@@ -48,12 +51,12 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
         while (offset < inputEnd) {
             finishBlockIfFull();
 
-            int spaceInBlock = BLOCK_SIZE - this.blockPos;
+            int spaceInBlock = getBlockSize() - getBlockPos();
             int inputPartEnd = Math.min(inputEnd, offset + spaceInBlock);
             int inputPartLength = inputPartEnd - offset;
-            blockHasher.update(input, offset, inputPartLength);
+            getBlockHasher().update(input, offset, inputPartLength);
 
-            blockPos += inputPartLength;
+            setBlockPos(getBlockPos() + inputPartLength);
             offset += inputPartLength;
         }
     }
@@ -64,13 +67,13 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
         while (input.position() < inputEnd) {
             finishBlockIfFull();
 
-            int spaceInBlock = BLOCK_SIZE - this.blockPos;
+            int spaceInBlock = getBlockSize() - getBlockPos();
             int inputPartEnd = Math.min(inputEnd, input.position() + spaceInBlock);
             int inputPartLength = inputPartEnd - input.position();
             input.limit(inputPartEnd);
-            blockHasher.update(input);
+            getBlockHasher().update(input);
 
-            blockPos += inputPartLength;
+            setBlockPos(getBlockPos() + inputPartLength);
             input.position(inputPartEnd);
         }
     }
@@ -78,45 +81,45 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
     @Override
     protected byte[] engineDigest() {
         finishBlockIfNonEmpty();
-        return overallHasher.digest();
+        return getOverallHasher().digest();
     }
 
     @Override
     protected int engineDigest(byte[] buf, int offset, int len)
             throws DigestException {
         finishBlockIfNonEmpty();
-        return overallHasher.digest(buf, offset, len);
+        return getOverallHasher().digest(buf, offset, len);
     }
 
     @Override
     protected void engineReset() {
-        this.overallHasher.reset();
-        this.blockHasher.reset();
-        this.blockPos = 0;
+        getOverallHasher().reset();
+        getBlockHasher().reset();
+        setBlockPos(0);
     }
 
     @Override
     public DropBoxContentHasher clone()
             throws CloneNotSupportedException {
         DropBoxContentHasher clone = (DropBoxContentHasher) super.clone();
-        clone.overallHasher = (MessageDigest) clone.overallHasher.clone();
-        clone.blockHasher = (MessageDigest) clone.blockHasher.clone();
+        clone.setOverallHasher((MessageDigest) clone.getOverallHasher().clone());
+        clone.setBlockHasher((MessageDigest) clone.getBlockHasher().clone());
         return clone;
     }
 
     private void finishBlock() {
-        overallHasher.update(blockHasher.digest());
-        blockPos = 0;
+        getOverallHasher().update(getBlockHasher().digest());
+        setBlockPos(0);
     }
 
     private void finishBlockIfFull() {
-        if (blockPos == BLOCK_SIZE) {
+        if (getBlockPos() == getBlockSize()) {
             finishBlock();
         }
     }
 
     private void finishBlockIfNonEmpty() {
-        if (blockPos > 0) {
+        if (getBlockPos() > 0) {
             finishBlock();
         }
     }
@@ -130,7 +133,7 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
     }
 
     public String hex(byte[] data) {
-        char[] hex_digits = new char[]{
+        char[] hex_digits = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'a', 'b', 'c', 'd', 'e', 'f'};
         char[] buf = new char[2 * data.length];
@@ -140,6 +143,30 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
             buf[i++] = hex_digits[b & 0x0f];
         }
         return new String(buf);
+    }
+
+    private MessageDigest getOverallHasher() {
+        return overallHasher;
+    }
+
+    private void setOverallHasher(MessageDigest overallHasher) {
+        this.overallHasher = overallHasher;
+    }
+
+    private MessageDigest getBlockHasher() {
+        return blockHasher;
+    }
+
+    private void setBlockHasher(MessageDigest blockHasher) {
+        this.blockHasher = blockHasher;
+    }
+
+    private int getBlockPos() {
+        return blockPos;
+    }
+
+    private void setBlockPos(int blockPos) {
+        this.blockPos = blockPos;
     }
 }
 

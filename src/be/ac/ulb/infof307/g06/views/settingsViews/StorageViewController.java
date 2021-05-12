@@ -9,8 +9,6 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import java.sql.SQLException;
-
 /**
  * The storage settings scene
  */
@@ -44,9 +42,9 @@ public class StorageViewController {
      * The main method for button's events.
      *
      * @param actionEvent ActionEvent, the event.
-     * throws SQLException
+     *                    throws SQLException
      */
-    public void events(ActionEvent actionEvent) throws SQLException {
+    public void events(ActionEvent actionEvent) {
         if (actionEvent.getSource() == saveBtn) {
             if (listener.saveSettings(limitField.getText(), this)) {
                 new AlertWindow("Save", "Changes saved").showInformationWindow();
@@ -124,14 +122,14 @@ public class StorageViewController {
      * Communicates to the controller which action has been taken by the user
      */
     public interface ViewListener {
-        boolean saveSettings(String limit, StorageViewController storageViewController) throws SQLException;
+        boolean saveSettings(String limit, StorageViewController storageViewController);
 
         void authenticateGoogleDrive();
 
         void authenticateDropBox();
     }
 
-    private class UnitValue {
+    private static class UnitValue {
         private String unit;
         private long value;
 

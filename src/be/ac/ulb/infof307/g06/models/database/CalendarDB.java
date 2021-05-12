@@ -84,9 +84,10 @@ public class CalendarDB extends Database {
 
     /**
      * Check if a certain project is contained in the db
-     * @param title
-     * @return
-     * @throws SQLException
+     *
+     * @param title The title of the project
+     * @return True if it exists, false otherwise
+     * @throws SQLException On database access error
      */
     private boolean isInDB(String title) throws SQLException {
         int res;
@@ -98,7 +99,7 @@ public class CalendarDB extends Database {
 
     /**
      * Replace a project with another one.
-     * @param prevName old porject
+     * @param prevName old project
      * @param newName new project
      * @throws SQLException if query fails
      */

@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 public class InvitationViewController {
     //-------------- ATTRIBUTES ----------------
     @FXML
+    private AnchorPane layout;
+    @FXML
     private Button acceptBtn;
     @FXML
     private TextField descriptionTextField;
@@ -35,10 +37,9 @@ public class InvitationViewController {
     /**
      * Initializes the fields related to the edition of a project.
      *
-     * @param invitation     The invitation to be shown
-     * @param invitationPane invitation layout
+     * @param invitation The invitation to be shown
      */
-    public void show(Invitation invitation, AnchorPane invitationPane) {
+    public void show(Invitation invitation) {
         Project invitedProject = invitation.getProject();
         User sender = invitation.getSender();
 
@@ -47,18 +48,17 @@ public class InvitationViewController {
         senderNameTextField.setText(sender.getUserName());
         projectNameTextField.setText(invitedProject.getTitle());
         descriptionTextField.setText(invitedProject.getDescription());
-        showStage(invitationPane);
+        showStage();
     }
 
     /**
      * Shows the "invitation" stage.
      *
-     * @param invitationPane AnchorPane, the pane for a collaborator invitation.
      */
-    private void showStage(AnchorPane invitationPane) {
+    private void showStage() {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Invitation");
-        stage.setScene(new Scene(invitationPane, 571, 473));
+        stage.setScene(new Scene(layout, 571, 473));
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.showAndWait();

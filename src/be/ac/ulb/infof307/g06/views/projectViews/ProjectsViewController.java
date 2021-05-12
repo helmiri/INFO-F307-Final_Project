@@ -8,10 +8,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -30,6 +32,8 @@ import java.util.Map;
 
 public class ProjectsViewController {
     //----------ATTRIBUTES---------
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Button helpBtn;
     @FXML
@@ -51,7 +55,7 @@ public class ProjectsViewController {
     @FXML
     private Button editBtn;
     @FXML
-    private Button addTaskbtn;
+    private Button addTaskButton;
     @FXML
     private Button backBtn;
     @FXML
@@ -104,20 +108,9 @@ public class ProjectsViewController {
     private final Map<Integer, TreeItem<Project>> TreeMap = new HashMap<>();
 
     //---------------METHODS----------------
-    public void init() {
-        initTree();
-        root.getChildren().clear();
-        List<Project> projectsArray = listener.getProjects();
-        hideRoot();
-        for (Project project : projectsArray) {
-            TreeItem<Project> child = new TreeItem<>(project);
-            TreeMap.put(project.getId(), child);
-            if (project.getParentId() == 0) {
-                root.getChildren().add(child);
-            } else {
-                TreeMap.get(project.getParentId()).getChildren().add(child);
-            }
-        }
+    public void show(Stage stage) {
+        stage.setScene(new Scene(layout));
+        refreshTree(null);
         refresh();
     }
 
@@ -148,7 +141,7 @@ public class ProjectsViewController {
             listener.downloadProject();
         } else if (event.getSource() == addCollaboratorsBtn) {
             listener.addCollaborator(collaboratorsName.getText(), selectedProject.getId());
-        } else if (event.getSource() == addTaskbtn && selectedProject != null) {
+        } else if (event.getSource() == addTaskButton && selectedProject != null) {
             if (startDateTask.getValue() != null && endDateTask.getValue() != null) {
                 listener.addTask(descriptionTask.getText(), selectedProject.getId(), startDateTask.getValue().toEpochDay(), endDateTask.getValue().toEpochDay());
                 displayTask();
@@ -185,7 +178,19 @@ public class ProjectsViewController {
      */
     public void refreshTree(Project selected) {
         selectedProject = selected;
-        init();
+        initTree();
+        root.getChildren().clear();
+        List<Project> projectsArray = listener.getProjects();
+        hideRoot();
+        for (Project project : projectsArray) {
+            TreeItem<Project> child = new TreeItem<>(project);
+            TreeMap.put(project.getId(), child);
+            if (project.getParentId() == 0) {
+                root.getChildren().add(child);
+            } else {
+                TreeMap.get(project.getParentId()).getChildren().add(child);
+            }
+        }
     }
 
     private List<Project> getMultipleSelectedProjects() {

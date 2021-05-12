@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +107,7 @@ public class CloudServiceController implements CloudSelectionViewController.View
             }
         } catch (IOException error) {
             new AlertWindow("IOError", "An error occurred while saving the files", error.getMessage()).showErrorWindow();
-        } catch (NoSuchAlgorithmException | DbxException error) {
+        } catch (DbxException error) {
             new AlertWindow("Connection Error", "An error occurred while fetching the files", error.getMessage()).showErrorWindow();
         }
         importFiles(downloadedFiles);

@@ -5,71 +5,72 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="anchorPane" maxHeight="823.0" maxWidth="971.0" minHeight="823.0" minWidth="971.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.StorageViewController">
-   <children>
-      <HBox layoutX="232.0" layoutY="299.0" spacing="40.0"/>
-      <Button fx:id="saveBtn" layoutX="515.0" layoutY="745.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="201.0" stylesheets="@../../resources/stylesheets/Button.css" text="SAVE"
-              textFill="WHITE" visible="false">
-         <font>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPane" maxHeight="823.0" maxWidth="971.0" minHeight="823.0"
+            minWidth="971.0" xmlns="http://javafx.com/javafx/16"
+            fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.StorageViewController">
+    <HBox layoutX="232.0" layoutY="299.0" spacing="40.0"/>
+    <Button fx:id="saveBtn" layoutX="515.0" layoutY="745.0" mnemonicParsing="false" onAction="#events"
+            prefHeight="54.0" prefWidth="201.0" stylesheets="@../../resources/stylesheets/Button.css" text="SAVE"
+            textFill="WHITE" visible="false">
+        <font>
             <Font name="Calibri" size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <Text fill="#070707" layoutX="75.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disk usage">
-         <font>
+        </cursor>
+    </Button>
+    <Text fill="#070707" layoutX="75.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disk usage">
+        <font>
             <Font size="24.0"/>
-         </font>
-      </Text>
-      <ProgressBar fx:id="diskBar" layoutX="293.0" layoutY="157.0" prefHeight="18.0" prefWidth="584.0" progress="0.0" />
-      <Text fx:id="usageText" layoutX="106.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="165.18308448791504">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Text>
-      <Text layoutX="75.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cloud service integration">
-         <font>
-            <Font size="24.0"/>
-         </font>
-      </Text>
-      <Text fx:id="adminText" layoutX="75.0" layoutY="560.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Admin settings" visible="false">
-         <font>
-            <Font size="24.0"/>
-         </font>
-      </Text>
-      <TextField fx:id="limitField" alignment="CENTER" layoutX="437.0" layoutY="636.0" prefHeight="26.0"
-                 prefWidth="462.0" visible="false"/>
-      <Text fx:id="limitText" layoutX="113.0" layoutY="656.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Disk usage limit (in MB)" visible="false">
-         <font>
+        </font>
+    </Text>
+    <ProgressBar fx:id="diskBar" layoutX="293.0" layoutY="157.0" prefHeight="18.0" prefWidth="584.0" progress="0.0"/>
+    <Text fx:id="usageText" layoutX="106.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          wrappingWidth="165.18308448791504">
+        <font>
             <Font size="18.0"/>
-         </font>
-      </Text>
-      <Separator layoutX="75.0" layoutY="91.0" prefHeight="18.0" prefWidth="855.0"/>
-      <Separator layoutX="75.0" layoutY="263.0" prefHeight="18.0" prefWidth="855.0"/>
-      <Separator fx:id="separator" layoutX="75.0" layoutY="557.0" prefHeight="18.0" prefWidth="855.0" visible="false"/>
-      <Button fx:id="dBoxButton" layoutX="515.0" layoutY="375.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="256.0" stylesheets="@../../resources/stylesheets/Button.css"
-              text="Connect DropBox" textFill="WHITE">
-         <font>
+        </font>
+    </Text>
+    <Text layoutX="75.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cloud service integration">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Text>
+    <Text fx:id="adminText" layoutX="75.0" layoutY="560.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Admin settings" visible="false">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Text>
+    <TextField fx:id="limitField" alignment="CENTER" layoutX="437.0" layoutY="636.0" prefHeight="26.0"
+               prefWidth="462.0" visible="false"/>
+    <Text fx:id="limitText" layoutX="113.0" layoutY="656.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Disk usage limit (in MB)" visible="false">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Text>
+    <Separator layoutX="75.0" layoutY="91.0" prefHeight="18.0" prefWidth="855.0"/>
+    <Separator layoutX="75.0" layoutY="263.0" prefHeight="18.0" prefWidth="855.0"/>
+    <Separator fx:id="separator" layoutX="75.0" layoutY="557.0" prefHeight="18.0" prefWidth="855.0" visible="false"/>
+    <Button fx:id="dBoxButton" layoutX="515.0" layoutY="375.0" mnemonicParsing="false" onAction="#events"
+            prefHeight="54.0" prefWidth="256.0" stylesheets="@../../resources/stylesheets/Button.css"
+            text="Connect DropBox" textFill="WHITE">
+        <font>
             <Font name="Calibri" size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <Button fx:id="gDriveButton" layoutX="191.0" layoutY="375.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="54.0" prefWidth="252.0" stylesheets="@../../resources/stylesheets/Button.css"
-              text="Connect GoogleDrive" textFill="WHITE">
-         <font>
+        </cursor>
+    </Button>
+    <Button fx:id="gDriveButton" layoutX="191.0" layoutY="375.0" mnemonicParsing="false" onAction="#events"
+            prefHeight="54.0" prefWidth="252.0" stylesheets="@../../resources/stylesheets/Button.css"
+            text="Connect GoogleDrive" textFill="WHITE">
+        <font>
             <Font name="Calibri" size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-   </children>
+        </cursor>
+    </Button>
 </AnchorPane>

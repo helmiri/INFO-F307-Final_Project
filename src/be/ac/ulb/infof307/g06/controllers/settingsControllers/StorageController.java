@@ -32,22 +32,28 @@ import java.sql.SQLException;
 public class StorageController extends Controller implements StorageViewController.ViewListener, CodePromptViewController.ViewListener {
     private final StorageViewController storageViewController;
     private DropBoxAuthorization authorization;
-
+    private UserDB userDB;
+    private ProjectDB projectDB;
 
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage                 Stage, a stage
+     * @param scene                 Scene, a scene
      * @param storageViewController StorageViewController, the view controller
-     * @param DB_PATH String, the path to the database
+     * @param DB_PATH               String, the path to the database
      */
     //--------------- METHODS ----------------
-    public StorageController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, StorageViewController storageViewController, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public StorageController(Stage stage, Scene scene, StorageViewController storageViewController, String DB_PATH) throws DatabaseException {
+        super(stage, scene, DB_PATH);
         this.storageViewController = storageViewController;
+
+        try {
+            userDB = new UserDB(DB_PATH);
+            projectDB = new ProjectDB(DB_PATH);
+        } catch (ClassNotFoundException | SQLException error) {
+            throw new DatabaseException(error);
+        }
     }
 
     /**
@@ -57,8 +63,8 @@ public class StorageController extends Controller implements StorageViewControll
     public void show() {
         try {
             storageViewController.setListener(this);
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-            storageViewController.initialize(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
+            storageViewController.initialize(userDB.getDiskLimit(), userDB.getDiskUsage(), userDB.getCurrentUser().isAdmin());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -76,15 +82,15 @@ public class StorageController extends Controller implements StorageViewControll
     public boolean saveSettings(String limit, StorageViewController storageViewController) {
         boolean res = false;
         try {
-            if (user_db.isAdmin() && !limit.isBlank()) {
+            if (userDB.isAdmin() && !limit.isBlank()) {
                 try {
                     setLimit(limit);
                     res = true;
                 } catch (NumberFormatException error) {
-                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number: "+error).showErrorWindow();
+                    new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number: " + error).showErrorWindow();
                 }
             }
-            storageViewController.refresh(user_db.getDiskLimit(), user_db.getDiskUsage(), user_db.getCurrentUser().isAdmin());
+            storageViewController.refresh(userDB.getDiskLimit(), userDB.getDiskUsage(), userDB.getCurrentUser().isAdmin());
         } catch (SQLException error) {
             new DatabaseException(error).show();
             return false;
@@ -99,7 +105,7 @@ public class StorageController extends Controller implements StorageViewControll
     public void authenticateGoogleDrive() {
         AlertWindow alert = new AlertWindow("Authorization request", "Requesting authorization...\nDo not close the app. Click 'OK' to continue");
         alert.showInformationWindow();
-        GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(user_db.getCurrentUser().getUserName());
+        GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(userDB.getCurrentUser().getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
         } catch (IOException | GeneralSecurityException error) {
@@ -136,7 +142,7 @@ public class StorageController extends Controller implements StorageViewControll
         if (newLimit == 0) {
             throw new NumberFormatException("Invalid number");
         }
-        user_db.setLimit(Integer.parseInt(limit) * 1000L * 1000L);
+        userDB.setLimit(Integer.parseInt(limit) * 1000L * 1000L);
     }
 
     /**
@@ -164,15 +170,15 @@ public class StorageController extends Controller implements StorageViewControll
     @Override
     public void onOKClicked(String code) {
         try {
-            DbxCredential credential = user_db.getDropBoxCredentials();
+            DbxCredential credential = userDB.getDropBoxCredentials();
             if (credential == null) {
                 // Insert if no credentials found
                 credential = authorization.getAuthorization(code);
-                user_db.addDropBoxCredentials(credential);
+                userDB.addDropBoxCredentials(credential);
             } else {
                 // Update existing credentials if found
                 credential = authorization.getAuthorization(code);
-                user_db.updateDropBoxCredentials(credential);
+                userDB.updateDropBoxCredentials(credential);
             }
             new AlertWindow("Credentials saved", "Settings saved").showInformationWindow();
         } catch (DbxException error) {

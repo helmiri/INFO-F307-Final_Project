@@ -31,5 +31,4 @@ public class AddProjectViewController extends ProjectInputViewController {
     public void init(ProjectsViewController.ViewListener listener, Stage stage) {
         super.init(listener, stage);
     }
-
 }

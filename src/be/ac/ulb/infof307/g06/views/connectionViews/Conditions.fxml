@@ -8,56 +8,54 @@
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="551.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16"
             fx:controller="be.ac.ulb.infof307.g06.views.connectionViews.ConditionsViewController">
-    <children>
-        <Button fx:id="acceptConditionsBtn" layoutX="719.0" layoutY="495.0" mnemonicParsing="false"
-                onAction="#conditionsEvents" prefHeight="39.0" prefWidth="122.0"
-                stylesheets="@../../resources/stylesheets/Button.css" text="Continue" textFill="WHITE"/>
-        <Polygon fill="#4ec8f50d" layoutX="-167.0" layoutY="296.0" points="167.0, 258.0, 169.0, -295.0, 731.0, 258.0"
-                 stroke="TRANSPARENT" strokeType="INSIDE">
-            <effect>
-                <Bloom/>
-            </effect>
-        </Polygon>
-        <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="296.0"
-                 points="208.0, 258.0, 208.00001525878906, -295.1999816894531, 672.0, 258.0" stroke="TRANSPARENT"
-                 strokeType="INSIDE"/>
-        <Polygon fill="#4ec8f50d" layoutX="-214.0" layoutY="296.0"
-                 points="214.0, 258.0, 214.00001525878906, -289.0, 546.0, 258.0" stroke="TRANSPARENT"
-                 strokeType="INSIDE"/>
-        <Polygon fill="#4fc3f70d" layoutX="-162.0" layoutY="296.0"
-                 points="162.00001525878906, 258.0, 162.00001525878906, -296.0, 423.0, 258.0" stroke="TRANSPARENT"
-                 strokeType="INSIDE"/>
-        <CheckBox fx:id="acceptConditionsBox" layoutX="59.0" layoutY="493.0" mnemonicParsing="false" prefHeight="43.0"
-                  prefWidth="334.0" text="Accept terms &amp; conditions">
-            <font>
-                <Font size="16.0"/>
-            </font>
-        </CheckBox>
-        <Text layoutX="278.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Agreement"
-              underline="true">
-            <font>
-                <Font name="System Bold" size="48.0"/>
-            </font>
-        </Text>
-        <Text layoutX="59.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="By registering an account with this application, you agree to grant us a non-transferable option to claim, for now and for ever more, your immortal soul. Should We wish to exercise this option, you agree to surrender your immortal soul, and any claim you may have on it, within 5 (five) working days of receiving written notification from Team_6 or one of its duly authorized minions."
-              textAlignment="JUSTIFY" wrappingWidth="803.6159057617188">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Text>
-        <Text layoutX="59.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="We reserve the right to serve such notice in 6 (six) meter high letters of fire, however we can accept no liability for any loss or damage caused by such an act. If you a) do not believe you have an immortal soul, b) have already given it to another party, or c) do not wish to grant us such a license, you may continue with you account registration regardless.*"
-              textAlignment="JUSTIFY" wrappingWidth="803.6159057617188">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Text>
-        <Text layoutX="58.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="*We don't hold grudges. We promise">
-            <font>
-                <Font size="8.0"/>
-            </font>
-        </Text>
-    </children>
+    <Button fx:id="acceptConditionsBtn" layoutX="719.0" layoutY="495.0" mnemonicParsing="false"
+            onAction="#conditionsEvents" prefHeight="39.0" prefWidth="122.0"
+            stylesheets="@../../resources/stylesheets/Button.css" text="Continue" textFill="WHITE"/>
+    <Polygon fill="#4ec8f50d" layoutX="-167.0" layoutY="296.0" points="167.0, 258.0, 169.0, -295.0, 731.0, 258.0"
+             stroke="TRANSPARENT" strokeType="INSIDE">
+        <effect>
+            <Bloom/>
+        </effect>
+    </Polygon>
+    <Polygon fill="#4ec8f50d" layoutX="-206.0" layoutY="296.0"
+             points="208.0, 258.0, 208.00001525878906, -295.1999816894531, 672.0, 258.0" stroke="TRANSPARENT"
+             strokeType="INSIDE"/>
+    <Polygon fill="#4ec8f50d" layoutX="-214.0" layoutY="296.0"
+             points="214.0, 258.0, 214.00001525878906, -289.0, 546.0, 258.0" stroke="TRANSPARENT"
+             strokeType="INSIDE"/>
+    <Polygon fill="#4fc3f70d" layoutX="-162.0" layoutY="296.0"
+             points="162.00001525878906, 258.0, 162.00001525878906, -296.0, 423.0, 258.0" stroke="TRANSPARENT"
+             strokeType="INSIDE"/>
+    <CheckBox fx:id="acceptConditionsBox" layoutX="59.0" layoutY="493.0" mnemonicParsing="false" prefHeight="43.0"
+              prefWidth="334.0" text="Accept terms &amp; conditions">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </CheckBox>
+    <Text layoutX="278.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Agreement"
+          underline="true">
+        <font>
+            <Font name="System Bold" size="48.0"/>
+        </font>
+    </Text>
+    <Text layoutX="59.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="By registering an account with this application, you agree to grant us a non-transferable option to claim, for now and for ever more, your immortal soul. Should We wish to exercise this option, you agree to surrender your immortal soul, and any claim you may have on it, within 5 (five) working days of receiving written notification from Team_6 or one of its duly authorized minions."
+          textAlignment="JUSTIFY" wrappingWidth="803.6159057617188">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Text>
+    <Text layoutX="59.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="We reserve the right to serve such notice in 6 (six) meter high letters of fire, however we can accept no liability for any loss or damage caused by such an act. If you a) do not believe you have an immortal soul, b) have already given it to another party, or c) do not wish to grant us such a license, you may continue with you account registration regardless.*"
+          textAlignment="JUSTIFY" wrappingWidth="803.6159057617188">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Text>
+    <Text layoutX="58.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="*We don't hold grudges. We promise">
+        <font>
+            <Font size="8.0"/>
+        </font>
+    </Text>
 </AnchorPane>

@@ -4,24 +4,24 @@ package be.ac.ulb.infof307.g06.views.settingsViews.helpViews;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.io.File;
-import java.nio.file.Paths;
 
 /**
  * Help section view controller
  */
 public class HelpViewController {
     //-------------- ATTRIBUTES ----------------
-
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Button projectManagementHelpBtn;
 
@@ -76,14 +76,37 @@ public class HelpViewController {
 
     @FXML
     private Slider progressBar;
-
+    @FXML
     private MediaPlayer mediaPlayer;
     @FXML
     private MediaView mediaView;
-
     private ViewListener listener;
 
+    public HelpViewController() {
+    }
+
+
     //--------------- METHODS ----------------
+
+    /**
+     * Displays the tutorial window
+     *
+     * @param stage Window where the scene will be set
+     */
+    public void show(Stage stage) {
+        stage.setScene(new Scene(layout));
+        stage.sizeToScene();
+        stage.show();
+    }
+
+    /**
+     * Listener setter
+     *
+     * @param listener This view's listener
+     */
+    public void setListener(ViewListener listener) {
+        this.listener = listener;
+    }
 
     /**
      * The main method for button's events.
@@ -96,31 +119,16 @@ public class HelpViewController {
         if (event.getSource() == projectManagementHelpBtn) {
             new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == storageHelpBtn) {
-            makeHelpWindow("storageHelp.mp4", "Storage management");
+            listener.loadVideo("storageHelp.mp4", "Storage management");
         } else if (event.getSource() == exportImportHelpBtn) {
             new AlertWindow("Soon...", "Coming soon...").showInformationWindow();
         } else if (event.getSource() == calendarHelpBtn) {
-            makeHelpWindow("calendarHelp.mp4", "Storage management");
+            listener.loadVideo("calendarHelp.mp4", "Storage management");
         } else if (event.getSource() == tagsHelpBtn) {
-            makeHelpWindow("tagsHelp.mp4", "Tags management");
+            listener.loadVideo("tagsHelp.mp4", "Tags management");
         } else if (event.getSource() == profileHelpBtn) {
-            makeHelpWindow("profileHelp.mp4", "Profile Management");
+            listener.loadVideo("profileHelp.mp4", "Profile Management");
         }
-
-    }
-
-    /**
-     * Sets media player and shows help window
-     *
-     * @param path  path to video file
-     * @param title window title
-     */
-    private void makeHelpWindow(String path, String title) {
-        File file = new File("src/be/ac/ulb/infof307/g06/resources/videos");
-        path = file.getAbsolutePath() + "/" + path;
-        Media media = new Media(Paths.get(path).toUri().toString());
-        mediaPlayer = new MediaPlayer(media);
-        listener.showHelp("TutorialView.fxml", title, mediaPlayer);
     }
 
     /**
@@ -143,7 +151,6 @@ public class HelpViewController {
      */
     @FXML
     void playBtnClicked(ActionEvent event) {
-        mediaView.setMediaPlayer(mediaPlayer);
         setProgressBar();
         mediaPlayer.play();
     }
@@ -162,7 +169,6 @@ public class HelpViewController {
      */
     @FXML
     void pauseBtnClicked(ActionEvent event) {
-        mediaView.setMediaPlayer(mediaPlayer);
         mediaPlayer.pause();
     }
 
@@ -173,7 +179,6 @@ public class HelpViewController {
      */
     @FXML
     void stopBtnClicked(ActionEvent event) {
-        mediaView.setMediaPlayer(mediaPlayer);
         if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED ){
             mediaPlayer.stop();
         }
@@ -189,7 +194,6 @@ public class HelpViewController {
      */
     @FXML
     void videoProgressEvents(ActionEvent event) {
-        mediaView.setMediaPlayer(mediaPlayer);
         if (event.getSource() == skipBtn){
             mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(10)));
         }
@@ -205,7 +209,6 @@ public class HelpViewController {
      */
     @FXML
     void videoSpeedEvents(ActionEvent event) {
-        mediaView.setMediaPlayer(mediaPlayer);
         videoLabel.setVisible(false);
         if (event.getSource() == verySlowSpeedBtn){
             setVideoRate(0.5);
@@ -235,37 +238,22 @@ public class HelpViewController {
         videoLabel.setText("x" + rateValue);
     }
 
-    /**
-     * Sets the new media player to be used
-     *
-     * @param player The media player
-     */
-    public void setPlayer(MediaPlayer player) {
-        mediaPlayer = player;
-    }
 
-    //--------------- LISTENER ----------------
-
-    /**
-     * Sets the listener.
-     *
-     * @param listener ViewListener, the listener to the view.
-     */
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
+    public void setMediaView(MediaPlayer mediaPlayer) {
+        mediaView.setMediaPlayer(mediaPlayer);
     }
 
     /**
-     * Listener that communicates with the controller
+     * Controller communication interface
      */
     public interface ViewListener {
+
         /**
-         * Displays a new stage with help information
+         * Sets media player and shows help window
          *
-         * @param fileName The path to the video to be played
-         * @param title    The title of the window
-         * @param player   The player used
+         * @param path  path to video file
+         * @param title window title
          */
-        void showHelp(String fileName, String title, MediaPlayer player);
+        void loadVideo(String path, String title);
     }
 }

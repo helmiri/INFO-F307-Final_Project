@@ -8,42 +8,40 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="823.0" prefWidth="971.0" xmlns="http://javafx.com/javafx/16"
             fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.TagsViewController">
-    <children>
-        <ColorPicker fx:id="tagsColorPicker" layoutX="345.0" layoutY="741.0" prefHeight="25.0" prefWidth="96.0"/>
-        <TextField fx:id="defaultTagNameTextField" alignment="CENTER" layoutX="311.0" layoutY="703.0" prefHeight="25.0"
-                   prefWidth="350.0" promptText="Tag's name"/>
-        <Button fx:id="updateBtn" stylesheets="@../../resources/stylesheets/Button.css" layoutX="530.0" layoutY="741.0"
-                mnemonicParsing="false" onAction="#events"
-                prefHeight="25.0" prefWidth="96.0" text="UPDATE">
-            <font>
-                <Font name="Calibri" size="12.0"/>
-            </font>
-        </Button>
-        <Button fx:id="addBtn" layoutX="458.0" layoutY="741.0" mnemonicParsing="false"
-                stylesheets="@../../resources/stylesheets/Button.css" onAction="#events"
-                prefHeight="25.0" prefWidth="54.0" text="ADD">
-            <font>
-                <Font name="Calibri" size="12.0"/>
-            </font>
-        </Button>
-        <HBox layoutX="259.0" layoutY="392.0" spacing="40.0"/>
-        <TableView fx:id="defaultTagsTableView" layoutX="253.0" layoutY="96.0" onMouseClicked="#onTagSelected"
-                   prefHeight="586.0" prefWidth="465.0">
-            <columns>
-                <TableColumn fx:id="defaultTagsColumn" prefWidth="463.99998474121094"/>
-            </columns>
-            <contextMenu>
-                <ContextMenu>
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#deleteTag" text="Delete"/>
-                    </items>
-                </ContextMenu>
-            </contextMenu>
-        </TableView>
-        <Text layoutX="364.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit/Add/Delete tags">
-            <font>
-                <Font size="24.0"/>
-            </font>
-        </Text>
-    </children>
+    <ColorPicker fx:id="tagsColorPicker" layoutX="345.0" layoutY="741.0" prefHeight="25.0" prefWidth="96.0"/>
+    <TextField fx:id="defaultTagNameTextField" alignment="CENTER" layoutX="311.0" layoutY="703.0" prefHeight="25.0"
+               prefWidth="350.0" promptText="Tag's name"/>
+    <Button fx:id="updateBtn" stylesheets="@../../resources/stylesheets/Button.css" layoutX="530.0" layoutY="741.0"
+            mnemonicParsing="false" onAction="#events"
+            prefHeight="25.0" prefWidth="96.0" text="UPDATE">
+        <font>
+            <Font name="Calibri" size="12.0"/>
+        </font>
+    </Button>
+    <Button fx:id="addBtn" layoutX="458.0" layoutY="741.0" mnemonicParsing="false"
+            stylesheets="@../../resources/stylesheets/Button.css" onAction="#events"
+            prefHeight="25.0" prefWidth="54.0" text="ADD">
+        <font>
+            <Font name="Calibri" size="12.0"/>
+        </font>
+    </Button>
+    <HBox layoutX="259.0" layoutY="392.0" spacing="40.0"/>
+    <TableView fx:id="defaultTagsTableView" layoutX="253.0" layoutY="96.0" onMouseClicked="#onTagSelected"
+               prefHeight="586.0" prefWidth="465.0">
+        <columns>
+            <TableColumn fx:id="defaultTagsColumn" prefWidth="463.99998474121094"/>
+        </columns>
+        <contextMenu>
+            <ContextMenu>
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#deleteTag" text="Delete"/>
+                </items>
+            </ContextMenu>
+        </contextMenu>
+    </TableView>
+    <Text layoutX="364.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit/Add/Delete tags">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Text>
 </AnchorPane>

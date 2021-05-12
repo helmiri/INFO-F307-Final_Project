@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.controllers.projectControllers;
 
-import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
@@ -12,9 +11,7 @@ import be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
-import javafx.stage.Stage;
 import org.rauschig.jarchivelib.ArchiveFormat;
 import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
@@ -33,25 +30,24 @@ import java.util.Map;
 /**
  * File exportation/importation controller
  */
-public class IOController extends Controller {
+public class IOController {
     //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
     private final String tempDir;
-
+    private UserDB userDB;
+    private ProjectDB projectDB;
     //--------------- METHODS ----------------
 
     /**
      * File exportation/importation controller
      *
-     * @param user_db    The user database used to retrieve information from
-     * @param project_db The project database used to retrieve information from
-     * @param stage      The application stage
-     * @param scene      The current scene (to swap back to)
-     * @param DB_PATH    The database path
+     * @param userDB    The user database to be used to retrieve the information
+     * @param projectDB The project database to be used to retrieve the information
      */
 
-    public IOController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public IOController(UserDB userDB, ProjectDB projectDB) {
+        this.userDB = userDB;
+        this.projectDB = projectDB;
         tempDir = System.getProperty("user.dir") + "/temp/";
         File directory = new File(tempDir);// Temporary file directory
 
@@ -69,10 +65,6 @@ public class IOController extends Controller {
         this.viewController = viewController;
     }
 
-    @Override
-    public void show() {
-    }
-
     /**
      * Write a project and its children in a json file.
      *
@@ -81,14 +73,14 @@ public class IOController extends Controller {
      */
     private void saveProjectAndChildrenJSON(Project project, FileWriter fileWriter) throws IOException, SQLException {
         int ID = project.getId();
-        saveProjectJson(project, project_db.getTasks(ID), project_db.getTags(ID), fileWriter);
-        List<Integer> subProjects = project_db.getSubProjects(ID);
+        saveProjectJson(project, projectDB.getTasks(ID), projectDB.getTags(ID), fileWriter);
+        List<Integer> subProjects = projectDB.getSubProjects(ID);
         if (subProjects.isEmpty()) {
             return;
         }
-        for (Integer subProject : project_db.getSubProjects(ID)) {
+        for (Integer subProject : projectDB.getSubProjects(ID)) {
             fileWriter.write(",\n");
-            saveProjectAndChildrenJSON(project_db.getProject(subProject), fileWriter);
+            saveProjectAndChildrenJSON(projectDB.getProject(subProject), fileWriter);
         }
     }
 
@@ -107,7 +99,6 @@ public class IOController extends Controller {
         try (FileWriter fileWriter = new FileWriter(jsonFile, true)) {
             saveProjectAndChildrenJSON(project, fileWriter);
         } catch (IOException error) {
-            error.printStackTrace();
             // Close file writer and throw exception back
             throw new IOException(error);
         } catch (SQLException error) {
@@ -161,7 +152,7 @@ public class IOController extends Controller {
             return false;
         }
         parseJsonFile(jsonFile);
-        user_db.updateDiskUsage(project_db.getSizeOnDisk());
+        userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         deleteFile(jsonFile);
         return true;
     }
@@ -218,7 +209,7 @@ public class IOController extends Controller {
                 parseTasks(id, line);
             } else if (count == 4) {
                 parseTags(id, line);
-                addProjectToTreeView(project_db.getProject(id));
+                addProjectToTreeView(projectDB.getProject(id));
             } else {
                 if (line.equals("[")) {
                     count = 1;
@@ -253,8 +244,8 @@ public class IOController extends Controller {
         }.getType();
         List<Tag> tag = new Gson().fromJson(line, listType);
         for (Tag t : tag) {
-            tagID = project_db.createTag(t.getDescription(), t.getColor());
-            project_db.addTag(tagID, id);
+            tagID = projectDB.createTag(t.getDescription(), t.getColor());
+            projectDB.addTag(tagID, id);
         }
     }
 
@@ -271,7 +262,7 @@ public class IOController extends Controller {
         }.getType();
         List<Task> tasks = new Gson().fromJson(line.substring(0, line.length() - 1), listType);
         for (Task t : tasks) {
-            project_db.createTask(t.getDescription(), id, t.getStartDate(), t.getEndDate());
+            projectDB.createTask(t.getDescription(), id, t.getStartDate(), t.getEndDate());
         }
     }
 
@@ -290,14 +281,14 @@ public class IOController extends Controller {
         Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
         int id;
         if (projectMap.size() == 0) {
-            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), 0);
+            id = projectDB.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), 0);
             projectMap.put(project.getParentId(), 0);
         } else {
-            id = project_db.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), projectMap.get(project.getParentId()));
+            id = projectDB.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), projectMap.get(project.getParentId()));
             parentID = projectMap.get(project.getParentId());
         }
         projectMap.put(project.getId(), id);
-        project_db.addCollaborator(id, user_db.getCurrentUser().getId());
+        projectDB.addCollaborator(id, userDB.getCurrentUser().getId());
         return new int[]{id, parentID};
     }
 
@@ -355,7 +346,7 @@ public class IOController extends Controller {
                 count %= 6;
                 if (count == 2) {
                     Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
-                    int id = project_db.getProjectID(project.getTitle());
+                    int id = projectDB.getProjectID(project.getTitle());
                     if (id != 0) {
                         reader.close();
                         return true;

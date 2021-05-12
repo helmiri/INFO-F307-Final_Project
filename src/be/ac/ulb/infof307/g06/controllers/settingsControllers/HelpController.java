@@ -1,71 +1,79 @@
 package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 
 /**
  * Main controller for the help section.
  */
 public class HelpController extends Controller implements HelpViewController.ViewListener {
-    private final HelpViewController helpViewController;
+    private HelpViewController helpViewController;
 
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
-     * @param helpViewController HelpViewController, the view controller
+     * @param stage   Stage, a stage
+     * @param scene   Scene, a scene
      * @param DB_PATH String, the path to the database
      */
-    public HelpController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, HelpViewController helpViewController, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
-        this.helpViewController = helpViewController;
-    }
-
-    /**
-     * Shows help menu
-     */
-    @Override
-    public void show() {
+    public HelpController(Stage stage, Scene scene, HelpViewController viewController, String DB_PATH) {
+        super(stage, scene, DB_PATH);
+        helpViewController = viewController;
         helpViewController.setListener(this);
     }
 
     /**
-     * Shows the accurate pop up according to the given title and FXML file name.
-     *
-     * @param fileName String, FXML file's name.
-     * @param title    String, the pop up name.
+     * Nothing to show by this controller
      */
     @Override
-    public void showHelp(String fileName, String title, MediaPlayer player) {
+    public void show() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void loadVideo(String path, String title) {
+        File file = new File("src/be/ac/ulb/infof307/g06/resources/videos");
+        path = file.getAbsolutePath() + "/" + path;
+        Media media = new Media(Paths.get(path).toUri().toString());
+        FXMLLoader loader = new FXMLLoader(HelpViewController.class.getResource("TutorialView.fxml"));
         try {
-            FXMLLoader loader = new FXMLLoader(HelpViewController.class.getResource(fileName));
-            AnchorPane projectPane = loader.load();
-            HelpViewController controller = loader.getController();
-            controller.setPlayer(player);
-            Stage helpStage = new Stage();
-            helpStage.initModality(Modality.APPLICATION_MODAL);
-            helpStage.setTitle(title);
-            helpStage.setScene(new Scene(projectPane));
-            helpStage.centerOnScreen();
-            helpStage.setResizable(false);
-            helpStage.show();
+            loader.load();
         } catch (IOException e) {
-            new AlertWindow("Error", "An error occurred", e.getMessage()).showErrorWindow();
+            new WindowLoadException(e).show();
+            return;
         }
+        helpViewController = loader.getController();
+
+        helpViewController.setListener(this);
+        helpViewController.setMediaView(new MediaPlayer(media));
+        createStage(title);
+    }
+
+    /**
+     * Creates the window where the tutorial will be displayed
+     *
+     * @param title Title of the window
+     */
+    public void createStage(String title) {
+        Stage tutorialStage = new Stage();
+        tutorialStage.initModality(Modality.APPLICATION_MODAL);
+        tutorialStage.setTitle(title);
+        tutorialStage.centerOnScreen();
+        tutorialStage.setResizable(false);
+        helpViewController.show(tutorialStage);
     }
 }

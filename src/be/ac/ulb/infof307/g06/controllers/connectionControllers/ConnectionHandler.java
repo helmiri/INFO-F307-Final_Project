@@ -3,7 +3,6 @@ package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.models.encryption.EncryptedFile;
 import javafx.application.Platform;
@@ -19,28 +18,25 @@ import java.sql.SQLException;
 public class ConnectionHandler implements SignUpController.Listener, LoginController.Listener, MainMenuController.Listener {
     //-------------- ATTRIBUTES ----------------
     private final UserDB userDB;
-    private final ProjectDB projectDB;
     private final Stage stage;
-    private final boolean isFirstBoot;
     private final String DECRYPTED_DB_PATH;
     private final String ENCRYPTED_DB_PATH;
 
     /**
-     /**
+     * /**
      * Constructor.
      *
-     * @param userDB UserDB, the user database
-     * @param projectDB ProjectDB, the projects database
-     * @param stage Stage, a stage
-     * @param isFirstBoot boolean, to see if it's the first time launching the app
+     * @param stage             Stage, a stage
      * @param DECRYPTED_DB_PATH String, path to the decrypted database
-     * @param DB_PATH String, the path to the database
+     * @param DB_PATH           String, the path to the database
      */
-    public ConnectionHandler(UserDB userDB, ProjectDB projectDB, Stage stage, boolean isFirstBoot, String DECRYPTED_DB_PATH, String DB_PATH) {
-        this.userDB = userDB;
-        this.projectDB = projectDB;
+    public ConnectionHandler(Stage stage, String DECRYPTED_DB_PATH, String DB_PATH) throws DatabaseException {
+        try {
+            userDB = new UserDB(DECRYPTED_DB_PATH);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new DatabaseException(e);
+        }
         this.stage = stage;
-        this.isFirstBoot = isFirstBoot;
         this.DECRYPTED_DB_PATH = DECRYPTED_DB_PATH;
         ENCRYPTED_DB_PATH = DB_PATH;
     }
@@ -71,17 +67,17 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
         } catch (SQLException e) {
             new AlertWindow("error", "" + e).showErrorWindow();
         }
-        switch (res) {
-            case 0 -> new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").showErrorWindow();
-            case -1 -> new AlertWindow("Login Error", "This user is already connected").showErrorWindow();
-            default -> {
-                try {
-                    userDB.getUserInfo(res);
-                } catch (SQLException e) {
-                    new AlertWindow("error", "" + e).showErrorWindow();
-                }
-                showMainMenu();
+        if (res == 0) {
+            new AlertWindow("Login Error", "This user does not exist or the password/username is wrong").showErrorWindow();
+        } else if (res == -1) {
+            new AlertWindow("Login Error", "This user is already connected").showErrorWindow();
+        } else {
+            try {
+                userDB.getUserInfo(res);
+            } catch (SQLException e) {
+                new AlertWindow("error", "" + e).showErrorWindow();
             }
+            showMainMenu();
         }
     }
 
@@ -114,8 +110,13 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
             Platform.exit();
             System.exit(0);
         });
-        setAdminIfFirstBoot();
-        MainMenuController controller = new MainMenuController(userDB, projectDB, stage, stage.getScene(), DECRYPTED_DB_PATH);
+        try {
+            setAdminIfFirstBoot();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
+            return;
+        }
+        MainMenuController controller = new MainMenuController(stage, stage.getScene(), DECRYPTED_DB_PATH);
         controller.setListener(this);
         controller.show();
     }
@@ -123,8 +124,8 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
     /**
      * Sets admin to first boot
      */
-    private void setAdminIfFirstBoot() {
-        if (isFirstBoot) {
+    private void setAdminIfFirstBoot() throws SQLException {
+        if (userDB.isFirstBoot()) {
             try {
                 userDB.setAdmin(256 * 1000000);
             } catch (SQLException e) {
@@ -178,5 +179,4 @@ public class ConnectionHandler implements SignUpController.Listener, LoginContro
             new AlertWindow("Error", "Couldn't disconnect the user: " + e).showErrorWindow();
         }
     }
-
 }

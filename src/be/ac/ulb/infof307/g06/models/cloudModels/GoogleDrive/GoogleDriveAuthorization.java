@@ -36,7 +36,8 @@ public class GoogleDriveAuthorization {
 
     /**
      * constructor
-     * @param userName the Gdrive username
+     *
+     * @param userName the Google drive username
      */
     public GoogleDriveAuthorization(String userName) {
         this.userName = userName;

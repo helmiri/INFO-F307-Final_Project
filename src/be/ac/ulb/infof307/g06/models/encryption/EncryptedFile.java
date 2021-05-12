@@ -17,7 +17,7 @@ import java.util.Random;
  * Encrypts/Decrypts password protected files
  */
 public class EncryptedFile {
-    private final String algorithm = "PBEWithMD5AndTripleDES";
+    private static final String algorithm = "PBEWithMD5AndTripleDES";
     private final String source;
     private PBEKeySpec pbeKeySpec;
     private String encrypted_source;
@@ -102,7 +102,7 @@ public class EncryptedFile {
             encrypted_source = source;
         }
         FileInputStream in = new FileInputStream(encrypted_source);
-        ;
+
         FileOutputStream out = new FileOutputStream(destination);
         try {
             byte[] salt = new byte[8];

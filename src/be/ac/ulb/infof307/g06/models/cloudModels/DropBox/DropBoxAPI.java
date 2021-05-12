@@ -27,9 +27,9 @@ public class DropBoxAPI {
      */
     public DropBoxAPI(String accessToken, String clientID) {
         // Create Dropbox client
-        StandardHttpRequestor requestor = new StandardHttpRequestor(StandardHttpRequestor.Config.builder().build());
+        StandardHttpRequestor requester = new StandardHttpRequestor(StandardHttpRequestor.Config.builder().build());
         DbxRequestConfig config = DbxRequestConfig.newBuilder(clientID)
-                .withHttpRequestor(requestor)
+                .withHttpRequestor(requester)
                 .withUserLocale(Locale.getDefault().toString())
                 .build();
 //        @SuppressWarnings("deprecation") DbxRequestConfig config = new DbxRequestConfig(clientID, "en_US");

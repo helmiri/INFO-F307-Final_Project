@@ -11,11 +11,14 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
@@ -31,6 +34,8 @@ import java.util.Map;
  */
 public class CalendarViewController {
     //-------------- ATTRIBUTES -------------
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Line line1;
     @FXML
@@ -137,7 +142,7 @@ public class CalendarViewController {
     /**
      * Fills colors in the colors combo box.
      *
-     * @param colorObject CalendarColor, colros of the calendar
+     * @param colorObject CalendarColor, colors of the calendar
      */
     public void fillColors(CalendarColor colorObject) {
         colorsComboBox.setCellFactory(new Callback<>() {
@@ -171,9 +176,11 @@ public class CalendarViewController {
      * Initializes the calendar.
      *
      * @param projectSource CalendarSource, calendar object for projects
-     * @param taskSource CalendarSource, calendar object for tasks
+     * @param taskSource    CalendarSource, calendar object for tasks
+     * @param stage         Tha application window
      */
-    public void init(CalendarSource projectSource, CalendarSource taskSource) {
+    public void show(CalendarSource projectSource, CalendarSource taskSource, Stage stage) {
+        stage.setScene(new Scene(layout));
         isMonthView = false;
         monthHeaders = new ArrayList<>(Arrays.asList(monthHeader1, monthHeader2, monthHeader3, monthHeader4, monthHeader5));
         monthDayViews = new ArrayList<>(Arrays.asList(monthWeek1, monthWeek2, monthWeek3, monthWeek4, monthWeek5));

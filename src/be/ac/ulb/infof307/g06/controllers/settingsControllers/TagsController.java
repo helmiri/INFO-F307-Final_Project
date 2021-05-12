@@ -5,8 +5,6 @@ import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.settingsViews.StorageViewController;
 import be.ac.ulb.infof307.g06.views.settingsViews.TagsViewController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,22 +15,26 @@ import java.sql.SQLException;
  * Main controller for the tags section.
  */
 public class TagsController extends Controller implements TagsViewController.ViewListener {
-    TagsViewController viewController;
+    private TagsViewController viewController;
+    private ProjectDB projectDB;
 
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage          Stage, a stage
+     * @param scene          Scene, a scene
      * @param viewController TagsViewController, the view controller
-     * @param DB_PATH String, the path to the database
+     * @param DB_PATH        String, the path to the database
      */
     //--------------- METHODS ----------------
-    public TagsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, TagsViewController viewController, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public TagsController(Stage stage, Scene scene, TagsViewController viewController, String DB_PATH) throws DatabaseException {
+        super(stage, scene, DB_PATH);
         this.viewController = viewController;
+        try {
+            projectDB = new ProjectDB(DB_PATH);
+        } catch (SQLException | ClassNotFoundException error) {
+            throw new DatabaseException(error);
+        }
     }
 
     /**
@@ -42,12 +44,11 @@ public class TagsController extends Controller implements TagsViewController.Vie
     public void show() {
         viewController.setListener(this);
         try {
-            viewController.initialize(project_db.getAllTags());
+            viewController.initialize(projectDB.getAllTags());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
     }
-
 
     /**
      * Adds a tag
@@ -58,8 +59,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
     @Override
     public void onAddButtonClicked(String text, String toRGBCode) {
         try {
-            project_db.createTag(text, toRGBCode);
-            viewController.refresh(project_db.getAllTags());
+            projectDB.createTag(text, toRGBCode);
+            viewController.refresh(projectDB.getAllTags());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -79,8 +80,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
             return;
         }
         try {
-            project_db.editTag(selectedTag.getId(), text, toRGBCode);
-            viewController.refresh(project_db.getAllTags());
+            projectDB.editTag(selectedTag.getId(), text, toRGBCode);
+            viewController.refresh(projectDB.getAllTags());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -94,8 +95,8 @@ public class TagsController extends Controller implements TagsViewController.Vie
     @Override
     public void deleteSelectedTag(Tag selectedTag) {
         try {
-            project_db.deleteTag(selectedTag.getId());
-            viewController.refresh(project_db.getAllTags());
+            projectDB.deleteTag(selectedTag.getId());
+            viewController.refresh(projectDB.getAllTags());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }

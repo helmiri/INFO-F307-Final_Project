@@ -210,7 +210,13 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("First boot")
     public void testIsFirstBoot() throws SQLException {
-        // Always false since the database is populated beforehand with test data
+        assertTrue(userDB.isFirstBoot());
+    }
+
+    @Test
+    @DisplayName("Not first boot")
+    public void testNotFirstBoot() throws SQLException {
+        userDB.setAdmin(256);
         assertFalse(userDB.isFirstBoot());
     }
 

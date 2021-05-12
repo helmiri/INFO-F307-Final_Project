@@ -9,7 +9,6 @@ import com.dropbox.core.v2.files.Metadata;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class DropBoxController {
      * @param localPath  The directory where to save the files on disk
      * @return Paths to the downloaded files
      */
-    public List<String> downloadFiles(List<String> cloudPaths, String localPath) throws IOException, NoSuchAlgorithmException, DbxException {
+    public List<String> downloadFiles(List<String> cloudPaths, String localPath) throws IOException, DbxException {
         List<Metadata> fileMetas = getFileMetaDatas(cloudPaths);
         List<String> downloadedFilePaths = new ArrayList<>();
         for (Metadata fileMeta : fileMetas) {

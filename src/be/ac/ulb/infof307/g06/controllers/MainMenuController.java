@@ -4,17 +4,10 @@ import be.ac.ulb.infof307.g06.controllers.calendarControllers.CalendarController
 import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
 import be.ac.ulb.infof307.g06.controllers.settingsControllers.SettingsController;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.Invitation;
-import be.ac.ulb.infof307.g06.models.Project;
-import be.ac.ulb.infof307.g06.models.User;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
-import be.ac.ulb.infof307.g06.views.mainMenuViews.InvitationViewController;
+import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
+import be.ac.ulb.infof307.g06.views.mainMenuViews.InvitationController;
 import be.ac.ulb.infof307.g06.views.mainMenuViews.MenuViewController;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,22 +16,26 @@ import java.sql.SQLException;
 /**
  * Controller for the main menu.
  */
-public class MainMenuController extends Controller implements MenuViewController.ViewListener, InvitationViewController.ViewListener {
+public class MainMenuController extends Controller implements MenuViewController.ViewListener {
     //--------------- ATTRIBUTE ----------------
     private Listener listener;
+    private InvitationController invitationController;
 
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage   Stage, a stage
+     * @param scene   Scene, a scene
      * @param DB_PATH String, the path to the database
      */
     //--------------- METHODS ----------------
-    public MainMenuController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public MainMenuController(Stage stage, Scene scene, String DB_PATH) {
+        super(stage, scene, DB_PATH);
+        try {
+            invitationController = new InvitationController(stage, scene, DB_PATH);
+        } catch (DatabaseException error) {
+            error.show();
+        }
     }
 
     /**
@@ -47,49 +44,17 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void show() {
         try {
-            FXMLLoader loader = new FXMLLoader(MenuViewController.class.getResource("MenuView.fxml"));
-            scene = new Scene(loader.load());
-            MenuViewController controller = loader.getController();
+            MenuViewController controller = (MenuViewController) loadView(MenuViewController.class, "MenuView.fxml");
             controller.setListener(this);
-            stage.setScene(scene);
-            stage.sizeToScene();
-            load(940, 1515);
-            for (Invitation invitation : user_db.getInvitations(project_db)) {
-                showInvitationStage(invitation);
+            controller.show(stage);
+            if (invitationController != null) {
+                // The exception in the constructor was not thrown
+                invitationController.show();
             }
-        } catch (IOException | SQLException error) {
-            new AlertWindow("Error", "" + error).showErrorWindow();
+        } catch (IOException error) {
+            new WindowLoadException(error).show();
         }
     }
-
-
-    /**
-     * Sets the loader to show the stage with an invitation to join a project.
-     *
-     * @param invitation The invitation to be accepted/declined
-     */
-    public void showInvitationStage(Invitation invitation) throws IOException {
-        FXMLLoader loader = new FXMLLoader(InvitationViewController.class.getResource("InvitationView.fxml"));
-        AnchorPane invitationPane = loader.load();
-        InvitationViewController controller = loader.getController();
-        controller.setListener(this);
-        controller.show(invitation, invitationPane);
-    }
-
-
-    /**
-     * Loads stage.
-     *
-     * @param height Integer, height of the window.
-     * @param width  Integer, width of the window.
-     */
-    public void load(Integer height, Integer width) {
-        // Set main stage
-        stage.setHeight(height);
-        stage.setWidth(width);
-        stage.centerOnScreen();
-    }
-
 
     //--------------- STAGES ----------------
 
@@ -101,13 +66,12 @@ public class MainMenuController extends Controller implements MenuViewController
         show();
     }
 
-
     /**
      * Shows settings menu
      */
     @Override
     public void showSettings() {
-        SettingsController controller = new SettingsController(user_db, project_db, stage, scene, DB_PATH);
+        SettingsController controller = new SettingsController(stage, stage.getScene(), DB_PATH);
         controller.show();
     }
 
@@ -116,8 +80,12 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showProjects() {
-        ProjectController controller = new ProjectController(user_db, project_db, stage, scene, DB_PATH);
-        controller.show();
+        try {
+            ProjectController controller = new ProjectController(stage, stage.getScene(), DB_PATH);
+            controller.show();
+        } catch (SQLException | ClassNotFoundException error) {
+            new DatabaseException(error).show();
+        }
     }
 
     /**
@@ -125,8 +93,12 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showStats() {
-        StatsController controller = new StatsController(user_db, project_db, stage, scene, DB_PATH);
-        controller.show();
+        try {
+            StatsController controller = new StatsController(stage, stage.getScene(), DB_PATH);
+            controller.show();
+        } catch (DatabaseException error) {
+            error.show();
+        }
     }
 
 
@@ -135,14 +107,15 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showCalendar() {
-        CalendarController controller = new CalendarController(user_db, project_db, stage, scene, DB_PATH);
         try {
+            CalendarController controller = new CalendarController(stage, stage.getScene(), DB_PATH);
             controller.show();
-        } catch (SQLException e) {
-            new DatabaseException(e).show();
+        } catch (DatabaseException error) {
+            error.show();
+        } catch (WindowLoadException e) {
+            e.show();
         }
     }
-
 
     /**
      * Logs user out
@@ -151,41 +124,6 @@ public class MainMenuController extends Controller implements MenuViewController
     public void logout() {
         listener.logout();
         listener.showLogin();
-    }
-
-    /**
-     * Accepts an invitation and adds collaborator to project
-     *
-     * @param invitation      Invitation object
-     * @param invitationStage Invitation Stage
-     */
-    @Override
-    public void acceptInvitation(Invitation invitation, Stage invitationStage) {
-        Project project = invitation.getProject();
-        User receiver = invitation.getReceiver();
-        try {
-            project_db.addCollaborator(project.getId(), receiver.getId());
-            user_db.removeInvitation(invitation.getInvitationID());
-            invitationStage.close();
-        } catch (SQLException error) {
-            new DatabaseException(error).show();
-        }
-    }
-
-    /**
-     * Declines invitation to project
-     *
-     * @param invitation      Invitation object
-     * @param invitationStage Invitation Stage
-     */
-    @Override
-    public void declineInvitation(Invitation invitation, Stage invitationStage) {
-        try {
-            user_db.removeInvitation(invitation.getInvitationID());
-            invitationStage.close();
-        } catch (SQLException error) {
-            new DatabaseException(error).show();
-        }
     }
 
 

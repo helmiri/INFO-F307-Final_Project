@@ -10,27 +10,25 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="343.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16"
             fx:controller="be.ac.ulb.infof307.g06.views.projectViews.CodePromptViewController">
-   <children>
-      <TextField fx:id="codeField" alignment="CENTER" layoutX="75.0" layoutY="214.0" prefHeight="26.0" prefWidth="469.0"
-                 promptText="Authorization code">
-         <cursor>
+    <TextField fx:id="codeField" alignment="CENTER" layoutX="75.0" layoutY="214.0" prefHeight="26.0" prefWidth="469.0"
+               promptText="Authorization code">
+        <cursor>
             <Cursor fx:constant="TEXT"/>
-         </cursor>
-      </TextField>
-      <Hyperlink fx:id="link" layoutX="87.0" layoutY="113.0" onAction="#events" prefHeight="58.0" prefWidth="426.0"
-                 textAlignment="CENTER"/>
-      <Button fx:id="okButton" layoutX="452.0" layoutY="289.0" mnemonicParsing="false" onAction="#events"
-              prefHeight="34.0" prefWidth="121.0" stylesheets="@../../resources/stylesheets/Button.css" text="OK"
-              textFill="WHITE"/>
-      <Text layoutX="156.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Access request"
-            textAlignment="CENTER" wrappingWidth="288.13671875">
-         <font>
+        </cursor>
+    </TextField>
+    <Hyperlink fx:id="link" layoutX="87.0" layoutY="113.0" onAction="#events" prefHeight="58.0" prefWidth="426.0"
+               textAlignment="CENTER"/>
+    <Button fx:id="okButton" layoutX="452.0" layoutY="289.0" mnemonicParsing="false" onAction="#events"
+            prefHeight="34.0" prefWidth="121.0" stylesheets="@../../resources/stylesheets/Button.css" text="OK"
+            textFill="WHITE"/>
+    <Text layoutX="156.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Access request"
+          textAlignment="CENTER" wrappingWidth="288.13671875">
+        <font>
             <Font size="18.0"/>
-         </font>
-      </Text>
-      <Text fx:id="copyNotification" layoutX="236.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Link copied to clipboard" visible="false"/>
-      <Text layoutX="177.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Visit the following link if your browser didn't open"/>
-   </children>
+        </font>
+    </Text>
+    <Text fx:id="copyNotification" layoutX="236.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Link copied to clipboard" visible="false"/>
+    <Text layoutX="177.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Visit the following link if your browser didn't open"/>
 </AnchorPane>

@@ -2,18 +2,12 @@ package be.ac.ulb.infof307.g06;
 
 import be.ac.ulb.infof307.g06.controllers.connectionControllers.ConnectionHandler;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.models.encryption.EncryptedFile;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
 import java.io.File;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.sql.SQLException;
 
 /**
  * The application launcher
@@ -34,24 +28,24 @@ public class Main extends Application {
      * @param stage Stage
      */
     @Override
-    public void start(Stage stage) throws IllegalBlockSizeException, IOException, BadPaddingException, InvalidKeyException {
+    public void start(Stage stage) {
+        // Decrypt the database if it exists
         new File("data").mkdir();
-        // Set main stage
         String DB_PATH = "data/Database.db";
         String DECRYPTED_DB_PATH = "data/Database_Decrypted.db";
-        if (new File(DB_PATH).exists()) {
-            EncryptedFile file = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", DB_PATH);
-            file.decryptFile(DECRYPTED_DB_PATH);
-        }
+
         try {
-            UserDB userDB = new UserDB(DECRYPTED_DB_PATH);
-            ProjectDB projectDB = new ProjectDB(DECRYPTED_DB_PATH);
-            boolean isFirstBoot = userDB.isFirstBoot();
-            ConnectionHandler handler = new ConnectionHandler(userDB, projectDB, stage, isFirstBoot, DECRYPTED_DB_PATH, DB_PATH);
+            if (new File(DB_PATH).exists()) {
+                EncryptedFile file = new EncryptedFile("QwAtb5wcgChC2u3@f,]/bnd\"", DB_PATH);
+                file.decryptFile(DECRYPTED_DB_PATH);
+            }
+            ConnectionHandler handler;
+            handler = new ConnectionHandler(stage, DECRYPTED_DB_PATH, DB_PATH);
             handler.showLogin();
-        } catch (SQLException | ClassNotFoundException e) {
-            new DatabaseException(e).show();
+        } catch (DatabaseException e) {
+            e.show();
+        } catch (IOException e) {
+            new DatabaseException(e, "Could not load database").show();
         }
     }
-
 }

@@ -19,10 +19,11 @@ public class UserDB extends Database {
     private Hash hash;
 
     /**
-     * Same constructor as the main database abstract class (ecxept for the hash).
+     * Same constructor as the main database abstract class (except for the hash).
+     *
      * @param dbName the name of the db
      * @throws ClassNotFoundException if it doesnt find the parent class
-     * @throws SQLException if the query fails
+     * @throws SQLException           if the query fails
      */
     public UserDB(String dbName) throws ClassNotFoundException, SQLException {
         super(dbName);
@@ -124,8 +125,9 @@ public class UserDB extends Database {
      * @throws SQLException On database access error
      */
     public boolean isFirstBoot() throws SQLException {
-        ResultSet res = sqlQuery("SELECT * FROM users;");
+        ResultSet res = sqlQuery("SELECT * FROM admin;");
         boolean empty = res.isClosed();
+        currentUser.setAdmin(empty);
         res.close();
         return empty;
     }

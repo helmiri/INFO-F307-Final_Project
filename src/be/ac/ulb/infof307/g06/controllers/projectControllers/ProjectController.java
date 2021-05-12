@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.controllers.projectControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
+import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
@@ -24,6 +25,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -40,25 +42,28 @@ import java.util.regex.Pattern;
 public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
     private final IOController ioController;
     //--------------- ATTRIBUTES ----------------
-    private CalendarDB calendar_db;
+    private CalendarDB calendarDB;
+    private UserDB userDB;
+    private ProjectDB projectDB;
     private ProjectsViewController viewController;
     private CloudServiceController cloudServiceController;
-    private String DB_PATH;
 
     //--------------- METHODS ----------------
+
     /**
      * Constructor.
      *
-     * @param user_db UserDB, the user database.
-     * @param project_db ProjectDB, the project database.
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage   Stage, a stage
+     * @param scene   Scene, a scene
      * @param DB_PATH String, the path to the database.
      */
-    public ProjectController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
-        ioController = new IOController(user_db, project_db, stage, scene, DB_PATH);
-        this.DB_PATH = DB_PATH;
+    public ProjectController(Stage stage, Scene scene, String DB_PATH) throws SQLException, ClassNotFoundException {
+        super(stage, scene, DB_PATH);
+        projectDB = new ProjectDB(DB_PATH);
+        userDB = new UserDB(DB_PATH);
+        calendarDB = new CalendarDB(DB_PATH);
+        ioController = new IOController(userDB, projectDB);
+        cloudServiceController = new CloudServiceController(this, userDB);
     }
 
 
@@ -68,24 +73,16 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public void show() {
         try {
-            calendar_db = new CalendarDB(DB_PATH);
-            project_db.createTag("tag1", "#ff55ff");
-        } catch (SQLException | ClassNotFoundException error) {
+            projectDB.createTag("tag1", "#ff55ff");
+            viewController = (ProjectsViewController) loadView(ProjectsViewController.class, "ProjectsView.fxml");
+            ioController.setViewController(viewController);
+            viewController.setListener(this);
+            viewController.show(stage);
+        } catch (SQLException error) {
             new DatabaseException(error).show();
-        }
-        FXMLLoader loader = new FXMLLoader(ProjectsViewController.class.getResource("ProjectsView.fxml"));
-        try {
-            scene = new Scene(loader.load());
         } catch (IOException error) {
-            new AlertWindow("Error", "Could not load the window", error.getMessage()).showErrorWindow();
+            new WindowLoadException(error).show();
         }
-        viewController = loader.getController();
-        ioController.setViewController(viewController);
-
-        viewController.setListener(this);
-        stage.setScene(scene);
-        stage.sizeToScene();
-        viewController.init();
     }
 
     // ----------------------------- STAGES -----------------------------------
@@ -110,7 +107,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             addStage.show();
             controller.init(listener, addStage);
         } catch (IOException error) {
-            new AlertWindow("Error", "Could not load the window", error.getMessage()).showErrorWindow();
+            new WindowLoadException(error).show();
         }
     }
 
@@ -133,7 +130,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         try {
-            ((EditProjectViewController) controller).init(project, listener, stage, project_db.getTags(project.getId()));
+            ((EditProjectViewController) controller).init(project, listener, stage, projectDB.getTags(project.getId()));
         } catch (SQLException error) {
             throw new DatabaseException(error);
         }
@@ -191,7 +188,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     public boolean storageLimitReached() {
         try {
-            if (user_db.availableDisk() <= 0) {
+            if (userDB.availableDisk() <= 0) {
                 new AlertWindow("Insufficient storage", "You've reached your maximum storage quota").showInformationWindow();
                 return true;
             }
@@ -222,10 +219,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public void deleteProject(String name) {
         try {
-            int projectID = project_db.getProjectID(name);
-            project_db.deleteProject(projectID);
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
-            calendar_db.removeProject(name);
+            int projectID = projectDB.getProjectID(name);
+            projectDB.deleteProject(projectID);
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
+            calendarDB.removeProject(name);
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -251,23 +248,23 @@ public class ProjectController extends Controller implements ProjectsViewControl
             if (title.equals("")) {
                 new AlertWindow("Alert", "Project title cannot be empty").showErrorWindow();
             } else {
-                project_db.editProject(
+                projectDB.editProject(
                         projectID,
                         title,
                         description,
                         startDate.toEpochDay(),
                         endDate.toEpochDay()
                 );
-                calendar_db.replaceProject(project.getTitle(), title);
+                calendarDB.replaceProject(project.getTitle(), title);
                 List<Integer> tags = new ArrayList<>();
                 for (String newTag : newTags) {
-                    tags.add(project_db.getTagID(newTag));
+                    tags.add(projectDB.getTagID(newTag));
                 }
-                project_db.editTags(projectID, tags);
+                projectDB.editTags(projectID, tags);
             }
-            viewController.refreshTree(project_db.getProject(projectID));
-            viewController.displayProject(project_db.getProject(projectID), newTags);
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            viewController.refreshTree(projectDB.getProject(projectID));
+            viewController.displayProject(projectDB.getProject(projectID), newTags);
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -299,9 +296,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public List<Project> getProjects() {
         List<Project> res = new ArrayList<>();
         try {
-            List<Integer> projectsID = project_db.getUserProjects(user_db.getCurrentUser().getId());
+            List<Integer> projectsID = projectDB.getUserProjects(userDB.getCurrentUser().getId());
             for (Integer project : projectsID) {
-                res.add(project_db.getProject(project));
+                res.add(projectDB.getProject(project));
             }
         } catch (SQLException error) {
             new DatabaseException(error).show();
@@ -320,7 +317,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public ObservableList<String> getProjectTags(Project project) {
         ObservableList<String> tagsName = FXCollections.observableArrayList();
         try {
-            List<Tag> tags = project_db.getTags(project.getId());
+            List<Tag> tags = projectDB.getTags(project.getId());
             for (Tag tag : tags) {
                 tagsName.add(tag.getDescription());
             }
@@ -340,7 +337,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public ObservableList<String> getAllTags() {
         ObservableList<String> tagsName = FXCollections.observableArrayList();
         try {
-            List<Tag> tags = project_db.getAllTags();
+            List<Tag> tags = projectDB.getAllTags();
             for (Tag tag : tags) {
                 tagsName.add(tag.getDescription());
             }
@@ -361,7 +358,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public Tag getTag(String name) {
         Tag res = null;
         try {
-            res = project_db.getTag(project_db.getTagID(name));
+            res = projectDB.getTag(projectDB.getTagID(name));
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -412,7 +409,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         try {
-            List<Task> tasks = project_db.getTasks(task.getProjectID());
+            List<Task> tasks = projectDB.getTasks(task.getProjectID());
             if (!new_description.equals(prev_description)) {
                 List<String> taskNames = new ArrayList<>();
                 for (Task task2 : tasks) {
@@ -425,10 +422,10 @@ public class ProjectController extends Controller implements ProjectsViewControl
             if (new_description.equals("")) {
                 deleteTask(task);
             } else if (validateDescription(new_description)) {
-                project_db.editTask(prev_description, new_description, task.getProjectID(), startDate, endDate);
+                projectDB.editTask(prev_description, new_description, task.getProjectID(), startDate, endDate);
             }
             viewController.displayTask();
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -442,8 +439,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public void deleteTask(Task task) {
         try {
-            project_db.deleteTask(task.getDescription(), task.getProjectID());
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            projectDB.deleteTask(task.getDescription(), task.getProjectID());
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -460,8 +457,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             if (project != null) {
                 String projectTitle = project.getTitle();
-                int projectID = project_db.getProjectID(projectTitle);
-                List<Task> taskList = project_db.getTasks(projectID);
+                int projectID = projectDB.getProjectID(projectTitle);
+                List<Task> taskList = projectDB.getTasks(projectID);
                 return FXCollections.observableArrayList(taskList);
             }
         } catch (SQLException error) {
@@ -484,7 +481,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             if (task != null) {
                 for (String collaborator : collaborators) {
-                    project_db.addTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
+                    projectDB.addTaskCollaborator(task.getId(), userDB.getUserInfo(collaborator).getId());
                 }
             } else {
                 new AlertWindow("Warning", "Please select a task before assigning a collaborator.").showWarningWindow();
@@ -506,9 +503,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
         ObservableList<String> names = FXCollections.observableArrayList();
         try {
             if (task != null) {
-                List<Integer> collaborators = project_db.getTaskCollaborator(task.getId());
+                List<Integer> collaborators = projectDB.getTaskCollaborator(task.getId());
                 for (Integer collaborator : collaborators) {
-                    names.add((user_db.getUserInfo(collaborator).getUserName()));
+                    names.add((userDB.getUserInfo(collaborator).getUserName()));
                 }
             } else {
                 new AlertWindow("Warning", "Please select a task.").showWarningWindow();
@@ -529,7 +526,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public void deleteTaskCollaborator(String collaborator, Task task) {
         try {
-            project_db.deleteTaskCollaborator(task.getId(), user_db.getUserInfo(collaborator).getId());
+            projectDB.deleteTaskCollaborator(task.getId(), userDB.getUserInfo(collaborator).getId());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -543,7 +540,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     @Override
     public boolean isCollaboratorInTask(Task task) {
-        return getTaskCollaborators(task).contains(Integer.toString(user_db.getCurrentUser().getId()));
+        return getTaskCollaborators(task).contains(Integer.toString(userDB.getCurrentUser().getId()));
     }
 
     /**
@@ -558,18 +555,18 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         try {
-            if (!user_db.userExists(username)) {
+            if (!userDB.userExists(username)) {
                 new AlertWindow("Alert", "User '" + username + "' doesn't exist").showErrorWindow();
                 return;
             }
-            int receiverID = user_db.getUserInfo(username).getId();
-            if (project_db.getCollaborators(project_id).contains(receiverID)) {
+            int receiverID = userDB.getUserInfo(username).getId();
+            if (projectDB.getCollaborators(project_id).contains(receiverID)) {
                 new AlertWindow("Alert", "User '" + username + "' is already a collaborator in this project").showErrorWindow();
                 return;
             }
-            user_db.sendInvitation(project_id, user_db.getCurrentUser().getId(), receiverID);
-            new AlertWindow("Alert", "Invitation sent to '" + username + "'").showErrorWindow();
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            userDB.sendInvitation(project_id, userDB.getCurrentUser().getId(), receiverID);
+            new AlertWindow("Alert", "Invitation sent to '" + username + "'").showInformationWindow();
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -584,8 +581,8 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public void deleteCollaborator(String collaboratorName, int project_id) {
         try {
-            project_db.deleteCollaborator(project_id, user_db.getUserInfo(collaboratorName).getId());
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            projectDB.deleteCollaborator(project_id, userDB.getUserInfo(collaboratorName).getId());
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -602,9 +599,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
         ObservableList<String> names = FXCollections.observableArrayList();
         try {
             List<Integer> collaborators;
-            collaborators = project_db.getCollaborators(project.getId());
+            collaborators = projectDB.getCollaborators(project.getId());
             for (Integer collaborator : collaborators) {
-                names.add((user_db.getUserInfo(collaborator).getUserName()));
+                names.add((userDB.getUserInfo(collaborator).getUserName()));
             }
         } catch (SQLException error) {
             new DatabaseException(error).show();
@@ -622,7 +619,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     @Override
     public boolean isUserInTask(String user, Task task) {
         try {
-            return project_db.getTaskCollaborator(task.getId()).contains((user_db.getUserInfo(user).getId()));
+            return projectDB.getTaskCollaborator(task.getId()).contains((userDB.getUserInfo(user).getId()));
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -687,9 +684,6 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     @Override
     public void uploadProject(List<Project> projects) {
-        if (setServiceProvider()) {
-            return;
-        }
         cloudServiceController.showSelectionStage(false);
         try {
             for (Project project : projects) {
@@ -719,25 +713,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     @Override
     public void downloadProject() {
-        if (setServiceProvider()) {
-            return;
-        }
         if (storageLimitReached()) {
             return;
         }
         cloudServiceController.showSelectionStage(true);
     }
-
-    /**
-     * @return Sets service provider
-     */
-    private boolean setServiceProvider() {
-        if (cloudServiceController == null) {
-            cloudServiceController = new CloudServiceController(this, user_db);
-        }
-        return false;
-    }
-
 
     /**
      * Adds a project to the database
@@ -758,16 +738,16 @@ public class ProjectController extends Controller implements ProjectsViewControl
 
             if (title.equals("")) {
                 new AlertWindow("Alert", "Title cannot be empty").showErrorWindow();
-            } else if (project_db.getProjectID(title) != 0) {
+            } else if (projectDB.getProjectID(title) != 0) {
                 new AlertWindow("Alert", "Project '" + title + "' Already exists").showErrorWindow();
             } else if (startDate == null) {
                 new AlertWindow("Alert", "Project needs a start date").showErrorWindow();
             } else if (endDate == null) {
                 new AlertWindow("Alert", "Project needs an end date").showErrorWindow();
-            } else if (parent.equals("") || project_db.getProjectID(parent) != 0) {
+            } else if (parent.equals("") || projectDB.getProjectID(parent) != 0) {
                 insertNewProject(title, description, startDate, endDate, tags, parent, parentID);
             }
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -787,15 +767,15 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     private void insertNewProject(String title, String description, LocalDate startDate, LocalDate endDate, ObservableList<String> tags, String parent, int parentID) throws SQLException {
         if (!parent.equals("")) {
-            parentID = project_db.getProjectID(parent);
+            parentID = projectDB.getProjectID(parent);
         }
-        int newProjectID = project_db.createProject(title, description, startDate.toEpochDay(), endDate.toEpochDay(), parentID);
+        int newProjectID = projectDB.createProject(title, description, startDate.toEpochDay(), endDate.toEpochDay(), parentID);
         for (String tag : tags) {
-            project_db.addTag(project_db.getTagID(tag), newProjectID);
+            projectDB.addTag(projectDB.getTagID(tag), newProjectID);
         }
 
-        project_db.addCollaborator(newProjectID, user_db.getCurrentUser().getId());
-        TreeItem<Project> child = new TreeItem<>(project_db.getProject(newProjectID));
+        projectDB.addCollaborator(newProjectID, userDB.getCurrentUser().getId());
+        TreeItem<Project> child = new TreeItem<>(projectDB.getProject(newProjectID));
         viewController.insertProject(newProjectID, child, parentID);
     }
 
@@ -816,7 +796,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             return;
         }
         try {
-            List<Task> tasks = project_db.getTasks(project_id);
+            List<Task> tasks = projectDB.getTasks(project_id);
             List<String> taskNames = new ArrayList<>();
             for (Task task : tasks) {
                 taskNames.add(task.getDescription());
@@ -826,9 +806,9 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 return;
             }
             if (project_id != 0) {
-                project_db.createTask(taskDescription, project_id, startDate, endDate);
+                projectDB.createTask(taskDescription, project_id, startDate, endDate);
             }
-            user_db.updateDiskUsage(project_db.getSizeOnDisk());
+            userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }

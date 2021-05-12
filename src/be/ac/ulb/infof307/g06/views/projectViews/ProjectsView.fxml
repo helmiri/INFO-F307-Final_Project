@@ -1,39 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?scenebuilder-stylesheet ProjectsView.css?>
-<?import java.net.URL?>
+
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.CheckComboBox?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController">
+<?import java.net.URL?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="layout" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0"
+            xmlns="http://javafx.com/javafx/15.0.1"
+            fx:controller="be.ac.ulb.infof307.g06.views.projectViews.ProjectsViewController">
    <stylesheets>
-      <URL value="@../../resources/stylesheets/ProjectsView.css" />
+      <URL value="@../../resources/stylesheets/ProjectsView.css"/>
    </stylesheets>
    <cursor>
-      <Cursor fx:constant="DEFAULT" />
+      <Cursor fx:constant="DEFAULT"/>
    </cursor>
-   <Polygon fill="#4fc3f70d" layoutX="720.0" layoutY="-284.0" points="467.5, 1184.0, 780.0, 285.0, 780.0, 1184.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-   <Polygon fill="#4fc3f70d" layoutX="1249.0" layoutY="-476.0" points="-374.0, 1376.0, 251.0, 476.0, 251.0, 1376.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-   <Polygon fill="#4fc3f70d" layoutX="1173.0" layoutY="-456.0" points="-192.0, 1356.0, 327.0, 457.0, 327.0, 1356.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-   <Polygon fill="#4fc3f70d" layoutX="1121.0" layoutY="-480.0" points="-56.0, 1381.0, 365.0, 481.0, 365.0, 1381.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+   <Polygon fill="#4fc3f70d" layoutX="720.0" layoutY="-284.0" points="467.5, 1184.0, 780.0, 285.0, 780.0, 1184.0"
+            stroke="TRANSPARENT" strokeType="INSIDE"/>
+   <Polygon fill="#4fc3f70d" layoutX="1249.0" layoutY="-476.0" points="-374.0, 1376.0, 251.0, 476.0, 251.0, 1376.0"
+            stroke="TRANSPARENT" strokeType="INSIDE"/>
+   <Polygon fill="#4fc3f70d" layoutX="1173.0" layoutY="-456.0" points="-192.0, 1356.0, 327.0, 457.0, 327.0, 1356.0"
+            stroke="TRANSPARENT" strokeType="INSIDE"/>
+   <Polygon fill="#4fc3f70d" layoutX="1121.0" layoutY="-480.0" points="-56.0, 1381.0, 365.0, 481.0, 365.0, 1381.0"
+            stroke="TRANSPARENT" strokeType="INSIDE"/>
    <TreeTableView fx:id="treeProjects" layoutX="14.0" layoutY="1.0" onMouseClicked="#onProjectSelected" prefHeight="849.0" prefWidth="322.0">
       <columns>
          <TreeTableColumn fx:id="treeProjectColumn" prefWidth="321.0" text="Projects" />
@@ -48,40 +42,55 @@
    </TreeTableView>
    <Accordion layoutX="467.0" layoutY="755.0" />
    <Pane layoutX="336.0" layoutY="-14.0" prefHeight="900.0" prefWidth="1176.0">
-      <Button fx:id="backBtn" layoutX="1050.0" layoutY="857.0" mnemonicParsing="false" onAction="#events" prefHeight="43.0" prefWidth="78.0" stylesheets="@../../resources/stylesheets/Button.css" text="BACK" textFill="WHITE" />
+      <Button fx:id="backBtn" layoutX="1050.0" layoutY="857.0" mnemonicParsing="false" onAction="#events"
+              prefHeight="43.0" prefWidth="78.0" stylesheets="@../../resources/stylesheets/Button.css" text="BACK"
+              textFill="WHITE"/>
       <Pane layoutX="89.0" layoutY="31.0" prefHeight="394.0" prefWidth="546.0">
-         <children>
-            <Text fx:id="projectsTitle" layoutX="33.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Project" textAlignment="CENTER" wrappingWidth="463.0">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Text>
-            <Label fx:id="projectsDate" layoutX="39.0" layoutY="277.0" prefHeight="27.0" prefWidth="450.0" text="Date" textAlignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <TextArea fx:id="projectsDescription" disable="true" layoutX="39.0" layoutY="138.0" prefHeight="118.0" prefWidth="450.0" promptText="DESCRIPTION" />
-            <Button fx:id="exportProjectBtn" layoutX="442.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="EXPORT" textFill="white" />
-            <ListView fx:id="projectTags" layoutX="37.0" layoutY="85.0" orientation="HORIZONTAL" prefHeight="43.0" prefWidth="450.0">
-               <tooltip>
-                  <Tooltip fx:id="tagToolTip" text="tags associated to the selected project." />
-               </tooltip></ListView>
-            <Button fx:id="importProjectBtn" layoutX="337.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="IMPORT" textFill="white" />
-            <Button fx:id="cloudDownloadBtn" layoutX="105.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="111.0" stylesheets="@../../resources/stylesheets/Button.css" text="DOWNLOAD" textFill="white" />
-            <Button fx:id="cloudUploadBtn" layoutX="14.0" layoutY="336.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="80.0" stylesheets="@../../resources/stylesheets/Button.css" text="UPLOAD" textFill="white" />
-         </children>
+         <Text fx:id="projectsTitle" layoutX="33.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0"
+               text="Project" textAlignment="CENTER" wrappingWidth="463.0">
+            <font>
+               <Font size="36.0"/>
+            </font>
+         </Text>
+         <Label fx:id="projectsDate" layoutX="39.0" layoutY="277.0" prefHeight="27.0" prefWidth="450.0" text="Date"
+                textAlignment="CENTER">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Label>
+         <TextArea fx:id="projectsDescription" disable="true" layoutX="39.0" layoutY="138.0" prefHeight="118.0"
+                   prefWidth="450.0" promptText="DESCRIPTION"/>
+         <Button fx:id="exportProjectBtn" layoutX="442.0" layoutY="336.0" mnemonicParsing="false" onAction="#events"
+                 prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css"
+                 text="EXPORT" textFill="white"/>
+         <ListView fx:id="projectTags" layoutX="37.0" layoutY="85.0" orientation="HORIZONTAL" prefHeight="43.0"
+                   prefWidth="450.0">
+            <tooltip>
+               <Tooltip fx:id="tagToolTip" text="tags associated to the selected project."/>
+            </tooltip>
+         </ListView>
+         <Button fx:id="importProjectBtn" layoutX="337.0" layoutY="336.0" mnemonicParsing="false" onAction="#events"
+                 prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css"
+                 text="IMPORT" textFill="white"/>
+         <Button fx:id="cloudDownloadBtn" layoutX="105.0" layoutY="336.0" mnemonicParsing="false" onAction="#events"
+                 prefHeight="37.0" prefWidth="111.0" stylesheets="@../../resources/stylesheets/Button.css"
+                 text="DOWNLOAD" textFill="white"/>
+         <Button fx:id="cloudUploadBtn" layoutX="14.0" layoutY="336.0" mnemonicParsing="false" onAction="#events"
+                 prefHeight="37.0" prefWidth="80.0" stylesheets="@../../resources/stylesheets/Button.css"
+                 text="UPLOAD" textFill="white"/>
       </Pane>
       <Pane layoutX="89.0" layoutY="465.0" prefHeight="459.0" prefWidth="546.0">
-         <TableView fx:id="taskTable" editable="true" layoutX="17.0" layoutY="14.0" onMouseClicked="#onTaskSelected" prefHeight="317.0" prefWidth="512.0" style="-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;">
+         <TableView fx:id="taskTable" editable="true" layoutX="17.0" layoutY="14.0" onMouseClicked="#onTaskSelected"
+                    prefHeight="317.0" prefWidth="512.0"
+                    style="-fx-selection-bar: lightgray; -fx-text-background-color:black; -fx-selection-bar-non-focused:white;">
             <columns>
-               <TableColumn fx:id="taskColumn" prefWidth="403.0" text="Tasks" />
-               <TableColumn fx:id="taskTime" prefWidth="108.0" text="Time left" />
+               <TableColumn fx:id="taskColumn" prefWidth="403.0" text="Tasks"/>
+               <TableColumn fx:id="taskTime" prefWidth="108.0" text="Time left"/>
             </columns>
             <contextMenu>
                <ContextMenu>
                   <items>
-                     <MenuItem mnemonicParsing="false" onAction="#showTaskEdition" text="Edit" />
+                     <MenuItem mnemonicParsing="false" onAction="#showTaskEdition" text="Edit"/>
                      <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Delete" />
                   </items>
                </ContextMenu>
@@ -90,7 +99,9 @@
                <Tooltip fx:id="taskTableToolTip" text="Overview of your tasks." />
             </tooltip>
          </TableView>
-         <Button fx:id="addTaskbtn" layoutX="442.0" layoutY="399.0" mnemonicParsing="false" onAction="#events" prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD" textFill="white" />
+         <Button fx:id="addTaskButton" layoutX="442.0" layoutY="399.0" mnemonicParsing="false" onAction="#events"
+                 prefHeight="37.0" prefWidth="90.0" stylesheets="@../../resources/stylesheets/Button.css" text="ADD"
+                 textFill="white"/>
          <TextArea fx:id="descriptionTask" layoutX="17.0" layoutY="398.0" prefHeight="37.0" prefWidth="413.0" promptText="Write a description for your task." />
          <DatePicker fx:id="startDateTask" layoutX="17.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0" promptText="Start date" />
          <DatePicker fx:id="endDateTask" layoutX="285.0" layoutY="347.0" prefHeight="25.0" prefWidth="240.0" promptText="End date" />

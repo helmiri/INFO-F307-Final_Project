@@ -1,9 +1,8 @@
 package be.ac.ulb.infof307.g06.controllers.settingsControllers;
 
 import be.ac.ulb.infof307.g06.controllers.Controller;
-import be.ac.ulb.infof307.g06.models.AlertWindow;
-import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
+import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.views.settingsViews.SettingsViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,14 +20,12 @@ public class SettingsController extends Controller implements SettingsViewContro
     /**
      * Constructor
      *
-     * @param user_db UserDB, the user database
-     * @param project_db ProjectDB, the project database
-     * @param stage Stage, a stage
-     * @param scene Scene, a scene
+     * @param stage   Stage, a stage
+     * @param scene   Scene, a scene
      * @param DB_PATH String, the path to the database
      */
-    public SettingsController(UserDB user_db, ProjectDB project_db, Stage stage, Scene scene, String DB_PATH) {
-        super(user_db, project_db, stage, scene, DB_PATH);
+    public SettingsController(Stage stage, Scene scene, String DB_PATH) {
+        super(stage, scene, DB_PATH);
     }
 
     /**
@@ -36,15 +33,13 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void show() {
-        AnchorPane pane = loadScene("SettingsView.fxml");
-        if (pane == null) {
-            return;
+        try {
+            SettingsViewController controller = (SettingsViewController) loadView(SettingsViewController.class, "SettingsView.fxml");
+            controller.setListener(this);
+            controller.show(stage);
+        } catch (IOException error) {
+            new WindowLoadException(error).show();
         }
-        SettingsViewController controller = loader.getController();
-        controller.setListener(this);
-        controller.setDefaultScene();
-        stage.setScene(new Scene(pane));
-        stage.sizeToScene();
     }
 
     /**
@@ -60,15 +55,15 @@ public class SettingsController extends Controller implements SettingsViewContro
     /**
      * loads a scene
      *
-     * @param view view
-     * @return AnchorPane
+     * @param view The fxml file to be loaded
+     * @return The scene or null on error
      */
     private AnchorPane loadScene(String view) {
         loader = new FXMLLoader(SettingsViewController.class.getResource(view));
         try {
             return loader.load();
         } catch (IOException error) {
-            new AlertWindow("Error", "Unable to load the window", error.getMessage()).showErrorWindow();
+            new WindowLoadException(error).show();
         }
         return null;
     }
@@ -108,8 +103,12 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showStorage() {
-        StorageController controller = new StorageController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
-        controller.show();
+        try {
+            StorageController controller = new StorageController(stage, currentScene, loader.getController(), DB_PATH);
+            controller.show();
+        } catch (DatabaseException error) {
+            error.show();
+        }
     }
 
     /**
@@ -117,8 +116,12 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showTags() {
-        TagsController controller = new TagsController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
-        controller.show();
+        try {
+            TagsController controller = new TagsController(stage, currentScene, loader.getController(), DB_PATH);
+            controller.show();
+        } catch (DatabaseException error) {
+            error.show();
+        }
     }
 
     /**
@@ -126,7 +129,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showHelp() {
-        HelpController controller = new HelpController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
+        HelpController controller = new HelpController(stage, currentScene, loader.getController(), DB_PATH);
         controller.show();
     }
 
@@ -135,8 +138,12 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showProfile() {
-        ProfileController controller = new ProfileController(user_db, project_db, stage, scene, loader.getController(), DB_PATH);
-        controller.show();
+        try {
+            ProfileController controller = new ProfileController(stage, currentScene, loader.getController(), DB_PATH);
+            controller.show();
+        } catch (DatabaseException e) {
+            e.show();
+        }
     }
 
     /**

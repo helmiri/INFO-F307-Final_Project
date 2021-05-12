@@ -8,132 +8,120 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="layout" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0"
             xmlns="http://javafx.com/javafx/16"
             fx:controller="be.ac.ulb.infof307.g06.views.settingsViews.SettingsViewController">
-   <children>
-      <Pane fx:id="subPane" layoutX="530.0" layoutY="76.0" prefHeight="823.0" prefWidth="971.0"
-            AnchorPane.bottomAnchor="0.7999999999999545" AnchorPane.leftAnchor="530.0"
-            AnchorPane.rightAnchor="-1.2000000000000455" AnchorPane.topAnchor="76.0">
-         <cursor>
+    <Pane fx:id="subPane" layoutX="530.0" layoutY="76.0" prefHeight="823.0" prefWidth="971.0"
+          AnchorPane.bottomAnchor="0.7999999999999545" AnchorPane.leftAnchor="530.0"
+          AnchorPane.rightAnchor="-1.2000000000000455" AnchorPane.topAnchor="76.0">
+        <cursor>
             <Cursor fx:constant="DEFAULT"/>
-         </cursor>
-      </Pane>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4fc3f7" height="900.0" stroke="TRANSPARENT" strokeType="INSIDE"
-                 strokeWidth="0.0" width="531.0">
-         <cursor>
+        </cursor>
+    </Pane>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4fc3f7" height="900.0" stroke="TRANSPARENT" strokeType="INSIDE"
+               strokeWidth="0.0" width="531.0">
+        <cursor>
             <Cursor fx:constant="DEFAULT"/>
-         </cursor>
-      </Rectangle>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e1e1" height="77.0" stroke="#e1e1e1" strokeType="INSIDE"
-                 width="1500.0">
-         <cursor>
+        </cursor>
+    </Rectangle>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e1e1" height="77.0" stroke="#e1e1e1" strokeType="INSIDE"
+               width="1500.0">
+        <cursor>
             <Cursor fx:constant="DEFAULT"/>
-         </cursor>
-      </Rectangle>
-      <Text fill="WHITE" layoutX="13.0" layoutY="55.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="SETTINGS" wrappingWidth="504.9830722808838">
-         <font>
+        </cursor>
+    </Rectangle>
+    <Text fill="WHITE" layoutX="13.0" layoutY="55.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="SETTINGS" wrappingWidth="504.9830722808838">
+        <font>
             <Font name="Calibri" size="48.0"/>
-         </font>
-      </Text>
-      <Button fx:id="tagsBtn" defaultButton="true" graphicTextGap="0.0" layoutX="-1.0" layoutY="302.0"
-              mnemonicParsing="false" onAction="#events" onMouseEntered="#hover" onMouseExited="#exitHover"
-              prefHeight="78.0" prefWidth="531.0" style="-fx-background-color: #4fc3f7;" text="Tags                    "
-              textAlignment="CENTER" textFill="#f2f1f0">
-         <font>
+        </font>
+    </Text>
+    <Button fx:id="tagsBtn" defaultButton="true" graphicTextGap="0.0" layoutX="-1.0" layoutY="302.0"
+            mnemonicParsing="false" onAction="#events" onMouseEntered="#hover" onMouseExited="#exitHover"
+            prefHeight="78.0" prefWidth="531.0" style="-fx-background-color: #4fc3f7;" text="Tags                    "
+            textAlignment="CENTER" textFill="#f2f1f0">
+        <font>
             <Font size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-         <effect>
+        </cursor>
+        <effect>
             <ColorAdjust/>
-         </effect>
-         <opaqueInsets>
+        </effect>
+        <opaqueInsets>
             <Insets/>
-         </opaqueInsets>
-      </Button>
-      <Button fx:id="profileBtn" graphicTextGap="0.0" layoutX="-1.0" layoutY="223.0" mnemonicParsing="false"
-              onAction="#events" onMouseEntered="#hover" onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0"
-              style="-fx-background-color: #4fc3f7;" text="Profile                 " textFill="#f2f1f0">
-         <font>
+        </opaqueInsets>
+    </Button>
+    <Button fx:id="profileBtn" graphicTextGap="0.0" layoutX="-1.0" layoutY="223.0" mnemonicParsing="false"
+            onAction="#events" onMouseEntered="#hover" onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0"
+            style="-fx-background-color: #4fc3f7;" text="Profile                 " textFill="#f2f1f0">
+        <font>
             <Font size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <Button fx:id="storageBtn" graphicTextGap="0.0" layoutY="381.0" mnemonicParsing="false" onAction="#events"
-              onMouseEntered="#hover" onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0"
-              style="-fx-background-color: #4fc3f7;" text="Storage             " textFill="#f2f1f0">
-         <font>
+        </cursor>
+    </Button>
+    <Button fx:id="storageBtn" graphicTextGap="0.0" layoutY="381.0" mnemonicParsing="false" onAction="#events"
+            onMouseEntered="#hover" onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0"
+            style="-fx-background-color: #4fc3f7;" text="Storage             " textFill="#f2f1f0">
+        <font>
             <Font size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <Button fx:id="helpBtn" layoutY="459.0" mnemonicParsing="false" onAction="#events" onMouseEntered="#hover"
-              onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0" style="-fx-background-color: #4fc3f7;"
-              text="Help                 " textFill="#f2f1f0">
-         <font>
+        </cursor>
+    </Button>
+    <Button fx:id="helpBtn" layoutY="459.0" mnemonicParsing="false" onAction="#events" onMouseEntered="#hover"
+            onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0" style="-fx-background-color: #4fc3f7;"
+            text="Help                 " textFill="#f2f1f0">
+        <font>
             <Font size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="-52.0" layoutY="323.0" pickOnBounds="true"
-                 preserveRatio="true" x="100.0">
-         <image>
-            <Image url="@../../resources/icons/TAGS_ICON.png"/>
-         </image>
-      </ImageView>
-      <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="47.0" layoutY="244.0" pickOnBounds="true"
-                 preserveRatio="true">
-         <image>
-            <Image url="@../../resources/icons/USER_ICON.png"/>
-         </image>
-      </ImageView>
-      <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="402.0" pickOnBounds="true"
-                 preserveRatio="true">
-         <image>
-            <Image url="@../../resources/icons/STORAGE_ICON.png"/>
-         </image>
-      </ImageView>
-      <Button fx:id="aboutBtn" layoutY="538.0" mnemonicParsing="false" onAction="#events" onMouseEntered="#hover"
-              onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0" style="-fx-background-color: #4fc3f7;"
-              text="About               " textFill="#f2f1f0">
-         <font>
+        </cursor>
+    </Button>
+    <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="-52.0" layoutY="323.0" pickOnBounds="true"
+               preserveRatio="true" x="100.0">
+        <Image url="@../../resources/icons/TAGS_ICON.png"/>
+    </ImageView>
+    <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="47.0" layoutY="244.0" pickOnBounds="true"
+               preserveRatio="true">
+        <Image url="@../../resources/icons/USER_ICON.png"/>
+    </ImageView>
+    <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="402.0" pickOnBounds="true"
+               preserveRatio="true">
+        <Image url="@../../resources/icons/STORAGE_ICON.png"/>
+    </ImageView>
+    <Button fx:id="aboutBtn" layoutY="538.0" mnemonicParsing="false" onAction="#events" onMouseEntered="#hover"
+            onMouseExited="#exitHover" prefHeight="78.0" prefWidth="531.0" style="-fx-background-color: #4fc3f7;"
+            text="About               " textFill="#f2f1f0">
+        <font>
             <Font size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <Button fx:id="backBtn" layoutX="1260.0" layoutY="820.0" mnemonicParsing="false" onAction="#events"
-              onMouseEntered="#hover" onMouseExited="#exitHover" prefHeight="54.0" prefWidth="201.0"
-              style="-fx-background-color: #4fc3f7;" text="BACK" textFill="WHITE">
-         <font>
+        </cursor>
+    </Button>
+    <Button fx:id="backBtn" layoutX="1260.0" layoutY="820.0" mnemonicParsing="false" onAction="#events"
+            onMouseEntered="#hover" onMouseExited="#exitHover" prefHeight="54.0" prefWidth="201.0"
+            style="-fx-background-color: #4fc3f7;" text="BACK" textFill="WHITE">
+        <font>
             <Font name="Calibri" size="24.0"/>
-         </font>
-         <cursor>
+        </font>
+        <cursor>
             <Cursor fx:constant="HAND"/>
-         </cursor>
-      </Button>
-      <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="480.0" pickOnBounds="true"
-                 preserveRatio="true">
-         <image>
-            <Image url="@../../resources/icons/HELP_ICON.png"/>
-         </image>
-      </ImageView>
-      <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="559.0" pickOnBounds="true"
-                 preserveRatio="true">
-         <image>
-            <Image url="@../../resources/icons/ABOUT_ICON.png"/>
-         </image>
-      </ImageView>
-   </children>
+        </cursor>
+    </Button>
+    <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="480.0" pickOnBounds="true"
+               preserveRatio="true">
+        <Image url="@../../resources/icons/HELP_ICON.png"/>
+    </ImageView>
+    <ImageView fitHeight="37.0" fitWidth="67.0" layoutX="48.0" layoutY="559.0" pickOnBounds="true"
+               preserveRatio="true">
+        <Image url="@../../resources/icons/ABOUT_ICON.png"/>
+    </ImageView>
 </AnchorPane>
