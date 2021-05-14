@@ -12,14 +12,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestProjectDB extends TestDatabase {
-    String projectName = "test1";
-    String projectDescription = "desc1";
-    Long projectDate = 1000L;
-    String taskDescription = "task1";
-    String taskDescription2 = "task2";
+    private final String testTag1 = "tag1";
+    private final String testColor = "#ffffff";
+    private final String testTag2 = "tag2";
+    private String projectName = "test1";
+    private String projectDescription = "desc1";
+    private Long projectDate = 1000L;
+    private String taskDescription = "task1";
+    private String taskDescription2 = "task2";
 
-    public TestProjectDB() throws ClassNotFoundException, SQLException {
-        super();
+    TestProjectDB() throws ClassNotFoundException, SQLException {
     }
 
     @Test
@@ -142,32 +144,32 @@ class TestProjectDB extends TestDatabase {
 
     @Test
     void createTag() throws SQLException {
-        int id = projectDB.createTag("tag1", "#ffffff");
-        assertEquals("tag1", projectDB.getTag(id).getDescription());
+        int id = projectDB.createTag(testTag1, testColor);
+        assertEquals(testTag1, projectDB.getTag(id).getDescription());
     }
 
     @Test
     void editTag() throws SQLException {
-        int id = projectDB.createTag("tag1", "#ffffff");
-        projectDB.editTag(id, "newtag1", "#ffffff");
+        int id = projectDB.createTag(testTag1, testColor);
+        projectDB.editTag(id, "newtag1", testColor);
         assertEquals("newtag1", projectDB.getTag(id).getDescription());
     }
 
     @Test
     void deleteTag() throws SQLException {
-        int id = projectDB.createTag("tag1", "#ffffff");
+        int id = projectDB.createTag(testTag1, testColor);
         projectDB.deleteTag(id);
         assertNull(projectDB.getTag(id));
     }
 
     @Test
     void addTag() throws SQLException {
-        int id1 = projectDB.createTag("tag1", "#ffffff");
-        int id2 = projectDB.createTag("tag2", "#ffffff");
+        int id1 = projectDB.createTag(testTag1, testColor);
+        int id2 = projectDB.createTag(testTag2, testColor);
         projectDB.addTag(id1, 1);
         projectDB.addTag(id2, 1);
 
-        List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag2"));
+        List<String> expected = new ArrayList<>(Arrays.asList(testTag1, testTag2));
         List<String> actual = new ArrayList<>();
         for (int i = 0; i < projectDB.getTags(1).size(); i++) {
             actual.add(projectDB.getTags(1).get(i).getDescription());
@@ -177,14 +179,14 @@ class TestProjectDB extends TestDatabase {
 
     @Test
     void editTags() throws SQLException {
-        int id1 = projectDB.createTag("tag1", "#ffffff");
-        int id2 = projectDB.createTag("tag2", "#ffffff");
-        int id3 = projectDB.createTag("tag3", "#ffffff");
+        int id1 = projectDB.createTag(testTag1, testColor);
+        int id2 = projectDB.createTag(testTag2, testColor);
+        int id3 = projectDB.createTag("tag3", testColor);
         projectDB.addTag(id1, 1);
         projectDB.addTag(id2, 1);
         List<Integer> newTags = new ArrayList<>(Arrays.asList(id1, id3));
         projectDB.editTags(1, newTags);
-        List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag3"));
+        List<String> expected = new ArrayList<>(Arrays.asList(testTag1, "tag3"));
         List<String> actual = new ArrayList<>();
         for (int i = 0; i < projectDB.getTags(1).size(); i++) {
             actual.add(projectDB.getTags(1).get(i).getDescription());
@@ -194,12 +196,12 @@ class TestProjectDB extends TestDatabase {
 
     @Test
     void removeTag() throws SQLException {
-        int id1 = projectDB.createTag("tag1", "#ffffff");
-        int id2 = projectDB.createTag("tag2", "#ffffff");
+        int id1 = projectDB.createTag(testTag1, testColor);
+        int id2 = projectDB.createTag(testTag2, testColor);
         projectDB.addTag(id1, 1);
         projectDB.addTag(id2, 1);
         projectDB.removeTag(1, id1);
-        List<String> expected = new ArrayList<>(Collections.singletonList("tag2"));
+        List<String> expected = new ArrayList<>(Collections.singletonList(testTag2));
         List<String> actual = new ArrayList<>();
         for (int i = 0; i < projectDB.getTags(1).size(); i++) {
             actual.add(projectDB.getTags(1).get(i).getDescription());
@@ -209,11 +211,11 @@ class TestProjectDB extends TestDatabase {
 
     @Test
     void getAllTags() throws SQLException {
-        int id1 = projectDB.createTag("tag1", "#ffffff");
-        int id2 = projectDB.createTag("tag2", "#ffffff");
+        int id1 = projectDB.createTag(testTag1, testColor);
+        int id2 = projectDB.createTag(testTag2, testColor);
         projectDB.addTag(id1, 1);
         projectDB.addTag(id2, 1);
-        List<String> expected = new ArrayList<>(Arrays.asList("tag1", "tag2"));
+        List<String> expected = new ArrayList<>(Arrays.asList(testTag1, testTag2));
         List<String> actual = new ArrayList<>();
         for (int i = 0; i < projectDB.getAllTags().size(); i++) {
             actual.add(projectDB.getAllTags().get(i).getDescription());

@@ -5,7 +5,6 @@ import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.views.settingsViews.SettingsViewController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -20,12 +19,10 @@ public class SettingsController extends Controller implements SettingsViewContro
     /**
      * Constructor
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage Stage, a stage
      */
-    public SettingsController(Stage stage, Scene scene, String DB_PATH) {
-        super(stage, scene, DB_PATH);
+    public SettingsController(Stage stage) {
+        super(stage);
     }
 
     /**
@@ -104,7 +101,7 @@ public class SettingsController extends Controller implements SettingsViewContro
     @Override
     public void showStorage() {
         try {
-            StorageController controller = new StorageController(stage, currentScene, loader.getController(), DB_PATH);
+            StorageController controller = new StorageController(stage, loader.getController());
             controller.show();
         } catch (DatabaseException error) {
             error.show();
@@ -117,7 +114,7 @@ public class SettingsController extends Controller implements SettingsViewContro
     @Override
     public void showTags() {
         try {
-            TagsController controller = new TagsController(stage, currentScene, loader.getController(), DB_PATH);
+            TagsController controller = new TagsController(stage, loader.getController());
             controller.show();
         } catch (DatabaseException error) {
             error.show();
@@ -129,7 +126,7 @@ public class SettingsController extends Controller implements SettingsViewContro
      */
     @Override
     public void showHelp() {
-        HelpController controller = new HelpController(stage, currentScene, loader.getController(), DB_PATH);
+        HelpController controller = new HelpController(stage, loader.getController());
         controller.show();
     }
 
@@ -139,7 +136,7 @@ public class SettingsController extends Controller implements SettingsViewContro
     @Override
     public void showProfile() {
         try {
-            ProfileController controller = new ProfileController(stage, currentScene, loader.getController(), DB_PATH);
+            ProfileController controller = new ProfileController(stage, loader.getController());
             controller.show();
         } catch (DatabaseException e) {
             e.show();

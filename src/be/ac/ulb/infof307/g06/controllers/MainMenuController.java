@@ -1,13 +1,14 @@
 package be.ac.ulb.infof307.g06.controllers;
 
 import be.ac.ulb.infof307.g06.controllers.calendarControllers.CalendarController;
+import be.ac.ulb.infof307.g06.controllers.connectionControllers.LoginController;
 import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
 import be.ac.ulb.infof307.g06.controllers.settingsControllers.SettingsController;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
+import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.mainMenuViews.InvitationController;
 import be.ac.ulb.infof307.g06.views.mainMenuViews.MenuViewController;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,31 +19,33 @@ import java.sql.SQLException;
  */
 public class MainMenuController extends Controller implements MenuViewController.ViewListener {
     //--------------- ATTRIBUTE ----------------
-    private Listener listener;
     private InvitationController invitationController;
+    private UserDB userDB;
 
     /**
      * Constructor
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage Stage, a stage
      */
     //--------------- METHODS ----------------
-    public MainMenuController(Stage stage, Scene scene, String DB_PATH) {
-        super(stage, scene, DB_PATH);
+    public MainMenuController(Stage stage) {
+        super(stage);
         try {
-            invitationController = new InvitationController(stage, scene, DB_PATH);
+            userDB = new UserDB();
+            invitationController = new InvitationController(stage);
         } catch (DatabaseException error) {
             error.show();
+        } catch (SQLException error) {
+            new DatabaseException(error).show();
         }
     }
+
 
     /**
      * Sets the loader to show the Main menu scene.
      */
     @Override
-    public void show() {
+    public final void show() {
         try {
             MenuViewController controller = (MenuViewController) loadView(MenuViewController.class, "MenuView.fxml");
             controller.setListener(this);
@@ -71,7 +74,7 @@ public class MainMenuController extends Controller implements MenuViewController
      */
     @Override
     public void showSettings() {
-        SettingsController controller = new SettingsController(stage, stage.getScene(), DB_PATH);
+        SettingsController controller = new SettingsController(stage);
         controller.show();
     }
 
@@ -81,9 +84,9 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showProjects() {
         try {
-            ProjectController controller = new ProjectController(stage, stage.getScene(), DB_PATH);
+            ProjectController controller = new ProjectController(stage);
             controller.show();
-        } catch (SQLException | ClassNotFoundException error) {
+        } catch (SQLException error) {
             new DatabaseException(error).show();
         }
     }
@@ -94,13 +97,12 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showStats() {
         try {
-            StatsController controller = new StatsController(stage, stage.getScene(), DB_PATH);
+            StatsController controller = new StatsController(stage);
             controller.show();
         } catch (DatabaseException error) {
             error.show();
         }
     }
-
 
     /**
      * Shows calendar menu
@@ -108,7 +110,7 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void showCalendar() {
         try {
-            CalendarController controller = new CalendarController(stage, stage.getScene(), DB_PATH);
+            CalendarController controller = new CalendarController(stage);
             controller.show();
         } catch (DatabaseException error) {
             error.show();
@@ -121,36 +123,15 @@ public class MainMenuController extends Controller implements MenuViewController
      * Logs user out
      */
     @Override
-    public void logout() {
-        listener.logout();
-        listener.showLogin();
-    }
-
-
-    //--------------- LISTENER ----------------
-
-    /**
-     * Sets listener
-     *
-     * @param listener Listener
-     */
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
-    /**
-     * The listener and his methods.
-     */
-    public interface Listener {
-
-        /**
-         * Logs the user out.
-         */
-        void logout();
-
-        /**
-         * Shows the login
-         */
-        void showLogin();
+    public void onLogout() {
+        try {
+            userDB.disconnectUser();
+            LoginController controller = new LoginController(stage);
+            controller.show();
+        } catch (SQLException error) {
+            new DatabaseException(error, "Unable to disconnect").show();
+        } catch (DatabaseException | WindowLoadException e) {
+            new DatabaseException(e).show();
+        }
     }
 }

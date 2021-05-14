@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.controllers;
 
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,22 +14,17 @@ import java.io.IOException;
 public abstract class Controller {
     //--------------- ATTRIBUTES ----------------
     protected Stage stage;
-    protected Scene currentScene;
-    protected Scene prevScene;
-    protected String DB_PATH;
+    protected final Scene prevScene;
 
     /**
      * Constructor
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage The stage of the application
      */
     //--------------- METHODS ----------------
-    public Controller(Stage stage, Scene scene, String DB_PATH) {
+    public Controller(Stage stage) {
         this.stage = stage;
-        prevScene = scene;
-        this.DB_PATH = DB_PATH;
+        prevScene = stage.getScene();
     }
 
     /**
@@ -42,7 +38,7 @@ public abstract class Controller {
     /**
      * Shows the controller's screen
      */
-    public abstract void show() throws WindowLoadException;
+    public abstract void show() throws WindowLoadException, DatabaseException;
 
     protected Object loadView(Class<?> viewController, String view) throws IOException {
         FXMLLoader loader = new FXMLLoader(viewController.getResource(view));

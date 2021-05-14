@@ -4,14 +4,14 @@ package be.ac.ulb.infof307.g06.models;
 /**
  * A task data object
  */
-public class Task {
+public final class Task {
     //-------------- ATTRIBUTES ----------------
-    int id;
-    String description;
-    String time;
-    int projectID;
-    long startDate;
-    long endDate;
+    final int id;
+    final String description;
+    final String time;
+    final int projectID;
+    final long startDate;
+    final long endDate;
     //-------------- METHODS ----------------
 
     /**

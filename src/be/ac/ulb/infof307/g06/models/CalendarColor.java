@@ -11,7 +11,7 @@ import java.util.Map;
  * Calendar colors
  */
 public class CalendarColor {
-    private Map<String, String> colorsMap = new HashMap<>();
+    private final Map<String, String> colorsMap = new HashMap<>();
 
     /**
      * consturctor

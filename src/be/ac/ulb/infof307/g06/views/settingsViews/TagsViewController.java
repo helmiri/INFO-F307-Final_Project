@@ -65,7 +65,7 @@ public class TagsViewController {
      * Convert Color objet to HEX code
      *
      * @param color javafx.scene.paint.Color
-     * @return String
+     * @return RGB representation of the color
      */
     public String toRGBCode(Color color) {
         return String.format("#%02X%02X%02X",
@@ -150,8 +150,11 @@ public class TagsViewController {
 
     //--------------- LISTENER ----------------
 
-    public void setListener(ViewListener listener) {
-        this.listener = listener;
+    /**
+     * @param newListener The newListener for this object
+     */
+    public void setListener(ViewListener newListener) {
+        listener = newListener;
     }
 
     /**

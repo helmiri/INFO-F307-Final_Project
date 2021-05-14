@@ -59,9 +59,9 @@ public class GoogleDriveAPI {
      * @throws IOException On error saving the file
      */
     public void downloadFile(String localFilePath, String fileID) throws IOException {
-        OutputStream outputStream = new FileOutputStream(localFilePath);
-        service.files().get(fileID).executeMediaAndDownloadTo(outputStream);
-        outputStream.close();
+        try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
+            service.files().get(fileID).executeMediaAndDownloadTo(outputStream);
+        }
     }
 
     /**

@@ -48,7 +48,7 @@ public class MenuViewController {
     @FXML
     private void events(ActionEvent event) {
         if (event.getSource() == logOutBtn) {
-            listener.logout();
+            listener.onLogout();
         } else if (event.getSource() == mainMenuBtn) {
             listener.showMainMenu();
         } else if (event.getSource() == statsAccessBtn) {
@@ -107,6 +107,6 @@ public class MenuViewController {
         /**
          * Logs the user out
          */
-        void logout();
+        void onLogout();
     }
 }

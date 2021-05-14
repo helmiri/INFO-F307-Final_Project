@@ -1,89 +1,73 @@
 package be.ac.ulb.infof307.g06.controllers.connectionControllers;
 
-import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
+import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.views.connectionViews.LoginViewController;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Controller for the login view.
  */
-public class LoginController {
-    public static final int HEIGHT = 465;
-    public static final int WIDTH = 715;
-    //--------------- ATTRIBUTES ----------------
-    private final Stage stage;
-    private final Listener listener;
+public class LoginController extends ConnectionController implements LoginViewController.ViewListener {
 
     /**
-     * Constructor.
+     * Constructor
      *
-     * @param stage Stage, a stage.
-     * @param listener Listener, a listener
+     * @param stage Stage, a stage
      */
-    //--------------- METHODS ----------------
-    public LoginController(Stage stage, Listener listener) {
-        this.stage = stage;
-        this.listener = listener;
+    public LoginController(Stage stage) throws DatabaseException {
+        super(stage);
     }
 
     /**
      * Shows the login screen
      */
-    public void show() {
-        FXMLLoader loader = new FXMLLoader(LoginViewController.class.getResource("LoginView.fxml"));
-        AnchorPane mainLayout;
+    @Override
+    public void show() throws WindowLoadException {
         try {
-            mainLayout = loader.load();
-        } catch (IOException error) {
-            new AlertWindow("Error", "Could not load the window", error.getMessage());
-            return;
+            LoginViewController controller = (LoginViewController) loadView(LoginViewController.class, "LoginView.fxml");
+            controller.setListener(this);
+            controller.show(stage);
+        } catch (IOException e) {
+            throw new WindowLoadException(e);
         }
-        Scene scene = new Scene(mainLayout);
-        stage.setScene(scene);
-        LoginViewController controller = loader.getController();
-        controller.setListener(new LoginViewController.ViewListener() {
-            @Override
-            public void login(String username, String password) {
-                listener.onLogin(username, password);
-            }
-
-            @Override
-            public void signup() {
-                listener.onSignup();
-            }
-        });
-        stage.setTitle("I(Should)PlanAll");
-
-        stage.setResizable(true);
-        stage.setHeight(HEIGHT);
-        stage.setWidth(WIDTH);
-        stage.centerOnScreen();
-        stage.setResizable(false);
-        stage.show();
     }
 
     /**
-     * The listener and his methods.
+     * Validates user data for the log in.
+     *
+     * @param username Username (String)
+     * @param password User's password (String)
      */
-    //--------------- LISTENER ----------------
-    // Hand over control to the ConnectionHandler
-    public interface Listener {
-        /**
-         * When we log in
-         *
-         * @param username String, the username
-         * @param password String, the password
-         */
-        void onLogin(String username, String password);
+    @Override
+    public String login(String username, String password) {
+        int res;
+        String errorMessage = "";
+        try {
+            res = userDB.validateData(username, password);
+            if (res == 0) {
+                errorMessage = "This user does not exist or the password/username is wrong";
+            } else if (res == -1) {
+                errorMessage = "This user is already connected";
+            } else {
+                loginSetup(res);
+            }
+        } catch (SQLException e) {
+            new DatabaseException(e, "An error occurred retrieving the user data").show();
+        }
+        return errorMessage;
+    }
 
-        /**
-         * When we sign up.
-         */
-        void onSignup();
+    @Override
+    public void signupClicked() {
+        try {
+            SignUpController controller = new SignUpController(stage);
+            controller.show();
+        } catch (DatabaseException e) {
+            e.show();
+        }
     }
 }

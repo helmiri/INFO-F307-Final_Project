@@ -8,7 +8,6 @@ import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,16 +21,14 @@ public class InvitationController extends Controller implements InvitationViewCo
     /**
      * Constructor
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage Stage, a stage
      */
-    public InvitationController(Stage stage, Scene scene, String DB_PATH) throws DatabaseException {
-        super(stage, scene, DB_PATH);
+    public InvitationController(Stage stage) throws DatabaseException {
+        super(stage);
         try {
-            userDB = new UserDB(DB_PATH);
-            projectDB = new ProjectDB(DB_PATH);
-        } catch (ClassNotFoundException | SQLException error) {
+            userDB = new UserDB();
+            projectDB = new ProjectDB();
+        } catch (SQLException error) {
             throw new DatabaseException(error, "Could not load invitations");
         }
     }

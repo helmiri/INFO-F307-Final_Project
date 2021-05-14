@@ -6,7 +6,6 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.views.settingsViews.TagsViewController;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -15,24 +14,22 @@ import java.sql.SQLException;
  * Main controller for the tags section.
  */
 public class TagsController extends Controller implements TagsViewController.ViewListener {
-    private TagsViewController viewController;
+    private final TagsViewController viewController;
     private ProjectDB projectDB;
 
     /**
      * Constructor
      *
      * @param stage          Stage, a stage
-     * @param scene          Scene, a scene
      * @param viewController TagsViewController, the view controller
-     * @param DB_PATH        String, the path to the database
      */
     //--------------- METHODS ----------------
-    public TagsController(Stage stage, Scene scene, TagsViewController viewController, String DB_PATH) throws DatabaseException {
-        super(stage, scene, DB_PATH);
+    public TagsController(Stage stage, TagsViewController viewController) throws DatabaseException {
+        super(stage);
         this.viewController = viewController;
         try {
-            projectDB = new ProjectDB(DB_PATH);
-        } catch (SQLException | ClassNotFoundException error) {
+            projectDB = new ProjectDB();
+        } catch (SQLException error) {
             throw new DatabaseException(error);
         }
     }

@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUserDB extends TestDatabase {
 
+    private final String userNameField = "userName";
+    private final String newPassword = "newPassword";
 
     public TestUserDB() throws ClassNotFoundException, SQLException {
     }
@@ -46,7 +48,7 @@ public class TestUserDB extends TestDatabase {
     @DisplayName("User Exists")
     public void testUserExists() throws Exception {
         for (Map<String, String> item : testData) {
-            assertTrue(userDB.userExists(item.get("userName")));
+            assertTrue(userDB.userExists(item.get(userNameField)));
         }
     }
 
@@ -54,7 +56,7 @@ public class TestUserDB extends TestDatabase {
     @DisplayName("Wrong password login")
     public void testWrongPasswordValidation() throws SQLException {
         for (Map<String, String> item : testData) {
-            assertEquals(0, userDB.validateData(item.get("userName"), "RandomWrongPassword"));
+            assertEquals(0, userDB.validateData(item.get(userNameField), "RandomWrongPassword"));
         }
     }
 
@@ -77,7 +79,7 @@ public class TestUserDB extends TestDatabase {
     public void testValidateData() throws SQLException {
         // validateData should return the ID of the user on successful login (indexed at 1)
         for (int i = 0; i < testData.size(); i++) {
-            assertEquals(i + 1, userDB.validateData(testData.get(i).get("userName"), testData.get(i).get("password")));
+            assertEquals(i + 1, userDB.validateData(testData.get(i).get(userNameField), testData.get(i).get("password")));
         }
     }
 
@@ -87,7 +89,7 @@ public class TestUserDB extends TestDatabase {
         // queryUserInfo + getUserInfo test due to queryUserInfo being a private implementation method
         for (int i = 0; i < testData.size(); i++) {
             User usrInfo = userDB.getUserInfo(i + 1);
-            assertEquals(testData.get(i).get("userName"), usrInfo.getUserName());
+            assertEquals(testData.get(i).get(userNameField), usrInfo.getUserName());
             assertEquals(testData.get(i).get("fName"), usrInfo.getFirstName());
             assertEquals(testData.get(i).get("lName"), usrInfo.getLastName());
             assertEquals(testData.get(i).get("email"), usrInfo.getEmail());
@@ -100,24 +102,22 @@ public class TestUserDB extends TestDatabase {
     @DisplayName("Send invitation")
     public void testSendInvitation() throws SQLException {
         // Necessary setup
-        userDB.sendInvitation(1, 2, 1);
-        userDB.validateData(testData.get(0).get("userName"), testData.get(0).get("password"));
+        userDB.sendInvitation(1, 2, activeUser.getID());
         projectDB.createProject("Title", "Desc", 1000L, 1000L, 1);
 
         // Test
         List<Invitation> invitations = userDB.getInvitations(projectDB);
         assertEquals(1, invitations.get(0).getProject().getId());
         assertEquals(2, invitations.get(0).getSender().getId());
-        assertEquals(1, invitations.get(0).getReceiver().getId());
+        assertEquals(activeUser.getID(), invitations.get(0).getReceiver().getId());
     }
 
 
     @Test
     @DisplayName("Get user invitations")
     public void testGetInvitations() throws SQLException {
-        userDB.sendInvitation(1, 1, 2);
-        userDB.sendInvitation(5, 3, 2);
-        assertTrue(userDB.validateData("User_2_userName", "User_2_password") > 0);
+        userDB.sendInvitation(1, 1, activeUser.getID());
+        userDB.sendInvitation(5, 3, activeUser.getID());
         List<Invitation> invitations = userDB.getInvitations(projectDB);
         assertEquals(2, invitations.size());
         // First invitation
@@ -132,9 +132,8 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Remove invitations")
     public void testRemoveInvitation() throws SQLException {
-        userDB.sendInvitation(1, 1, 2);
-        userDB.sendInvitation(5, 3, 2);
-        assertTrue(userDB.validateData("User_2_userName", "User_2_password") > 0);
+        userDB.sendInvitation(1, 1, activeUser.getID());
+        userDB.sendInvitation(5, 3, activeUser.getID());
         userDB.removeInvitation(1);
         assertEquals(1, userDB.getInvitations(projectDB).size());
         userDB.removeInvitation(2);
@@ -144,9 +143,8 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("User info setter")
     public void testSetUserInfo() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password");
-        userDB.setUserInfo("NewFName", "NewLName", "NewEmail", "newPassword");
-        User res = userDB.getUserInfo(1);
+        userDB.setUserInfo("NewFName", "NewLName", "NewEmail", newPassword);
+        User res = userDB.getUserInfo(activeUser.getID());
 
         assertEquals("NewFName", res.getFirstName());
         assertEquals("NewLName", res.getLastName());
@@ -156,34 +154,29 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Login with wrong new password")
     public void testLoginWIthWrongNewPassword() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password"); // Login with user
-        userDB.userSettingsSync(null, "newPassword");
+        userDB.userSettingsSync(null, newPassword);
         userDB.disconnectUser();
         // Wrong password
-        assertEquals(0, userDB.validateData("User_1_userName", "User_1_password"));
+        assertEquals(0, userDB.validateData(activeUser.getUserName(), testData.get(activeUser.getID() - 1).get("password")));
     }
 
     @Test
     @DisplayName("Login with correct new password")
     public void testLoginWithCorrectNewPassword() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password"); // Login with user
-        userDB.userSettingsSync(null, "newPassword");
-        userDB.disconnectUser();
+        userDB.userSettingsSync(null, newPassword);
         // Test new password
-        assertEquals(1, userDB.validateData("User_1_userName", "newPassword"));
+        assertEquals(activeUser.getID(), userDB.validateData(activeUser.getUserName(), newPassword));
     }
 
     @Test
     @DisplayName("Disk usage getter")
     public void testGetDiskUsage() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password");
         assertEquals(0, userDB.getDiskUsage());
     }
 
     @Test
     @DisplayName("Available disk getter")
     public void testAvailableDisk() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password");
         userDB.setAdmin(256);
         assertEquals(256, userDB.availableDisk());
     }
@@ -198,7 +191,6 @@ public class TestUserDB extends TestDatabase {
     @Test
     @DisplayName("Admin setter")
     public void testSetAdmin() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password");
         userDB.setAdmin(256);
         Statement state = db.createStatement();
         ResultSet res = state.executeQuery("select diskLimit from admin");

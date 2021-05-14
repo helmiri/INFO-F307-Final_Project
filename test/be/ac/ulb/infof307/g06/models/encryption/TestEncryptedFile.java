@@ -13,9 +13,9 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestEncryptedFile {
+public final class TestEncryptedFile {
     private String testFilePath = "test/be/ac/ulb/infof307/g06/models/encryption/testFile.txt";
-    String decryptedTestFilePath = testFilePath + "decrypted";
+    private String decryptedTestFilePath = testFilePath + "decrypted";
     private String encryptedTestFilePath = testFilePath + "encrypted";
 
     @BeforeEach

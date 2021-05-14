@@ -4,9 +4,9 @@ import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.User;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.settingsViews.ProfileViewController;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -17,24 +17,24 @@ import java.util.regex.Pattern;
  * User configuration controller
  */
 public class ProfileController extends Controller implements ProfileViewController.ViewListener {
-    private ProfileViewController viewController;
-    private User user;
+    private final ProfileViewController viewController;
+    private final ActiveUser activeUser;
+    private User newUser;
     private UserDB userDB;
 
     /**
      * Constructor
      *
      * @param stage      Stage, a stage
-     * @param scene      Scene, a scene
      * @param controller ProfileViewController, the view controller
-     * @param DB_PATH    String, the path to the database
      */
-    public ProfileController(Stage stage, Scene scene, ProfileViewController controller, String DB_PATH) throws DatabaseException {
-        super(stage, scene, DB_PATH);
+    public ProfileController(Stage stage, ProfileViewController controller) throws DatabaseException, NullPointerException {
+        super(stage);
         viewController = controller;
+        activeUser = ActiveUser.getInstance();
         try {
-            userDB = new UserDB(DB_PATH);
-        } catch (ClassNotFoundException | SQLException error) {
+            userDB = new UserDB();
+        } catch (SQLException error) {
             throw new DatabaseException(error);
         }
     }
@@ -43,10 +43,14 @@ public class ProfileController extends Controller implements ProfileViewControll
      * Initializes the scene
      */
     @Override
-    public void show() {
-        user = userDB.getCurrentUser();
+    public void show() throws DatabaseException {
+        try {
+            newUser = userDB.getUserInfo(activeUser.getID());
+        } catch (SQLException error) {
+            throw new DatabaseException(error);
+        }
         viewController.setListener(this);
-        viewController.initialize(user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail());
+        viewController.initialize(activeUser.getUserName(), activeUser.getFirstName(), activeUser.getLastName(), activeUser.getEmail());
     }
 
     /**
@@ -60,7 +64,7 @@ public class ProfileController extends Controller implements ProfileViewControll
         if (validateTextField(field, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")) {
             return false;
         }
-        user.setFirstName(field);
+        newUser.setFirstName(field);
         return profileSaved();
     }
 
@@ -75,7 +79,7 @@ public class ProfileController extends Controller implements ProfileViewControll
         if (validateTextField(field, "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,64}$")) {
             return false;
         }
-        user.setLastName(field);
+        newUser.setLastName(field);
         return profileSaved();
     }
 
@@ -108,7 +112,7 @@ public class ProfileController extends Controller implements ProfileViewControll
         if (validateTextField(field, "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
             return false;
         }
-        user.setEmail(field);
+        newUser.setEmail(field);
         return profileSaved();
     }
 
@@ -119,7 +123,7 @@ public class ProfileController extends Controller implements ProfileViewControll
      */
     private boolean profileSaved() {
         try {
-            userDB.userSettingsSync(user, "");
+            userDB.userSettingsSync(newUser, "");
         } catch (SQLException e) {
             new DatabaseException(e).show();
             return false;
@@ -161,6 +165,6 @@ public class ProfileController extends Controller implements ProfileViewControll
                    - The username must not contain any special characters or spaces (8 to 16 chars)
                    - The password must have at least one lowercase character, one uppercase character and one special character from '@#_$%!' (6 to 16 chars)
                 """;
-        new AlertWindow("Wrong enters", contextText).showWarningWindow();
+        new AlertWindow("Wrong input", contextText).showWarningWindow();
     }
 }

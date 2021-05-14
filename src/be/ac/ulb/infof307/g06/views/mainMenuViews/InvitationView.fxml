@@ -15,14 +15,14 @@
     </VBox>
     <Button fx:id="acceptBtn" layoutX="63.0" layoutY="405.0" mnemonicParsing="false" onAction="#events"
             prefHeight="25.0" prefWidth="152.0" stylesheets="@../../resources/stylesheets/Button.css" text="ACCEPT"/>
-    <Text fx:id="errorText" layoutX="12.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0"
+    <Text layoutX="12.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0"
           text="You've been invited to collaborate on a project" textAlignment="CENTER" underline="true"
           wrappingWidth="519.0">
         <font>
             <Font name="Calibri" size="18.0"/>
         </font>
     </Text>
-    <Button fx:id="declineBtn" layoutX="334.0" layoutY="405.0" mnemonicParsing="false" onAction="#events"
+    <Button layoutX="334.0" layoutY="405.0" mnemonicParsing="false" onAction="#events"
             prefHeight="25.0" prefWidth="152.0" stylesheets="@../../resources/stylesheets/Button.css" text="DECLINE"/>
     <VBox layoutX="126.0" layoutY="80.0" prefHeight="314.0" prefWidth="395.0" spacing="40.0">
         <TextField fx:id="senderNameTextField"/>

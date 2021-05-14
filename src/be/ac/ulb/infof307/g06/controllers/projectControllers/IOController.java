@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.models.encryption.EncryptedFile;
@@ -34,8 +35,8 @@ public class IOController {
     //--------------- ATTRIBUTES ----------------
     private ProjectsViewController viewController;
     private final String tempDir;
-    private UserDB userDB;
-    private ProjectDB projectDB;
+    private final UserDB userDB;
+    private final ProjectDB projectDB;
     //--------------- METHODS ----------------
 
     /**
@@ -72,13 +73,13 @@ public class IOController {
      * @param fileWriter FileWriter
      */
     private void saveProjectAndChildrenJSON(Project project, FileWriter fileWriter) throws IOException, SQLException {
-        int ID = project.getId();
-        saveProjectJson(project, projectDB.getTasks(ID), projectDB.getTags(ID), fileWriter);
-        List<Integer> subProjects = projectDB.getSubProjects(ID);
+        int id = project.getId();
+        saveProjectJson(project, projectDB.getTasks(id), projectDB.getTags(id), fileWriter);
+        List<Integer> subProjects = projectDB.getSubProjects(id);
         if (subProjects.isEmpty()) {
             return;
         }
-        for (Integer subProject : projectDB.getSubProjects(ID)) {
+        for (Integer subProject : projectDB.getSubProjects(id)) {
             fileWriter.write(",\n");
             saveProjectAndChildrenJSON(projectDB.getProject(subProject), fileWriter);
         }
@@ -195,28 +196,28 @@ public class IOController {
      * @throws SQLException when a database error occurs
      */
     private void parseJsonFile(String jsonFile) throws IOException, SQLException {
-        BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
-        int count = 0, parentID = 0, id = 0;
-        String line;
-        Map<Integer, Integer> projectMap = new HashMap<>();
-        while ((line = reader.readLine()) != null) {
-            count = ++count % 6;
-            if (count == 2) {
-                int[] parentIDList = parseProject(parentID, projectMap, line);
-                id = parentIDList[0];
-                parentID = parentIDList[1];
-            } else if (count == 3) {
-                parseTasks(id, line);
-            } else if (count == 4) {
-                parseTags(id, line);
-                addProjectToTreeView(projectDB.getProject(id));
-            } else {
-                if (line.equals("[")) {
-                    count = 1;
+        try (BufferedReader reader = new BufferedReader(new FileReader(jsonFile))) {
+            int count = 0, parentID = 0, id = 0;
+            String line;
+            Map<Integer, Integer> projectMap = new HashMap<>();
+            while ((line = reader.readLine()) != null) {
+                count = ++count % 6;
+                if (count == 2) {
+                    int[] parentIDList = parseProject(parentID, projectMap, line);
+                    id = parentIDList[0];
+                    parentID = parentIDList[1];
+                } else if (count == 3) {
+                    parseTasks(id, line);
+                } else if (count == 4) {
+                    parseTags(id, line);
+                    addProjectToTreeView(projectDB.getProject(id));
+                } else {
+                    if (line.equals("[")) {
+                        count = 1;
+                    }
                 }
             }
         }
-        reader.close();
     }
 
     /**
@@ -278,18 +279,20 @@ public class IOController {
      * @throws SQLException When a database access error occurs
      */
     private int[] parseProject(int parentID, Map<Integer, Integer> projectMap, String line) throws SQLException {
+        ActiveUser activeUser = ActiveUser.getInstance();
         Project project = new Gson().fromJson(line.substring(0, line.length() - 1), Project.class);
         int id;
+        int newParentID = parentID;
         if (projectMap.size() == 0) {
             id = projectDB.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), 0);
             projectMap.put(project.getParentId(), 0);
         } else {
             id = projectDB.createProject(project.getTitle(), project.getDescription(), project.getStartDate(), project.getEndDate(), projectMap.get(project.getParentId()));
-            parentID = projectMap.get(project.getParentId());
+            newParentID = projectMap.get(project.getParentId());
         }
         projectMap.put(project.getId(), id);
-        projectDB.addCollaborator(id, userDB.getCurrentUser().getId());
-        return new int[]{id, parentID};
+        projectDB.addCollaborator(id, activeUser.getID());
+        return new int[]{id, newParentID};
     }
 
     /**

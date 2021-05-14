@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g06.views.settingsViews;
 
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -56,12 +55,10 @@ public class ProfileViewController {
     }
 
     /**
-     * Retrieves the input data
-     *
-     * @param actionEvent Should only be triggered by the save button
+     * Retrieves the input data when the user clicks on the save button
      */
     @FXML
-    private void save(ActionEvent actionEvent) {
+    private void save() {
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
         String email = emailField.getText();

@@ -2,15 +2,20 @@ package be.ac.ulb.infof307.g06.views.connectionViews;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * The signup scene
  */
 public class SignUpViewController {
     //-------------- ATTRIBUTES ----------------
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Button signUpBtn;
     @FXML
@@ -43,7 +48,7 @@ public class SignUpViewController {
         if (event.getSource() == signUpBtn) {
             listener.signup(firstNameField.getText(), lastNameField.getText(), signUpUsernameField.getText(), emailField.getText(), signUpPasswordField.getText(), passwordConfirmationField.getText());
         } else if (event.getSource() == backBtn) {
-            listener.back();
+            listener.onBack();
         }
     }
 
@@ -56,6 +61,16 @@ public class SignUpViewController {
      */
     public void setListener(ViewListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Display the scene
+     *
+     * @param stage The stage where the scene will be displayed
+     */
+    public void show(Stage stage) {
+        stage.setScene(new Scene(layout));
+        stage.sizeToScene();
     }
 
     /**
@@ -77,6 +92,7 @@ public class SignUpViewController {
         /**
          * Go back to previous scene
          */
-        void back();
+        void onBack();
+
     }
 }

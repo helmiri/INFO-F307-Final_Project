@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.List;
 
 public class StatsViewController {
-    private final TreeItem<Project> root = new TreeItem<>();
+
     //-------------- ATTRIBUTES ----------------
     @FXML
     private Tooltip collaboratorsToolTip;
@@ -86,6 +86,8 @@ public class StatsViewController {
     private BarChart<String, Integer> tasksChart;
     private Project selectedProject;
     private StatsViewController.ViewListener listener;
+    private final TreeItem<Project> root = new TreeItem<>();
+    private final String endDatePlaceHolder = "?/?/?";
     //--------------- METHODS ----------------
 
     /**
@@ -199,7 +201,7 @@ public class StatsViewController {
         tasksTableView.setItems(listener.setTasksTable(selectedProject));
         startDate.setText(listener.dateToString(selectedProject.getStartDate()));
         estimatedDate.setText(listener.dateToString(selectedProject.getEndDate()));
-        taskEndDateLabel.setText("?/?/?");
+        taskEndDateLabel.setText(endDatePlaceHolder);
     }
 
     /**
@@ -220,7 +222,7 @@ public class StatsViewController {
     public void onTaskSelected() {
         Task selectedTask = getSelectedTask();
         if (selectedTask == null) {
-            taskEndDateLabel.setText("?/?/?");
+            taskEndDateLabel.setText(endDatePlaceHolder);
         } else {
             taskEndDateLabel.setText(listener.dateToString(selectedTask.getEndDate()));
         }
@@ -258,9 +260,9 @@ public class StatsViewController {
         projectsNumberLabel.setText("0");
         tasksNumberLabel.setText("0");
         collaboratorsNumberLabel.setText("0");
-        startDate.setText("?/?/?");
-        estimatedDate.setText("?/?/?");
-        taskEndDateLabel.setText("?/?/?");
+        startDate.setText(endDatePlaceHolder);
+        estimatedDate.setText(endDatePlaceHolder);
+        taskEndDateLabel.setText(endDatePlaceHolder);
 
     }
 

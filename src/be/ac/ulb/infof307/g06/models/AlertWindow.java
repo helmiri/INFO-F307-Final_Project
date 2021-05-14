@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g06.models;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
 import javafx.scene.layout.Region;
 
 
@@ -9,35 +8,35 @@ import javafx.scene.layout.Region;
  * Creates and shows alert windows with information
  */
 public class AlertWindow {
-    Alert alert;
-    String title;
-    String headerText;
-    DialogPane dialogPane;
-    String message;
+    private final String title;
+    private final String message;
+    private Alert alert;
+    private String headerText;
 
     /**
      * Creates an alert window
      *
-     * @param title   The window title
-     * @param message The message to be displayed
+     * @param newTitle   The window newTitle
+     * @param newMessage The newMessage to be displayed
      */
-    public AlertWindow(String title, String message) {
-        this.title = title;
-        this.message = message;
+    public AlertWindow(String newTitle, String newMessage) {
+        title = newTitle;
+        message = newMessage;
         headerText = null;
     }
 
     /**
      * Creates an alert window
      *
-     * @param title      The window title
-     * @param headerText The header message
-     * @param message    The message to be displayed
+     * @param newTitle   The window newTitle
+     * @param newHeader  The header newMessage
+     * @param newMessage The newMessage to be displayed
      */
-    public AlertWindow(String title, String headerText, String message) {
-        this(title, message);
-        this.headerText = headerText;
+    public AlertWindow(String newTitle, String newHeader, String newMessage) {
+        this(newTitle, newMessage);
+        headerText = newHeader;
     }
+
 
     /**
      * Handles the window's attributes
@@ -47,7 +46,6 @@ public class AlertWindow {
         alert.setHeaderText(headerText);
         alert.setContentText(message);
         resize();
-        dialogPane = alert.getDialogPane();
     }
 
     /**

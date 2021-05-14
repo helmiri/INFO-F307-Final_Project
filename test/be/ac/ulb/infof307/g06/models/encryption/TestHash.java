@@ -46,7 +46,7 @@ public class TestHash {
         Hash hash1 = new Hash();
         for (String testPassword : testData) {
             String password1 = hash1.hashPassword(testPassword, "An Interesting Salt");
-            assertNotEquals("Guaranteed Different Password because it is longer than the randomly generated strings ;)", password1);
+            assertNotEquals(testPassword, password1);
         }
     }
 }

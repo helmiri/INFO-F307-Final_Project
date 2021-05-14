@@ -6,8 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="551.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16"
-            fx:controller="be.ac.ulb.infof307.g06.views.connectionViews.ConditionsViewController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="layout" prefHeight="551.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/16"
+            fx:controller="be.ac.ulb.infof307.g06.views.connectionViews.UserAgreementViewController">
     <Button fx:id="acceptConditionsBtn" layoutX="719.0" layoutY="495.0" mnemonicParsing="false"
             onAction="#conditionsEvents" prefHeight="39.0" prefWidth="122.0"
             stylesheets="@../../resources/stylesheets/Button.css" text="Continue" textFill="WHITE"/>

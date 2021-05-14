@@ -3,37 +3,31 @@ package be.ac.ulb.infof307.g06.models.database;
 
 import be.ac.ulb.infof307.g06.models.User;
 import be.ac.ulb.infof307.g06.models.encryption.Hash;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
 
 public class TestDatabase {
     protected static final String DB_PATH = "test/be/ac/ulb/infof307/g06/models/database/testDB.db";
-    protected  Connection db;
-    protected  List<Map<String, String>> testData;
+    protected DatabaseConnection db;
+    protected List<Map<String, String>> testData;
     protected  List<String> dbFields;
     protected  UserDB userDB;
     protected  ProjectDB projectDB;
-    protected  CalendarDB calendarDB;
-
-    @BeforeAll
-    public static void setup(){
-        File dbFile = new File(DB_PATH);
-        dbFile.deleteOnExit();
-    }
+    protected CalendarDB calendarDB;
+    protected ActiveUser activeUser;
 
     public TestDatabase() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
 
-        db = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-
+        DatabaseConnection.connect(DB_PATH);
+        db = DatabaseConnection.getInstance();
         dbFields = new ArrayList<>(5);
         dbFields.add("fName");
         dbFields.add("lName");
@@ -50,13 +44,31 @@ public class TestDatabase {
             }
             testData.add(i, userData);
         }
-
-        userDB = new UserDB(DB_PATH);
-        projectDB = new ProjectDB(DB_PATH);
-        calendarDB = new CalendarDB(DB_PATH);
+        userDB = new UserDB();
+        projectDB = new ProjectDB();
+        calendarDB = new CalendarDB();
     }
 
+    @BeforeAll
+    public static void setup() {
+        File dbFile = new File(DB_PATH);
+        dbFile.delete();
+    }
 
+    @BeforeEach
+    private void setTestUser() {
+        // Randomness used to ensure that no matter the user in the test set all tests pass consistently
+        int id = new Random().nextInt(testData.size());
+        Map<String, String> userInfo = testData.get(id); // Get a random user each execution
+        ActiveUser.initializeInstance(new User(userInfo.get("userName"), userInfo.get("firstName"), userInfo.get("lastName"), userInfo.get("email"), new Random().nextBoolean(), id + 1)); // +1 because user IDs indexed at 1
+        activeUser = ActiveUser.getInstance();
+    }
+
+    /**
+     * Clears the contents of the database for a fresh start after each test
+     *
+     * @throws SQLException On error accessing the database
+     */
     @AfterEach
     public void clear() throws SQLException {
         /*
@@ -75,6 +87,7 @@ public class TestDatabase {
         state.executeUpdate("DELETE FROM Tag_projects");
         state.executeUpdate("DELETE FROM tasks_users");
         state.close();
+
     }
 
     @BeforeEach
@@ -82,11 +95,11 @@ public class TestDatabase {
         /*
           Populate tesDB with testData
          */
-
+        String[] keys = {"id"};
         PreparedStatement state;
         Hash hash = new Hash();
         for (int i = 0; i < 10; i++) {
-            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)");
+            state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password) VALUES (?,?,?,?,?)", keys);
             for (int j = 0; j < dbFields.size() - 1; j++) {
                 state.setString(j + 1, testData.get(i).get(dbFields.get(j)));
             }
@@ -95,13 +108,5 @@ public class TestDatabase {
             state.execute();
             state.close();
         }
-    }
-
-    @Test
-    @DisplayName("User getter")
-    public void testGetCurrentUser() throws SQLException {
-        userDB.validateData("User_1_userName", "User_1_password");
-        User user = userDB.getCurrentUser();
-        assertEquals("User_1_userName", user.getUserName());
     }
 }

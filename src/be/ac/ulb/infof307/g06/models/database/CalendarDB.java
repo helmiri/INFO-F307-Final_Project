@@ -14,12 +14,9 @@ public class CalendarDB extends Database {
     /**
      * Initializes the database
      *
-     * @param dbName Path to database file
-     * @throws ClassNotFoundException When the JDBC driver cannot be found
-     * @throws SQLException           If a database access error occurs
+     * @throws SQLException If a database access error occurs
      */
-    public CalendarDB(String dbName) throws ClassNotFoundException, SQLException {
-        super(dbName);
+    public CalendarDB() throws SQLException {
     }
 
     @Override
@@ -44,9 +41,10 @@ public class CalendarDB extends Database {
      * @throws SQLException if query fails
      */
     public String getColor(String project) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT color FROM Projects WHERE title = '" + project + "';");
-        String res = rs.getString("color");
-        rs.close();
+        String res;
+        try (ResultSet rs = prepareSqlQuery("SELECT color FROM Projects WHERE title = '" + project + "';")) {
+            res = rs.getString("color");
+        }
         return res;
     }
 
@@ -73,12 +71,13 @@ public class CalendarDB extends Database {
      * @throws SQLException if query fails
      */
     public Map<String, String> getProjects() throws SQLException {
-        ResultSet rs = sqlQuery("SELECT title, color FROM Projects;");
-        Map<String, String> res = new HashMap<>();
-        while (rs.next()) {
-            res.put(rs.getString("title"), rs.getString("color"));
+        Map<String, String> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT title, color FROM Projects;")) {
+            res = new HashMap<>();
+            while (rs.next()) {
+                res.put(rs.getString("title"), rs.getString("color"));
+            }
         }
-        rs.close();
         return res;
     }
 
@@ -91,9 +90,9 @@ public class CalendarDB extends Database {
      */
     private boolean isInDB(String title) throws SQLException {
         int res;
-        ResultSet rs = sqlQuery("SELECT COUNT(*) FROM Projects WHERE title ='" + title + "';");
-        res = rs.getInt("COUNT(*)");
-        rs.close();
+        try (ResultSet rs = prepareSqlQuery("SELECT COUNT(*) FROM Projects WHERE title ='" + title + "';")) {
+            res = rs.getInt("COUNT(*)");
+        }
         return !(res == 0);
     }
 

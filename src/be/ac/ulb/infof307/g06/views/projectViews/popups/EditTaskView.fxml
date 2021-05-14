@@ -15,7 +15,7 @@
         <DatePicker fx:id="newStartDateTask" prefHeight="25.0" prefWidth="338.0" promptText="Start date"/>
         <DatePicker fx:id="newEndDateTask" prefHeight="25.0" prefWidth="338.0" promptText="End date"/>
     </VBox>
-    <Text fx:id="errorText" fill="RED" layoutX="11.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0"
+    <Text fill="RED" layoutX="11.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0"
           wrappingWidth="519.0">
         <font>
             <Font name="Calibri" size="12.0"/>

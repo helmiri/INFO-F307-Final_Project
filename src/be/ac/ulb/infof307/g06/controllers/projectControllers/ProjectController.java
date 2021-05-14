@@ -7,6 +7,7 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Tag;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.CalendarDB;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
@@ -40,30 +41,34 @@ import java.util.regex.Pattern;
  * Handles the main page for projects management and only that.
  */
 public class ProjectController extends Controller implements ProjectsViewController.ViewListener {
-    private final IOController ioController;
+
+    private final String alertWindowTitle = "Alert";
     //--------------- ATTRIBUTES ----------------
     private CalendarDB calendarDB;
     private UserDB userDB;
     private ProjectDB projectDB;
     private ProjectsViewController viewController;
     private CloudServiceController cloudServiceController;
+    private final String warningWindowTitle = "Warning";
+    private final IOController ioController;
+    private final String errorWindowTitle = "Error";
+    private ActiveUser activeUser;
 
     //--------------- METHODS ----------------
 
     /**
      * Constructor.
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database.
+     * @param stage Stage, a stage
      */
-    public ProjectController(Stage stage, Scene scene, String DB_PATH) throws SQLException, ClassNotFoundException {
-        super(stage, scene, DB_PATH);
-        projectDB = new ProjectDB(DB_PATH);
-        userDB = new UserDB(DB_PATH);
-        calendarDB = new CalendarDB(DB_PATH);
+    public ProjectController(Stage stage) throws SQLException {
+        super(stage);
+        projectDB = new ProjectDB();
+        userDB = new UserDB();
+        calendarDB = new CalendarDB();
         ioController = new IOController(userDB, projectDB);
         cloudServiceController = new CloudServiceController(this, userDB);
+        activeUser = ActiveUser.getInstance();
     }
 
 
@@ -126,11 +131,11 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             controller = loadStage(stageTitle, view, stage);
         } catch (IOException error) {
-            new AlertWindow("Error", "Could not load the window", error.getMessage());
+            new AlertWindow(errorWindowTitle, "Could not load the window", error.getMessage());
             return;
         }
         try {
-            ((EditProjectViewController) controller).init(project, listener, stage, projectDB.getTags(project.getId()));
+            ((EditProjectViewController) controller).show(project, listener, stage, projectDB.getTags(project.getId()));
         } catch (SQLException error) {
             throw new DatabaseException(error);
         }
@@ -177,7 +182,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             controller = loadStage(stageTitle, view, stage);
             ((EditTaskViewController) controller).init(task, listener, stage);
         } catch (IOException error) {
-            new AlertWindow("Error", "Could not load the window", error.getMessage());
+            new AlertWindow(errorWindowTitle, "Could not load the window", error.getMessage());
         }
     }
 
@@ -246,7 +251,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         try {
             int projectID = project.getId();
             if (title.equals("")) {
-                new AlertWindow("Alert", "Project title cannot be empty").showErrorWindow();
+                new AlertWindow(errorWindowTitle, "Project title cannot be empty").showErrorWindow();
             } else {
                 projectDB.editProject(
                         projectID,
@@ -296,7 +301,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
     public List<Project> getProjects() {
         List<Project> res = new ArrayList<>();
         try {
-            List<Integer> projectsID = projectDB.getUserProjects(userDB.getCurrentUser().getId());
+            List<Integer> projectsID = projectDB.getUserProjects(activeUser.getID());
             for (Integer project : projectsID) {
                 res.add(projectDB.getProject(project));
             }
@@ -416,7 +421,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     taskNames.add(task2.getDescription());
                 }
                 if (taskNames.contains(new_description)) {
-                    new AlertWindow("Warning", "This task already exists.").showWarningWindow();
+                    new AlertWindow(warningWindowTitle, "This task already exists.").showWarningWindow();
                 }
             }
             if (new_description.equals("")) {
@@ -484,7 +489,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     projectDB.addTaskCollaborator(task.getId(), userDB.getUserInfo(collaborator).getId());
                 }
             } else {
-                new AlertWindow("Warning", "Please select a task before assigning a collaborator.").showWarningWindow();
+                new AlertWindow(warningWindowTitle, "Please select a task before assigning a collaborator.").showWarningWindow();
             }
 
         } catch (SQLException error) {
@@ -508,7 +513,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                     names.add((userDB.getUserInfo(collaborator).getUserName()));
                 }
             } else {
-                new AlertWindow("Warning", "Please select a task.").showWarningWindow();
+                new AlertWindow(warningWindowTitle, "Please select a task.").showWarningWindow();
             }
         } catch (SQLException error) {
             new DatabaseException(error).show();
@@ -540,7 +545,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
      */
     @Override
     public boolean isCollaboratorInTask(Task task) {
-        return getTaskCollaborators(task).contains(Integer.toString(userDB.getCurrentUser().getId()));
+        return getTaskCollaborators(task).contains(Integer.toString(activeUser.getID()));
     }
 
     /**
@@ -556,16 +561,16 @@ public class ProjectController extends Controller implements ProjectsViewControl
         }
         try {
             if (!userDB.userExists(username)) {
-                new AlertWindow("Alert", "User '" + username + "' doesn't exist").showErrorWindow();
+                new AlertWindow(alertWindowTitle, "User '" + username + "' doesn't exist").showErrorWindow();
                 return;
             }
             int receiverID = userDB.getUserInfo(username).getId();
             if (projectDB.getCollaborators(project_id).contains(receiverID)) {
-                new AlertWindow("Alert", "User '" + username + "' is already a collaborator in this project").showErrorWindow();
+                new AlertWindow(alertWindowTitle, "User '" + username + "' is already a collaborator in this project").showErrorWindow();
                 return;
             }
-            userDB.sendInvitation(project_id, userDB.getCurrentUser().getId(), receiverID);
-            new AlertWindow("Alert", "Invitation sent to '" + username + "'").showInformationWindow();
+            userDB.sendInvitation(project_id, activeUser.getID(), receiverID);
+            new AlertWindow(alertWindowTitle, "Invitation sent to '" + username + "'").showInformationWindow();
             userDB.updateDiskUsage(projectDB.getSizeOnDisk());
         } catch (SQLException error) {
             new DatabaseException(error).show();
@@ -651,7 +656,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
         } catch (SQLException error) {
             new DatabaseException(error).show();
         } catch (IOException error) {
-            new AlertWindow("Error", "An error reading the file", error.getMessage()).showErrorWindow();
+            new AlertWindow(errorWindowTitle, "An error reading the file", error.getMessage()).showErrorWindow();
         }
     }
 
@@ -671,7 +676,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             ioController.onExportProject(password, project, path);
             new AlertWindow("Success", "Exportation successful").showInformationWindow();
         } catch (IOException error) {
-            new AlertWindow("Error", "An error occurred while exporting", error.getMessage()).showErrorWindow();
+            new AlertWindow(errorWindowTitle, "An error occurred while exporting", error.getMessage()).showErrorWindow();
         } catch (DatabaseException error) {
             error.show();
         }
@@ -699,7 +704,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             }
             new AlertWindow("Success", "Upload successful").showInformationWindow();
         } catch (IOException error) {
-            new AlertWindow("Error", "An error occurred while exporting the project file", error.getMessage()).showErrorWindow();
+            new AlertWindow(errorWindowTitle, "An error occurred while exporting the project file", error.getMessage()).showErrorWindow();
         } catch (DbxException error) {
             new AlertWindow("Connection Error", "Could not connect to DropBox", error.getMessage()).showErrorWindow();
         } catch (DatabaseException error) {
@@ -737,13 +742,13 @@ public class ProjectController extends Controller implements ProjectsViewControl
             int parentID = 0;
 
             if (title.equals("")) {
-                new AlertWindow("Alert", "Title cannot be empty").showErrorWindow();
+                new AlertWindow(alertWindowTitle, "Title cannot be empty").showErrorWindow();
             } else if (projectDB.getProjectID(title) != 0) {
-                new AlertWindow("Alert", "Project '" + title + "' Already exists").showErrorWindow();
+                new AlertWindow(alertWindowTitle, "Project '" + title + "' Already exists").showErrorWindow();
             } else if (startDate == null) {
-                new AlertWindow("Alert", "Project needs a start date").showErrorWindow();
+                new AlertWindow(alertWindowTitle, "Project needs a start date").showErrorWindow();
             } else if (endDate == null) {
-                new AlertWindow("Alert", "Project needs an end date").showErrorWindow();
+                new AlertWindow(alertWindowTitle, "Project needs an end date").showErrorWindow();
             } else if (parent.equals("") || projectDB.getProjectID(parent) != 0) {
                 insertNewProject(title, description, startDate, endDate, tags, parent, parentID);
             }
@@ -774,7 +779,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
             projectDB.addTag(projectDB.getTagID(tag), newProjectID);
         }
 
-        projectDB.addCollaborator(newProjectID, userDB.getCurrentUser().getId());
+        projectDB.addCollaborator(newProjectID, activeUser.getID());
         TreeItem<Project> child = new TreeItem<>(projectDB.getProject(newProjectID));
         viewController.insertProject(newProjectID, child, parentID);
     }
@@ -802,7 +807,7 @@ public class ProjectController extends Controller implements ProjectsViewControl
                 taskNames.add(task.getDescription());
             }
             if (taskNames.contains(taskDescription)) {
-                new AlertWindow("Warning", "This task already exists.").showWarningWindow();
+                new AlertWindow(warningWindowTitle, "This task already exists.").showWarningWindow();
                 return;
             }
             if (project_id != 0) {

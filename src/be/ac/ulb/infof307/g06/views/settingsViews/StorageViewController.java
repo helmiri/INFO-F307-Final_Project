@@ -129,7 +129,7 @@ public class StorageViewController {
         void authenticateDropBox();
     }
 
-    private static class UnitValue {
+    private static final class UnitValue {
         private String unit;
         private long value;
 

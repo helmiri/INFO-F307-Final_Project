@@ -19,7 +19,7 @@ import java.util.Random;
 public class EncryptedFile {
     private static final String algorithm = "PBEWithMD5AndTripleDES";
     private final String source;
-    private PBEKeySpec pbeKeySpec;
+    private final PBEKeySpec pbeKeySpec;
     private String encrypted_source;
 
     /**
@@ -43,18 +43,15 @@ public class EncryptedFile {
         byte[] salt = generateSalt();
         PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 100);
 
-        FileInputStream inFile = new FileInputStream(source);
-        FileOutputStream outFile = new FileOutputStream(destination);
-
-        Cipher cipher = null;
-        try {
-            cipher = Cipher.getInstance(algorithm);
+        try (FileInputStream inFile = new FileInputStream(source);
+             FileOutputStream outFile = new FileOutputStream(destination)) {
+            Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(), pbeParameterSpec);
             outFile.write(salt);
+            processFile(inFile, outFile, cipher);
         } catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchAlgorithmException ignored) {
-            // The algorithm used for encryption/decryption ensure that these exceptions will never be triggered
+            // The algorithm used for encryption/decryption ensure that these exceptions will never be triggered and can safely be ignored
         }
-        processFile(inFile, outFile, cipher);
     }
 
     /**
@@ -101,10 +98,9 @@ public class EncryptedFile {
         if (encrypted_source == null) {
             encrypted_source = source;
         }
-        FileInputStream in = new FileInputStream(encrypted_source);
 
-        FileOutputStream out = new FileOutputStream(destination);
-        try {
+        try (FileInputStream in = new FileInputStream(encrypted_source);
+             FileOutputStream out = new FileOutputStream(destination)) {
             byte[] salt = new byte[8];
             in.read(salt);
 
@@ -117,10 +113,6 @@ public class EncryptedFile {
                 // The algorithm used for encryption/decryption ensure that these exceptions will never be triggered
             }
             processFile(in, out, cipher);
-        } finally {
-            in.close();
-            out.flush();
-            out.close();
         }
     }
 

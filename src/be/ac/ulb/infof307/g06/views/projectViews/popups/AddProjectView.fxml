@@ -16,7 +16,7 @@
         <DatePicker fx:id="endDateProject" layoutX="10.0" layoutY="142.0" prefHeight="35.0" prefWidth="295.0"
                     promptText="End date"/>
         <CheckComboBox fx:id="tagsProject" prefHeight="35.0" prefWidth="226.0"/>
-        <TextField fx:id="parentProject" prefHeight="35.0" prefWidth="283.0" promptText="Parent( optionnal )"/>
+        <TextField fx:id="parentProject" prefHeight="35.0" prefWidth="283.0" promptText="Parent( optional )"/>
     </VBox>
     <Button fx:id="addProjectBtn" layoutX="195.0" layoutY="405.0" mnemonicParsing="false" onAction="#events"
             prefHeight="25.0" prefWidth="152.0" stylesheets="@../../../resources/stylesheets/Button.css" text="ADD"/>

@@ -16,8 +16,8 @@ import javafx.stage.Stage;
  */
 public class SettingsViewController {
     //-------------- ATTRIBUTES ----------------
-    private static final String hoverColor = "#95dbfa";
-    private static final String defaultColor = "#4fc3f7";
+    private static final String HOVER_COLOR = "#95dbfa";
+    private static final String DEFAULT_COLOR = "#4fc3f7";
     @FXML
     private AnchorPane layout;
     @FXML
@@ -110,7 +110,7 @@ public class SettingsViewController {
      */
     @FXML
     private void hover(MouseEvent mouseEvent) {
-        setButtonStyle((Button) mouseEvent.getSource(), hoverColor);
+        setButtonStyle((Button) mouseEvent.getSource(), HOVER_COLOR);
     }
 
     /**
@@ -135,8 +135,8 @@ public class SettingsViewController {
         if (current.equals(previousClicked)) {
             return;
         }
-        setButtonStyle(current, hoverColor);
-        setButtonStyle(previousClicked, defaultColor);
+        setButtonStyle(current, HOVER_COLOR);
+        setButtonStyle(previousClicked, DEFAULT_COLOR);
         previousClicked = current;
     }
 
@@ -159,7 +159,7 @@ public class SettingsViewController {
         if (previousClicked.equals(source)) {
             return;
         }
-        setButtonStyle(source, defaultColor);
+        setButtonStyle(source, DEFAULT_COLOR);
     }
 
 

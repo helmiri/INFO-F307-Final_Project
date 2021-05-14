@@ -68,11 +68,11 @@ public class DropBoxAPI {
      */
 
     public void uploadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
-        InputStream in = new FileInputStream(localFilePath);
-        UploadBuilder uploadBuilder = dropboxClient.files().uploadBuilder(cloudFilePath);
-        uploadBuilder.withMode(WriteMode.OVERWRITE);
-        uploadBuilder.uploadAndFinish(in);
-        in.close();
+        try (InputStream in = new FileInputStream(localFilePath)) {
+            UploadBuilder uploadBuilder = dropboxClient.files().uploadBuilder(cloudFilePath);
+            uploadBuilder.withMode(WriteMode.OVERWRITE);
+            uploadBuilder.uploadAndFinish(in);
+        }
     }
 
     /**
@@ -84,12 +84,11 @@ public class DropBoxAPI {
      * @throws DbxException On error communicating with the api
      */
     public void downloadFile(String localFilePath, String cloudFilePath) throws IOException, DbxException {
-        OutputStream outputStream = new FileOutputStream(localFilePath);
-        dropboxClient.files()
-                .downloadBuilder(cloudFilePath)
-                .download(outputStream);
-
-        outputStream.close();
+        try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
+            dropboxClient.files()
+                    .downloadBuilder(cloudFilePath)
+                    .download(outputStream);
+        }
     }
 
     /**

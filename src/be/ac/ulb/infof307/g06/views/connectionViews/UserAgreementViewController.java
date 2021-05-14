@@ -2,14 +2,20 @@ package be.ac.ulb.infof307.g06.views.connectionViews;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * The user agreement prompt
  */
-public class ConditionsViewController {
+public class UserAgreementViewController {
+
     //-------------- ATTRIBUTES -------------
+    @FXML
+    private AnchorPane layout;
     @FXML
     private Button acceptConditionsBtn;
     @FXML
@@ -43,6 +49,14 @@ public class ConditionsViewController {
      */
     public void setListener(ViewListener listener) {
         this.listener = listener;
+    }
+
+
+    public void show(Stage stage) {
+        stage.setTitle("User Agreement");
+        stage.setScene(new Scene(layout));
+        stage.sizeToScene();
+        stage.showAndWait();
     }
 
     /**

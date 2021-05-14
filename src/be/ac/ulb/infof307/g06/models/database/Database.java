@@ -1,33 +1,27 @@
 package be.ac.ulb.infof307.g06.models.database;
 
-import be.ac.ulb.infof307.g06.models.User;
-
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 /**
  * The database main abstract class
  */
 public abstract class Database {
-    protected static Connection db;
-    protected String dbURL;
     private Statement state;
-    protected static User currentUser;
+    private final DatabaseConnection connection;
+
 
     /**
      * Initializes the database
      *
-     * @param dbName Path to database file
-     * @throws ClassNotFoundException When the JDBC driver cannot be found
-     * @throws SQLException           If a database access error occurs
+     * @throws SQLException If a database access error occurs
      */
-    public Database(String dbName) throws ClassNotFoundException, SQLException {
-        dbURL = dbName;
-        // Ensures that the same connection  is shared across all instances
-        if (db == null) {
-            db = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
-            Class.forName("org.sqlite.JDBC");
-        }
+    public Database() throws SQLException {
+        // Ensures that the same connection is shared across all database instances
+        connection = DatabaseConnection.getInstance();
         createTables();
     }
 
@@ -45,8 +39,8 @@ public abstract class Database {
      * @return ResultSet
      * @throws SQLException if query fails
      */
-    protected ResultSet sqlQuery(String query) throws SQLException {
-        state = db.createStatement();
+    protected ResultSet prepareSqlQuery(String query) throws SQLException {
+        state = connection.createStatement();
         state.close();
         return state.executeQuery(query);
     }
@@ -57,24 +51,19 @@ public abstract class Database {
      * @throws SQLException if the query fails
      */
     protected void sqlUpdate(String query) throws SQLException {
-        state = db.createStatement();
+        state = connection.createStatement();
         state.executeUpdate(query);
         state.close();
     }
 
     /**
-     * Returns the current user
-     * @return The user
+     * Creates a prepared statement
+     * @param query The query to be prepared
+     * @param keys The keys to be retrieved
+     * @return The prepared statement
+     * @throws SQLException on error creating the statement
      */
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    /**
-     * closes the database
-     * @throws SQLException if the closing fails
-     */
-    public void disconnectDB() throws SQLException {
-        db.close();
+    protected PreparedStatement prepareSqlQuery(String query, String[] keys) throws SQLException {
+        return connection.prepareStatement(query, keys);
     }
 }

@@ -53,9 +53,9 @@ public class EditProjectViewController extends ProjectInputViewController{
         descriptionProject.setText(description);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Long TO_DAY = 86400000L;
-        dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * TO_DAY), formatter));
-        endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * TO_DAY), formatter));
+        Long toDay = 86400000L;
+        dateProject.setValue(LocalDate.parse(dateFormat.format(startDate * toDay), formatter));
+        endDateProject.setValue(LocalDate.parse(dateFormat.format(endDate * toDay), formatter));
     }
 
     /**
@@ -73,16 +73,16 @@ public class EditProjectViewController extends ProjectInputViewController{
     }
 
     /**
-     * Inits the edit stage.
+     * Initializes and displays the project edit stage
      *
-     * @param project Project, the selected project
-     * @param listener ViewListener, the listener to the view.
-     * @param stage Stage, the edit stage.
-     * @param tags List of the selected project tags.
+     * @param newProject Project, the selected project
+     * @param listener   ViewListener, the listener to the view.
+     * @param stage      Stage, the edit stage.
+     * @param tags       List of the selected newProject tags.
      */
-    public void init(Project project, ProjectsViewController.ViewListener listener, Stage stage, List<Tag> tags) {
+    public void show(Project newProject, ProjectsViewController.ViewListener listener, Stage stage, List<Tag> tags) {
         init(listener, stage);
-        this.project = project;
+        project = newProject;
         initFields(tags);
     }
 }

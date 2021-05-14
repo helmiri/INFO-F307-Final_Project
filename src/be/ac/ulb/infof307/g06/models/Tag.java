@@ -10,14 +10,14 @@ public class Tag {
     private final String color;
 
     /**
-     * @param id          The ID of the tag
-     * @param description The description
-     * @param color       Its color in HEX format
+     * @param newID          The ID of the tag
+     * @param newDescription The description
+     * @param newColor       Its color in HEX format
      */
-    public Tag(int id, String description, String color) {
-        this.id = id;
-        this.description = description;
-        this.color = color;
+    public Tag(int newID, String newDescription, String newColor) {
+        id = newID;
+        description = newDescription;
+        color = newColor;
     }
 
     /**
@@ -44,6 +44,9 @@ public class Tag {
      * @return the size of the tag
      */
     public int getSize() {
-        return 4 + description.length() + 4;
+        // 4 = The size in bytes of an int
+        // description.length() The size in bytes of a string
+        // color.length The size in bytes of the color (colors are represented by their hex number)
+        return 4 + description.length() + color.length();
     }
 }

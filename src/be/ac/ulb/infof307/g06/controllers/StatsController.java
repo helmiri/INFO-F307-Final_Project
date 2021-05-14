@@ -5,8 +5,8 @@ import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.statisticsViews.StatsViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,25 +30,25 @@ import java.util.*;
 public class StatsController extends Controller implements StatsViewController.ViewListener {
     //--------------- ATTRIBUTE ----------------
     private StatsViewController statsView;
-    private UserDB userDB;
     private ProjectDB projectDB;
+    private ActiveUser activeUser;
 
     /**
      * Constructor
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage Stage, a stage
+     * @throws DatabaseException    On database access error
+     * @throws NullPointerException When the CurrentUser instance has not been initialized
      */
     //--------------- METHODS ----------------
-    public StatsController(Stage stage, Scene scene, String DB_PATH) throws DatabaseException {
-        super(stage, scene, DB_PATH);
+    public StatsController(Stage stage) throws DatabaseException, NullPointerException {
+        super(stage);
         try {
-            userDB = new UserDB(DB_PATH);
-            projectDB = new ProjectDB(DB_PATH);
-        } catch (ClassNotFoundException | SQLException error) {
+            projectDB = new ProjectDB();
+        } catch (SQLException error) {
             throw new DatabaseException(error);
         }
+        activeUser = ActiveUser.getInstance();
     }
 
     /**
@@ -79,10 +79,10 @@ public class StatsController extends Controller implements StatsViewController.V
     private void load(String fxmlFilename) {
         FXMLLoader loader = new FXMLLoader(StatsViewController.class.getResource(fxmlFilename));
         try {
-            currentScene = new Scene(loader.load());
+            Scene statsScene = new Scene(loader.load());
             statsView = loader.getController();
             statsView.setListener(this);
-            stage.setScene(currentScene);
+            stage.setScene(statsScene);
         } catch (IOException error) {
             new WindowLoadException(error).show();
         }
@@ -91,12 +91,12 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Returns a projects list of the actual user.
      *
-     * @return The IDs of the current user's projects
+     * @return The IDs of the current user's projects, null on error
      */
     @Override
     public List<Integer> getProjects() {
         try {
-            return projectDB.getUserProjects(userDB.getCurrentUser().getId());
+            return projectDB.getUserProjects(activeUser.getID());
         } catch (SQLException error) {
             new DatabaseException(error).show();
             return null;
@@ -128,8 +128,8 @@ public class StatsController extends Controller implements StatsViewController.V
     @Override
     public String dateToString(Long date) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Long TO_DAY = 86400000L;
-        return dateFormat.format(date * TO_DAY);
+        Long today = 86400000L;
+        return dateFormat.format(date * today);
     }
 
     /**
@@ -187,7 +187,7 @@ public class StatsController extends Controller implements StatsViewController.V
     public List<Integer> countOverallStats() {
         List<Integer> res = new ArrayList<>(Collections.nCopies(3, 0));
         try {
-            List<Integer> projects = projectDB.getUserProjects(userDB.getCurrentUser().getId());
+            List<Integer> projects = projectDB.getUserProjects(activeUser.getID());
             if (projects.size() != 0) {
                 int tasks = 0;
                 List<Integer> collaborators = new ArrayList<>();
@@ -260,7 +260,7 @@ public class StatsController extends Controller implements StatsViewController.V
     public void exportStatsAsJson(String fileName, String path) {
         try {
             StringBuilder finalString = new StringBuilder("{\n");
-            List<Integer> projectsID = projectDB.getUserProjects(userDB.getCurrentUser().getId());
+            List<Integer> projectsID = projectDB.getUserProjects(activeUser.getID());
             for (Integer project : projectsID) {
                 Project child = projectDB.getProject(project);
                 boolean isMainProject = child.getParentId() == 0;
@@ -339,7 +339,7 @@ public class StatsController extends Controller implements StatsViewController.V
         try (PrintWriter csv = new PrintWriter(path + fileName)) {
             // Name of columns
             String content = "ID" + "," + "Title" + "," + "Collaborators" + "," + "Tasks" + "," + "Sub projects" + "," + "Parent ID" + "," + "Start date" + "," + "Estimated date" + "\r\n";
-            List<Integer> projectsID = projectDB.getUserProjects(userDB.getCurrentUser().getId());
+            List<Integer> projectsID = projectDB.getUserProjects(activeUser.getID());
             for (Integer project : projectsID) {
                 Project child = projectDB.getProject(project);
                 boolean isMainProject = child.getParentId() == 0;
@@ -389,15 +389,13 @@ public class StatsController extends Controller implements StatsViewController.V
     /**
      * Writes information in a file for a json format.
      *
-     * @param chosenString String
-     * @param fileName     String
-     * @param path         String
+     * @param chosenString String to be written
+     * @param fileName     Name of the file
+     * @param path         Path to file
      */
     public void write(String chosenString, String fileName, String path) {
-        try {
-            FileWriter writer = new FileWriter(path + fileName, false);
+        try (FileWriter writer = new FileWriter(path + fileName, false)) {
             writer.write(chosenString + "\n");
-            writer.close();
             new AlertWindow("Success", "Success in exporting statistics.").showInformationWindow();
         } catch (IOException error) {
             new AlertWindow("Error", "Couldn't write in this file (" + path + fileName + ")", error.getMessage()).showErrorWindow();

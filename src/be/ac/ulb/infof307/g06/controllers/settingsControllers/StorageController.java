@@ -5,6 +5,7 @@ import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.cloudModels.DropBox.DropBoxAuthorization;
 import be.ac.ulb.infof307.g06.models.cloudModels.GoogleDrive.GoogleDriveAuthorization;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.CodePromptViewController;
@@ -14,7 +15,6 @@ import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.oauth.DbxCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
@@ -34,24 +34,23 @@ public class StorageController extends Controller implements StorageViewControll
     private DropBoxAuthorization authorization;
     private UserDB userDB;
     private ProjectDB projectDB;
+    private final ActiveUser activeUser;
 
     /**
      * Constructor
      *
      * @param stage                 Stage, a stage
-     * @param scene                 Scene, a scene
      * @param storageViewController StorageViewController, the view controller
-     * @param DB_PATH               String, the path to the database
      */
     //--------------- METHODS ----------------
-    public StorageController(Stage stage, Scene scene, StorageViewController storageViewController, String DB_PATH) throws DatabaseException {
-        super(stage, scene, DB_PATH);
+    public StorageController(Stage stage, StorageViewController storageViewController) throws DatabaseException {
+        super(stage);
         this.storageViewController = storageViewController;
-
+        activeUser = ActiveUser.getInstance();
         try {
-            userDB = new UserDB(DB_PATH);
-            projectDB = new ProjectDB(DB_PATH);
-        } catch (ClassNotFoundException | SQLException error) {
+            userDB = new UserDB();
+            projectDB = new ProjectDB();
+        } catch (SQLException error) {
             throw new DatabaseException(error);
         }
     }
@@ -64,7 +63,7 @@ public class StorageController extends Controller implements StorageViewControll
         try {
             storageViewController.setListener(this);
             userDB.updateDiskUsage(projectDB.getSizeOnDisk());
-            storageViewController.initialize(userDB.getDiskLimit(), userDB.getDiskUsage(), userDB.getCurrentUser().isAdmin());
+            storageViewController.initialize(userDB.getDiskLimit(), userDB.getDiskUsage(), activeUser.isAdmin());
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
@@ -90,7 +89,7 @@ public class StorageController extends Controller implements StorageViewControll
                     new AlertWindow("Invalid parameter", "The disk usage limit must be a valid integer number: " + error).showErrorWindow();
                 }
             }
-            storageViewController.refresh(userDB.getDiskLimit(), userDB.getDiskUsage(), userDB.getCurrentUser().isAdmin());
+            storageViewController.refresh(userDB.getDiskLimit(), userDB.getDiskUsage(), activeUser.isAdmin());
         } catch (SQLException error) {
             new DatabaseException(error).show();
             return false;
@@ -105,7 +104,7 @@ public class StorageController extends Controller implements StorageViewControll
     public void authenticateGoogleDrive() {
         AlertWindow alert = new AlertWindow("Authorization request", "Requesting authorization...\nDo not close the app. Click 'OK' to continue");
         alert.showInformationWindow();
-        GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(userDB.getCurrentUser().getUserName());
+        GoogleDriveAuthorization authorization = new GoogleDriveAuthorization(activeUser.getUserName());
         try {
             authorization.getCredentials(GoogleNetHttpTransport.newTrustedTransport());
         } catch (IOException | GeneralSecurityException error) {

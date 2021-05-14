@@ -20,16 +20,16 @@ public class Hash {
      */
     public String hashPassword(String password, String salt) {
         try {
-            final int ITERATIONS = 1000;
-            final int KEY_LENGTH = 192; // bits
+            final int iterations = 1000;
+            final int keyLength = 192; // bits
             char[] passwordChars = password.toCharArray();
             byte[] saltBytes = salt.getBytes();
 
             PBEKeySpec spec = new PBEKeySpec(
                     passwordChars,
                     saltBytes,
-                    ITERATIONS,
-                    KEY_LENGTH
+                    iterations,
+                    keyLength
             );
             SecretKeyFactory key = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hashedPassword = key.generateSecret(spec).getEncoded();

@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -17,14 +16,18 @@ import java.util.Objects;
  */
 public class ProjectDB extends Database {
 
+    private final ActiveUser activeUser;
+    private final String descriptionField = "description";
+    private final String startDateField = "startDate";
+    private final String endDateField = "endDate";
+
     /**
      * same constructor as the main database abstract class
-     * @param dbName the name of the database
-     * @throws ClassNotFoundException if the super fails
+     *
      * @throws SQLException if query fails
      */
-    public ProjectDB(String dbName) throws ClassNotFoundException, SQLException {
-        super(dbName);
+    public ProjectDB() throws SQLException {
+        activeUser = ActiveUser.getInstance();
     }
 
     @Override
@@ -49,16 +52,15 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public int createProject(String title, String description, Long startDate, Long endDate, int parent_id) throws SQLException {
-        ResultSet rs = null;
         int id;
-        try {   // Generate id
-            rs = sqlQuery("SELECT id, MAX(id) FROM Project;");
-            id = rs.getInt("id");
-            id++;
-        } catch (Exception e) {
-            id = 1;
+        try (ResultSet rs = prepareSqlQuery("SELECT id, MAX(id) FROM Project;")) {
+            if (rs.isClosed()) {
+                id = 1;
+            } else {
+                id = rs.getInt("id");
+                id++;
+            }
         }
-        Objects.requireNonNull(rs).close();
         sqlUpdate("INSERT INTO Project (id, title, description, startDate, endDate, parent_id) VALUES('" +
                 id + "','" + title + "','" + description + "','" + startDate + "','" + endDate + "','" + parent_id + "');");
         if (parent_id != 0) {    // Add the parent tags to the current tags
@@ -67,7 +69,6 @@ public class ProjectDB extends Database {
                 addTag(parent_tag.getId(), id);
             }
         }
-
         return id;
     }
 
@@ -138,11 +139,11 @@ public class ProjectDB extends Database {
      */
     public List<Integer> getSubProjects(int id) throws SQLException {
         List<Integer> subProjects = new ArrayList<>();
-        ResultSet rs = sqlQuery("SELECT id FROM Project WHERE parent_id = '" + id + "';");
-        while (rs.next()) {
-            subProjects.add(rs.getInt("id"));
+        try (ResultSet rs = prepareSqlQuery("SELECT id FROM Project WHERE parent_id = '" + id + "';")) {
+            while (rs.next()) {
+                subProjects.add(rs.getInt("id"));
+            }
         }
-        rs.close();
         return subProjects;
     }
 
@@ -153,16 +154,14 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public int getProjectID(String title) throws SQLException {
-        ResultSet rs = null;
-        int id = 0;
-        try {
-            rs = sqlQuery("SELECT id FROM Project WHERE title='" + title + "';");
-
-            id = rs.getInt("id");
-        } catch (Exception ignored) {
+        int id;
+        try (ResultSet rs = prepareSqlQuery("SELECT id FROM Project WHERE title='" + title + "';")) {
+            if (rs.isClosed()) {
+                id = 0;
+            } else {
+                id = rs.getInt("id");
+            }
         }
-
-        Objects.requireNonNull(rs).close();
         return id;
     }
 
@@ -173,7 +172,7 @@ public class ProjectDB extends Database {
      */
     public int getSizeOnDisk() throws SQLException {
         int total = 0;
-        for (Integer projectID : getUserProjects(currentUser.getId())) {
+        for (Integer projectID : getUserProjects(activeUser.getID())) {
             total += getProjectInfoSize(projectID);
         }
         return total;
@@ -212,21 +211,19 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public Project getProject(int id) throws SQLException {
-        ResultSet rs = null;
-        Project res = null;
-        try {
-            rs = sqlQuery("SELECT title,description,startDate,endDate,parent_id FROM Project WHERE id='" + id + "';");
-
-            String title = rs.getString("title");
-            String description = rs.getString("description");
-            Long startDate = rs.getLong("startDate");
-            Long endDate = rs.getLong("endDate");
-            int parent_id = rs.getInt("parent_id");
+        Project res;
+        try (ResultSet rs = prepareSqlQuery("SELECT title,description,startDate,endDate,parent_id FROM Project WHERE id='" + id + "';")) {
+            if (rs.isClosed()) {
+                return null;
+            }
+            String titleField = "title";
+            String title = rs.getString(titleField);
+            String description = rs.getString(descriptionField);
+            Long startDate = rs.getLong(startDateField);
+            Long endDate = rs.getLong(endDateField);
+            String parentIDField = "parent_id";
+            int parent_id = rs.getInt(parentIDField);
             res = new Project(id, title, description, startDate, endDate, parent_id);
-        } catch (Exception ignored) {
-        }
-        if (rs != null) {
-            rs.close();
         }
         return res;
     }
@@ -268,12 +265,13 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public List<Integer> getCollaborators(int project_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT user_id FROM Collaborator WHERE project_id='" + project_id + "';");
-        List<Integer> res = new ArrayList<>();
-        while (rs.next()) {
-            res.add(rs.getInt("user_id"));
+        List<Integer> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT user_id FROM Collaborator WHERE project_id='" + project_id + "';")) {
+            res = new ArrayList<>();
+            while (rs.next()) {
+                res.add(rs.getInt("user_id"));
+            }
         }
-        rs.close();
         return res;
     }
 
@@ -285,9 +283,9 @@ public class ProjectDB extends Database {
      */
     public int countCollaborators(int project_id) throws SQLException {
         int res;
-        ResultSet rs = sqlQuery("SELECT COUNT(*) FROM Collaborator WHERE project_id='" + project_id + "';");
-        res = rs.getInt("COUNT(*)");
-        rs.close();
+        try (ResultSet rs = prepareSqlQuery("SELECT COUNT(*) FROM Collaborator WHERE project_id='" + project_id + "';")) {
+            res = rs.getInt("COUNT(*)");
+        }
         return res;
     }
 
@@ -298,12 +296,13 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public List<Integer> getUserProjects(int user_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT project_id FROM Collaborator WHERE user_id='" + user_id + "';");
-        List<Integer> res = new ArrayList<>();
-        while (rs.next()) {
-            res.add(rs.getInt("project_id"));
+        List<Integer> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT project_id FROM Collaborator WHERE user_id='" + user_id + "';")) {
+            res = new ArrayList<>();
+            while (rs.next()) {
+                res.add(rs.getInt("project_id"));
+            }
         }
-        rs.close();
         return res;
     }
 
@@ -319,23 +318,22 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public void createTask(String description, int project_id, Long startDate, Long endDate) throws SQLException {
-        ResultSet rs = null;
         for (int i = 0; i < getTasks(project_id).size(); i++) {
             if (getTasks(project_id).get(i).getDescription().equals(description)) {
                 return;
             }
         }
         int id;
-        try {   // Generate id
-            rs = sqlQuery("SELECT id, MAX(id) FROM Task;");
-            id = rs.getInt("id");
-            id++;
-        } catch (Exception e) {
-            id = 1;
+        try (ResultSet rs = prepareSqlQuery("SELECT id, MAX(id) FROM Task;")) {   // Generate id
+            if (rs.isClosed()) {
+                id = 1;
+            } else {
+                id = rs.getInt("id");
+                id++;
+            }
         }
         sqlUpdate("INSERT INTO Task (id, description, project_id, startDate, endDate) VALUES('" +
                 id + "','" + description + "','" + project_id + "','" + startDate + "','" + endDate + "');");
-        Objects.requireNonNull(rs).close();
     }
 
     /**
@@ -369,38 +367,19 @@ public class ProjectDB extends Database {
     }
 
     /**
-     * Returns the task that corresponds to the id
-     * @param id the id of the task
-     * @return the task
-     * @throws SQLException if the query fails
-     */
-    public Task getTask(int id) throws SQLException {
-        ResultSet rs = null;
-        Task res;
-        try {
-            rs = sqlQuery("SELECT id, description, startDate, endDate FROM Task WHERE id='" + id + "';");
-            res = new Task(rs.getInt("id"), rs.getString("description"), id, rs.getLong("startDate"), rs.getLong("endDate"));
-        } catch (Exception e) {
-            res = null;
-        }
-        Objects.requireNonNull(rs).close();
-        return res;
-    }
-
-    /**
      * Returns all the tasks from a project
      * @param project_id the id of the project
      * @return the id's of the tasks
      * @throws SQLException if the query fails
      */
     public List<Task> getTasks(int project_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT id, description, startDate, endDate FROM Task WHERE project_id='" + project_id + "';");
-        List<Task> res = new ArrayList<>();
-
-        while (rs.next()) {
-            res.add(new Task(rs.getInt("id"), rs.getString("description"), project_id, rs.getLong("startDate"), rs.getLong("endDate")));
+        List<Task> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT id, description, startDate, endDate FROM Task WHERE project_id='" + project_id + "';")) {
+            res = new ArrayList<>();
+            while (rs.next()) {
+                res.add(new Task(rs.getInt("id"), rs.getString(descriptionField), project_id, rs.getLong(startDateField), rs.getLong(endDateField)));
+            }
         }
-        rs.close();
         return res;
     }
 
@@ -412,9 +391,9 @@ public class ProjectDB extends Database {
      */
     public int countTasks(int project_id) throws SQLException {
         int res;
-        ResultSet rs = sqlQuery("SELECT COUNT(*) FROM Task WHERE project_id='" + project_id + "';");
-        res = rs.getInt("COUNT(*)");
-        rs.close();
+        try (ResultSet rs = prepareSqlQuery("SELECT COUNT(*) FROM Task WHERE project_id='" + project_id + "';")) {
+            res = rs.getInt("COUNT(*)");
+        }
         return res;
     }
 
@@ -447,28 +426,13 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public List<Integer> getTaskCollaborator(int task_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT user_id FROM tasks_users WHERE task_id='" + task_id + "';");
-        List<Integer> res = new ArrayList<>();
-        while (rs.next()) {
-            res.add(rs.getInt("user_id"));
+        List<Integer> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT user_id FROM tasks_users WHERE task_id='" + task_id + "';")) {
+            res = new ArrayList<>();
+            while (rs.next()) {
+                res.add(rs.getInt("user_id"));
+            }
         }
-        rs.close();
-        return res;
-    }
-
-    /**
-     * Returns all the task that a user has
-     * @param user_id the id of the user
-     * @return the tasks of the user
-     * @throws SQLException if the query fails
-     */
-    public List<Task> getUserTasks(int user_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT task_id FROM tasks_users WHERE user_id='" + user_id + "';");
-        List<Task> res = new ArrayList<>();
-        while (rs.next()) {
-            res.add(getTask(rs.getInt("task_id")));
-        }
-        rs.close();
         return res;
     }
 
@@ -482,19 +446,18 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public int createTag(String description, String color) throws SQLException {
-        ResultSet rs = null;
         int id;
         if (getTagID(description) == 0) {
-            try {   // Generate id
-                rs = sqlQuery("SELECT id, MAX(id) FROM Tag;");
-                id = rs.getInt("id");
-                id++;
-            } catch (Exception e) {
-                id = 1;
+            try (ResultSet rs = prepareSqlQuery("SELECT id, MAX(id) FROM Tag;")) {   // Generate id
+                if (rs.isClosed()) {
+                    id = 1;
+                } else {
+                    id = rs.getInt("id");
+                    id++;
+                }
             }
             sqlUpdate("INSERT INTO Tag (id, description, color) VALUES('" +
                     id + "','" + description + "','" + color + "');");
-            Objects.requireNonNull(rs).close();
         } else {
             return getTagID(description);
         }
@@ -528,17 +491,14 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public Tag getTag(int id) throws SQLException {
-        ResultSet rs = null;
         Tag res;
-        try {
-            rs = sqlQuery("SELECT description, color FROM Tag WHERE id='" + id + "';");
-            res = new Tag(id, rs.getString("description"), rs.getString("color"));
-
-        } catch (Exception e) {
-            res = null;
+        try (ResultSet rs = prepareSqlQuery("SELECT description, color FROM Tag WHERE id='" + id + "';")) {
+            if (rs.isClosed()) {
+                res = null;
+            } else {
+                res = new Tag(id, rs.getString(descriptionField), rs.getString("color"));
+            }
         }
-        assert rs != null;
-        rs.close();
         return res;
     }
 
@@ -548,12 +508,13 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public List<Tag> getAllTags() throws SQLException {
-        ResultSet rs = sqlQuery("SELECT id, description, color FROM Tag;");
-        List<Tag> res = new ArrayList<>();
-        while (rs.next()) {
-            res.add(new Tag(rs.getInt("id"), rs.getString("description"), rs.getString("color")));
+        List<Tag> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT id, description, color FROM Tag;")) {
+            res = new ArrayList<>();
+            while (rs.next()) {
+                res.add(new Tag(rs.getInt("id"), rs.getString(descriptionField), rs.getString("color")));
+            }
         }
-        rs.close();
         return res;
     }
 
@@ -608,14 +569,15 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public List<Tag> getTags(int project_id) throws SQLException {
-        ResultSet rs = sqlQuery("SELECT tag_id FROM Tag_projects WHERE project_id='" + project_id + "';");
-        List<Tag> res = new ArrayList<>();
-        while (rs.next()) {
-            if (getTag(rs.getInt("tag_id")) != null) {
-                res.add(getTag(rs.getInt("tag_id")));
+        List<Tag> res;
+        try (ResultSet rs = prepareSqlQuery("SELECT tag_id FROM Tag_projects WHERE project_id='" + project_id + "';")) {
+            res = new ArrayList<>();
+            while (rs.next()) {
+                if (getTag(rs.getInt("tag_id")) != null) {
+                    res.add(getTag(rs.getInt("tag_id")));
+                }
             }
         }
-        rs.close();
         return res;
     }
 
@@ -626,16 +588,14 @@ public class ProjectDB extends Database {
      * @throws SQLException if the query fails
      */
     public int getTagID(String title) throws SQLException {
-        ResultSet rs;
         int id;
-        try {
-            rs = sqlQuery("SELECT id FROM Tag WHERE description ='" + title + "';");
-            id = rs.getInt("id");
-        } catch (Exception e) {
-            return 0;
+        try (ResultSet rs = prepareSqlQuery("SELECT id FROM Tag WHERE description ='" + title + "';")) {
+            if (rs.isClosed()) {
+                id = 0;
+            } else {
+                id = rs.getInt("id");
+            }
         }
-        rs.close();
-        rs.close();
         return id;
     }
 }

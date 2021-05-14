@@ -25,6 +25,11 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
+    public User(String userName, String firstName, String lastName, String email, boolean isAdmin, int id) {
+        this(userName, firstName, lastName, email, isAdmin);
+        this.id = id;
+    }
+
     /**
      * @return the admin status of the user
      */
@@ -107,11 +112,4 @@ public class User {
         this.email = email;
     }
 
-    /**
-     * @param admin bool
-     * Sets the admin status of the user
-     */
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
 }

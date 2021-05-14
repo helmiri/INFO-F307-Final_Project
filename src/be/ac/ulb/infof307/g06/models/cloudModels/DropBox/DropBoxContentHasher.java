@@ -48,16 +48,17 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
     @Override
     protected void engineUpdate(byte[] input, int offset, int len) {
         int inputEnd = offset + len;
-        while (offset < inputEnd) {
+        int newOffset = offset;
+        while (newOffset < inputEnd) {
             finishBlockIfFull();
 
             int spaceInBlock = getBlockSize() - getBlockPos();
-            int inputPartEnd = Math.min(inputEnd, offset + spaceInBlock);
-            int inputPartLength = inputPartEnd - offset;
-            getBlockHasher().update(input, offset, inputPartLength);
+            int inputPartEnd = Math.min(inputEnd, newOffset + spaceInBlock);
+            int inputPartLength = inputPartEnd - newOffset;
+            getBlockHasher().update(input, newOffset, inputPartLength);
 
             setBlockPos(getBlockPos() + inputPartLength);
-            offset += inputPartLength;
+            newOffset += inputPartLength;
         }
     }
 
@@ -133,14 +134,14 @@ public final class DropBoxContentHasher extends MessageDigest implements Cloneab
     }
 
     public String hex(byte[] data) {
-        char[] hex_digits = {
+        char[] hexDigits = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'a', 'b', 'c', 'd', 'e', 'f'};
         char[] buf = new char[2 * data.length];
         int i = 0;
         for (byte b : data) {
-            buf[i++] = hex_digits[(b & 0xf0) >>> 4];
-            buf[i++] = hex_digits[b & 0x0f];
+            buf[i++] = hexDigits[(b & 0xf0) >>> 4];
+            buf[i++] = hexDigits[b & 0x0f];
         }
         return new String(buf);
     }

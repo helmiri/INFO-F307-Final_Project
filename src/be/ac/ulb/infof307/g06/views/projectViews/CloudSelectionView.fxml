@@ -24,7 +24,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="DBoxButton" mnemonicParsing="false" onAction="#serviceSelect"
+        <Button mnemonicParsing="false" onAction="#serviceSelect"
                 style="-fx-background-color: transparent;">
             <graphic>
                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">

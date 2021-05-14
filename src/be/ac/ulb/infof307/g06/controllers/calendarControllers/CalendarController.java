@@ -7,9 +7,9 @@ import be.ac.ulb.infof307.g06.models.AlertWindow;
 import be.ac.ulb.infof307.g06.models.CalendarColor;
 import be.ac.ulb.infof307.g06.models.Project;
 import be.ac.ulb.infof307.g06.models.Task;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.CalendarDB;
 import be.ac.ulb.infof307.g06.models.database.ProjectDB;
-import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.calendarViews.CalendarViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
@@ -17,7 +17,6 @@ import com.calendarfx.model.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,7 +31,7 @@ import java.util.Random;
  * Main controller class for the calendar's view. Handles the monthly and weekly view.
  */
 public class CalendarController extends Controller implements CalendarViewController.ViewListener {
-    CalendarColor colorObject = new CalendarColor();
+    final CalendarColor colorObject = new CalendarColor();
     private CalendarViewController viewController;
     private CalendarSource projectSource;
     private CalendarSource taskSource;
@@ -42,23 +41,19 @@ public class CalendarController extends Controller implements CalendarViewContro
     private final Map<String, Calendar> projectsMap = new HashMap<>();
     private final Map<String, Calendar> tasksMap = new HashMap<>();
     private CalendarDB calendarDB;
-    private UserDB userDB;
     private ProjectDB projectDB;
 
     /**
      * Constructor.
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage Stage, a stage
      */
-    public CalendarController(Stage stage, Scene scene, String DB_PATH) throws DatabaseException {
-        super(stage, scene, DB_PATH);
+    public CalendarController(Stage stage) throws DatabaseException {
+        super(stage);
         try {
-            userDB = new UserDB(DB_PATH);
-            projectDB = new ProjectDB(DB_PATH);
-            calendarDB = new CalendarDB(DB_PATH);
-        } catch (SQLException | ClassNotFoundException error) {
+            projectDB = new ProjectDB();
+            calendarDB = new CalendarDB();
+        } catch (SQLException error) {
             throw new DatabaseException(error);
         }
 
@@ -68,8 +63,9 @@ public class CalendarController extends Controller implements CalendarViewContro
      * Initialises calendar
      */
     public void initCalendar() {
+        ActiveUser activeUser = ActiveUser.getInstance();
         try {
-            List<Integer> userProjects = projectDB.getUserProjects(userDB.getCurrentUser().getId());
+            List<Integer> userProjects = projectDB.getUserProjects(activeUser.getID());
             ObservableList<String> projects = FXCollections.observableArrayList();
             for (Integer project : userProjects) {
                 projects.add(projectDB.getProject(project).getTitle());
@@ -214,7 +210,7 @@ public class CalendarController extends Controller implements CalendarViewContro
      * Moves view to next/previous week/month or today
      *
      * @param today   go to today
-     * @param month   is current monthview
+     * @param month   is current month view
      * @param forward forward or backwards
      */
     @Override
@@ -243,7 +239,7 @@ public class CalendarController extends Controller implements CalendarViewContro
     /**
      * adds selected project(s) to calendars
      *
-     * @param projectsList List of selected projects in checkcombobox
+     * @param projectsList List of selected projects in checkComboBox
      */
     @Override
     public void addProject(ObservableList<? extends String> projectsList) {

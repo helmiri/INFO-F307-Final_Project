@@ -16,18 +16,17 @@ import java.util.List;
  * The user database.
  */
 public class UserDB extends Database {
-    private Hash hash;
+    private final Hash hash;
+    private ActiveUser activeUser;
 
     /**
      * Same constructor as the main database abstract class (except for the hash).
      *
-     * @param dbName the name of the db
-     * @throws ClassNotFoundException if it doesnt find the parent class
-     * @throws SQLException           if the query fails
+     * @throws SQLException if the query fails
      */
-    public UserDB(String dbName) throws ClassNotFoundException, SQLException {
-        super(dbName);
+    public UserDB() throws SQLException {
         hash = new Hash();
+        activeUser = ActiveUser.getInstance();
     }
 
     /**
@@ -37,10 +36,9 @@ public class UserDB extends Database {
      * @throws SQLException On database access error
      */
     public boolean isAdmin() throws SQLException {
-        ResultSet res = sqlQuery("SELECT id FROM admin where id='" + currentUser.getId() + "'");
-        boolean check = res.next();
-        res.close();
-        return check;
+        try (ResultSet res = prepareSqlQuery("SELECT id FROM admin where id='" + activeUser.getID() + "'")) {
+            return res.next();
+        }
     }
 
     /**
@@ -83,7 +81,7 @@ public class UserDB extends Database {
      * @throws SQLException On database access error
      */
     public void addDropBoxCredentials(DbxCredential credential) throws SQLException {
-        sqlUpdate("INSERT INTO DropBoxCredentials VALUES ('" + currentUser.getId() + "','"
+        sqlUpdate("INSERT INTO DropBoxCredentials VALUES ('" + activeUser.getID() + "','"
                 + credential.getAccessToken() + "','" + credential.getExpiresAt() + "','" + credential.getRefreshToken() + "','"
                 + credential.getAppKey() + "','" + credential.getAppSecret() + "');");
     }
@@ -97,24 +95,24 @@ public class UserDB extends Database {
     public void updateDropBoxCredentials(DbxCredential credential) throws SQLException {
         sqlUpdate("UPDATE DropBoxCredentials set accessToken='" + credential.getAccessToken() + "', refreshToken='"
                 + credential.getRefreshToken() + "', appKey='" + credential.getAppKey() + "', expiration='"
-                + credential.getExpiresAt() + "', appSecret='" + credential.getAppSecret() + "' where id='" + currentUser.getId() + "'");
+                + credential.getExpiresAt() + "', appSecret='" + credential.getAppSecret() + "' where id='" + activeUser.getID() + "'");
     }
 
     /**
      * Retrieves the user's dropbox credentials
      *
-     * @return The credentials object
+     * @return The credentials object, null if not found
      * @throws SQLException On database access error
      */
     public DbxCredential getDropBoxCredentials() throws SQLException {
-        ResultSet res;
-        res = sqlQuery("SELECT accessToken, expiration, refreshToken, appKey, appSecret from DropBoxCredentials where id='" + currentUser.getId() + "'");
-        if (res.isClosed()) {
-            return null;
+        DbxCredential credential;
+        try (ResultSet res = prepareSqlQuery("SELECT accessToken, expiration, refreshToken, appKey, appSecret from DropBoxCredentials where id='" + activeUser.getID() + "'")) {
+            if (res.isClosed()) {
+                return null;
+            }
+            credential = new DbxCredential(res.getString("accessToken"),
+                    res.getLong("expiration"), res.getString("refreshToken"), res.getString("appKey"), res.getString("appSecret"));
         }
-        DbxCredential credential = new DbxCredential(res.getString("accessToken"),
-                res.getLong("expiration"), res.getString("refreshToken"), res.getString("appKey"), res.getString("appSecret"));
-        res.close();
         return credential;
     }
 
@@ -125,11 +123,9 @@ public class UserDB extends Database {
      * @throws SQLException On database access error
      */
     public boolean isFirstBoot() throws SQLException {
-        ResultSet res = sqlQuery("SELECT * FROM admin;");
-        boolean empty = res.isClosed();
-        currentUser.setAdmin(empty);
-        res.close();
-        return empty;
+        try (ResultSet res = prepareSqlQuery("SELECT * FROM admin;")) {
+            return res.isClosed();
+        }
     }
 
     /**
@@ -145,40 +141,20 @@ public class UserDB extends Database {
      */
     public int addUser(String fName, String lName, String userName, String email, String password) throws SQLException {
         String[] key = {"id"};
-        PreparedStatement state = db.prepareStatement("INSERT INTO users(fName, lName, userName, email, password, status, diskUsage) VALUES (?,?,?,?,?,?,?)", key);
-        state.setString(1, fName);
-        state.setString(2, lName);
-        state.setString(3, userName);
-        state.setString(4, email);
         String hashPassword = hash.hashPassword(password, userName); // change salt
-        state.setString(5, hashPassword);
-        state.setBoolean(6, true);
-        state.setInt(7, 0);
-        state.execute();
-        ResultSet rs = state.getGeneratedKeys();
-        int res = rs.getInt(1);
-        rs.close();
-        state.close();
-        setCurrentUser(fName, lName, userName, email, res);
-        return res;
-    }
-
-    /**
-     * Sets the current user for query purposes
-     *
-     * @param fName    The user's first name
-     * @param lName    The user's last name
-     * @param userName The user's username
-     * @param email    The user's email
-     * @param id       The ID of the user
-     * @throws SQLException on error accessing the database
-     */
-    private void setCurrentUser(String fName, String lName, String userName, String email, int id) throws SQLException {
-        Database.currentUser = new User(userName, fName, lName, email, false);
-        Database.currentUser.setId(id);
-        boolean isAdmin;
-        isAdmin = isAdmin();
-        Database.currentUser.setAdmin(isAdmin);
+        try (PreparedStatement state = prepareSqlQuery("INSERT INTO users(fName, lName, userName, email, password, status, diskUsage) VALUES (?,?,?,?,?,?,?)", key)) {
+            state.setString(1, fName);
+            state.setString(2, lName);
+            state.setString(3, userName);
+            state.setString(4, email);
+            state.setString(5, hashPassword);
+            state.setBoolean(6, true);
+            state.setInt(7, 0);
+            state.execute();
+            try (ResultSet rs = state.getGeneratedKeys()) {
+                return rs.getInt(1);
+            }
+        }
     }
 
     /**
@@ -189,10 +165,9 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public boolean userExists(String userName) throws SQLException {
-        ResultSet res = sqlQuery("SELECT userName FROM users WHERE userName='" + userName + "'");
-        boolean found = res.next();
-        res.close();
-        return found;
+        try (ResultSet res = prepareSqlQuery("SELECT userName FROM users WHERE userName='" + userName + "'")) {
+            return res.next();
+        }
     }
 
     /**
@@ -207,16 +182,13 @@ public class UserDB extends Database {
         if (!userExists(userName)) {
             return 0;
         }
-        ResultSet res = sqlQuery("SELECT id, password, status FROM main.users WHERE userName='" + userName + "'");
-        String hashPassword = hash.hashPassword(password, userName); // change salt
-        Integer key = validate(hashPassword, res);
-        res.close();
+        Integer key;
+        try (ResultSet res = prepareSqlQuery("SELECT id, password, status FROM main.users WHERE userName='" + userName + "'")) {
+            String hashPassword = hash.hashPassword(password, userName); // change salt
+            key = validate(hashPassword, res);
+        }
         if (key == null) {
             return -1;
-        }
-        Database.currentUser = getUserInfo(key);
-        if (Database.currentUser == null) {
-            return 0;
         }
         return key;
     }
@@ -229,14 +201,9 @@ public class UserDB extends Database {
      * @throws SQLException On database access error
      */
     public boolean isAdmin(int id) throws SQLException {
-        ResultSet res = sqlQuery("SELECT id from admin where id='" + id + "'");
-
-        boolean bool = !res.isClosed();
-
-        if (!bool) {
-            res.close();
+        try (ResultSet res = prepareSqlQuery("SELECT id from admin where id='" + id + "'")) {
+            return res.next();
         }
-        return bool;
     }
 
     /**
@@ -296,18 +263,24 @@ public class UserDB extends Database {
      * @throws SQLException On error accessing the database
      */
     private User queryUserInfo(String idField) throws SQLException {
-        ResultSet usrInfo = sqlQuery("Select id, userName, fName, lName, email " + idField);
-        if (usrInfo.isClosed()) {
-            return null;
+        User user;
+        try (ResultSet usrInfo = prepareSqlQuery("Select id, userName, fName, lName, email " + idField)) {
+            if (usrInfo.isClosed()) {
+                return null;
+            }
+            user = new User(usrInfo.getString("userName"), usrInfo.getString("fName"),
+                    usrInfo.getString("lName"), usrInfo.getString("email"), isAdmin(usrInfo.getInt("id")));
+            user.setId(usrInfo.getInt("id"));
         }
-        User user = new User(usrInfo.getString("userName"),
-                usrInfo.getString("fName"),
-                usrInfo.getString("lName"),
-                usrInfo.getString("email"),
-                isAdmin(usrInfo.getInt("id")));
-        user.setId(usrInfo.getInt("id"));
-        usrInfo.close();
         return user;
+    }
+
+    /**
+     * Refreshes the singleton instance once initialized
+     * To not have to check every method CurrentUser.getInstance() == null
+     */
+    public void updateCurrentUser() {
+        activeUser = ActiveUser.getInstance();
     }
 
     /**
@@ -316,7 +289,10 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public void disconnectUser() throws SQLException {
-        sqlUpdate("UPDATE users SET status=false WHERE id='" + currentUser.getId() + "'");
+        if (activeUser == null) {
+            return;
+        }
+        sqlUpdate("UPDATE users SET status=false WHERE id='" + activeUser.getID() + "'");
     }
 
     /**
@@ -328,18 +304,16 @@ public class UserDB extends Database {
      * @throws SQLException On error accessing the database
      */
     public void sendInvitation(int projectId, int senderId, int receiverId) throws SQLException {
-        ResultSet rs = null;
         int id;
-        try {   // Generate id
-            rs = sqlQuery("SELECT id, MAX(id) FROM Invitations;");
-            id = rs.getInt("id");
-            id++;
-        } catch (Exception e) {
-            id = 1;
+        try (ResultSet rs = prepareSqlQuery("SELECT id, MAX(id) FROM Invitations;")) {   // Generate id
+            if (rs.isClosed()) {
+                id = 1;
+            } else {
+                id = rs.getInt("id");
+                id++;
+            }
         }
         sqlUpdate("INSERT INTO Invitations(id, project_id, user1_id, user2_id) VALUES('" + id + "','" + projectId + "', '" + senderId + "','" + receiverId + "');");
-        assert rs != null;
-        rs.close();
     }
 
     /**
@@ -354,17 +328,18 @@ public class UserDB extends Database {
 
     /**
      * returns the invitations for collaboration of a user
+     *
      * @param projectDB the project database
      * @return all the invitations
      * @throws SQLException if the query fails
      */
     public List<Invitation> getInvitations(ProjectDB projectDB) throws SQLException {
         List<Invitation> invitations = new ArrayList<>();
-        ResultSet rs = sqlQuery("SELECT id, project_id, user1_id FROM Invitations WHERE user2_id = '" + currentUser.getId() + "';");
-        while (rs.next()) {
-            invitations.add(new Invitation(rs.getInt("id"), projectDB.getProject(rs.getInt("project_id")), currentUser, getUserInfo(rs.getInt("user1_id"))));
+        try (ResultSet rs = prepareSqlQuery("SELECT id, project_id, user1_id FROM Invitations WHERE user2_id = '" + activeUser.getID() + "';")) {
+            while (rs.next()) {
+                invitations.add(new Invitation(rs.getInt("id"), projectDB.getProject(rs.getInt("project_id")), getUserInfo(activeUser.getID()), getUserInfo(rs.getInt("user1_id"))));
+            }
         }
-        rs.close();
         return invitations;
     }
 
@@ -397,7 +372,7 @@ public class UserDB extends Database {
         if (info.isBlank()) {
             return;
         }
-        sqlUpdate("UPDATE users SET " + field + "='" + info + "' WHERE id='" + currentUser.getId() + "'");
+        sqlUpdate("UPDATE users SET " + field + "='" + info + "' WHERE id='" + activeUser.getID() + "'");
     }
 
     /**
@@ -407,10 +382,9 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public int getDiskUsage() throws SQLException {
-        ResultSet res = sqlQuery("SELECT diskUsage from users where id='" + currentUser.getId() + "'");
-        int disk = res.getInt("diskUsage");
-        res.close();
-        return disk;
+        try (ResultSet res = prepareSqlQuery("SELECT diskUsage from users where id='" + activeUser.getID() + "'")) {
+            return res.getInt("diskUsage");
+        }
     }
 
     /**
@@ -430,7 +404,7 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public void updateDiskUsage(int diff) throws SQLException {
-        sqlUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + currentUser.getId() + "'");
+        sqlUpdate("UPDATE users SET diskUsage='" + diff + "' where id='" + activeUser.getID() + "'");
     }
 
     /**
@@ -440,10 +414,9 @@ public class UserDB extends Database {
      * @throws SQLException When a database access error occurs
      */
     public long getDiskLimit() throws SQLException {
-        ResultSet res = sqlQuery("SELECT diskLimit FROM admin");
-        long limit = res.getLong("diskLimit");
-        res.close();
-        return limit;
+        try (ResultSet res = prepareSqlQuery("SELECT diskLimit FROM admin")) {
+            return res.getLong("diskLimit");
+        }
     }
 
     /**
@@ -455,12 +428,11 @@ public class UserDB extends Database {
      */
     public void userSettingsSync(User newUser, String newPassword) throws SQLException {
         if (newUser != null) {
-            currentUser = newUser;
-            setUserInfo(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), "");
+            setUserInfo(activeUser.getFirstName(), activeUser.getLastName(), activeUser.getEmail(), "");
             return;
         }
-        String hashPassword = hash.hashPassword(newPassword, currentUser.getUserName()); // change salt
-        sqlUpdate("UPDATE users set password='" + hashPassword + "' where id='" + currentUser.getId() + "'");
+        // Update password only because it is not stored in User
+        String hashPassword = hash.hashPassword(newPassword, activeUser.getUserName()); // change salt
+        sqlUpdate("UPDATE users set password='" + hashPassword + "' where id='" + activeUser.getID() + "'");
     }
-
 }

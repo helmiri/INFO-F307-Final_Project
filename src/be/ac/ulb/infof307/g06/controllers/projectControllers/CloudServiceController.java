@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g06.controllers.projectControllers;
 
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudSelectionViewController;
 import be.ac.ulb.infof307.g06.views.projectViews.CloudViewController;
@@ -60,9 +61,10 @@ public class CloudServiceController implements CloudSelectionViewController.View
      */
     @Override
     public void selectGoogleDrive() {
+        ActiveUser activeUser = ActiveUser.getInstance();
         try {
             dropBoxSelected = false;
-            googleDriveController = new GoogleDriveController(userDB.getCurrentUser().getUserName());
+            googleDriveController = new GoogleDriveController(activeUser.getUserName());
             googleDriveSelected = true;
         } catch (IOException error) {
             new AlertWindow("Error", "Could not retrieve the files ", error.getMessage()).showErrorWindow();

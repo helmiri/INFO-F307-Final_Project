@@ -82,10 +82,6 @@ public class HelpViewController {
     private MediaView mediaView;
     private ViewListener listener;
 
-    public HelpViewController() {
-    }
-
-
     //--------------- METHODS ----------------
 
     /**
@@ -238,8 +234,13 @@ public class HelpViewController {
         videoLabel.setText("x" + rateValue);
     }
 
-
-    public void setMediaView(MediaPlayer mediaPlayer) {
+    /**
+     * Initializes the media player
+     *
+     * @param mediaPlayer The player to be used
+     */
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
         mediaView.setMediaPlayer(mediaPlayer);
     }
 

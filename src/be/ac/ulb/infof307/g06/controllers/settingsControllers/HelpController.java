@@ -4,7 +4,6 @@ import be.ac.ulb.infof307.g06.controllers.Controller;
 import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
 import be.ac.ulb.infof307.g06.views.settingsViews.helpViews.HelpViewController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
@@ -24,12 +23,10 @@ public class HelpController extends Controller implements HelpViewController.Vie
     /**
      * Constructor
      *
-     * @param stage   Stage, a stage
-     * @param scene   Scene, a scene
-     * @param DB_PATH String, the path to the database
+     * @param stage Stage, a stage
      */
-    public HelpController(Stage stage, Scene scene, HelpViewController viewController, String DB_PATH) {
-        super(stage, scene, DB_PATH);
+    public HelpController(Stage stage, HelpViewController viewController) {
+        super(stage);
         helpViewController = viewController;
         helpViewController.setListener(this);
     }
@@ -46,9 +43,9 @@ public class HelpController extends Controller implements HelpViewController.Vie
      */
     @Override
     public void loadVideo(String path, String title) {
-        File file = new File("src/be/ac/ulb/infof307/g06/resources/videos");
-        path = file.getAbsolutePath() + "/" + path;
-        Media media = new Media(Paths.get(path).toUri().toString());
+        File file = new File("../../resources/videos");
+        String newPath = file.getAbsolutePath() + "/" + path;
+        Media media = new Media(Paths.get(newPath).toUri().toString());
         FXMLLoader loader = new FXMLLoader(HelpViewController.class.getResource("TutorialView.fxml"));
         try {
             loader.load();
@@ -59,7 +56,7 @@ public class HelpController extends Controller implements HelpViewController.Vie
         helpViewController = loader.getController();
 
         helpViewController.setListener(this);
-        helpViewController.setMediaView(new MediaPlayer(media));
+        helpViewController.setMediaPlayer(new MediaPlayer(media));
         createStage(title);
     }
 

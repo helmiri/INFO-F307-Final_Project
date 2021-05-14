@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g06.models.database;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -18,7 +17,6 @@ class CalendarDBTest extends TestDatabase {
     String color2 = "color2";
 
     public CalendarDBTest() throws ClassNotFoundException, SQLException {
-        super();
     }
 
 

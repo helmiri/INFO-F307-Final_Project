@@ -17,7 +17,6 @@ import java.util.logging.Logger;
  */
 public class DropBoxAuthorization {
     private final DbxAppInfo appInfo;
-    private String authorizationUrl = "";
     private DbxWebAuth webAuth;
 
     /**
@@ -53,6 +52,7 @@ public class DropBoxAuthorization {
      * @return the url
      */
     public String getUrl() {
+        String authorizationUrl = "";
         if (!authorizationUrl.isBlank()) {
             return authorizationUrl;
         }
@@ -73,7 +73,6 @@ public class DropBoxAuthorization {
      * @throws DbxException exception
      */
     public DbxAuthFinish authorize(String code) throws DbxException {
-        code = code.trim();
-        return webAuth.finishFromCode(code);
+        return webAuth.finishFromCode(code.trim());
     }
 }

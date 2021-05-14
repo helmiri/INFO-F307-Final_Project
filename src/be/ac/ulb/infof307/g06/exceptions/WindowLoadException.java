@@ -3,7 +3,7 @@ package be.ac.ulb.infof307.g06.exceptions;
 import be.ac.ulb.infof307.g06.models.AlertWindow;
 
 public class WindowLoadException extends Exception {
-    AlertWindow alert;
+    private final AlertWindow alert;
 
     /**
      * @param e error thrown
