@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g06.models.database;
 
+import be.ac.ulb.infof307.g06.controllers.MainMenuController;
 import be.ac.ulb.infof307.g06.models.User;
 
 
@@ -78,5 +79,30 @@ public class ActiveUser {
 
     public int getID() {
         return user.getId();
+    }
+
+    /**
+     * The purpose of this method and the PrivateAccess class is to simulate the friend mechanism in C++ that allows select classes
+     * to get access to private methods. This is needed in order to reset the instance on logout otherwise the singleton state will be preserved
+     * and a different user would be able to login to the previous user's account.
+     *
+     * @param friend The class to grant access to. The friend class must be MainMenuController as this is the only class who needs this functionality
+     */
+    public void grantAccess(MainMenuController friend) {
+        friend.getAccess(new PrivateAccess());
+    }
+
+    /**
+     * The class can only be instantiated by the ActiveUser and controls what the friend class can have access to.
+     * While a bit more complex, this is a bit better that the friend class mechanism in C++.
+     * This ensures that ONLY the class that it, in this case, MainMenuController, is granted access.
+     */
+    public class PrivateAccess {
+        private PrivateAccess() {
+        }
+
+        public void resetInstance() {
+            activeUser = null;
+        }
     }
 }
