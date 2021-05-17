@@ -43,8 +43,8 @@ public class HelpController extends Controller implements HelpViewController.Vie
      */
     @Override
     public void loadVideo(String path, String title) {
-        File file = new File("../../resources/videos");
-        String newPath = file.getAbsolutePath() + "/" + path;
+        File file = new File(System.getProperty("user.dir") + "/src/be/ac/ulb/infof307/g06/resources/videos");
+        String newPath = file + "/" + path;
         Media media = new Media(Paths.get(newPath).toUri().toString());
         FXMLLoader loader = new FXMLLoader(HelpViewController.class.getResource("TutorialView.fxml"));
         try {
