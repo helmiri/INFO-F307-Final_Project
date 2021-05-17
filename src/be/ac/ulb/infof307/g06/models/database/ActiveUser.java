@@ -84,9 +84,11 @@ public class ActiveUser {
     /**
      * The purpose of this method and the PrivateAccess class is to simulate the friend mechanism in C++ that allows select classes
      * to get access to private methods. This is needed in order to reset the instance on logout otherwise the singleton state will be preserved
-     * and a different user would be able to login to the previous user's account.
+     * and a different user would be able to login to the previous user's account. This implies that ActiveUser is no longer a Singleton
+     * because its instance can be modified but i feel like it is justified in this situation. This is a simpler solution than having to change the structure
+     * of the project to dynamically determine which user is connected.
      *
-     * @param friend The class to grant access to. The friend class must be MainMenuController as this is the only class who needs this functionality
+     * @param friend The class to grant access to. The friend class must be MainMenuController as this is the ONLY class who needs this functionality to logout the user.
      */
     public void grantAccess(MainMenuController friend) {
         friend.getAccess(new PrivateAccess());
@@ -94,8 +96,8 @@ public class ActiveUser {
 
     /**
      * The class can only be instantiated by the ActiveUser and controls what the friend class can have access to.
-     * While a bit more complex, this is a bit better that the friend class mechanism in C++.
-     * This ensures that ONLY the class that it, in this case, MainMenuController, is granted access.
+     * While a bit more complex, this is a bit better that the friend class mechanism in C++ because it allow to fine-tune the access.
+     * This ensures that ONLY the class that needs it, in this case MainMenuController, is granted access.
      */
     public class PrivateAccess {
         private PrivateAccess() {
