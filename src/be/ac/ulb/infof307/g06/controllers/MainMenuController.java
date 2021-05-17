@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g06.controllers.projectControllers.ProjectController;
 import be.ac.ulb.infof307.g06.controllers.settingsControllers.SettingsController;
 import be.ac.ulb.infof307.g06.exceptions.DatabaseException;
 import be.ac.ulb.infof307.g06.exceptions.WindowLoadException;
+import be.ac.ulb.infof307.g06.models.database.ActiveUser;
 import be.ac.ulb.infof307.g06.models.database.UserDB;
 import be.ac.ulb.infof307.g06.views.mainMenuViews.InvitationController;
 import be.ac.ulb.infof307.g06.views.mainMenuViews.MenuViewController;
@@ -21,6 +22,7 @@ public class MainMenuController extends Controller implements MenuViewController
     //--------------- ATTRIBUTE ----------------
     private InvitationController invitationController;
     private UserDB userDB;
+    private ActiveUser.PrivateAccess friend;
 
     /**
      * Constructor
@@ -38,6 +40,7 @@ public class MainMenuController extends Controller implements MenuViewController
         } catch (SQLException error) {
             new DatabaseException(error).show();
         }
+
     }
 
 
@@ -125,7 +128,9 @@ public class MainMenuController extends Controller implements MenuViewController
     @Override
     public void onLogout() {
         try {
+            ActiveUser.getInstance().grantAccess(this);
             userDB.disconnectUser();
+            friend.resetInstance();
             LoginController controller = new LoginController(stage);
             controller.show();
         } catch (SQLException error) {
@@ -133,5 +138,15 @@ public class MainMenuController extends Controller implements MenuViewController
         } catch (DatabaseException | WindowLoadException e) {
             new DatabaseException(e).show();
         }
+    }
+
+    /**
+     * Requests ActiveUser for access to its private methods through a nested class that controls said access
+     * See ActiveUser.PrivateAccess doc for an explanation on why this is needed.
+     *
+     * @param privateAccess The instance of the class
+     */
+    public void getAccess(ActiveUser.PrivateAccess privateAccess) {
+        friend = privateAccess;
     }
 }
