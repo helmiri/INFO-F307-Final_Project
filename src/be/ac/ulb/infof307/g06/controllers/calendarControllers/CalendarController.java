@@ -105,9 +105,9 @@ public class CalendarController extends Controller implements CalendarViewContro
      */
     public void createEntry(CalendarSource source, String name, LocalDate start, LocalDate end, String color, String projectName) {
         if (source.getName().equals("projects")) {
-            finaliseEntryCreation(source, name, start, end, color, projectsMap);
+            finaliseEntryCreation(source, name, start, end, color, projectsMap, projectName);
         } else {
-            finaliseEntryCreation(source, projectName, start, end, color, tasksMap);
+            finaliseEntryCreation(source, name, start, end, color, tasksMap, projectName);
         }
     }
 
@@ -119,19 +119,19 @@ public class CalendarController extends Controller implements CalendarViewContro
      * @param color  Entry color string
      * @param map    Map to insert entry
      */
-    private void finaliseEntryCreation(CalendarSource source, String name, LocalDate start, LocalDate end, String color, Map<String, Calendar> map) {
+    private void finaliseEntryCreation(CalendarSource source, String name, LocalDate start, LocalDate end, String color, Map<String, Calendar> map, String projectName) {
         Entry<String> testEntry = new Entry<>(name);
         testEntry.changeStartDate(start);
         testEntry.changeEndDate(end);
         testEntry.setFullDay(true);
         Calendar newCalendar = new Calendar(name);
-        if (map.containsKey(name)) {
-            map.get(name).addEntry(testEntry);
+        if (map.containsKey(projectName)) {
+            map.get(projectName).addEntry(testEntry);
         } else {
             newCalendar.setStyle(color);
             source.getCalendars().add(newCalendar);
             newCalendar.addEntry(testEntry);
-            map.put(name, newCalendar);
+            map.put(projectName, newCalendar);
         }
     }
 
