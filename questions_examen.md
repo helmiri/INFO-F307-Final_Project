@@ -67,3 +67,7 @@ renommée à *AlertController* pour rester cohérent.
 
 ## Question 5
 The tests and launcher of the jar require to use a specific script to launch everything. Does it fulfill the delivery asked by the client ? What can you do to give what the client asked ?
+
+Lors des différentes réunions avec le client, nous n'avons pas eu de remarques particulières sur la simplicité du lancement de l'application. Ainsi, nous avons décidé de détailler les différentes commandes dans le *README*.
+Mais après réflexion, l'idéal aurait été d'offrir une éxécution simple, sans connaissances en informatique, ou utilisation d'un terminal en prérequis.
+Il est possible de séparer nos fichers de compilation en *compileTest*, *runTest* et *compileJar*, *runJar* ainsi que *compileMain*, *runMain*, pour permettre d'exécuter le programme avec un simple double click sur les fichiers.
